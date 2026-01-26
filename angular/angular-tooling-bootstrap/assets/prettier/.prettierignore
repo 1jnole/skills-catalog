@@ -1,0 +1,19 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+.angular
+
+# IDEs
+.idea
+.vscode
+
+# Logs
+*.log
+
+# Lock files
+package-lock.json
+
+# Generated files
+*.d.ts
