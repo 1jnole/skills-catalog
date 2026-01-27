@@ -1,48 +1,55 @@
 ---
 name: core-repo-gates-bootstrap
-description: Use at repo start to standardize npm run verify, add missing scripts, and ensure RUNBOOK and AGENTS references are in place.
+description: Standardize a single repo gate (`npm run verify`), generate a deterministic RUNBOOK, and ensure AGENTS routing references gates/docs.
 metadata:
   short-description: Repo Gates Bootstrap
 ---
 
 ## Goal
-Make any repo agent-ready by standardizing a single gate command npm run verify, a RUNBOOK, and AGENTS routing.
+Make any repo agent-ready by standardizing:
+- a single gate command: `npm run verify`
+- `docs/RUNBOOK.md` (commands + gate + evidence)
+- minimal AGENTS.md routing references (RUNBOOK + verify)
 
 ## When to use
 - New repo (technical test or side project).
-- Repo missing npm run verify.
-- Repo missing docs/RUNBOOK.md.
+- Repo missing `npm run verify`.
+- Repo missing `docs/RUNBOOK.md`.
 - Scripts exist but naming is inconsistent.
 
 ## When NOT to use
-- Repo already has a working npm run verify and documented run commands.
-- Monorepo with custom tooling where npm run verify is not appropriate (adapt instead).
+- Repo already has a working `npm run verify` and a correct `docs/RUNBOOK.md`.
+- Monorepo with custom tooling where `npm run verify` is not appropriate (adapt instead).
 
 ## Inputs
-- Package manager (assume npm)
-- Existing package.json scripts (if any)
-- Existing docs (ARCHITECTURE, RUNBOOK, AGENTS)
-- Whether OpenSpec is used
+- `package.json` (scripts + deps)
+- Existing docs: `docs/RUNBOOK.md`, `AGENTS.md`
+- If Angular: run `angular-tooling-bootstrap` first when lint/format tooling is missing.
 
-## Workflow
-1) Inspect package.json and scripts.
-2) Detect missing tooling for the verify gate.
-   - If this is an Angular repo and Prettier or ESLint are missing
-      - Run angular-tooling-bootstrap first
-      - Then continue with this skill
-3) Ensure these scripts exist (create minimal defaults if missing)
-   - format, lint, typecheck, test, build, verify
-4) Ensure verify runs in order
-   - format → lint → typecheck → test → build
-5) Create docs/RUNBOOK.md if missing.
-6) Update AGENTS.md with minimal patch to reference RUNBOOK and the preferred gate.
-7) Do not change unrelated scripts or project structure.
+## Outputs
+- Ensures `npm run verify` exists and is meaningful.
+- Creates/updates `docs/RUNBOOK.md` from template:
+  - `templates/docs/RUNBOOK.md`
+- Minimal patch in `AGENTS.md` to reference RUNBOOK and the verify gate.
 
-## Common pitfalls
-- Creating a verify that is incomplete (missing typecheck/build).
-- Rewriting existing scripts unnecessarily.
-- Assuming tooling exists when it does not.
+## Rules (MUST)
+- `npm run verify` is the single required gate (do **not** use `npm run dev` as a gate).
+- `verify` must run checks in this order **when the scripts exist**:
+  - `format:check` → `lint` → `typecheck` → `test` → `build`
+- Do not rewrite existing scripts unnecessarily; only add missing scripts when needed.
+- Prefer `format:check` inside `verify` (CI-like, no file writes). Keep `format` for fixes.
+- `docs/RUNBOOK.md` must be generated deterministically:
+  - If missing: copy from template.
+  - If present: update only the managed block `<!-- RUNBOOK:START --> ... <!-- RUNBOOK:END -->` using the template block.
+  - Preserve repo-specific notes outside the managed block.
+- Record evidence in `openspec/changes/<slug>/tasks.md` when working under OpenSpec.
 
-## Example prompts
-- "Bootstrap repo gates and docs and ensure npm run verify exists."
-- "If Angular tooling is missing, run angular-tooling-bootstrap first."
+## Notes
+- Script defaults should be conservative:
+  - Compose `verify` using existing scripts when possible.
+  - If no check scripts exist at all, `verify` should fail with a clear message (do not create a false-green gate).
+
+## Template references
+- RUNBOOK: `templates/docs/RUNBOOK.md`
+- Optional scripts sample: `templates/package-json-scripts.json`
+  - NOTE: sample `test/build` use explicit failing placeholders (`[MISSING_*_SCRIPT]`) and must be replaced with real commands.

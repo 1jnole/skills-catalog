@@ -1,0 +1,9 @@
+{
+  "format": "prettier --write .",
+  "format:check": "prettier --check .",
+  "lint": "eslint .",
+  "typecheck": "tsc -p tsconfig.json --noEmit",
+  "test": "node -e \"console.error('[MISSING_TEST_SCRIPT]'); process.exit(1)\"",
+  "build": "node -e \"console.error('[MISSING_BUILD_SCRIPT]'); process.exit(1)\"",
+  "verify": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build"
+}
