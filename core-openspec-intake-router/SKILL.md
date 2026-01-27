@@ -1,8 +1,8 @@
     ---
     name: core-openspec-intake-router
-    description: Entry skill: given README/brief/spec/tasks, decide TT vs Feature, Mini-SPEC vs SPEC (full), and strict vs advisory PROCESS handling. Output exact next skill call(s). No file writes.
+    description: "Entry skill: given README/brief/spec/tasks, decide TT vs Feature, Mini-SPEC vs SPEC (full), and strict vs advisory PROCESS handling. Output exact next skill call(s). No file writes."
     metadata:
-      short-description: core-openspec-intake-router
+      short-description: "Router → pick next skill"
     ---
 
     ## Goal

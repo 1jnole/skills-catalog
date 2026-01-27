@@ -1,8 +1,8 @@
     ---
     name: feature-openspec-spec-from-brief
-    description: Product feature intake: convert a brief/PRD/notes/README excerpt into a full OpenSpec SPEC (with scenarios) plus requirement inventory + traceability. Avoid tech-test PR choreography unless `process_mode=strict` is requested.
+    description: "Product feature intake: convert a brief/PRD/notes/README excerpt into a full OpenSpec SPEC (with scenarios) plus requirement inventory + traceability. Avoid tech-test PR choreography unless `process_mode=strict` is requested."
     metadata:
-      short-description: feature-openspec-spec-from-brief
+      short-description: "Feature → SPEC (full)"
     ---
 
     ## Goal

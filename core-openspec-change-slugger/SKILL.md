@@ -1,8 +1,8 @@
     ---
     name: core-openspec-change-slugger
-    description: Generate a stable, verb-led kebab-case slug for an OpenSpec change folder (`openspec/changes/<slug>/`). Deterministic: same input → same slug.
+    description: "Generate a stable, verb-led kebab-case slug for an OpenSpec change folder (`openspec/changes/<slug>/`). Deterministic: same input → same slug."
     metadata:
-      short-description: core-openspec-change-slugger
+      short-description: "Title → <slug>"
     ---
 
     ## Goal
