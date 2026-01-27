@@ -72,6 +72,10 @@ Transform a Mini-SPEC into a small, reviewable plan (max 5 iterations) that maps
      - propose splitting those ACs or deferring non-core polish
      - do not output an overstuffed plan
 
+6) Recommended follow-up (MUST):
+   - Run `core-openspec-tasks-lint` against the produced tasks.md.
+   - If FAIL: run `core-openspec-tasks-fix`.
+
 ## Copy/paste template
 ```md
 # Plan (OpenSpec-friendly)

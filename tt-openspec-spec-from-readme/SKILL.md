@@ -22,6 +22,10 @@ Convert a technical test README into a Mini-SPEC that is explicit, verifiable, a
 - Constraints (stack, time limit, must-have features, forbidden libs)
 - Any references (Figma, API docs, examples)
 
+- Optional flags:
+  - process_mode: strict | advisory (default: strict)
+  - spec_path: openspec/changes/<slug>/specs/mini-spec.md (default)
+
 ## Outputs
 - Primary artifact (markdown): `openspec/changes/<slug>/specs/mini-spec.md`
 - No code changes. No dependency changes. No command execution.
@@ -70,7 +74,7 @@ Convert a technical test README into a Mini-SPEC that is explicit, verifiable, a
      - `OUT` → references Out of scope / Non-goals
      - `ASSUMED` → references Assumptions
      - `UNKNOWN` → references Unknowns
-   - Include a compact mapping list `R-* → ...`.
+   - Include a compact mapping list where each line includes status: `R-* [MAPPED|OUT|ASSUMED|UNKNOWN] → ...`.
 
 9) STOP condition (MUST):
    - If any `R-*` is not assigned a status (MAPPED/OUT/ASSUMED/UNKNOWN), STOP and report the unmapped IDs.
@@ -126,8 +130,8 @@ Convert a technical test README into a Mini-SPEC that is explicit, verifiable, a
 ## Risks (top 3)
 - R1: ...
 
-## Traceability (R-* → mapped/out/assumed/unknown)
-- R-1 → AC-1
-- R-2 → Delivery constraints
-- R-3 → Data contracts
-- R-4 → Unknowns/Q1
+## Traceability (R-* [status] → target)
+- R-1 [MAPPED] → AC-1
+- R-2 [MAPPED] → Delivery constraints
+- R-3 [MAPPED] → Data contracts
+- R-4 [UNKNOWN] → Unknowns/Q1

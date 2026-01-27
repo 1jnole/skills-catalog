@@ -12,6 +12,7 @@ Fix failures deterministically without turning into a rewrite.
 - npm run verify fails.
 - Any single command fails lint/test/build/typecheck/format checks.
 - CI failure reproduction.
+- 
 
 ## When NOT to use
 - You haven’t run any command yet (verify first).
