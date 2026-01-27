@@ -37,6 +37,8 @@ Make any repo agent-ready by standardizing:
 - `verify` must run checks in this order **when the scripts exist**:
   - `format:check` → `lint` → `typecheck` → `test` → `build`
 - Do not rewrite existing scripts unnecessarily; only add missing scripts when needed.
+- If `npm run verify` already exists, do **not** change its contents. Only document it in `docs/RUNBOOK.md`.
+  - Exception: if `verify` is clearly a placeholder/false-green (e.g. `echo`), replace with a CI-like composition.
 - Prefer `format:check` inside `verify` (CI-like, no file writes). Keep `format` for fixes.
 - `docs/RUNBOOK.md` must be generated deterministically:
   - If missing: copy from template.
