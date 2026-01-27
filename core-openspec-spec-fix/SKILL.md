@@ -1,35 +1,26 @@
----
-name: core-openspec-spec-fix
-description: "Given a failing spec lint report, rewrite the spec with minimal edits to satisfy lints. Do not invent requirements; missing info becomes UNKNOWN/ASSUMED explicitly."
-metadata:
-  short-description: Spec fix (minimal diff)
-  category: openspec
----
+    ---
+    name: core-openspec-spec-fix
+    description: Fix a Mini-SPEC/SPEC that failed `core-openspec-spec-lint` by rewriting the spec with minimal edits (no new scope). Preserve existing IDs when possible. Output the corrected spec only.
+    metadata:
+      short-description: core-openspec-spec-fix
+    ---
 
-## Goal
-Auto-repair spec drafts so you don't need to "craft a better prompt" each time.
+    ## Goal
+Auto-repair spec drafts so you don't have to craft prompts every time.
 
 ## Inputs
 - Current spec markdown
 - Lint report from `core-openspec-spec-lint`
-- Optional: source brief (README/notes)
+- Optional: source brief
 
 ## Outputs
-- Write ONLY the corrected spec (same path as caller expects).
-- No code changes. No dependency changes. No command execution.
+- Write ONLY the corrected spec to the same target path implied by context.
+- No code changes. No dependency changes. No commands.
 
 ## Rules (MUST)
-- Minimal-diff mindset: change only what is necessary to pass lint.
-- Do NOT add new scope; missing info → Unknowns/Assumptions.
-- If the lint is about coverage:
-  - Add missing R-* entries using the source wording.
-  - Mark as UNKNOWN if details are missing.
-- Ensure Traceability includes explicit statuses:
-  - `R-1 [MAPPED] → AC-1`
-  - `R-2 [OUT] → Out of scope`
-  - `R-3 [ASSUMED] → A1`
-  - `R-4 [UNKNOWN] → Q1`
+- Minimal-diff mindset: change only what's necessary to pass lint.
+- Do NOT add new scope. Missing info → Unknowns/Assumptions.
+- Preserve existing IDs (R-*, AC-*) when possible.
 
 ## Stop condition (MUST)
-After edits, re-check mentally against the lint list.
-If any lint item is still unfixed, STOP and list remaining failures (do not pretend it's fixed).
+- If any lint item cannot be fixed without inventing requirements, STOP and list remaining failures.

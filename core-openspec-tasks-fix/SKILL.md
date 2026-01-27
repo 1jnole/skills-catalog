@@ -1,32 +1,26 @@
----
-name: core-openspec-tasks-fix
-description: "Given a failing tasks lint report, rewrite tasks.md with minimal edits to satisfy the lints; do not invent scope. Preserve iteration count and structure when possible."
-metadata:
-  short-description: Tasks fix (minimal diff)
-  category: openspec
----
+    ---
+    name: core-openspec-tasks-fix
+    description: Fix tasks.md that failed `core-openspec-tasks-lint` with minimal edits: schedule missing ACs/PROCESS constraints, add Iteration 0 gates if missing, keep PR-sized iterations. No new scope.
+    metadata:
+      short-description: core-openspec-tasks-fix
+    ---
 
-## Goal
-Repair tasks plans so they are consistent with the spec and sequencing constraints.
+    ## Goal
+Auto-repair tasks.md so the plan covers all ACs and constraints.
 
 ## Inputs
-- tasks.md content
-- Lint report from `core-openspec-tasks-lint`
-- Optional: spec content (Mini-SPEC/SPEC)
-- Optional: process_mode: strict | advisory
+- tasks.md
+- tasks lint report from `core-openspec-tasks-lint`
+- Spec (Mini-SPEC or SPEC)
 
 ## Outputs
-- Write ONLY the corrected tasks.md (same target path as caller expects).
-- No code changes. No dependency changes. No command execution.
+- Write ONLY the corrected tasks.md to the same target path implied by context.
+- No code changes. No commands.
 
 ## Rules (MUST)
-- Minimal-diff mindset: change only what's required to pass lint.
-- Do NOT add new features; if missing info, defer with reason (feature) or mark as missing (tt).
-- Ensure:
-  - Iteration 0 exists and includes install + gate.
-  - Every iteration includes gate.
-  - AC coverage is complete (or explicitly deferred if allowed).
-  - PROCESS constraints are satisfied (strict) or called out (advisory).
+- Minimal-diff mindset: change only what's necessary to pass tasks lint.
+- Do NOT add new requirements; only schedule what exists in the spec.
+- Preserve iteration numbering/structure when possible.
 
 ## Stop condition (MUST)
-If any lint item remains unfixed, STOP and list remaining failures.
+- If any lint item cannot be fixed without inventing scope, STOP and list remaining failures.

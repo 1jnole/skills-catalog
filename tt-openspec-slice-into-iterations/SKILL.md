@@ -1,6 +1,6 @@
 ---
 name: tt-openspec-slice-into-iterations
-description: Use after a Mini-SPEC to produce an OpenSpec-friendly tasks.md plan in 3–5 iterations (plus Iteration 0 baseline), each with a single objective, explicit coverage (ACs + PROCESS constraints), and gate checks (prefer npm run verify).
+description: After a TT Mini-SPEC: write `openspec/changes/<slug>/tasks.md` as 3–5 PR-sized iterations (plus Iteration 0 baseline) that cover every AC and PROCESS constraint (e.g., PR #1 skeleton-only) with gate checks (prefer `npm run verify`). No code changes.
 metadata:
   short-description: TT → 3–5 Iterations
 ---
@@ -71,10 +71,6 @@ Transform a Mini-SPEC into a small, reviewable plan (max 5 iterations) that maps
      - explain which ACs/constraints are too broad
      - propose splitting those ACs or deferring non-core polish
      - do not output an overstuffed plan
-
-6) Recommended follow-up (MUST):
-   - Run `core-openspec-tasks-lint` against the produced tasks.md.
-   - If FAIL: run `core-openspec-tasks-fix`.
 
 ## Copy/paste template
 ```md

@@ -1,57 +1,43 @@
----
-name: core-openspec-spec-lint
-description: "Lint an OpenSpec Mini-SPEC/SPEC for completeness: no silent drops, verifiable atomic ACs, explicit determinism/state rules when implied, and traceability with statuses."
-metadata:
-  short-description: Spec lint (PASS/FAIL)
-  category: openspec
----
+    ---
+    name: core-openspec-spec-lint
+    description: Lint an OpenSpec Mini-SPEC/SPEC for completeness and no-drop coverage against the source brief (README/notes): requirement inventory, traceability statuses, atomic ACs with Verify, and determinism/state rules. Output PASS/FAIL only. No writes.
+    metadata:
+      short-description: core-openspec-spec-lint
+    ---
 
-## Goal
-Prevent spec drift and silent requirement drops before tasks planning.
+    ## Goal
+Catch missing/forgotten requirements (including PROCESS items) before slicing or coding.
 
 ## Inputs
 - Spec markdown (Mini-SPEC or SPEC)
-- Optional: source brief (README/notes) to check coverage
+- Optional: source brief (recommended) to check coverage
 
 ## Outputs
 - A lint report only (no file writes):
-  - Status: PASS | FAIL
+  - Status: PASS|FAIL
   - Errors: LINT-1, LINT-2...
-  - Fix hints (max 5 bullets)
+  - Fix hints (optional, max 5 bullets)
 
 ## Checks (MUST)
 ### Structure
-Spec must include:
-- Summary
-- Acceptance criteria
-- Traceability
-- Requirements inventory (R-1..R-n) for Mini-SPEC or SPEC
+- Must contain: Summary, Data contracts (if any), Acceptance criteria, Determinism & state rules (if relevant), Traceability.
+- For Mini-SPEC: must contain "README requirement inventory (R-1..R-n)".
 
 ### Acceptance criteria quality
 - Every AC checkbox includes `Verify: ...`
-- Atomic (one behavior per AC)
-- No unverifiable AC (e.g., "should be fast" without metric)
+- Atomic: one behavior per AC
+- No unverifiable AC ("should be fast" without metric)
 
-### Traceability statuses (no-drop)
-- Every requirement R-* must have exactly one status:
-  - MAPPED | OUT | ASSUMED | UNKNOWN
-- Status must appear either:
-  - in the Traceability list (`R-1 [MAPPED] → AC-1`), or
-  - explicitly in a traceability table/section with the same semantics.
+### Coverage / no-drop
+- If source brief provided:
+  - Every requirement-like sentence must map to some R-*
+  - Every R-* must have a status: MAPPED|OUT|ASSUMED|UNKNOWN
+  - If any R-* missing a status → FAIL
 
-### Coverage (if source provided)
-- Every requirement-like sentence in the source must map to some R-*
-- Every R-* must be accounted for in Traceability
-- If any R-* is missing a status → FAIL
+### Ambiguities
+- If the brief contains contradictory instructions (common in PROCESS):
+  - Spec must capture it as UNKNOWN + question (do not silently choose)
 
-### Determinism/state rules
-If the source implies ordering, stable-per-day/session, caching/persistence scope, navigation/back behavior:
-- Spec must state explicit rules and boundaries (timezone, persistence scope, stable ordering basis)
-
-## Output format (MUST)
-- Status: PASS|FAIL
-- Errors:
-  - LINT-1: <message>
-  - LINT-2: <message>
-- Fix hints:
-  - <bullet> (optional, max 5)
+### Determinism/state
+- If brief implies daily/session stability, ordering, caching, navigation state:
+  - Spec must state explicit rules and boundaries (timezone, persistence scope)

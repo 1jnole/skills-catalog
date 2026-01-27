@@ -1,23 +1,21 @@
----
-name: core-openspec-change-slugger
-description: "Generate a stable, verb-led kebab-case OpenSpec change slug from a title/context for openspec/changes/<slug>/."
-metadata:
-  short-description: OpenSpec Slugger
-  category: openspec
----
+    ---
+    name: core-openspec-change-slugger
+    description: Generate a stable, verb-led kebab-case slug for an OpenSpec change folder (`openspec/changes/<slug>/`). Deterministic: same input → same slug.
+    metadata:
+      short-description: core-openspec-change-slugger
+    ---
 
-## Goal
-Produce a deterministic slug for `openspec/changes/<slug>/`.
+    ## Goal
+Produce a kebab-case, verb-led, stable slug for `openspec/changes/<slug>/`.
 
 ## Inputs
-- A short title (e.g., "Add pet detail page")
-- Optional: repo/app name (only if needed to disambiguate)
+- Feature/title sentence (e.g., "Add pet detail page")
 
 ## Outputs
-- A single slug string (kebab-case). No extra text.
+- A single slug (kebab-case), no extra text.
 
 ## Rules (MUST)
 - Start with a verb: add|fix|refactor|improve|remove|support|enable|update
-- 2–5 meaningful tokens total
+- Include 2–5 meaningful tokens
 - No dates, no "v1", no "final"
-- Deterministic: same input → same slug
+- Deterministic: same input → same output

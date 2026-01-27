@@ -1,41 +1,40 @@
-# Skills Catalog
+# Skills Catalog — OpenSpec + Codex (2026)
 
-This repository is a **Codex skills catalog** (SKILL.md + optional references/templates).
-Codex primarily uses each skill’s **name + description** (YAML front matter) to decide when to invoke it.
+A small, composable skills catalog for **spec-driven development** with OpenSpec and Codex.
 
-## OpenSpec flows (recommended)
+## What this catalog optimizes for
+- **No silent drops**: requirements present in the brief/README must be captured and traceable.
+- **Determinism**: explicit state rules and reproducible acceptance criteria.
+- **Low prompt burden**: the workflow is driven by skills + lint/fix loops, not ad-hoc prompting.
+- **Small changes**: PR-sized iterations and a single verification gate.
 
-### Entry (when no flow is provided)
-Use this when the user provides **README/spec/tasks** but does not tell the agent what to do next.
+## Install (Codex)
+Copy skill folders into one of:
+- Repo-scoped: `.codex/skills/<skill>/SKILL.md`
+- User-scoped: `~/.codex/skills/<skill>/SKILL.md`
 
-1) `core-openspec-intake-router`
-2) Follow the **Next skill(s)** it returns.
+## Recommended flows
 
-### Technical test (README → Mini-SPEC → tasks.md)
-1) `tt-openspec-spec-from-readme` → writes `openspec/changes/<slug>/specs/mini-spec.md`
-2) `core-openspec-spec-lint`
-3) If FAIL: `core-openspec-spec-fix`
-4) `tt-openspec-slice-into-iterations` → writes `openspec/changes/<slug>/tasks.md`
-5) `core-openspec-tasks-lint`
-6) If FAIL: `core-openspec-tasks-fix`
+### Entry (when the prompt does NOT specify a flow)
+1) `core-openspec-intake-router` (no file writes)
+2) Follow its **Next skill(s)** exactly.
 
-Implementation per iteration (optional, non-OpenSpec-specific):
-- `core-minimal-diff-implementer`
-- `core-verify-and-evidence` (→ if fail: `core-error-fix-loop`)
-- `core-pr-ready-packager`
+### Tech Test (README → Mini-SPEC → tasks)
+1) `core-openspec-change-slugger` (recommended)
+2) `tt-openspec-spec-from-readme`
+3) `core-openspec-spec-lint` → (if FAIL) `core-openspec-spec-fix` → repeat until PASS
+4) `tt-openspec-slice-into-iterations`
+5) `core-openspec-tasks-lint` → (if FAIL) `core-openspec-tasks-fix` → repeat until PASS
+6) Only after PASS: implement per-iteration using your repo gates + evidence policy.
 
-### Product feature (brief → SPEC → tasks.md)
-1) `feature-openspec-spec-from-brief` → writes `openspec/changes/<slug>/specs/spec.md`
-2) `core-openspec-spec-lint`
-3) If FAIL: `core-openspec-spec-fix`
-4) `feature-openspec-slice-into-iterations` → writes `openspec/changes/<slug>/tasks.md`
-5) `core-openspec-tasks-lint`
-6) If FAIL: `core-openspec-tasks-fix`
+### Product Feature (brief → SPEC full → tasks)
+1) `core-openspec-change-slugger` (recommended)
+2) `feature-openspec-spec-from-brief`
+3) `core-openspec-spec-lint` → (if FAIL) `core-openspec-spec-fix` → repeat until PASS
+4) `feature-openspec-slice-into-iterations`
+5) `core-openspec-tasks-lint` → (if FAIL) `core-openspec-tasks-fix` → repeat until PASS
 
-## Repo gates / runbook (recommended prerequisite)
-If `docs/RUNBOOK.md` or a standard gate (`npm run verify`) is missing, run:
-- `core-repo-gates-bootstrap`
-
-If the project is Angular and tooling/docs are missing, also consider:
-- `angular-tooling-bootstrap`
-- `angular-docs-bootstrap`
+## Conventions (to avoid overlap)
+- Prompts should be **orchestration only** (which skill, which order, when to STOP).
+- Spec structure, requirement inventory rules, and traceability rules live **only in SKILL.md**.
+- Lint/fix skills are the enforcement layer; generators are not trusted alone.
