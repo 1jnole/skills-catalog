@@ -1,15 +1,15 @@
 ---
 name: tt-openspec-slice-into-iterations
-description: Use after a Mini-SPEC to split work into 3–5 OpenSpec-friendly iterations with per-iteration checks (prefer npm run verify) and minimal diffs.
+description: Use after a Mini-SPEC to produce an OpenSpec-friendly tasks.md plan in 3–5 iterations (plus Iteration 0 baseline), each with a single objective, explicit AC coverage, and a gate check (prefer npm run verify).
 metadata:
   short-description: TT → 3–5 Iterations
 ---
 
 ## Goal
-Transform a Mini-SPEC into a small, reviewable plan (max 5 iterations) that maps cleanly to OpenSpec tasks.md.
+Transform a Mini-SPEC into a small, reviewable plan (max 5 iterations) that maps cleanly to OpenSpec `tasks.md`, with verifiable acceptance-criteria coverage and minimal diffs.
 
 ## When to use
-- You already have a Mini-SPEC (from README).
+- You already have a Mini-SPEC.
 - You want deterministic delivery with small diffs.
 - You are about to create/apply an OpenSpec change.
 
@@ -18,48 +18,104 @@ Transform a Mini-SPEC into a small, reviewable plan (max 5 iterations) that maps
 - The task is truly tiny (single-file trivial change).
 
 ## Inputs
-- Mini-SPEC
-- Gate command (default/preferred) npm run verify
-- Any must-pass constraints (lint/test/build)
+- Mini-SPEC (must include Acceptance criteria)
+- Preferred gate command: `npm run verify` (or the repo’s gate if different)
+- If available: `docs/RUNBOOK.md` commands (install/gate)
+- Any delivery constraints (PR sequencing rules in README)
+
+## Outputs
+- Write/replace the plan section in: `openspec/changes/<slug>/tasks.md`
+- No code changes. No command execution.
 
 ## Workflow
-1) Create Iteration 0 baseline (install + verify).
-2) Convert acceptance criteria into 3–5 iterations.
-3) Each iteration must include
-   - Goal
-   - Files/areas touched (high-level)
-   - Notes (no code)
-   - Checks (commands)
-   - Done when (subset of acceptance criteria)
-4) Enforce minimal diffs (one iteration = one objective).
-5) Keep total iterations ≤ 5 (excluding Iteration 0).
+1) Preflight (routing):
+   - If `docs/RUNBOOK.md` is missing OR the gate is unclear/missing → run `core-repo-gates-bootstrap` first.
+   - If this is Angular and tooling is missing → run `angular-tooling-bootstrap` first.
+   - If RUNBOOK exists, treat its commands as the source of truth.
+
+2) Normalize Acceptance criteria:
+   - Extract AC list from Mini-SPEC and label them `AC-1...AC-n` (keep wording).
+   - Coverage invariant: every AC must appear in exactly one iteration’s “Done when”, or be explicitly deferred with a reason.
+
+3) Create Iteration 0 — Baseline / Gates:
+   - Goal: confirm install + gate works.
+   - Checks: use RUNBOOK commands if present; otherwise use minimal defaults:
+     - Install: `npm ci`
+     - Gate: `npm run verify`
+
+4) Group ACs into 3–5 iterations (excluding Iteration 0) using this ordering:
+   - Iteration 1: Foundation (wiring/shell required for later ACs)
+   - Iteration 2: Core flow (happy path end-to-end)
+   - Iteration 3: State & determinism (ordering/persistence/time boundaries)
+   - Iteration 4–5 (optional): Edge cases + quality (errors/loading/a11y/perf constraints)
+
+5) For each iteration, enforce:
+   - Single objective (no multi-feature bundles)
+   - Minimal diffs (smallest set of files)
+   - Checks include the gate (prefer `npm run verify`)
+   - Done when references a subset of `AC-*`
+
+6) Stop conditions:
+   - If you cannot fit within ≤ 5 iterations without mixing objectives:
+     - explain which ACs are too broad
+     - propose splitting those ACs or deferring non-core polish
+     - do not output an overstuffed plan
 
 ## Copy/paste templates
 ```md
 # Plan (OpenSpec-friendly)
 
 ## Iteration 0 — Baseline / Gates
-- Goal: confirm repo runs + gates exist
+- Goal: confirm installation and gate works
 - Checks
-  - npm ci
-  - npm run verify
+  - <INSTALL_COMMAND> (from RUNBOOK; default `npm ci`)
+  - <GATE_COMMAND> (from RUNBOOK; default `npm run verify`)
 - Done when
-  - verify PASS
+  - Gate PASS
 
-## Iteration 1 — ...
+## Iteration 1 — Foundation
 - Goal: ...
 - Files/areas: ...
 - Notes: ...
 - Checks
-  - npm run verify
+  - <GATE_COMMAND>
 - Done when
   - [ ] AC-1 ...
+  - [ ] AC-2 ...
+
+## Iteration 2 — Core flow
+- Goal: ...
+- Files/areas: ...
+- Notes: ...
+- Checks
+  - <GATE_COMMAND>
+- Done when
+  - [ ] AC-...
+
+## Iteration 3 — State & determinism
+- Goal: ...
+- Files/areas: ...
+- Notes: ...
+- Checks
+  - <GATE_COMMAND>
+- Done when
+  - [ ] AC-...
+
+## Iteration 4 — Quality / edge cases (optional)
+- Goal: ...
+- Files/areas: ...
+- Notes: ...
+- Checks
+  - <GATE_COMMAND>
+- Done when
+  - [ ] AC-...
 ```
 
 ## Common pitfalls
-- Iterations too large (multiple features at once).
-- Skipping Iteration 0 (then debugging setup later).
-- Not tying Done when to acceptance criteria.
+- Iterations too large (multiple objectives at once).
+- Skipping Iteration 0 (debugging setup later).
+- ACs are not mapped 1:1 to iterations (“stuff slips through”).
+- Hardcoding commands instead of using RUNBOOK.
 
 ## Example prompts
 - "Slice this Mini-SPEC into 3–5 iterations with gates per iteration."

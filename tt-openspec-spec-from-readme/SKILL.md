@@ -1,42 +1,66 @@
 ---
 name: tt-openspec-spec-from-readme
-description: Use when starting a technical test from a README to extract a Mini-SPEC (scope/no-scope, acceptance criteria, risks) before creating an OpenSpec change.
+description: Use at the start of a technical test when you only have a README/brief to produce a verifiable Mini-SPEC (scope, constraints, determinism rules, acceptance criteria) BEFORE any implementation. Do NOT slice into iterations here.
 metadata:
   short-description: TT → README → Mini-SPEC
 ---
 
 ## Goal
-Convert a technical test README into a Mini-SPEC that is explicit and implementation-ready, minimizing rework.
+Convert a technical test README into a Mini-SPEC that is explicit, verifiable, and OpenSpec-ready, minimizing rework.
 
 ## When to use
 - You are starting a technical test and only have a README / brief.
 - Requirements are ambiguous, scattered, or missing acceptance criteria.
-- You want to freeze scope before writing code (OpenSpec-first).
+- You want to freeze scope and determinism before writing code (OpenSpec-first).
 
 ## When NOT to use
 - There is already an active OpenSpec change describing the work in `openspec/changes/<slug>/`.
-- The request is purely exploratory brainstorming with no delivery intent.
+- You are asked to implement code or run tooling (use bootstrap/implementer skills).
+- You want to slice work into iterations (use `tt-openspec-slice-into-iterations`).
 
 ## Inputs
 - README content (paste or point to file)
 - Constraints (stack, time limit, must-have features, forbidden libs)
 - Any design/system references (Figma, API docs, examples)
 
+## Outputs
+- Primary artifact (markdown): `openspec/changes/<slug>/specs/mini-spec.md`
+- No code changes. No dependency changes. No command execution.
+
 ## Workflow
 1) Read README end-to-end once.
-2) Extract explicit requirements → turn them into acceptance criteria (checklist).
-3) Define in scope vs out of scope strictly.
-4) If you infer anything, label it as an assumption.
-5) List unknowns/questions (max 5).
-6) List top 3 risks (delivery risks).
-7) Propose a 3–5 step iteration plan (no code).
+2) Extract **delivery/process requirements** (submission format, PR strategy, docs expectations, evaluation rules, repo constraints).
+3) Determinism & state freeze (MUST):
+   - Identify requirements involving: persistence, stability, ordering, randomness, time/day boundaries, navigation/back behavior, caching, idempotency.
+   - If specified in README → encode as acceptance criteria.
+   - If unspecified but required for testability → pick minimal defaults and record under Assumptions (never leave implicit).
+4) Extract data contracts (MUST):
+   - List endpoints, payload shapes, headers/params exactly as stated.
+   - Do NOT invent fields or endpoints. Missing info → Unknowns.
+5) Define in scope vs out of scope strictly, and add explicit non-goals.
+6) Acceptance criteria (MUST be verifiable):
+   - Each checkbox includes a short `Verify:` note (manual steps or command).
+   - Keep each checkbox atomic (one behavior per AC).
+7) If you infer anything, label it as an assumption (A1, A2...).
+8) List unknowns/questions (max 5) that could change correctness/determinism.
+9) List top 3 risks (delivery risks).
+10) STOP: Output ONLY the Mini-SPEC. Do NOT slice into iterations here.
 
-## Copy/paste templates
-```md
+## Copy/paste template
+
 # Mini-SPEC
 
 ## Summary
 - ...
+
+## Delivery constraints
+- ...
+
+## Data contracts (source of truth: README)
+- Endpoints:
+  - ...
+- Models:
+  - ...
 
 ## In scope
 - ...
@@ -44,30 +68,24 @@ Convert a technical test README into a Mini-SPEC that is explicit and implementa
 ## Out of scope
 - ...
 
-## Acceptance criteria
-- [ ] ...
-
-## Assumptions
+## Non-goals (explicit)
 - ...
+
+## Determinism & state rules
+- ...
+
+## Acceptance criteria
+- [ ] AC-1 ... (Verify: ...)
+- [ ] AC-2 ... (Verify: ...)
+
+## Assumptions (minimal + reversible)
+- A1: ...
+- A2: ...
 
 ## Unknowns / questions (max 5)
-- ...
+- Q1: ...
 
 ## Risks (top 3)
-- ...
-
-## Proposed iteration plan (3–5 steps)
-- Iteration 0: Baseline / gates
-- Iteration 1: ...
-- Iteration 2: ...
-```
-
-## Common pitfalls
-- Inventing requirements not present in the README.
-- Writing architecture decisions without constraints.
-- Producing a plan too big to review in one PR/change.
-
-## Example prompts
-- "Turn this README into a Mini-SPEC for OpenSpec."
-- "Extract acceptance criteria + scope boundaries from this challenge."
-- "List unknowns/risks and an iteration plan before coding."
+- R1: ...
+- R2: ...
+- R3: ...
