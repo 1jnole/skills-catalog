@@ -37,6 +37,14 @@ Convert a technical test README into a Mini-SPEC that is explicit, verifiable, a
 4) Extract data contracts (MUST):
    - List endpoints, payload shapes, headers/params exactly as stated.
    - Do NOT invent fields or endpoints. Missing info → Unknowns.
+5) Guardrails (MUST):
+   - Do NOT promote mentioned/derived concepts into UI requirements unless explicitly required by the README.
+   - If a requirement needs a deterministic mechanism to be implementable/testable (e.g., “stable per day/session”), define a minimal deterministic algorithm under Assumptions:
+     - specify inputs/outputs
+     - specify stable base ordering (if needed)
+     - specify selection rule (e.g., deterministic index from a time key)
+   - Prefer describing such mechanisms as pure functions (easy to unit test).
+
 5) Define in scope vs out of scope strictly, and add explicit non-goals.
 6) Acceptance criteria (MUST be verifiable):
    - Each checkbox includes a short `Verify:` note (manual steps or command).
