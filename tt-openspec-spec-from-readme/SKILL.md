@@ -1,11 +1,11 @@
-    ---
-    name: tt-openspec-spec-from-readme
-    description: "Technical test / code challenge: convert README into an OpenSpec-ready Mini-SPEC with complete requirement inventory (incl PROCESS/PR instructions) + traceability statuses BEFORE any implementation. Do NOT slice into iterations here."
-    metadata:
-      short-description: "TT → README → Mini-SPEC"
-    ---
+---
+name: tt-openspec-spec-from-readme
+description: "Technical test / code challenge: convert README into an OpenSpec-ready Mini-SPEC with complete requirement inventory (incl PROCESS/PR instructions) + traceability statuses BEFORE any implementation. Do NOT slice into iterations here."
+metadata:
+  short-description: "TT → README → Mini-SPEC"
+---
 
-    ## Goal
+## Goal
 Convert a technical test README into a Mini-SPEC that cannot silently drop requirements (including PROCESS items like "PR #1 skeleton").
 
 ## Inputs
@@ -23,3 +23,4 @@ Convert a technical test README into a Mini-SPEC that cannot silently drop requi
 - Acceptance criteria are atomic and verifiable; every checkbox includes `Verify: ...`.
 - Traceability exists and every R-* has exactly one status: MAPPED/OUT/ASSUMED/UNKNOWN.
 - STOP if any R-* is missing a status.
+

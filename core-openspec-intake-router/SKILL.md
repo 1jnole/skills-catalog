@@ -1,11 +1,11 @@
-    ---
-    name: core-openspec-intake-router
-    description: "Entry skill: given README/brief/spec/tasks, decide TT vs Feature, Mini-SPEC vs SPEC (full), and strict vs advisory PROCESS handling. Output exact next skill call(s). No file writes."
-    metadata:
-      short-description: "Router → pick next skill"
-    ---
+---
+name: core-openspec-intake-router
+description: "Entry skill: given README/brief/spec/tasks, decide TT vs Feature, Mini-SPEC vs SPEC (full), and strict vs advisory PROCESS handling. Output exact next skill call(s). No file writes."
+metadata:
+  short-description: "Router → pick next skill"
+---
 
-    ## Goal
+## Goal
 Given an input (README, brief, notes, existing Mini-SPEC/SPEC, or tasks.md), choose the next best OpenSpec skill(s) and flags with minimal user burden.
 
 ## Inputs
@@ -35,3 +35,4 @@ Return exactly:
 - Next skill(s):
 - Flags:
 - Why (3 bullets max):
+

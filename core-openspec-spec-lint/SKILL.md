@@ -1,11 +1,11 @@
-    ---
-    name: core-openspec-spec-lint
-    description: "Lint an OpenSpec Mini-SPEC/SPEC for completeness and no-drop coverage against the source brief (README/notes): requirement inventory, traceability statuses, atomic ACs with Verify, determinism/state rules, and ambiguity capture. Output PASS/FAIL only. No writes."
-    metadata:
-      short-description: "Spec lint → PASS/FAIL"
-    ---
+---
+name: core-openspec-spec-lint
+description: "Lint an OpenSpec Mini-SPEC/SPEC for completeness and no-drop coverage against the source brief (README/notes): requirement inventory, traceability statuses, atomic ACs with Verify, determinism/state rules, and ambiguity capture. Output PASS/FAIL only. No writes."
+metadata:
+  short-description: "Spec lint → PASS/FAIL"
+---
 
-    ## Goal
+## Goal
 Catch missing/forgotten requirements (including PROCESS items) before slicing or coding.
 
 ## Inputs
@@ -41,3 +41,4 @@ Catch missing/forgotten requirements (including PROCESS items) before slicing or
 ### Determinism/state
 - If brief implies daily/session stability, ordering, caching, navigation state:
   - Spec must state explicit rules and boundaries (timezone, persistence scope)
+

@@ -1,11 +1,11 @@
-    ---
-    name: feature-openspec-spec-from-brief
-    description: "Product feature intake: convert a brief/PRD/notes/README excerpt into a full OpenSpec SPEC (with scenarios) plus requirement inventory + traceability. Avoid tech-test PR choreography unless `process_mode=strict` is requested."
-    metadata:
-      short-description: "Feature → SPEC (full)"
-    ---
+---
+name: feature-openspec-spec-from-brief
+description: "Product feature intake: convert a brief/PRD/notes/README excerpt into a full OpenSpec SPEC (with scenarios) plus requirement inventory + traceability. Avoid tech-test PR choreography unless `process_mode=strict` is requested."
+metadata:
+  short-description: "Feature → SPEC (full)"
+---
 
-    ## Goal
+## Goal
 Create a richer SPEC for real product features.
 
 ## Inputs
@@ -24,3 +24,4 @@ Create a richer SPEC for real product features.
 - Include Determinism & state rules when relevant.
 - ACs: atomic + each includes Verify.
 - Include Traceability mapping R-* → AC/section/OUT/ASSUMED/UNKNOWN.
+

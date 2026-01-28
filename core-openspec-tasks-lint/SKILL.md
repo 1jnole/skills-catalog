@@ -1,11 +1,11 @@
-    ---
-    name: core-openspec-tasks-lint
-    description: "Lint `openspec/changes/<slug>/tasks.md` against the spec: Iteration 0 baseline/gates, every AC scheduled exactly once, PROCESS constraints satisfied or explicitly deferred, and PR-sized iteration objectives. Output PASS/FAIL only. No writes."
-    metadata:
-      short-description: "Tasks lint → PASS/FAIL"
-    ---
+---
+name: core-openspec-tasks-lint
+description: "Lint `openspec/changes/<slug>/tasks.md` against the spec: Iteration 0 baseline/gates, every AC scheduled exactly once, PROCESS constraints satisfied or explicitly deferred, and PR-sized iteration objectives. Output PASS/FAIL only. No writes."
+metadata:
+  short-description: "Tasks lint → PASS/FAIL"
+---
 
-    ## Goal
+## Goal
 Ensure the plan is complete and enforceable before implementation.
 
 ## Inputs
@@ -24,3 +24,4 @@ Ensure the plan is complete and enforceable before implementation.
 - Every AC appears in exactly one iteration's "Done when".
 - Every PROCESS requirement is satisfied by an iteration or explicitly deferred with rationale.
 - Each iteration has a single objective and minimal file scope (PR-sized).
+
