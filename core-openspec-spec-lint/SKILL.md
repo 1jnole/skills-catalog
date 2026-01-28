@@ -1,8 +1,8 @@
 ---
 name: core-openspec-spec-lint
-description: "Lint an OpenSpec Mini-SPEC/SPEC for completeness and no-drop coverage against the source brief (README/notes): requirement inventory, traceability statuses, atomic ACs with Verify, determinism/state rules, and ambiguity capture. Output PASS/FAIL only. No writes."
+description: Lint an OpenSpec Mini-SPEC or SPEC for completeness and no-drop coverage against the source brief (README or notes). Output PASS or FAIL only. No writes.
 metadata:
-  short-description: "Spec lint → PASS/FAIL"
+  short-description: Spec lint -> PASS/FAIL
 ---
 
 ## Goal

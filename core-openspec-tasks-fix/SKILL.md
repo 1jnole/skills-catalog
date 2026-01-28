@@ -1,8 +1,8 @@
 ---
 name: core-openspec-tasks-fix
-description: "Fix tasks.md that failed `core-openspec-tasks-lint` with minimal edits: schedule missing ACs/PROCESS constraints, add Iteration 0 gates if missing, keep PR-sized iterations. No new scope."
+description: Fix tasks.md that failed core-openspec-tasks-lint with minimal edits. Schedule missing ACs or PROCESS constraints, add Iteration 0 gates if missing, keep PR-sized iterations. No new scope.
 metadata:
-  short-description: "Fix tasks.md minimal diff"
+  short-description: Fix tasks.md minimal diff
 ---
 
 ## Goal

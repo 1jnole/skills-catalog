@@ -1,8 +1,8 @@
 ---
 name: feature-openspec-slice-into-iterations
-description: "After a full SPEC: write `openspec/changes/<slug>/tasks.md` as 3–6 reviewable iterations with Iteration 0 baseline/gates, each iteration mapping to specific ACs. Treat PROCESS items as advisory unless `process_mode=strict`."
+description: After a full SPEC, write openspec/changes/<slug>/tasks.md as 3-6 reviewable iterations with Iteration 0 baseline and gates. Each iteration maps to specific ACs. PROCESS items are advisory unless process_mode=strict.
 metadata:
-  short-description: "Feature → tasks.md iterations"
+  short-description: Feature -> tasks.md iterations
 ---
 
 ## Goal

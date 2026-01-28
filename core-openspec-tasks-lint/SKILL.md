@@ -1,8 +1,8 @@
 ---
 name: core-openspec-tasks-lint
-description: "Lint `openspec/changes/<slug>/tasks.md` against the spec: Iteration 0 baseline/gates, every AC scheduled exactly once, PROCESS constraints satisfied or explicitly deferred, and PR-sized iteration objectives. Output PASS/FAIL only. No writes."
+description: Lint openspec/changes/<slug>/tasks.md against the spec. Require Iteration 0 baseline and gates, every AC scheduled exactly once, PROCESS constraints handled or deferred, and PR-sized iterations. Output PASS or FAIL only. No writes.
 metadata:
-  short-description: "Tasks lint → PASS/FAIL"
+  short-description: Tasks lint -> PASS/FAIL
 ---
 
 ## Goal
