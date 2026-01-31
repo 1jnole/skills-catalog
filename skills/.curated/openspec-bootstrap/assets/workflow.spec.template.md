@@ -1,9 +1,22 @@
-# OpenSpec Workflow Contract
+# Workflow Contract — Codex + Skills + OpenSpec + npm
 
-Copy this file to `openspec/specs/workflow.md` and keep it short.
+## Non-negotiables
+- OpenSpec is source-of-truth: implement only `openspec/changes/<slug>/`.
+- 1 change = 1 PR (or equivalent).
+- Evidence required in `openspec/changes/<slug>/tasks.md` (commands + outputs + exit codes).
+- Single gate: `npm run verify`.
+- No invented contracts: STOP and ask for clarification.
 
-Include:
-- source of truth rules (changes/<slug>)
-- evidence requirements (tasks.md)
-- single gate (npm run verify)
-- stop conditions
+## OpenSpec structure
+- `openspec/specs/` = stable specs (durable contracts).
+- `openspec/changes/<slug>/specs/` = spec deltas only when the change modifies/adds a durable contract.
+
+## Commit messages
+Use Conventional Commits:
+- `type(scope): short summary`
+- `scope` MUST be `<slug>`.
+- Types: `feat|fix|refactor|docs|test|chore`.
+- Body SHOULD include: `OpenSpec: openspec/changes/<slug>/`.
+
+## AGENTS.md
+Keep root instructions short; delegate details to overrides (e.g. `openspec/AGENTS.override.md`).

@@ -19,6 +19,10 @@ Use the repo-local templates:
 - Include relevant outputs (trim long logs, but keep failures and exit codes).
 - Always include the final `npm run verify` output.
 
+## Commit convention (MUST)
+- Commit scope MUST be the OpenSpec `<slug>`.
+- Include `OpenSpec: openspec/changes/<slug>/` in the commit body (recommended).
+
 ## Workflow conventions
 - Keep each change folder small and focused.
 - If you need deeper agent rules for a specific subfolder inside `openspec/`, add a nested `AGENTS.override.md` there.

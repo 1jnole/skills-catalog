@@ -14,6 +14,11 @@
 - The single verification gate is: `npm run verify`.
 - Run it after every meaningful change and before you claim completion.
 
+## Commit messages (Conventional Commits)
+- Format: `type(<slug>): short summary`
+- Types: `feat|fix|refactor|docs|test|chore`
+- Recommended body: `OpenSpec: openspec/changes/<slug>/`
+
 ## Context budget
 - Keep this file short to avoid silent truncation. Push deeper detail into `AGENTS.override.md` files.
 

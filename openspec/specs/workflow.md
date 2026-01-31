@@ -1,52 +1,51 @@
-# OpenSpec Workflow Contract
+# Workflow Contract — Codex + Skills + OpenSpec + npm
 
-This document defines the **stable, repo-wide workflow contract** for using OpenSpec in this ecosystem.
+This document is the **stable contract** for how this repository and downstream repos should be operated by agents.
 
-> If any instruction in `AGENTS.md` / `AGENTS.override.md` conflicts with this doc, follow the AGENTS instruction
-> and open an OpenSpec change to reconcile the contract.
+## Non-negotiables
+- **OpenSpec is source-of-truth**: implement only what exists under `openspec/changes/<slug>/`.
+- **1 change = 1 PR** (or equivalent atomic unit).
+- **Evidence is mandatory**: record commands + relevant output (including exit codes) in `openspec/changes/<slug>/tasks.md`.
+- **Single gate**: run `npm run verify`.
+- **No invented contracts**: if an input/output/requirement is not specified, **STOP** and ask for clarification.
 
-## Goals
+## OpenSpec structure
 
-- Keep work **deterministic** and reviewable.
-- Make the agent's behavior **repeatable** with minimal prompting.
-- Ensure every change has **evidence** and passes the single gate: `npm run verify`.
+### Stable specs vs change deltas
+- `openspec/specs/` contains **stable specs** that define durable contracts (like this document).
+- `openspec/changes/<slug>/specs/` contains **spec deltas** for a specific change *only when that change modifies or adds to a durable contract*.
 
-## Source of truth
+It is valid for `openspec/changes/<slug>/specs/` to be empty when the change is purely mechanical or operational.
 
-- **Only implement what is specified under** `openspec/changes/<slug>/...`.
-- **One change folder maps to one PR** (or equivalent).
+### Change folder minimum
+A change folder should contain at least:
+- `proposal.md`
+- `tasks.md`
 
-## Required artifacts per change
+Optional (when needed):
+- `design.md`
+- `specs/` (spec deltas)
 
-Each change lives in `openspec/changes/<slug>/` and typically includes:
+## Commit messages
 
-- `proposal.md` — why + what changes
-- `tasks.md` — evidence log (commands + outputs + exit codes)
-- optional: `design.md`
-- optional: `specs/*.md` — spec deltas for this change
+### Standard
+Use **Conventional Commits**:
+- Format: `type(scope): short summary`
+- `scope` **MUST** be the OpenSpec `<slug>`.
+- Types (minimum set): `feat | fix | refactor | docs | test | chore`.
 
-## Evidence rules (tasks.md)
+### Traceability requirements
+When the change is associated with an OpenSpec slug, the commit body SHOULD include:
+- `OpenSpec: openspec/changes/<slug>/`
 
-`tasks.md` must include:
+If a gate was executed successfully, the body MAY include:
+- `Evidence: npm run verify`
 
-1) Objective
-2) Checklist of steps
-3) Commands executed (copy/paste)
-4) Relevant output (include exit codes)
-5) Result of `npm run verify`
+### Safety
+Agents SHOULD NOT run `git commit` unless the environment explicitly allows it; instead, generate the commit message text for human review.
 
-## Global specs vs change specs
+## AGENTS.md
+- Keep `AGENTS.md` short (root policy + gate + stop conditions).
+- Put operational detail under directory overrides (e.g. `openspec/AGENTS.override.md`).
 
-- `openspec/specs/` holds **stable, long-lived contracts** (like this workflow).
-- `openspec/changes/<slug>/specs/` holds **change-scoped spec deltas**.
-  - Use it when a change introduces or modifies a contract.
-  - If a delta updates a stable contract, apply it by updating the target file under `openspec/specs/`
-    as part of the same change (with evidence).
-
-## Stop conditions
-
-Stop and ask for clarification if:
-
-- Requirements/spec are missing or ambiguous.
-- The target repo lacks `npm run verify` and there is no agreed equivalent.
-- A required tool is missing (node/npm/gh/python) and no documented alternative exists.
+Reason: agent instruction documents may be truncated by size limits; prioritize critical content at the top and delegate details to overrides.

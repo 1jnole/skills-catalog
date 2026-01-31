@@ -58,8 +58,9 @@ Managed block markers (MUST):
 ```
 
 ## Content rules (MUST)
-- Put the **critical rules first** (source-of-truth, gate, stop conditions).
+- Put the **critical rules first** (source-of-truth, gate, stop conditions, commit convention).
 - Keep `AGENTS.md` short; push detail into `openspec/AGENTS.override.md`.
+- Use Conventional Commits with `scope=<slug>` (see managed block).
 - Assume `AGENTS.md` may be silently truncated; keep the managed block compact.
 - Never invent missing contracts; stop and ask.
 - Default to minimal diffs.
