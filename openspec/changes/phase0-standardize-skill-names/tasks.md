@@ -1,7 +1,7 @@
 # Tasks — phase0-standardize-skill-names
 
 ## Objective
-Standardize skill names to clearer, community-aligned prefixes (`core-*`, `repo-*`, `openspec-*`) and ensure `name` matches folder name (kebab-case) for reliable discovery.
+Standardize skill names to clearer, community-aligned prefixes (`core-*`, `repo-*`, `spec-*`) and ensure `name` matches folder name (kebab-case) for reliable discovery.
 
 ## Checklist
 - [x] Rename skill folders to standardized prefixes.
@@ -10,16 +10,16 @@ Standardize skill names to clearer, community-aligned prefixes (`core-*`, `repo-
 - [x] Run the single gate: `npm run verify`.
 
 ## Renames
-- `core-openspec-change-slugger` → `openspec-change-slugger`
-- `core-openspec-intake-router` → `openspec-intake-router`
-- `core-openspec-spec-fix` → `openspec-spec-fix`
-- `core-openspec-spec-lint` → `openspec-spec-lint`
-- `core-openspec-tasks-fix` → `openspec-tasks-fix`
-- `core-openspec-tasks-lint` → `openspec-tasks-lint`
-- `feature-openspec-spec-from-brief` → `openspec-spec-from-brief`
-- `tt-openspec-spec-from-readme` → `openspec-spec-from-readme`
-- `feature-openspec-slice-into-iterations` → `openspec-slice-into-iterations-from-brief`
-- `tt-openspec-slice-into-iterations` → `openspec-slice-into-iterations-from-readme`
+- `core-spec-change-slugger` → `spec-change-slugger`
+- `core-spec-intake-router` → `spec-intake-router`
+- `core-spec-spec-fix` → `spec-spec-fix`
+- `core-spec-spec-lint` → `spec-spec-lint`
+- `core-spec-tasks-fix` → `spec-tasks-fix`
+- `core-spec-tasks-lint` → `spec-tasks-lint`
+- `feature-spec-spec-from-brief` → `spec-spec-from-brief`
+- `tt-spec-spec-from-readme` → `spec-spec-from-readme`
+- `feature-spec-slice-into-iterations` → `spec-slice-into-iterations-from-brief`
+- `tt-spec-slice-into-iterations` → `spec-slice-into-iterations-from-readme`
 - `core-env-vars-bootstrap` → `repo-env-vars-bootstrap`
 - `core-repo-gates-bootstrap` → `repo-gates-bootstrap`
 - `core-runbook-command-extractor` → `repo-runbook-command-extractor`
@@ -37,16 +37,16 @@ core-error-fix-loop
 core-gates-and-evidence
 core-minimal-diff-implementer
 core-pr-ready-packager
-openspec-change-slugger
-openspec-intake-router
-openspec-slice-into-iterations-from-brief
-openspec-slice-into-iterations-from-readme
-openspec-spec-fix
-openspec-spec-from-brief
-openspec-spec-from-readme
-openspec-spec-lint
-openspec-tasks-fix
-openspec-tasks-lint
+spec-change-slugger
+spec-intake-router
+spec-slice-into-iterations-from-brief
+spec-slice-into-iterations-from-readme
+spec-spec-fix
+spec-spec-from-brief
+spec-spec-from-readme
+spec-spec-lint
+spec-tasks-fix
+spec-tasks-lint
 repo-env-vars-bootstrap
 repo-gates-bootstrap
 repo-runbook-command-extractor
@@ -54,7 +54,7 @@ repo-testing-suites-discovery
 ```
 
 ```bash
-rg "core-openspec-|tt-openspec-|feature-openspec-" -S skills README.md || true
+rg "core-spec-|tt-spec-|feature-spec-" -S skills README.md || true
 ```
 ```text
 (exit_code=0)

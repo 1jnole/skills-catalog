@@ -15,10 +15,14 @@ If Codex ignores repo-local config, the workflow still works because:
 ## OpenSpec workflow contract
 The stable workflow contract lives at `openspec/specs/workflow.md`.
 
+## Templates are not decorative
+The flow assumes repo-local templates under `openspec/templates/*`.
+When starting a new change, scaffold `openspec/changes/<slug>/` from templates (see `$spec-new-change-from-templates`).
+
 ## Skills layout
 This catalog uses:
-- `skills/.curated/<skill>/SKILL.md` for stable skills
-- `skills/.experimental/<skill>/SKILL.md` for optional packs (e.g. Angular)
+- `packs/core/skills/<skill>/SKILL.md` for stable skills
+- `packs/angular/skills/<skill>/SKILL.md` for framework packs (e.g. Angular)
 
 ## Installing skills for Codex
 Typical locations:

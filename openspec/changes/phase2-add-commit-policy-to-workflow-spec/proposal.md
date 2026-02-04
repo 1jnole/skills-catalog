@@ -5,7 +5,7 @@ Commit message conventions should be part of the **stable workflow contract** so
 
 ## What changes
 - Update `openspec/specs/workflow.md` to define Conventional Commits policy.
-- Update `openspec-bootstrap`'s workflow spec template so newly bootstrapped repos inherit the policy.
+- Update `spec-bootstrap`'s workflow spec template so newly bootstrapped repos inherit the policy.
 
 ## Scope
 - Documentation-only contract changes.

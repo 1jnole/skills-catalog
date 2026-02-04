@@ -5,7 +5,7 @@ Add Conventional Commits policy (scope = OpenSpec slug + traceability footer) to
 
 ## Checklist
 - [x] Update stable workflow spec with commit message policy
-- [x] Update openspec-bootstrap workflow spec template
+- [x] Update spec-bootstrap workflow spec template
 - [x] Run the catalog gate: `npm run verify`
 
 ## Commands executed

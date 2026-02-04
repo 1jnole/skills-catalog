@@ -7,16 +7,15 @@ Within `openspec/`, follow these rules strictly:
 ## Change layout
 Each change lives in `openspec/changes/<slug>/` and includes:
 - `proposal.md` (why + what changes)
-- `tasks.md` (evidence: commands + outputs + exit codes)
+- `tasks.md` (plan + evidence)
 - optional: `design.md` and `specs/*.md`
 
+## Templates
+Prefer repo-local templates under `openspec/templates/*`.
+When starting a new change folder, scaffold it via `$spec-new-change-from-templates`.
+
 ## Evidence format
-In `tasks.md`, include:
-1) Objective
-2) Checklist
-3) Commands executed (copy/paste)
-4) Relevant output (include exit codes)
-5) Result of `npm run verify`
+In `tasks.md`, keep an iteration plan (incl. Iteration 0) and append verification evidence under `## Evidence log`.
 
 ## Stop conditions
 - Do not invent requirements or contracts.

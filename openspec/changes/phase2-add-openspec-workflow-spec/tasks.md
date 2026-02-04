@@ -1,4 +1,4 @@
-# Tasks — phase2-add-openspec-workflow-spec
+# Tasks — phase2-add-spec-workflow-spec
 
 ## Objective
 Add a stable, repo-wide OpenSpec workflow contract at `openspec/specs/workflow.md` and wire it into agent docs,
@@ -7,8 +7,8 @@ bootstrap assets, and the catalog verification gate.
 ## Checklist
 - [x] Add `openspec/specs/workflow.md`
 - [x] Reference workflow contract from `openspec/AGENTS.override.md` and `docs/AGENTS.md`
-- [x] Update `openspec-bootstrap` to scaffold `openspec/specs/workflow.md`
-- [x] Add a workflow spec template to `openspec-bootstrap` assets
+- [x] Update `spec-bootstrap` to scaffold `openspec/specs/workflow.md`
+- [x] Add a workflow spec template to `spec-bootstrap` assets
 - [x] Extend catalog `npm run verify` to require the workflow spec + template
 - [x] Run `npm run verify` and capture output
 

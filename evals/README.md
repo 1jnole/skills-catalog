@@ -1,16 +1,23 @@
-# Evals prep (golden prompts)
+# Evals
 
-This folder contains a **small golden prompt set** to validate the skills catalog manually (smoke tests) before building a full eval harness.
+`prompts.csv` is the executable regression set for this catalog.
 
-## How to use now (manual)
-- Pick 5–10 prompts from `golden-prompts.md`
-- Run them in Codex CLI (explicit skill calls recommended)
-- Grade against the **Expected checks** only (no subjective scoring)
+## Run
+Requires `codex` installed and on PATH.
 
-## When to convert to an eval harness
-Convert this set to a CSV-driven harness once:
-- skill names/layout are stable (no renames),
-- `AGENTS.md` + overrides are stable,
-- the prompts reflect real workflows (from at least 2 repos / ~10 runs).
+```bash
+npm run evals
+# optional rubric pass (if your Codex CLI supports --output-schema)
+npm run evals -- --with-rubric
+```
 
-At that point, create `evals/prompts.csv` in the OpenAI eval-skills style and run `codex exec --json` with deterministic graders.
+## Inputs
+- `fixtures/<name>/` — workspace templates copied per eval row
+- `core-skills.json` — skills that must have explicit/implicit/negative coverage
+- `rubric/` — optional structured rubric (opt-in)
+
+## Outputs
+- `artifacts/workspaces/<EV-ID>/` — per-eval workspace + isolated CODEX_HOME
+- `artifacts/<EV-ID>.jsonl` — Codex JSONL trace
+- `artifacts/<EV-ID>.stderr.log` — stderr capture
+- `artifacts/report.json` — summary report

@@ -1,11 +1,11 @@
 # tasks.md — Evidence log
 
 ## Objective
-- Harden the Phase 1 bootstrap skills (`openspec-bootstrap`, `agents-bootstrap`) to be truncation-safe and aligned with current Codex + AGENTS.md + OpenSpec conventions.
+- Harden the Phase 1 bootstrap skills (`spec-bootstrap`, `agents-bootstrap`) to be truncation-safe and aligned with current Codex + AGENTS.md + OpenSpec conventions.
 
 ## Checklist
-- [x] Add missing OpenSpec templates (proposal/design/spec-delta) to `openspec-bootstrap` assets
-- [x] Update `openspec-bootstrap` instructions to scaffold the expanded template set
+- [x] Add missing OpenSpec templates (proposal/design/spec-delta) to `spec-bootstrap` assets
+- [x] Update `spec-bootstrap` instructions to scaffold the expanded template set
 - [x] Tighten `agents-bootstrap` (precedence + context budget) and update its templates
 - [x] Add a human-oriented fallback doc: `docs/AGENTS.md`
 - [x] Update `README.md` install + bootstrap sections
@@ -27,14 +27,14 @@ v22.16.0
 
 ### Asset inventory
 ```bash
-ls -1 skills/.curated/openspec-bootstrap/assets
+ls -1 skills/.curated/spec-bootstrap/assets
 ls -1 skills/.curated/agents-bootstrap/assets
 ```
 
 Output:
 ```text
 design.template.md
-openspec-README.md
+spec-README.md
 proposal.template.md
 spec-delta.template.md
 spec.template.md

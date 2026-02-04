@@ -1,6 +1,8 @@
-# Skills Catalog — OpenSpec + Codex (2026)
+# Skills Catalog — Spec-First + Codex (2026)
 
-A small, composable skills catalog for **spec-driven development** with OpenSpec and Codex.
+A small, composable skills catalog for **spec-driven development** with a spec-first workflow and Codex.
+> Note: The *skill namespace* is framework-neutral (`spec-*`). The repository still uses an **OpenSpec-compatible** folder layout (`openspec/...`) as the current storage backend.
+
 
 ## What this catalog optimizes for
 - **No silent drops**: requirements present in the brief/README must be captured and traceable.
@@ -23,22 +25,31 @@ Copy the skills you want into:
 ### Option C: installer (if available)
 If your Codex environment provides a `$skill-installer` command, prefer that for repeatable installs.
 
-## Repository layout
-This repo stores skills in a "flattened" layout for easier packaging:
-- `skills/.curated/<skill>/SKILL.md` (stable, default pack)
-- `skills/.experimental/<skill>/SKILL.md` (optional packs, WIP/knowledge)
+## References
+- OpenAI: Testing Agent Skills Systematically with Evals — https://developers.openai.com/blog/eval-skills/
+- OpenAI Codex CLI reference — https://developers.openai.com/codex/cli/reference/
+- OpenAI Codex changelog — https://developers.openai.com/codex/changelog/
+- OpenAI Codex: AGENTS.md guide — https://developers.openai.com/codex/guides/agents-md/
+- OpenAI Codex: Agent skills — https://developers.openai.com/codex/skills/
+- OpenAI: Unrolling the Codex agent loop — https://openai.com/index/unrolling-the-codex-agent-loop/
 
-Copy skill folders (from `skills/.curated` and/or `skills/.experimental`) into one of:
+
+## Repository layout
+This repo is organized as **packs** so you can install only what you need:
+
+- `packs/core/skills/<skill>/SKILL.md` (stable, default pack — OpenSpec + guardrails)
+- `packs/angular/skills/<skill>/SKILL.md` (Angular pack — framework guidance)
+
+To install, copy the skill folders from the pack(s) you want into one of:
 - Repo-scoped: `.codex/skills/<skill>/SKILL.md`
 - User-scoped: `~/.codex/skills/<skill>/SKILL.md`
 
-Keep the curated set small; treat `skills/.experimental` as opt-in packs.
-
+Keep `core` small and always-on; treat framework packs as opt-in.
 
 ## Recommended flows
 
 ### Repo bootstrap (once per repo)
-1) `openspec-bootstrap` (scaffold `openspec/` + templates)
+1) `spec-bootstrap` (scaffold `openspec/` + templates)
 
 2) `agents-bootstrap` (add `AGENTS.md` managed block + `openspec/AGENTS.override.md`)
 
@@ -46,23 +57,23 @@ For extended human notes, see `docs/AGENTS.md`.
 
 
 ### Entry (when the prompt does NOT specify a flow)
-1) `openspec-intake-router` (no file writes)
+1) `spec-intake-router` (no file writes)
 2) Follow its **Next skill(s)** exactly.
 
 ### Tech Test (README → Mini-SPEC → tasks)
-1) `openspec-change-slugger` (recommended)
-2) `openspec-spec-from-readme`
-3) `openspec-spec-lint` → (if FAIL) `openspec-spec-fix` → repeat until PASS
-4) `openspec-slice-into-iterations-from-readme`
-5) `openspec-tasks-lint` → (if FAIL) `openspec-tasks-fix` → repeat until PASS
+1) `spec-change-slugger` (recommended)
+2) `spec-spec-from-readme`
+3) `spec-spec-lint` → (if FAIL) `spec-spec-fix` → repeat until PASS
+4) `spec-slice-into-iterations-from-readme`
+5) `spec-tasks-lint` → (if FAIL) `spec-tasks-fix` → repeat until PASS
 6) Only after PASS: implement per-iteration using your repo gates + evidence policy.
 
 ### Product Feature (brief → SPEC full → tasks)
-1) `openspec-change-slugger` (recommended)
-2) `openspec-spec-from-brief`
-3) `openspec-spec-lint` → (if FAIL) `openspec-spec-fix` → repeat until PASS
-4) `openspec-slice-into-iterations-from-brief`
-5) `openspec-tasks-lint` → (if FAIL) `openspec-tasks-fix` → repeat until PASS
+1) `spec-change-slugger` (recommended)
+2) `spec-spec-from-brief`
+3) `spec-spec-lint` → (if FAIL) `spec-spec-fix` → repeat until PASS
+4) `spec-slice-into-iterations-from-brief`
+5) `spec-tasks-lint` → (if FAIL) `spec-tasks-fix` → repeat until PASS
 
 ## Conventions (to avoid overlap)
 - Prompts should be **orchestration only** (which skill, which order, when to STOP).
@@ -71,4 +82,22 @@ For extended human notes, see `docs/AGENTS.md`.
 
 
 ## Evals prep (optional)
-This repo includes a small "golden prompts" set under `evals/` for manual smoke testing now and to seed a future eval harness later.
+
+## Validation
+```bash
+npm run verify
+```
+
+## Evals
+Requires `codex` installed and on PATH.
+```bash
+npm run evals
+# optional rubric pass (if supported by your Codex CLI):
+npm run evals -- --with-rubric
+```
+
+## Install to USER scope
+```bash
+npm run install:skills -- --dry-run
+npm run install:skills
+```

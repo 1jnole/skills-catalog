@@ -1,4 +1,4 @@
-# Proposal — Add `openspec-bootstrap` skill
+# Proposal — Add `spec-bootstrap` skill
 
 ## Summary
 Add a curated skill that scaffolds a minimal `openspec/` workspace (changes + templates) so repos can adopt spec-driven workflows deterministically.
@@ -8,6 +8,6 @@ Add a curated skill that scaffolds a minimal `openspec/` workspace (changes + te
 - Enforce a particular OpenSpec CLI workflow.
 
 ## Acceptance
-- New skill lives under `skills/.curated/openspec-bootstrap/`.
+- New skill lives under `skills/.curated/spec-bootstrap/`.
 - Skill contains small, copy-friendly templates under `assets/`.
 - `npm run verify` succeeds in this catalog.

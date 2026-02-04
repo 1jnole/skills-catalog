@@ -38,3 +38,10 @@ pnpm-debug.log*
 *.iml
 .DS_Store
 Thumbs.db
+
+# Evals artifacts
+evals/artifacts/
+
+# Codex / agent runtime
+.codex/
+traces/
