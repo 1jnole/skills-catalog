@@ -60,34 +60,11 @@ The Angular pack is consolidated to these 10 canonical skills:
 - `angular21-rxjs-interop-concurrency`
 - `angular21-testing-strategy`
 
-## Recommended flows
-
 ### Repo bootstrap (once per repo)
-1) `spec-bootstrap` (scaffold `openspec/` + templates)
 
-2) `agents-bootstrap` (add `AGENTS.md` managed block + `openspec/AGENTS.override.md`)
+1) `agents-bootstrap` (add `AGENTS.md` managed block + `openspec/AGENTS.override.md`)
 
 For extended human notes, see `docs/AGENTS.md`.
-
-
-### Entry (when the prompt does NOT specify a flow)
-1) `spec-intake-router` (no file writes)
-2) Follow its **Next skill(s)** exactly.
-
-### Tech Test (README → Mini-SPEC → tasks)
-1) `spec-change-slugger` (recommended)
-2) `spec-spec-from-readme`
-3) `spec-spec-lint` → (if FAIL) `spec-spec-fix` → repeat until PASS
-4) `spec-slice-into-iterations-from-readme`
-5) `spec-tasks-lint` → (if FAIL) `spec-tasks-fix` → repeat until PASS
-6) Only after PASS: implement per-iteration using your repo gates + evidence policy.
-
-### Product Feature (brief → SPEC full → tasks)
-1) `spec-change-slugger` (recommended)
-2) `spec-spec-from-brief`
-3) `spec-spec-lint` → (if FAIL) `spec-spec-fix` → repeat until PASS
-4) `spec-slice-into-iterations-from-brief`
-5) `spec-tasks-lint` → (if FAIL) `spec-tasks-fix` → repeat until PASS
 
 ## Conventions (to avoid overlap)
 - Prompts should be **orchestration only** (which skill, which order, when to STOP).
