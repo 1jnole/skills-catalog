@@ -3,8 +3,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "verify": "node scripts/verify-skills.mjs",
-    "evals": "node scripts/run-evals.mjs",
-    "install:skills": "node scripts/install-user-skills.mjs"
+    "verify": "openspec list --json && openspec validate --specs"
   }
 }
