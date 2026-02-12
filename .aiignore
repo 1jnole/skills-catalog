@@ -1,0 +1,50 @@
+# AI context hygiene: keep prompts focused on source and docs.
+
+# Dependencies and generated artifacts
+node_modules/
+dist/
+build/
+out/
+tmp/
+temp/
+coverage/
+.nyc_output/
+
+# Framework and tooling caches
+.angular/cache/
+.cache/
+.parcel-cache/
+.turbo/
+.eslintcache
+*.tsbuildinfo
+
+# Logs and runtime traces
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+traces/
+
+# Secrets and local-only environment files
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+
+# Local editors, VCS internals, OS metadata
+.git/
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Local agent/tool runtime data
+.codex/

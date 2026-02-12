@@ -1,0 +1,12 @@
+interface:
+  display_name: "Angular SignalStore Feature Playbook"
+  short_description: "Start new Angular features with a standard NgRx SignalStore scaffold + async flows + request status."
+  brand_color: "#3B82F6"
+  default_prompt: "Start a new feature using the repo's standard SignalStore format. Use the templates in assets/ and do not guess endpoints or types."
+
+policy:
+  # Safer default: require explicit invocation to avoid misfires on general NgRx discussions.
+  allow_implicit_invocation: false
+
+dependencies:
+  tools: []

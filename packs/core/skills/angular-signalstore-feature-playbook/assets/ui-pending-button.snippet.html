@@ -1,0 +1,15 @@
+<!--
+  Snippet: Disable write actions while the store is pending.
+
+  Replace `store` with your injected store reference.
+  Works with Angular control flow (`@if`).
+-->
+
+<button
+  type="button"
+  (click)="onAction()"
+  [disabled]="store.isPending()"
+  class="... disabled:opacity-50 disabled:cursor-wait"
+>
+  @if (store.isPending()) { Syncing... } @else { Submit }
+</button>

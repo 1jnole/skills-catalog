@@ -103,5 +103,5 @@ Se mantienen:
 | --- | --- | --- | --- | --- |
 | `angular-skills-plan-baseline-and-realignment` | Archivado | `2026-02-12` | `openspec/changes/archive/2026-02-12-angular-skills-plan-baseline-and-realignment/tasks.md` | Baseline + realineación del plan |
 | `angular-skills-consolidate-foundation-and-data` | Pendiente | - | Pendiente de crear en su slug | Bloque foundation + data |
-| `angular-skills-consolidate-platform-and-quality` | Pendiente | - | Pendiente de crear en su slug | Bloque platform + quality |
+| `angular-skills-consolidate-platform-and-quality` | Archivado | `2026-02-12` | `openspec/changes/archive/2026-02-12-angular-skills-consolidate-platform-and-quality/tasks.md` | Bloque platform + quality |
 | `angular-skills-catalog-final-sync` | Pendiente | - | Pendiente de crear en su slug | Cierre documental final |
