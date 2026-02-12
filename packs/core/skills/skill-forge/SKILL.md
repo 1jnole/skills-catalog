@@ -1,26 +1,26 @@
 ---
 name: skill-forge
 description: |
-  Create or update Codex agent skills (SKILL.md + optional agents/openai.yaml) using recommended best practices.
+  Create or update Codex skills (`SKILL.md` and optional `agents/openai.yaml`) with repeatable best practices.
 
   Use when:
-  - The user asks to create a new Codex skill (a folder containing SKILL.md).
-  - The user asks to improve an existing skill’s trigger behavior, description boundaries, steps, templates, or optional metadata.
+  - The user asks to create a new Codex skill folder containing `SKILL.md`.
+  - The user asks to improve an existing skill's routing boundaries, steps, or metadata.
 
   Don't use when:
-  - The user is only asking conceptual questions about “skills” without requesting a concrete skill artifact.
-  - The user asks for evals/graders or a full evaluation harness (use a dedicated evals skill instead).
-  - The user asks for general documentation writing unrelated to Codex skill packaging.
+  - The request is only conceptual discussion without producing skill artifacts.
+  - The request is for eval harnesses/graders, not skill packaging.
+  - The request is general documentation unrelated to Codex skills.
 
   Outputs:
-  - A skill folder with a SKILL.md containing strict frontmatter (name, description) and procedural instructions.
-  - Optional agents/openai.yaml for UI metadata, invocation policy, and tool dependencies.
-  - Optional internal templates under assets/ when helpful.
+  - Skill folder with valid `SKILL.md` frontmatter (`name`, `description`) plus procedural instructions.
+  - Optional `agents/openai.yaml` for display metadata, invocation policy, and tool dependencies.
+  - Optional templates under `assets/` when useful.
 
   Success criteria:
-  - The produced SKILL.md has valid YAML frontmatter with name + description and clear trigger boundaries.
-  - The skill has explicit steps with inputs/outputs, guardrails, negative examples, and edge cases.
-  - Templates/examples are embedded in the skill (assets/), not in external system prompts.
+  - `SKILL.md` is valid and has clear routing boundaries.
+  - Steps define inputs, outputs, and guardrails.
+  - Templates/examples are embedded in the skill instead of external prompts.
 ---
 
 # Skill Forge — Create Skills that Create Results

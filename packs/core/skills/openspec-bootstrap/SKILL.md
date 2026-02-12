@@ -1,29 +1,27 @@
 ---
 name: openspec-bootstrap
 description: |
-  Bootstrap OpenSpec foundations in a repository (workspace, config, and OpenSpec override) so downstream OpenSpec skills can run deterministically.
+  Bootstrap OpenSpec foundations so downstream OpenSpec skills run deterministically.
 
   Use when:
   - The repo is missing `openspec/` or `openspec/config.yaml`.
   - `agents-bootstrap` is blocked because OpenSpec is not initialized.
-  - The user asks to prepare OpenSpec before creating or applying changes.
+  - The user asks to prepare OpenSpec before spec workflows.
 
   Don't use when:
-  - The user only wants to update `AGENTS.md` managed content (use `agents-bootstrap`).
-  - The user asks to create specific change artifacts (`proposal/specs/design/tasks`) directly.
-  - OpenSpec adoption is explicitly disallowed by project policy.
+  - The user only needs root `AGENTS.md` managed-block sync (use `agents-bootstrap`).
+  - The user asks to author a specific change artifact directly.
+  - OpenSpec adoption is disallowed by project policy.
 
   Outputs:
-  - `openspec/config.yaml` created or minimally updated from template.
-  - `openspec/AGENTS.override.md` created/updated (enabled by default; disable only if explicitly requested) with scope-by-artifacts, decision policy, conditional approval checkpoints, and evidence rules.
-  - OpenSpec preflight evidence or actionable blocker if CLI is unavailable.
+  - `openspec/config.yaml` created or minimally aligned from template.
+  - `openspec/AGENTS.override.md` created/updated by default unless explicitly disabled.
+  - Preflight evidence for `openspec --version`, `openspec schemas --json`, and `openspec list --json`.
 
   Success criteria:
-  - `openspec --version`, `openspec schemas --json`, and `openspec list --json` succeed.
-  - `openspec/config.yaml` exists with repo-specific context and deterministic rules.
-  - `openspec/AGENTS.override.md` includes phase routing, decision precedence, approval checkpoint rules for critical/destructive changes, and evidence requirements.
-  - Non-critical changes keep autonomous flow with `/review` + gates.
-  - OpenSpec-dependent skills are unblocked (`agents-bootstrap`, proposal/apply/archive workflows).
+  - OpenSpec CLI preflight commands succeed.
+  - Config and override files exist with deterministic routing/evidence rules.
+  - OpenSpec-dependent workflows are unblocked.
 metadata:
   short-description: Bootstrap OpenSpec workspace + config + override
 ---

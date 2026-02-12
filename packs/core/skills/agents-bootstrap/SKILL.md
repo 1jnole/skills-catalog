@@ -1,27 +1,26 @@
 ---
 name: agents-bootstrap
 description: |
-  Create or refresh repo-local Codex root agent instructions using a managed block in `AGENTS.md`.
+  Sync repo-local Codex root instructions by creating or refreshing the managed block in `AGENTS.md`.
 
   Use when:
   - The user asks to bootstrap or update the root `AGENTS.md` managed section.
-  - The managed block in `AGENTS.md` drifted and needs synchronization with the latest baseline.
-  - Repo-level guardrails, gate, and stop conditions must be standardized.
+  - The managed block drifted from the current baseline policy.
+  - Repo-level guardrails, gate, and stop conditions need standardization.
 
   Don't use when:
-  - The user only wants ad-hoc edits outside the managed block.
-  - The task is to create/update `openspec/config.yaml` or `openspec/AGENTS.override.md` (use `openspec-bootstrap`).
-  - The repository has explicit policy that forbids managed-block automation.
-  - Required preconditions (`npm run verify`) are intentionally out of scope.
+  - The user wants ad-hoc edits outside managed markers.
+  - The task is OpenSpec workspace bootstrap (`openspec/config.yaml` or `openspec/AGENTS.override.md`); use `openspec-bootstrap`.
+  - Repository policy forbids managed-block automation.
 
   Outputs:
-  - `AGENTS.md` with an updated managed block between the required markers.
-  - Updated managed-block template in `assets/` when baseline policy changed.
+  - Root `AGENTS.md` managed block synced between required markers.
+  - `assets/AGENTS.managed.md` updated when baseline policy changes.
 
   Success criteria:
-  - Managed content reflects the latest baseline policy for root instructions.
-  - Edits are minimal and preserve all non-managed content.
-  - Stop conditions are enforced instead of guessing missing contracts.
+  - Managed content matches baseline policy.
+  - Non-managed content is preserved.
+  - Missing contracts trigger stop-and-ask behavior.
 metadata:
   short-description: Sync AGENTS managed block (root-only)
 ---
