@@ -5,5 +5,5 @@
 - [ ] Steps are imperative, numbered, and artifact-driven (inputs → actions → outputs).
 - [ ] Guardrails exist (security + “don’t invent”).
 - [ ] At least 3 negative examples and 3 edge cases.
-- [ ] Templates/examples live inside the skill (assets/) and are referenced.
+- [ ] Any generated templates/examples live inside the skill (assets/) and are referenced.
 - [ ] Optional: agents/openai.yaml present if UI/policy/deps matter.

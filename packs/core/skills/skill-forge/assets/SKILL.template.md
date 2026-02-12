@@ -43,6 +43,7 @@ description: |
 ## Guardrails
 - Don’t invent facts or file contents you didn’t create.
 - Keep scope tight; if requirements expand, propose a separate skill.
+- If networked tools are used, require restrictive allowlists and `domain_secrets` for authenticated domains.
 
 ## Negative examples (don’t call this skill when…)
 - <case 1> → Do <alternative>
@@ -54,3 +55,6 @@ description: |
 
 ## Templates / examples
 - `assets/<template>`: <what it is>
+
+## Invocation snippet
+- `Use the <skill name> skill.`

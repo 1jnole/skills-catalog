@@ -11,6 +11,9 @@ policy:
 
 dependencies:
   tools:
+    # For tools that call external domains:
+    # 1) keep org/request allowlists restrictive
+    # 2) configure credentials with domain_secrets (never inline tokens)
     # - type: "mcp"
     #   value: "<server-name>"
     #   description: "<what it's for>"
