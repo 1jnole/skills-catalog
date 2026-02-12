@@ -2,44 +2,34 @@
 
 # Agent instructions (managed)
 
-## Setup commands
-- Install deps: `npm ci` (preferred) or `npm install`
-- Gate: `npm run verify`
+## Repository expectations
+- Use OpenSpec for non-trivial changes.
+- Implement only what is defined by artifacts in `openspec/changes/<slug>/`, editing repo files required by those tasks.
+- Keep changes atomic and reviewable (split large scopes into multiple slugs).
 
-## Source of truth
-- **OpenSpec is the source of truth.** Only implement work that is described under `openspec/changes/<slug>/...`.
-- **One change = one PR** (or equivalent).
+## Layered instructions
+- Keep this root file short (discovery-safe).
+- All operational details live in `openspec/AGENTS.override.md`.
+- Nested overrides near specialized work take precedence.
 
-## Gate
-- The single verification gate is: `npm run verify`.
-- Run it after every meaningful change and before you claim completion.
+## Prompt policy
+- Stable defaults:
+  - `/prompts:openspec-proposal`
+  - `/prompts:openspec-apply`
+  - `/prompts:openspec-archive`
+- Experimental (`/prompts:opsx-*`) only when explicitly requested.
 
-## Commit messages (Conventional Commits)
-- Format: `type(<slug>): short summary`
-- Types: `feat|fix|refactor|docs|test|chore`
-- Recommended body: `OpenSpec: openspec/changes/<slug>/`
-
-## Context budget
-- Keep this file short to avoid silent truncation. Push deeper detail into `AGENTS.override.md` files.
-
-## Evidence
-- Every change must include `openspec/changes/<slug>/tasks.md` with:
-  - objective + checklist
-  - copy/paste commands + relevant output (include exit codes)
-  - `npm run verify` output
-
-## Change discipline
-- Prefer minimal diffs and small, reviewable commits.
-- Do not refactor unless explicitly required by the spec.
-
-## Stop conditions
+## Stop conditions (global)
 Stop and ask if:
-- `openspec/` is missing, or you cannot locate the change folder.
-- `npm run verify` is missing/failing and there is no accepted substitute.
-- A requirement/contract is unclear or not specified.
-- Required tools (node/npm/git) are missing.
+- `openspec/` is missing or inconsistent
+- scope is unclear or acceptance criteria are missing
+- instructions/contracts conflict
+- a change requires elevated permissions beyond sandbox limits
+- there is destructive risk (see override for the exact list)
 
-## Optional reference
-- More detailed, human-oriented guidance may live in `docs/AGENTS.md`.
+## Execution mode
+- Autonomous end-to-end execution is the default.
+- Require explicit human approval before mutating actions only for critical decisions or destructive risk.
+- All other changes proceed autonomously with `/review` and repository gates.
 
 <!-- END MANAGED: agents-bootstrap -->

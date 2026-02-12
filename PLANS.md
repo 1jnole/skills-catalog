@@ -1,7 +1,7 @@
 # Plan Atómico de Consolidación Angular Skills
 
 ## Propósito
-- Reducir el catálogo Angular de `29` a `10` skills canónicas.
+- Reducir el catálogo Angular de `32` a `10` skills canónicas.
 - Eliminar solapamientos temáticos y mejorar mantenibilidad del pack Angular.
 - Mantener la ejecución en cambios atómicos y trazables.
 
@@ -21,12 +21,16 @@ Out-of-scope:
 - Creación de `docs/*` no existente en el estado actual del repo.
 - Refactors laterales no ligados al objetivo de consolidación.
 
+## Baseline operativo
+- Fecha de baseline: `2026-02-12`.
+- Inventario Angular actual: `32` skills en `packs/angular/skills`.
+
 ## Plan por changes
 
 ### 1) `angular-skills-plan-baseline-and-realignment`
 - Objetivo: fijar baseline y alinear el plan maestro con la estructura real del repo.
 - Entregables: `PLANS.md` lean y baseline del catálogo actual.
-- Aceptación: plan sin duplicación operativa y sin referencias a rutas inexistentes.
+- Aceptación: plan sin duplicación operativa, baseline `32` explícito y sin referencias a rutas inexistentes.
 
 ### 2) `angular-skills-consolidate-foundation-and-data`
 - Objetivo: consolidar dominios de docs/state/template/httpresource.
@@ -77,7 +81,7 @@ Se mantienen:
 - `angular-tooling-bootstrap` (sin cambio funcional)
 
 ## Criterios de aceptación global
-- Checkpoints de catálogo: `29 -> 22 -> 10`.
+- Checkpoints de catálogo: `32 -> 22 -> 10`.
 - Estructura mínima consistente en cada `SKILL.md` canónica.
 - Evidencia de verificación y cierre registrada por slug en `tasks.md`.
 - Trazabilidad completa entre decisiones del plan y cambios archivados.
@@ -97,7 +101,7 @@ Se mantienen:
 
 | Slug | Estado | Fecha | Evidencia (`tasks.md`) | Nota |
 | --- | --- | --- | --- | --- |
-| `angular-skills-plan-baseline-and-realignment` | Pendiente | - | `openspec/changes/<slug>/tasks.md` | Baseline + realineación del plan |
-| `angular-skills-consolidate-foundation-and-data` | Pendiente | - | `openspec/changes/<slug>/tasks.md` | Bloque foundation + data |
-| `angular-skills-consolidate-platform-and-quality` | Pendiente | - | `openspec/changes/<slug>/tasks.md` | Bloque platform + quality |
-| `angular-skills-catalog-final-sync` | Pendiente | - | `openspec/changes/<slug>/tasks.md` | Cierre documental final |
+| `angular-skills-plan-baseline-and-realignment` | Archivado | `2026-02-12` | `openspec/changes/archive/2026-02-12-angular-skills-plan-baseline-and-realignment/tasks.md` | Baseline + realineación del plan |
+| `angular-skills-consolidate-foundation-and-data` | Pendiente | - | Pendiente de crear en su slug | Bloque foundation + data |
+| `angular-skills-consolidate-platform-and-quality` | Pendiente | - | Pendiente de crear en su slug | Bloque platform + quality |
+| `angular-skills-catalog-final-sync` | Pendiente | - | Pendiente de crear en su slug | Cierre documental final |

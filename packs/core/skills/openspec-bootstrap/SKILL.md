@@ -15,12 +15,14 @@ description: |
 
   Outputs:
   - `openspec/config.yaml` created or minimally updated from template.
-  - `openspec/AGENTS.override.md` created/updated (enabled by default; disable only if explicitly requested).
+  - `openspec/AGENTS.override.md` created/updated (enabled by default; disable only if explicitly requested) with scope-by-artifacts, decision policy, conditional approval checkpoints, and evidence rules.
   - OpenSpec preflight evidence or actionable blocker if CLI is unavailable.
 
   Success criteria:
   - `openspec --version`, `openspec schemas --json`, and `openspec list --json` succeed.
   - `openspec/config.yaml` exists with repo-specific context and deterministic rules.
+  - `openspec/AGENTS.override.md` includes phase routing, decision precedence, approval checkpoint rules for critical/destructive changes, and evidence requirements.
+  - Non-critical changes keep autonomous flow with `/review` + gates.
   - OpenSpec-dependent skills are unblocked (`agents-bootstrap`, proposal/apply/archive workflows).
 metadata:
   short-description: Bootstrap OpenSpec workspace + config + override
@@ -78,7 +80,12 @@ Output: valid `openspec/config.yaml` baseline.
 Input: `include_agents_override` + `assets/openspec.AGENTS.override.template.md`.
 Action:
 - If enabled, create/update `openspec/AGENTS.override.md`.
-- Keep file concise and deterministic for phase routing and evidence rules.
+- Keep file deterministic and aligned with:
+  - scope defined by change artifacts (not folder-only edits),
+  - decision policy and precedence,
+  - conditional approval checkpoint for critical/destructive changes,
+  - trivial fast-path for low-risk changes,
+  - evidence rules (table or bullets with required fields).
 Output: `openspec/AGENTS.override.md` aligned with bootstrap policy.
 
 5) Run preflight verification.
@@ -116,4 +123,4 @@ Output: clear next-step routing.
 
 ## Templates/examples
 - `assets/openspec.config.template.yaml`: baseline OpenSpec config scaffold with deterministic rules.
-- `assets/openspec.AGENTS.override.template.md`: OpenSpec subtree override scaffold for phase routing and evidence.
+- `assets/openspec.AGENTS.override.template.md`: OpenSpec subtree override scaffold for phase routing, scope-by-artifacts, decision precedence, conditional approval checkpoint, and evidence rules.

@@ -68,10 +68,8 @@ Action: ensure managed block includes current sections:
 - `Repository expectations`
 - `Layered instructions`
 - `Prompt policy`
-- `Default command flow (stable)`
-- `Gate and evidence`
-- `Stop conditions`
-- `Detailed rules`
+- `Stop conditions (global)`
+- `Execution mode`
 Output: finalized managed block text.
 
 4) Apply updates with minimal diff.
@@ -96,6 +94,8 @@ Output: concise report of files changed and any blockers.
 - Never modify content outside managed markers in `AGENTS.md`.
 - Never invent missing workflow contracts or gates.
 - Keep root file compact; reference `openspec/AGENTS.override.md` without owning its lifecycle.
+- Keep repo-specific custom rules outside the managed block (for example: `## Repo-specific additions`).
+- Keep approval checkpoints conditional: only for critical decisions or destructive risk.
 - Prefer minimal, reviewable diffs.
 - Enforce stop conditions when scope or contracts are unclear.
 
