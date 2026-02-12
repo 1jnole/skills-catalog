@@ -55,6 +55,11 @@ const vm = computed(() => ({ loading: data.isLoading(), error: data.error(), val
 - "Create httpResource for airport list and render states."
 - "Guard the resource so it does not request until id exists."
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

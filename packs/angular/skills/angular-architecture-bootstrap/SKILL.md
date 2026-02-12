@@ -35,6 +35,11 @@ Ensure this repo contains the standard architecture rules doc:
 - Overwriting content outside the managed block (must preserve project-specific notes).
 - Running on a repo that intentionally diverges without documenting the decision (use ADR/OpenSpec instead).
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

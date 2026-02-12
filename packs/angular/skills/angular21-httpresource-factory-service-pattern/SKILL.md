@@ -53,6 +53,11 @@ Create reusable resource factories in services to centralize URL + parse + typin
 - "Refactor duplicated resources into a service factory."
 - "Create a resource factory for airport detail by id."
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

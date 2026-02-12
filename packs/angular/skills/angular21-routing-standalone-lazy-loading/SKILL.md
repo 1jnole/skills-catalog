@@ -58,6 +58,11 @@ export const routes: Routes = [
 - "Add lazy-loaded /airports routes using loadChildren and feature routes."
 - "Convert these routes to loadComponent."
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

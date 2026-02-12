@@ -55,6 +55,11 @@ Enable incremental hydration (SSR) and combine with `@defer` for faster interact
 - "Enable incremental hydration and show how to use it with @defer."
 - "Audit what should hydrate on viewport vs immediately."
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

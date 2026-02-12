@@ -52,6 +52,11 @@ Bind route params/query directly to component inputs (reduces ActivatedRoute boi
 - "Enable router input binding and bind :id to a page input()."
 - "Refactor ActivatedRoute param handling to inputs."
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

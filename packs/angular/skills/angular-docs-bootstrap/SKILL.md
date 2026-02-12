@@ -53,6 +53,11 @@ Creates or updates:
 - This skill is typically run **before** feature work.
 - Pair with `repo-gates-bootstrap` (RUNBOOK + `npm run verify`) for a complete bootstrap.
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

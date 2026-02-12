@@ -52,6 +52,11 @@ Chain resources safely (B depends on A) without firing invalid requests.
 - "Chain airports list → selected airport detail safely."
 - "Prevent B from firing until A has value."
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

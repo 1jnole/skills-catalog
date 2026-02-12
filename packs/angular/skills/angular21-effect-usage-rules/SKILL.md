@@ -57,6 +57,11 @@ effect(() => {
 - "Replace this effect-based derivation with computed()."
 - "Add an effect to sync a signal to document.title safely."
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

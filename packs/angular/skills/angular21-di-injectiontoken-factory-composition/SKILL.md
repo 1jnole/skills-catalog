@@ -97,6 +97,11 @@ export const API_CONFIG = new InjectionToken<ApiConfig>('API_CONFIG', {
 - "Compose a typed API_CONFIG token from multiple base tokens."
 - "Override API_BASE_URL in tests and verify derived tokens change."
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

@@ -35,6 +35,11 @@ Ensure this repo contains the standard styling rules doc:
 - Overwriting content outside the managed block (must preserve project-specific notes).
 - Introducing repo-specific tokens/rules inside the managed block (put those in "Project-specific notes" instead).
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

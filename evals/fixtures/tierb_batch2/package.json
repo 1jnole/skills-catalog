@@ -1,8 +1,0 @@
-{
-  "name": "fixture-tierb-batch2",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "verify": "node verify.mjs"
-  }
-}

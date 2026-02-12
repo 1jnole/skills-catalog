@@ -61,6 +61,11 @@ export class Widget {}
 - "Scope this store per component so two widgets do not share state."
 - "Move this provider from root to route providers."
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

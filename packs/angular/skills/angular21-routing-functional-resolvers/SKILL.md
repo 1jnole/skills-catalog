@@ -53,6 +53,11 @@ Use functional resolvers when route preloading is truly needed; otherwise prefer
 - "Add a functional resolver for airport detail by id."
 - "Remove this resolver and load data progressively instead."
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

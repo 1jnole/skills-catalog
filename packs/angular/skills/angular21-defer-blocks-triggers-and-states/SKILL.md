@@ -64,6 +64,11 @@ Lazy-render expensive UI with `@defer`, using placeholder/loading/error blocks a
 - "Wrap this section in @defer with placeholder/loading/error and choose the right trigger."
 - "Defer this panel on interaction and keep keyboard navigation correct."
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

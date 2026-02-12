@@ -1,7 +1,0 @@
-{
-  "name": "fixture-node-verify",
-  "private": true,
-  "scripts": {
-    "verify": "node -e \"console.log('verify ok')\""
-  }
-}

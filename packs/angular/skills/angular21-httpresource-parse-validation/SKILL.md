@@ -53,6 +53,11 @@ Add parse validation/transform to httpResource so consumers stay typed and safe.
 - "Add parse validation to this httpResource."
 - "Transform DTOs into domain types in parse()."
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

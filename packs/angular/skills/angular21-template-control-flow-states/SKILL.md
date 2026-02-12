@@ -61,6 +61,11 @@ Render UI states with modern control flow (`@if/@for/@switch`) and stable `track
 - "Refactor this template to @if/@for with proper UI states."
 - "Add stable track and empty state to this list."
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.

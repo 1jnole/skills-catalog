@@ -65,6 +65,11 @@ Managed block markers (MUST):
 - Never invent missing contracts; stop and ask.
 - Default to minimal diffs.
 
+## Definition of done
+- Outputs are delivered as specified in "Outputs".
+- Any required commands in the workflow were run, or blockers were reported.
+- Stop conditions were enforced when triggered.
+
 ## Failure modes
 
 - Missing required inputs → ask clarifying questions; do not guess.
