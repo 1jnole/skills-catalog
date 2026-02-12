@@ -37,3 +37,12 @@
 - See `openspec/AGENTS.override.md` for phase-by-phase command routing.
 
 <!-- END MANAGED: agents-bootstrap -->
+
+## Autonomous Execution Policy
+- Execute tasks end-to-end without requesting intermediate confirmations.
+- If a non-critical decision is missing, select the agent’s recommended option.
+- Record assumptions and continue.
+- Stop and ask only when:
+  - there is destructive risk (possible data loss),
+  - instructions/contracts conflict,
+  - elevated permissions are required beyond sandbox limits.

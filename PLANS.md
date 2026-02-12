@@ -1,164 +1,103 @@
-Proposed Plan
+# Plan Atómico de Consolidación Angular Skills
 
+## Propósito
+- Reducir el catálogo Angular de `29` a `10` skills canónicas.
+- Eliminar solapamientos temáticos y mejorar mantenibilidad del pack Angular.
+- Mantener la ejecución en cambios atómicos y trazables.
 
-# Plan Atómico de Consolidación Angular Skills (4 Changes + Umbrella Superseded)
+## Fuentes de verdad operativas
+- El flujo operativo (preflight, creación de change, artefactos, validación, cierre) se toma de `AGENTS.md`.
+- El enrutamiento detallado por fase se toma de `openspec/AGENTS.override.md`.
+- `PLANS.md` define decisiones, alcance y aceptación; no duplica comandos.
 
-## Resumen
+## Alcance
+In-scope:
+- Consolidación de skills en `packs/angular/skills`.
+- Actualización de documentación pública del catálogo cuando corresponda.
+- Registro de trazabilidad por slug en `openspec/changes/<slug>/tasks.md`.
 
-Política acordada para toda la serie: sin npm run verify en esta fase; validación estructural/documental por change.
+Out-of-scope:
+- Cambios en scripts o tooling runtime.
+- Creación de `docs/*` no existente en el estado actual del repo.
+- Refactors laterales no ligados al objetivo de consolidación.
 
-## Cambios importantes en interfaces/contratos
+## Plan por changes
 
-1. La interfaz pública del catálogo (packs/angular/skills/*) cambia de 29 skills a 10 skills canónicas.
-2. Se eliminan 27 carpetas legacy y se crean 8 carpetas nuevas; se mantienen angular-docs-bootstrap y angular-tooling-bootstrap.
-3. Todas las skills canónicas deben cumplir contrato homogéneo de SKILL.md:
-   name, description, metadata.short-description + secciones Goal, When to use, When NOT to use, Inputs, Outputs, Workflow, Common pitfalls, Definition of done, Failure modes.
-4. No hay cambios de APIs runtime, ni package.json, ni tooling de verify en esta serie.
+### 1) `angular-skills-plan-baseline-and-realignment`
+- Objetivo: fijar baseline y alinear el plan maestro con la estructura real del repo.
+- Entregables: `PLANS.md` lean y baseline del catálogo actual.
+- Aceptación: plan sin duplicación operativa y sin referencias a rutas inexistentes.
 
-## Secuencia exacta de implementación (decision-complete)
+### 2) `angular-skills-consolidate-foundation-and-data`
+- Objetivo: consolidar dominios de docs/state/template/httpresource.
+- Entregables: skills canónicas de foundation y data + eliminación de legacy absorbidas.
+- Aceptación: checkpoint intermedio de catálogo en `22` skills.
 
-## Change 1: baseline y matriz de absorción
+### 3) `angular-skills-consolidate-platform-and-quality`
+- Objetivo: consolidar routing/DI/defer/RxJS/testing.
+- Entregables: skills canónicas de plataforma y calidad + eliminación de legacy restantes.
+- Aceptación: checkpoint final de catálogo en `10` skills.
 
-Slug: angular-skills-baseline-and-mapping
-Objetivo: congelar baseline y publicar mapeo completo origen -> destino antes de editar skills.
+### 4) `angular-skills-catalog-final-sync`
+- Objetivo: sincronizar narrativa pública y cerrar trazabilidad de la serie.
+- Entregables: actualización final de `README.md` y ajustes mínimos en `AGENTS.md` si aplica.
+- Aceptación: catálogo final consistente y evidencia completa por slug.
 
-1. Crear change y artefactos OpenSpec:
-   openspec new change "angular-skills-baseline-and-mapping"
-   openspec instructions proposal --change "angular-skills-baseline-and-mapping" --json
-   openspec instructions specs --change "angular-skills-baseline-and-mapping" --json
-   openspec instructions design --change "angular-skills-baseline-and-mapping" --json
-   openspec instructions tasks --change "angular-skills-baseline-and-mapping" --json
-   openspec validate "angular-skills-baseline-and-mapping" --type change
-2. Implementación de este change:
-   docs/angular-skills-consolidation-map.md con mapeo completo (tabla de este plan, sección “Matriz de absorción completa”).
-3. Validación de salida:
-   (Get-ChildItem packs/angular/skills -Directory).Count debe seguir en 29.
-   Get-ChildItem packs/angular/skills -Directory | Select-Object -ExpandProperty Name sin cambios.
-   git diff --name-only solo incluye artefactos del change y docs/angular-skills-consolidation-map.md.
-4. Cerrar change:
-   openspec validate "angular-skills-baseline-and-mapping" --type change
-   openspec archive "angular-skills-baseline-and-mapping"
-
-## Change 2: consolidación foundation + data
-
-Slug: angular-skills-consolidate-foundation-and-data
-Objetivo: consolidar docs/state/template/httpresource en un bloque autocontenido.
-
-1. Crear y preparar artefactos:
-   openspec new change "angular-skills-consolidate-foundation-and-data"
-   (igual secuencia de instructions + validate que en Change 1)
-2. Implementación exacta:
-   Actualizar packs/angular/skills/angular-docs-bootstrap/SKILL.md.
-   Crear packs/angular/skills/angular21-state-model/SKILL.md.
-   Crear packs/angular/skills/angular21-template-control-flow/SKILL.md.
-   Crear packs/angular/skills/angular21-data-httpresource/SKILL.md.
-   Eliminar carpetas legacy absorbidas de estos dominios (listadas en la matriz).
-3. Validación de salida:
-   (Get-ChildItem packs/angular/skills -Directory).Count debe quedar en 22.
-   rg --files packs/angular/skills
-   rg "## Goal|## When to use|## When NOT to use|## Inputs|## Outputs|## Workflow|## Common pitfalls|## Definition of done|## Failure modes" packs/angular/skills/**/SKILL.md -n
-   git diff --name-only sin package.json.
-4. Cerrar change:
-   openspec validate "angular-skills-consolidate-foundation-and-data" --type change
-   openspec archive "angular-skills-consolidate-foundation-and-data"
-
-## Change 3: consolidación routing + di + defer + rxjs + testing
-
-Slug: angular-skills-consolidate-platform-and-quality
-Objetivo: completar consolidación del resto de dominios hasta llegar a 10 skills.
-
-1. Crear y preparar artefactos:
-   openspec new change "angular-skills-consolidate-platform-and-quality"
-   (igual secuencia de instructions + validate que en Change 1)
-2. Implementación exacta:
-   Crear packs/angular/skills/angular21-routing-patterns/SKILL.md.
-   Crear packs/angular/skills/angular21-di-patterns/SKILL.md.
-   Crear packs/angular/skills/angular21-defer-hydration/SKILL.md.
-   Crear packs/angular/skills/angular21-rxjs-interop-concurrency/SKILL.md.
-   Crear packs/angular/skills/angular21-testing-strategy/SKILL.md.
-   Eliminar carpetas legacy absorbidas de estos dominios (listadas en la matriz).
-3. Validación de salida:
-   (Get-ChildItem packs/angular/skills -Directory).Count debe quedar en 10.
-   Get-ChildItem packs/angular/skills -Directory | Select-Object -ExpandProperty Name debe coincidir con catálogo final.
-   rg "## Goal|## When to use|## When NOT to use|## Inputs|## Outputs|## Workflow|## Common pitfalls|## Definition of done|## Failure modes" packs/angular/skills/**/SKILL.md -n
-   git diff --name-only sin package.json.
-4. Cerrar change:
-   openspec validate "angular-skills-consolidate-platform-and-quality" --type change
-   openspec archive "angular-skills-consolidate-platform-and-quality"
-
-## Change 4: alineación documental y cierre de serie
-
-Slug: angular-skills-docs-validation-and-close
-Objetivo: sincronizar documentación pública, dejar evidencia final y cerrar umbrella como superseded.
-
-1. Crear y preparar artefactos:
-   openspec new change "angular-skills-docs-validation-and-close"
-   (igual secuencia de instructions + validate que en Change 1)
-2. Implementación exacta:
-   Actualizar README.md.
-   Actualizar docs/AGENTS.md.
-   Actualizar docs/AUDIT.md.
-   Verificar consistencia con docs/angular-skills-consolidation-map.md.
-3. Validación final de serie:
-   (Get-ChildItem packs/angular/skills -Directory).Count == 10
-   Get-ChildItem packs/angular/skills -Directory | Select-Object -ExpandProperty Name
-   git diff --name-only sin package.json
-   openspec validate "angular-skills-docs-validation-and-close" --type change
-4. Cerrar este change:
-   openspec archive "angular-skills-docs-validation-and-close"
-5. Cierre del umbrella:
-   Marcar en openspec/changes/consolidate-angular-skills-phase1/tasks.md que quedó superseded por los 4 slugs anteriores.
-   Archivar umbrella:
-   openspec archive "consolidate-angular-skills-phase1"
-
-## Matriz de absorción completa (sin decisiones pendientes)
-
-angular-architecture-bootstrap -> angular-docs-bootstrap
-angular-styling-bootstrap -> angular-docs-bootstrap
-angular21-computed-vs-linked-signal -> angular21-state-model
-angular21-effect-usage-rules -> angular21-state-model
-angular21-signals-input-output-model -> angular21-state-model
-angular21-template-control-flow-states -> angular21-template-control-flow
-angular21-httpresource-basics -> angular21-data-httpresource
-angular21-httpresource-chained-resources -> angular21-data-httpresource
-angular21-httpresource-factory-service-pattern -> angular21-data-httpresource
-angular21-httpresource-parse-validation -> angular21-data-httpresource
-angular21-router-component-input-binding -> angular21-routing-patterns
-angular21-routing-functional-guards -> angular21-routing-patterns
-angular21-routing-functional-resolvers -> angular21-routing-patterns
-angular21-routing-standalone-lazy-loading -> angular21-routing-patterns
-angular21-di-hierarchical-providers-scoping -> angular21-di-patterns
-angular21-di-injection-context-rules -> angular21-di-patterns
-angular21-di-injectiontoken-config -> angular21-di-patterns
-angular21-di-injectiontoken-factory-composition -> angular21-di-patterns
-angular21-defer-blocks-triggers-and-states -> angular21-defer-hydration
-angular21-defer-hydrate-triggers -> angular21-defer-hydration
-angular21-incremental-hydration-setup -> angular21-defer-hydration
-angular21-rxjs-concurrency-operator-choice -> angular21-rxjs-interop-concurrency
-angular21-rxjs-interop-take-until-destroyed -> angular21-rxjs-interop-concurrency
-angular21-testing-component-scenarios -> angular21-testing-strategy
-angular21-testing-di-overrides -> angular21-testing-strategy
-angular21-testing-httpclient -> angular21-testing-strategy
-angular21-defer-testing-strategy -> angular21-testing-strategy
+## Matriz de absorción
+- `angular-architecture-bootstrap` -> `angular-docs-bootstrap`
+- `angular-styling-bootstrap` -> `angular-docs-bootstrap`
+- `angular21-computed-vs-linked-signal` -> `angular21-state-model`
+- `angular21-effect-usage-rules` -> `angular21-state-model`
+- `angular21-signals-input-output-model` -> `angular21-state-model`
+- `angular21-template-control-flow-states` -> `angular21-template-control-flow`
+- `angular21-httpresource-basics` -> `angular21-data-httpresource`
+- `angular21-httpresource-chained-resources` -> `angular21-data-httpresource`
+- `angular21-httpresource-factory-service-pattern` -> `angular21-data-httpresource`
+- `angular21-httpresource-parse-validation` -> `angular21-data-httpresource`
+- `angular21-router-component-input-binding` -> `angular21-routing-patterns`
+- `angular21-routing-functional-guards` -> `angular21-routing-patterns`
+- `angular21-routing-functional-resolvers` -> `angular21-routing-patterns`
+- `angular21-routing-standalone-lazy-loading` -> `angular21-routing-patterns`
+- `angular21-di-hierarchical-providers-scoping` -> `angular21-di-patterns`
+- `angular21-di-injection-context-rules` -> `angular21-di-patterns`
+- `angular21-di-injectiontoken-config` -> `angular21-di-patterns`
+- `angular21-di-injectiontoken-factory-composition` -> `angular21-di-patterns`
+- `angular21-defer-blocks-triggers-and-states` -> `angular21-defer-hydration`
+- `angular21-defer-hydrate-triggers` -> `angular21-defer-hydration`
+- `angular21-incremental-hydration-setup` -> `angular21-defer-hydration`
+- `angular21-rxjs-concurrency-operator-choice` -> `angular21-rxjs-interop-concurrency`
+- `angular21-rxjs-interop-take-until-destroyed` -> `angular21-rxjs-interop-concurrency`
+- `angular21-testing-component-scenarios` -> `angular21-testing-strategy`
+- `angular21-testing-di-overrides` -> `angular21-testing-strategy`
+- `angular21-testing-httpclient` -> `angular21-testing-strategy`
+- `angular21-defer-testing-strategy` -> `angular21-testing-strategy`
 
 Se mantienen:
-angular-docs-bootstrap (ampliada)
-angular-tooling-bootstrap (sin cambio funcional)
+- `angular-docs-bootstrap` (ampliada)
+- `angular-tooling-bootstrap` (sin cambio funcional)
 
-## Casos de prueba y escenarios
+## Criterios de aceptación global
+- Checkpoints de catálogo: `29 -> 22 -> 10`.
+- Estructura mínima consistente en cada `SKILL.md` canónica.
+- Evidencia de verificación y cierre registrada por slug en `tasks.md`.
+- Trazabilidad completa entre decisiones del plan y cambios archivados.
 
-1. Escenario baseline: antes de consolidar, conteo de carpetas = 29.
-2. Escenario post-Change-2: conteo = 22 y no faltan skills canónicas ya creadas.
-3. Escenario post-Change-3: conteo = 10 y catálogo coincide exactamente con los 10 nombres objetivo.
-4. Escenario contrato SKILL.md: cada skill canónica contiene frontmatter y secciones obligatorias.
-5. Escenario documentación: README.md, docs/AGENTS.md y docs/AUDIT.md reflejan exactamente el catálogo final.
-6. Escenario guardrail de alcance: no cambios en package.json; no evidencia de ejecución de npm run verify en esta serie.
-7. Escenario trazabilidad: el umbrella queda archivado como superseded con referencia explícita a los 4 slugs ejecutados.
+## Riesgos y mitigaciones
+- Riesgo: drift entre plan y flujo operativo.
+- Mitigación: comandos se mantienen solo en AGENTS y este documento solo referencia esa fuente.
+- Riesgo: alcance accidental fuera de consolidación.
+- Mitigación: cambios atómicos por dominio y validación de alcance por slug.
 
-## Supuestos y defaults explícitos
+## Supuestos y defaults
+- No existe umbrella previo para marcar como superseded.
+- No se crearán rutas `docs/*` nuevas en esta serie.
+- Se prioriza cambio mínimo y revisión simple por iteración.
 
-1. Se aplica core-minimal-diff-implementer: diffs pequeños, sin refactors laterales.
-2. Se adapta core-gates-and-evidence al alcance de fase: evidencia estructural/documental en lugar de npm run verify.
-3. No se crean aliases de compatibilidad temporal para nombres legacy.
-4. No se mueve contenido deep desde vault en esta serie.
-5. La serie termina con 5 archives: 4 atómicos + 1 umbrella superseded.
+## Estado y trazabilidad
+
+| Slug | Estado | Fecha | Evidencia (`tasks.md`) | Nota |
+| --- | --- | --- | --- | --- |
+| `angular-skills-plan-baseline-and-realignment` | Pendiente | - | `openspec/changes/<slug>/tasks.md` | Baseline + realineación del plan |
+| `angular-skills-consolidate-foundation-and-data` | Pendiente | - | `openspec/changes/<slug>/tasks.md` | Bloque foundation + data |
+| `angular-skills-consolidate-platform-and-quality` | Pendiente | - | `openspec/changes/<slug>/tasks.md` | Bloque platform + quality |
+| `angular-skills-catalog-final-sync` | Pendiente | - | `openspec/changes/<slug>/tasks.md` | Cierre documental final |
