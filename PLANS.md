@@ -102,6 +102,6 @@ Se mantienen:
 | Slug | Estado | Fecha | Evidencia (`tasks.md`) | Nota |
 | --- | --- | --- | --- | --- |
 | `angular-skills-plan-baseline-and-realignment` | Archivado | `2026-02-12` | `openspec/changes/archive/2026-02-12-angular-skills-plan-baseline-and-realignment/tasks.md` | Baseline + realineación del plan |
-| `angular-skills-consolidate-foundation-and-data` | Pendiente | - | Pendiente de crear en su slug | Bloque foundation + data |
+| `angular-skills-consolidate-foundation-and-data` | Archivado | `2026-02-12` | `openspec/changes/archive/2026-02-12-angular-skills-consolidate-foundation-and-data/tasks.md` | Bloque foundation + data |
 | `angular-skills-consolidate-platform-and-quality` | Archivado | `2026-02-12` | `openspec/changes/archive/2026-02-12-angular-skills-consolidate-platform-and-quality/tasks.md` | Bloque platform + quality |
-| `angular-skills-catalog-final-sync` | Pendiente | - | Pendiente de crear en su slug | Cierre documental final |
+| `angular-skills-catalog-final-sync` | Archivado | `2026-02-12` | `openspec/changes/archive/2026-02-12-angular-skills-catalog-final-sync/tasks.md` | Cierre documental final |

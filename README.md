@@ -46,6 +46,20 @@ To install, copy the skill folders from the pack(s) you want into one of:
 
 Keep `core` small and always-on; treat framework packs as opt-in.
 
+## Angular pack canonical catalog
+The Angular pack is consolidated to these 10 canonical skills:
+
+- `angular-docs-bootstrap`
+- `angular-tooling-bootstrap`
+- `angular21-state-model`
+- `angular21-template-control-flow`
+- `angular21-data-httpresource`
+- `angular21-routing-patterns`
+- `angular21-di-patterns`
+- `angular21-defer-hydration`
+- `angular21-rxjs-interop-concurrency`
+- `angular21-testing-strategy`
+
 ## Recommended flows
 
 ### Repo bootstrap (once per repo)
@@ -79,25 +93,3 @@ For extended human notes, see `docs/AGENTS.md`.
 - Prompts should be **orchestration only** (which skill, which order, when to STOP).
 - Spec structure, requirement inventory rules, and traceability rules live **only in SKILL.md**.
 - Lint/fix skills are the enforcement layer; generators are not trusted alone.
-
-
-## Evals prep (optional)
-
-## Validation
-```bash
-npm run verify
-```
-
-## Evals
-Requires `codex` installed and on PATH.
-```bash
-npm run evals
-# optional rubric pass (if supported by your Codex CLI):
-npm run evals -- --with-rubric
-```
-
-## Install to USER scope
-```bash
-npm run install:skills -- --dry-run
-npm run install:skills
-```
