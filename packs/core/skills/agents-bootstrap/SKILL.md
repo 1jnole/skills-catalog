@@ -1,78 +1,114 @@
 ---
 name: agents-bootstrap
-description: Scaffold repo-local AGENTS.md (short, truncation-safe) plus `openspec/AGENTS.override.md` for OpenSpec workflows. Uses a managed block; stops if repo root or `npm run verify` is missing.
+description: |
+  Create or refresh repo-local Codex root agent instructions using a managed block in `AGENTS.md`.
+
+  Use when:
+  - The user asks to bootstrap or update the root `AGENTS.md` managed section.
+  - The managed block in `AGENTS.md` drifted and needs synchronization with the latest baseline.
+  - Repo-level guardrails, gate, and stop conditions must be standardized.
+
+  Don't use when:
+  - The user only wants ad-hoc edits outside the managed block.
+  - The task is to create/update `openspec/config.yaml` or `openspec/AGENTS.override.md` (use `openspec-bootstrap`).
+  - The repository has explicit policy that forbids managed-block automation.
+  - Required preconditions (`npm run verify`) are intentionally out of scope.
+
+  Outputs:
+  - `AGENTS.md` with an updated managed block between the required markers.
+  - Updated managed-block template in `assets/` when baseline policy changed.
+
+  Success criteria:
+  - Managed content reflects the latest baseline policy for root instructions.
+  - Edits are minimal and preserve all non-managed content.
+  - Stop conditions are enforced instead of guessing missing contracts.
 metadata:
-  short-description: Scaffold AGENTS.md + overrides
+  short-description: Sync AGENTS managed block (root-only)
 ---
-## Goal
-Create **project instructions** for Codex that are:
-- Short (to survive silent truncation)
-- Deterministic (one gate, explicit stop conditions)
-- Scoped (use directory overrides for deep detail)
+## Purpose
+Create or refresh compact, deterministic repository-level instructions using only:
+- `AGENTS.md` at repo root (managed block only)
 
-This skill writes:
-- `AGENTS.md` (repo root, short)
-- `openspec/AGENTS.override.md` (details for the OpenSpec subtree)
-
-## When to use
-- New repo adopting Codex + OpenSpec.
-- Repo has no `AGENTS.md`, or it needs a deterministic “managed” section.
-
-## When NOT to use
-- Repo already has an `AGENTS.md` with established team rules and you are not allowed to change it.
+Keep root guidance truncation-safe and preserve all non-managed content.
 
 ## Inputs
-- Repo root (preferred: Git root).
-- The single verification gate (required): `npm run verify`.
-- Whether the repo is “untrusted” for Codex config (if yes, rely more on `AGENTS.md`).
-
-## File precedence (Codex)
-- Prefer the nearest `AGENTS.override.md` when present; otherwise fall back to `AGENTS.md`.
-- Use directory-specific overrides (e.g. `openspec/AGENTS.override.md`) to keep root instructions short.
+- Target repo root (prefer Git root).
+- Required gate command: `npm run verify`.
+- Canonical baseline content:
+  - Current managed block policy from root `AGENTS.md` (latest agreed version).
 
 ## Outputs
-- `AGENTS.md` updated with a managed block:
-  - `assets/AGENTS.managed.md` → inserted between markers
-- `openspec/AGENTS.override.md` created/updated from:
-  - `assets/openspec.AGENTS.override.md`
+- Updated `AGENTS.md` with managed block markers:
+  - `<!-- BEGIN MANAGED: agents-bootstrap -->`
+  - `<!-- END MANAGED: agents-bootstrap -->`
+- If baseline changed, synchronized template:
+  - `assets/AGENTS.managed.md`
 
-## Preflight (MUST)
-1) Confirm repo root.
-   - If unknown: **STOP**.
-2) Confirm OpenSpec workspace exists.
-   - If `openspec/` is missing: run `spec-bootstrap` first, then re-run this skill.
-3) Confirm `npm run verify` exists.
-   - If missing or fails: **STOP** and ask the user to define the gate.
+## Preconditions / assumptions
+1) Repo root is known.
+2) `npm run verify` exists in repo scripts.
+3) Team permits managed-block updates in `AGENTS.md`.
 
-## Update strategy (MUST)
-- If `AGENTS.md` exists:
-  - Preserve all content outside the managed block.
-  - Replace only the managed block content.
-- If `AGENTS.md` does not exist:
-  - Create it from scratch using the managed block template.
+If any precondition fails, stop and ask instead of guessing.
 
-Managed block markers (MUST):
-```md
-<!-- BEGIN MANAGED: agents-bootstrap -->
-<!-- END MANAGED: agents-bootstrap -->
-```
+## Steps
+1) Resolve repo root and inspect existing files.
+Input: working directory and existing `AGENTS.md`.
+Action: read current content and detect marker presence.
+Output: baseline + delta summary.
 
-## Content rules (MUST)
-- Put the **critical rules first** (source-of-truth, gate, stop conditions, commit convention).
-- Keep `AGENTS.md` short; push detail into `openspec/AGENTS.override.md`.
-- Use Conventional Commits with `scope=<slug>` (see managed block).
-- Assume `AGENTS.md` may be silently truncated; keep the managed block compact.
-- Never invent missing contracts; stop and ask.
-- Default to minimal diffs.
+2) Run preflight checks.
+Input: repo scripts and filesystem.
+Action: confirm `npm run verify` is available.
+Output: go/no-go decision.
 
-## Definition of done
-- Outputs are delivered as specified in "Outputs".
-- Any required commands in the workflow were run, or blockers were reported.
-- Stop conditions were enforced when triggered.
+3) Build managed content from canonical baseline.
+Input: latest agreed root policy and skill assets.
+Action: ensure managed block includes current sections:
+- `Repository expectations`
+- `Layered instructions`
+- `Prompt policy`
+- `Default command flow (stable)`
+- `Gate and evidence`
+- `Stop conditions`
+- `Detailed rules`
+Output: finalized managed block text.
 
-## Failure modes
+4) Apply updates with minimal diff.
+Input: finalized texts.
+Action:
+- In `AGENTS.md`, replace only content between managed markers.
+- Preserve all non-managed content unchanged.
+- Create files only when missing.
+Output: updated files in place.
 
-- Missing required inputs → ask clarifying questions; do not guess.
-- If the request falls under "When NOT to use" → stop and suggest the appropriate next skill or action.
-- If the task depends on unavailable context (repo files, runtime logs) → request the minimum needed artifacts.
+5) Sync templates when policy changed.
+Input: updated live files.
+Action: update `assets/AGENTS.managed.md` so future runs reproduce current baseline.
+Output: template aligned with live policy.
 
+6) Validate and report.
+Input: modified files.
+Action: verify markers, short root length, and policy alignment.
+Output: concise report of files changed and any blockers.
+
+## Guardrails
+- Never modify content outside managed markers in `AGENTS.md`.
+- Never invent missing workflow contracts or gates.
+- Keep root file compact; reference `openspec/AGENTS.override.md` without owning its lifecycle.
+- Prefer minimal, reviewable diffs.
+- Enforce stop conditions when scope or contracts are unclear.
+
+## Negative examples
+- Updating unrelated repo docs while touching managed block.
+- Rewriting the entire `AGENTS.md` when only marker content needs replacement.
+- Introducing a new gate command instead of enforcing `npm run verify`.
+- Editing `openspec/AGENTS.override.md` from this skill.
+
+## Edge cases
+- `AGENTS.md` exists but markers are missing: insert managed block without deleting user content.
+- `npm run verify` missing: stop and ask user to define/restore the gate.
+- OpenSpec files missing but root block references them: keep root guidance and route setup to `openspec-bootstrap`.
+
+## Templates/examples
+- Managed block template: `assets/AGENTS.managed.md`
