@@ -33,25 +33,3 @@ Stop and ask if:
 - All other changes proceed autonomously with `/review` and repository gates.
 
 <!-- END MANAGED: agents-bootstrap -->
-
-## Repo-specific additions
-- Treat changes as non-trivial if any of these apply:
-  - touches more than 1 file
-  - changes observable behavior (feature, UI state, contract)
-  - touches build/config/deps (tooling, CI, tsconfig, nx, eslint, etc.)
-  - refactor with meaningful risk
-- Decision precedence:
-  - if acceptance criteria are missing and "done" cannot be verified, stop and ask
-  - if the decision is non-critical and verifiable, choose the documented default and record the assumption
-- Trivial fast-path (no approval checkpoint):
-  - no observable behavior or contract change
-  - no auth/permissions/tooling/deps/data model impact
-  - no destructive risk
-  - change is small, local, and reversible
-
-## Autonomous execution policy
-- Autonomous end-to-end execution is the default.
-- Require explicit human approval before mutating actions only for critical decisions or destructive risk.
-- All other changes proceed autonomously with `/review` and repository gates.
-- If a decision is non-critical and verifiable, choose the documented default and record it as an assumption.
-- Stop and ask for conflicts, missing critical inputs, or permission elevation.

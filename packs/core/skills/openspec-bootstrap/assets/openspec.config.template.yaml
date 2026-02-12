@@ -1,0 +1,28 @@
+schema: spec-driven
+
+context: |
+  Project: <project-name>
+  Purpose: <short-purpose>
+  Scope: OpenSpec workflow bootstrap for deterministic changes.
+  Preferred gate command: <gate-command-default-npm-run-verify>
+  Prompt policy: stable prompts by default (`openspec-proposal`, `openspec-apply`, `openspec-archive`);
+  use experimental `opsx-*` prompts only when explicitly requested.
+
+rules:
+  proposal:
+    - Keep scope explicit and atomic; define out-of-scope and success criteria.
+    - If scope is broad, split into multiple reviewable slugs.
+    - State assumptions/defaults explicitly.
+  specs:
+    - Write normative requirements using SHALL or MUST.
+    - Every requirement MUST include at least one Scenario with WHEN/THEN.
+    - Use canonical names for capabilities, folders, and slugs.
+  design:
+    - Record key decisions with rationale and alternatives.
+    - Include risks, trade-offs, and mitigation/rollback notes.
+    - Preserve minimal-diff implementation constraints.
+  tasks: |
+    - Use strict checkbox format: - [ ] X.Y Task description.
+    - Keep tasks session-sized and dependency-ordered.
+    - Define verification commands and expected evidence per task.
+    - Record command/result/date/note evidence in `openspec/changes/<slug>/tasks.md`.

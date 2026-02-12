@@ -3,6 +3,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "verify": "node scripts/verify-skills.mjs"
+    "verify": "openspec list --json && openspec validate --specs"
   }
 }

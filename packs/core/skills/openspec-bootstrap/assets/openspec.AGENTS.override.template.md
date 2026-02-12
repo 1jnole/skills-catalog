@@ -58,8 +58,7 @@ A change is trivial only if ALL of these are true:
 - `/prompts:openspec-archive`
 
 ### Experimental (opt-in only)
-- `/prompts:opsx-new`, `/prompts:opsx-continue`, `/prompts:opsx-apply`,
-  `/prompts:opsx-explore`, `/prompts:opsx-ff`
+  - `/prompts:opsx-new`, `/prompts:opsx-continue`, `/prompts:opsx-apply`, `/prompts:opsx-explore`, `/prompts:opsx-ff`
   If experimental prompts cause drift/ambiguity, fall back to stable prompts immediately.
 
 ---
@@ -96,8 +95,6 @@ Commands:
 
 Exit criteria:
 - CLI available, schemas visible, current changes known.
-
----
 
 ### 1) Create change
 Commands:

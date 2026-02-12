@@ -1,0 +1,11 @@
+interface:
+  display_name: "Skill Forge"
+  short_description: "Creates/updates Codex skills with best-practice routing, guardrails, and templates."
+  brand_color: "#3B82F6"
+  default_prompt: "Create a new Codex skill for: <one-sentence purpose>. Include use/don’t-use boundaries and templates."
+
+policy:
+  allow_implicit_invocation: true
+
+dependencies:
+  tools: []
