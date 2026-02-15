@@ -11,9 +11,16 @@ src/app/
   shared/               # reusable UI + utils (must not depend on features)
   features/
     <feature>/
-      domain/           # TS pure: models/types + rules (no Angular/Http/Router)
-      data-access/      # API + store + facade + guards/resolvers/providers
-      pages/            # smart routed containers (router + facade). NO direct HTTP
+      domain/
+        types/          # TS pure domain aliases/value types
+        interfaces/     # TS contracts for domain entities/ports
+        enums/          # avoid whenever possible; prefer union literal types
+      data-access/
+        api/            # HTTP clients/adapters
+        store/          # feature state (signals/store)
+        services/       # orchestration/use-cases for pages
+        resolvers/      # route data preload resolvers
+      pages/            # smart routed containers (router + data-access services). NO direct HTTP
       ui/               # presentational components (inputs/outputs). NO store/api
       utils/            # feature helpers
 ```
@@ -21,12 +28,12 @@ src/app/
 ## Dependency rules (hard)
 - `domain/` is **pure TS**: no Angular/Http/Router/store side-effects.
 - `ui/` must **not** import `data-access/` (presentational only).
-- `pages/` must call the **facade**, not the store directly.
+- `pages/` must call **data-access services**, not `api/` or `store/` directly.
 - `shared/` must **not** import from `features/`.
 
 ## State
-- Store per feature + Facade per feature.
-- Pages consume Facade only.
+- Store per feature + Services per feature.
+- Pages consume Services only.
 - Minimum state shape:
   - `status` (`idle|loading|success|error`)
   - `error`
@@ -52,8 +59,13 @@ Tokens + BEM rules live in `docs/STYLING.md` (this file stays short by design).
 ## Placement rules
 - Pages: `src/app/features/<feature>/pages/*`
 - UI: `src/app/features/<feature>/ui/*`
-- Data-access: `src/app/features/<feature>/data-access/*`
-- Domain: `src/app/features/<feature>/domain/*`
+- Data-access API: `src/app/features/<feature>/data-access/api/*`
+- Data-access store: `src/app/features/<feature>/data-access/store/*`
+- Data-access services: `src/app/features/<feature>/data-access/services/*`
+- Data-access resolvers: `src/app/features/<feature>/data-access/resolvers/*`
+- Domain types: `src/app/features/<feature>/domain/types/*`
+- Domain interfaces: `src/app/features/<feature>/domain/interfaces/*`
+- Domain enums: `src/app/features/<feature>/domain/enums/*` (avoid when possible)
 - Shared UI: `src/app/shared/ui/*`
 - Shared utils: `src/app/shared/utils/*`
 - Core infra: `src/app/core/*`
