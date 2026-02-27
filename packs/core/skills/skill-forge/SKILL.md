@@ -61,6 +61,7 @@ In `SKILL.md` frontmatter `description`, include:
 - Don’t use when (negative examples)
 - Outputs
 - Success criteria
+- Keep total `description` length at 1024 characters or fewer (loader limit).
 
 Make boundaries crisp enough that a model can route reliably.
 
@@ -96,6 +97,7 @@ Default posture:
 Before finalizing, verify:
 - Frontmatter exists and includes `name` + `description`.
 - Description includes explicit “use when / don’t use when / outputs / success criteria”.
+- Description length is <= 1024 characters.
 - Steps are imperative and artifact-driven.
 - Negative examples + edge cases exist.
 - Any created templates are embedded in assets/ and referenced from the instructions.

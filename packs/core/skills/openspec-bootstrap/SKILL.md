@@ -1,15 +1,15 @@
 ---
 name: openspec-bootstrap
 description: |
-  Bootstrap OpenSpec foundations so downstream OpenSpec skills run deterministically.
+  Bootstrap OpenSpec foundations so downstream workflows run deterministically.
 
   Use when:
   - The repo is missing `openspec/` or `openspec/config.yaml`.
   - `agents-bootstrap` is blocked because OpenSpec is not initialized.
-  - The user asks to prepare OpenSpec before spec workflows.
+  - The user asks to prepare OpenSpec before proposal/apply/archive workflows.
 
   Don't use when:
-  - The user only needs root `AGENTS.md` managed-block sync (use `agents-bootstrap`).
+  - The user only needs root `AGENTS.md` managed-block sync (`agents-bootstrap`).
   - The user asks to author a specific change artifact directly.
   - OpenSpec adoption is disallowed by project policy.
 

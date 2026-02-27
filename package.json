@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "verify": "openspec list --json && openspec validate --specs"
+    "verify:skills-frontmatter": "node ./scripts/verify-skills-frontmatter.mjs",
+    "verify": "npm run verify:skills-frontmatter && openspec list --json && openspec validate --specs"
   }
 }

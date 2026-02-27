@@ -1,27 +1,22 @@
 ---
 name: angular-signalstore-feature-playbook
 description: |
-  Standardize how new Angular features are started using NgRx SignalStore:
-  store scaffold + request status + rxMethod async flows + optional onInit hydration.
+  Playbook to start Angular features with NgRx SignalStore using a consistent scaffold:
+  state + computed selectors + methods, request status (pending/error), and rxMethod async flows.
+  Defaults: switchMap for reads and exhaustMap for writes.
 
   Use when:
-  - You are starting a new feature and want the project-standard store layout and APIs (selectors + methods).
-  - You need consistent async handling (pending/error) and concurrency semantics (switchMap for reads, exhaustMap for writes).
+  - You are creating a new feature store and need standard project APIs.
+  - You need predictable async and concurrency handling.
 
   Don't use when:
-  - The task is a small presentational UI change that does not justify introducing shared state.
-  - The project is not using NgRx SignalStore / rxMethod (or uses a different state approach).
-  - You don’t know the real endpoints/state shape yet (pause and obtain inputs instead of guessing).
+  - The task is a small UI-only change with no shared state.
+  - The project is not using SignalStore/rxMethod.
+  - API contracts or state shape are still unknown.
 
-  Outputs:
-  - New store file for the feature (SignalStore scaffold) using the templates in `assets/`.
-  - Optional reusable request-status feature (if missing) using `assets/request-status.feature.template.ts`.
-  - A predictable store API surface (selectors + methods) that components can consume.
-
-  Success criteria:
-  - TypeScript builds with no unresolved imports.
-  - Store exposes stable selectors (computed) and methods (rxMethod) aligned to real endpoints and types.
-  - Pending/error state is consistently set for all async paths.
+  Outputs and success:
+  - Feature store (and optional request-status helper) from `assets/` templates.
+  - TypeScript compiles, selectors/methods are stable, and pending/error is set consistently.
 ---
 
 # Angular SignalStore Feature Playbook
