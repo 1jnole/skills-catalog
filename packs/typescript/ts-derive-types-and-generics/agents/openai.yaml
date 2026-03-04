@@ -1,0 +1,5 @@
+interface:
+  display_name: "ts-derive-types-and-generics"
+  short_description: "Guidelines for derived types and generic utilities: type queries, registries, JSONValue recursion, and dict helpers."
+policy:
+  allow_implicit_invocation: true

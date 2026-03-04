@@ -1,0 +1,5 @@
+interface:
+  display_name: "ts-core-modeling"
+  short_description: "Guidelines for TypeScript contracts: object shapes, optional fields, dictionaries, tuples, structural typing, and callable types."
+policy:
+  allow_implicit_invocation: true

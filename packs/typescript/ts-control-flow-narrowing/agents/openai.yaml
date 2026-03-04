@@ -1,0 +1,5 @@
+interface:
+  display_name: "ts-control-flow-narrowing"
+  short_description: "Guidelines for branching on variants (success/error, states), parsing untyped/`unknown`, and implementing type guards."
+policy:
+  allow_implicit_invocation: true

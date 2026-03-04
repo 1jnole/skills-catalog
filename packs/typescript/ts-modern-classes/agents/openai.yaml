@@ -1,0 +1,5 @@
+interface:
+  display_name: "ts-modern-classes"
+  short_description: "Guidelines for class-based TypeScript: visibility, `#` private fields, statics/static blocks, inheritance, and override discipline."
+policy:
+  allow_implicit_invocation: true

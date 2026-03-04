@@ -1,72 +1,271 @@
-# Skills Catalog — Spec-First + Codex (2026)
+# Best Practices for Creating Codex Agent Skills
 
-A small, composable skills catalog for **spec-driven development** with a spec-first workflow and Codex.
-> Note: The *skill namespace* is framework-neutral (`spec-*`). The repository still uses an **OpenSpec-compatible** folder layout (`openspec/...`) as the current storage backend.
+This guide is a concentrated set of best practices for writing **professional-grade skills** for **OpenAI Codex**:
+- predictable routing (good discovery),
+- deterministic execution (low hallucination),
+- lean context (progressive disclosure),
+- regression-safe maintenance (validation + evals).
 
+> Scope: This is a **human-facing** guide for a **skills catalog repository**.
+> Inside each skill folder, prefer **agent-facing** files only (SKILL.md + references/scripts/assets).
 
-## What this catalog optimizes for
-- **No silent drops**: requirements present in the brief/README must be captured and traceable.
-- **Determinism**: explicit state rules and reproducible acceptance criteria.
-- **Low prompt burden**: the workflow is driven by skills + lint/fix loops, not ad-hoc prompting.
-- **Small changes**: PR-sized iterations and a single verification gate.
+---
 
-## Install (Codex)
+## 0) Codex mental model (what Codex actually loads)
 
-### Option A: repo-scoped (recommended)
-Copy the skills you want into:
-- `.codex/skills/<skill>/SKILL.md`
+Codex uses **progressive disclosure**:
+1) It starts with each skill’s **metadata**: `name`, `description`, file path, plus optional metadata from `agents/openai.yaml`.
+2) It loads the full `SKILL.md` instructions **only when it decides to use the skill**.
 
-This keeps the workflow portable with the repository.
+Implication:
+- Keep frontmatter **high-signal** (routing).
+- Keep `SKILL.md` **lean** (execution).
+- Offload bulk to `references/`, `assets/`, `scripts/` and load them **just-in-time**.
 
-### Option B: user-scoped
-Copy the skills you want into:
-- `~/.codex/skills/<skill>/SKILL.md`
+---
 
-### Option C: installer (if available)
-If your Codex environment provides a `$skill-installer` command, prefer that for repeatable installs.
+## 1) Structure of a Codex skill
 
-## References
-- OpenAI: Testing Agent Skills Systematically with Evals — https://developers.openai.com/blog/eval-skills/
-- OpenAI Codex CLI reference — https://developers.openai.com/codex/cli/reference/
-- OpenAI Codex changelog — https://developers.openai.com/codex/changelog/
-- OpenAI Codex: AGENTS.md guide — https://developers.openai.com/codex/guides/agents-md/
-- OpenAI Codex: Agent skills — https://developers.openai.com/codex/skills/
-- OpenAI: Unrolling the Codex agent loop — https://openai.com/index/unrolling-the-codex-agent-loop/
+A Codex skill is a directory with a required `SKILL.md`, plus optional standard folders:
 
+skill-name/
+├── SKILL.md              # Required: YAML frontmatter + core instructions (<500 lines recommended)
+├── scripts/              # Optional: tiny CLIs (Python/Bash/Node). Variation is a bug.
+├── references/           # Optional: supplementary context (schemas, cheatsheets, rules)
+├── assets/               # Optional: templates or static output artifacts
+└── agents/
+└── openai.yaml       # Optional: UI metadata + policy + dependencies
 
-## Repository layout
-This repo is organized as **packs** so you can install only what you need:
+Notes:
+- `SKILL.md` is the "brain": routing clarifications + high-level procedures.
+- `references/` must be **one level deep** (avoid references/foo/bar.md).
+- `scripts/` should contain **single-purpose executables**, not shared libraries.
+- `assets/` is for templates: JSON schemas, markdown templates, config templates, etc.
+- `agents/openai.yaml` is Codex-specific: UI metadata and invocation policy.
 
-- `packs/core/skills/<skill>/SKILL.md` (stable, default pack — OpenSpec + guardrails)
-- `packs/angular/skills/<skill>/SKILL.md` (Angular pack — framework guidance)
+---
 
-To install, copy the skill folders from the pack(s) you want into one of:
-- Repo-scoped: `.codex/skills/<skill>/SKILL.md`
-- User-scoped: `~/.codex/skills/<skill>/SKILL.md`
+## 2) Where to save skills (Codex discovery)
 
-Keep `core` small and always-on; treat framework packs as opt-in.
+Codex scans skills from multiple scopes:
 
-## Angular pack canonical catalog
-The Angular pack is consolidated to these 10 canonical skills:
+- REPO: `.agents/skills` in every directory from `$CWD` up to `$REPO_ROOT`
+    - `$CWD/.agents/skills`
+    - `$CWD/../.agents/skills` (parents up to repo root)
+    - `$REPO_ROOT/.agents/skills`
+- USER: `$HOME/.agents/skills`
+- ADMIN: `/etc/codex/skills`
+- SYSTEM: bundled with Codex
 
-- `angular-docs-bootstrap`
-- `angular-tooling-bootstrap`
-- `angular21-state-model`
-- `angular21-template-control-flow`
-- `angular21-data-httpresource`
-- `angular21-routing-patterns`
-- `angular21-di-patterns`
-- `angular21-defer-hydration`
-- `angular21-rxjs-interop-concurrency`
-- `angular21-testing-strategy`
+Important:
+- If two skills share the same `name`, Codex doesn’t merge them (both can appear).
+- Symlinked skill folders are supported.
 
-### Repo bootstrap (once per repo)
+Official docs:
+- https://developers.openai.com/codex/skills/
 
-1) `agents-bootstrap` (add `AGENTS.md` managed block + `openspec/AGENTS.override.md`)
+---
 
-For extended human notes, see `docs/AGENTS.md`.
+## 3) SKILL.md frontmatter (routing metadata)
 
-## Conventions (to avoid overlap)
-- Prompts should be **orchestration only** (which skill, which order, when to STOP).
-- Spec structure, requirement inventory rules, and traceability rules live **only in SKILL.md**.
-- Lint/fix skills are the enforcement layer; generators are not trusted alone.
+Codex sees **only** `name` and `description` before deciding to load a skill.
+
+### 3.1 Strict naming (recommended for predictability)
+Adopt these constraints (community best practice):
+- `name`: 1–64 chars
+- lowercase letters, numbers, hyphens (no consecutive hyphens)
+- must match the parent folder name exactly: `my-skill/SKILL.md` => `name: my-skill`
+
+Example:
+
+---
+name: ts-control-flow-narrowing
+description: "Branches safely on union variants and unknown inputs using control-flow narrowing and honest type guards. Don't use for class-only refactors or generic utilities."
+---
+
+### 3.2 Trigger-optimized descriptions (<= 1024 chars recommended)
+Write `description` in a routing-friendly way:
+- third-person capability statement
+- include **negative triggers** ("Don't use when ...")
+- avoid procedural detail here; keep that in the body.
+
+Bad:
+- "TypeScript skills."
+
+Good:
+- "Models TypeScript data contracts (objects, tuples, callables) and avoids unsafe casts. Use when defining API/domain shapes. Don't use for runtime narrowing or class-only refactors."
+
+---
+
+## 4) Optional metadata: agents/openai.yaml (Codex)
+
+Use this file to improve UI and policy:
+
+agents/openai.yaml
+interface:
+display_name: "User-facing name"
+short_description: "Short UI description"
+policy:
+allow_implicit_invocation: true|false
+dependencies:
+tools:
+- type: "mcp"
+value: "yourServerName"
+
+Use it for:
+- stable UI naming
+- explicitly disabling implicit invocation for risky skills
+- declaring tool dependencies for Codex environments that support it
+
+Docs:
+- https://developers.openai.com/codex/skills/
+
+---
+
+## 5) Progressive disclosure and resource management
+
+### Keep SKILL.md lean (<500 lines recommended)
+SKILL.md should be:
+- navigation + strict procedure
+- stop conditions
+- output format
+- just-in-time file reads
+
+### Flat subdirectories
+- ✅ references/schema.md
+- ❌ references/db/v1/schema.md
+
+### Just-in-time (JiT) loading
+Codex will not see `references/` or `assets/` unless you instruct it.
+Write explicit instructions like:
+- "Read `references/catalog.md` and pick 1–2 patterns."
+- "Copy the template from `assets/output.template.md`."
+
+### Explicit pathing
+Always use **relative paths** with forward slashes (`references/foo.md`).
+
+---
+
+## 6) Skills are for agents (keep skill folders agent-lean)
+
+Inside each skill folder, avoid adding:
+- README.md / CHANGELOG.md / INSTALLATION_GUIDE.md
+- redundant prose the agent already handles reliably
+- library code (put that in your repo’s normal CLI/tooling directories)
+
+Human docs belong in:
+- this repo root README
+- `docs/` (catalog-level docs)
+- issue templates / contribution guides
+
+---
+
+## 7) Write procedural instructions, not prose
+
+Agents follow **procedures** better than essays.
+
+### Step-by-step numbering
+Use strict chronological steps.
+For branching, make decision points explicit:
+- "Step 2: If X, do A. Otherwise, skip to Step 3."
+
+### Third-person imperative
+Prefer:
+- "Read …"
+- "Execute …"
+- "Replace …"
+- "Stop and ask …"
+
+Avoid:
+- "I will …"
+- "You should …" (human-facing tone)
+
+### Consistent terminology
+Pick one term per concept and reuse it consistently.
+
+---
+
+## 8) Bundle deterministic scripts for repetitive operations
+
+When variation is a bug, use `scripts/` tiny CLIs:
+- parsing files
+- generating reports
+- performing mechanical refactors
+- validating JSON/YAML formats
+
+Script rules:
+- fail loudly with actionable stderr
+- stable stdout for parsing
+- no shared “library” code inside skills
+
+---
+
+## 9) Validation guide (LLM-assisted)
+
+### 9.1 Discovery validation (routing)
+Paste into a fresh chat:
+
+I am building a Codex Agent Skill. Codex decides whether to load this skill based entirely on the YAML metadata below (name + description).
+
+name: angular-vite-migrator
+description: Migrates Angular CLI projects from Webpack to Vite and esbuild. Use when the user wants to update builder configurations, replace webpack plugins with rollup equivalents, or speed up Angular compilation. Don't use for React/Vue/Svelte projects or for version-only upgrades.
+
+Based strictly on this description:
+1) Generate 3 realistic user prompts that should trigger this skill.
+2) Generate 3 realistic prompts that should NOT trigger this skill.
+3) Critique the description: is it too broad? Suggest a tighter rewrite.
+
+### 9.2 Logic validation (determinism)
+Feed the LLM your `SKILL.md` + folder tree:
+
+Here is my skill folder tree:
+skill/
+├── SKILL.md
+├── scripts/...
+└── assets/...
+
+Act as an autonomous Codex agent that has just triggered this skill. Simulate execution step-by-step for this request: "<user request>".
+
+For each step:
+- What exactly are you doing?
+- Which file/script are you reading or running?
+- Flag "Execution Blockers": the exact line where you are forced to guess/hallucinate.
+
+### 9.3 Edge-case testing (attack the skill)
+Now switch roles: act as a ruthless QA tester. Your goal is to break this skill.
+Ask 3–5 highly specific questions about:
+- failure states
+- unsupported configurations
+- missing fallbacks
+  Do not fix issues yet. Ask the questions and wait.
+
+### 9.4 Architecture refinement (shrink token footprint)
+Based on the edge-case answers, rewrite SKILL.md enforcing progressive disclosure:
+- keep SKILL.md as high-level steps
+- move dense rules/templates into references/ or assets/
+- add an Error Handling section for known failure modes
+
+---
+
+## 10) Evals and regressions (recommended)
+
+Skills drift over time. Use evals to detect regressions early:
+- trigger correctness (should/should-not)
+- output format stability
+- refusal / stop behavior when context is missing
+
+OpenAI evals reference:
+- https://developers.openai.com/blog/eval-skills/
+
+---
+
+## 11) Relationship to AGENTS.md (always-on vs on-demand)
+
+- `AGENTS.md` is always-on project guidance. Codex reads it before any work.
+- Skills are on-demand workflows (progressive disclosure).
+
+AGENTS.md guide:
+- https://developers.openai.com/codex/guides/agents-md/
+
+Skills docs:
+- https://developers.openai.com/codex/skills/
