@@ -1,0 +1,5 @@
+interface:
+  display_name: "JS Best Practices Guardrails"
+  short_description: "Pre-flight checks before returning JS/TS code: avoid coercion bugs, accidental mutations, and async ordering mistakes by delegating to specialized skills."
+policy:
+  allow_implicit_invocation: true

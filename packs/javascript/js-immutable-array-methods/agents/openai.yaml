@@ -1,0 +1,5 @@
+interface:
+  display_name: "JS Immutable Array Methods"
+  short_description: "Replace in-place array mutations (sort/reverse/splice) with non-mutating alternatives and safe fallbacks."
+policy:
+  allow_implicit_invocation: false

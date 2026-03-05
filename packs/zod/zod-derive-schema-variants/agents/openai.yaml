@@ -1,0 +1,5 @@
+interface:
+  display_name: "zod-derive-schema-variants"
+  short_description: "Derive Zod schema variants with partial/pick/omit/extend to prevent drift across create/update/public shapes."
+policy:
+  allow_implicit_invocation: true

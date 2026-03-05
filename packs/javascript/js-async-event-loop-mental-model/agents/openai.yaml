@@ -1,0 +1,5 @@
+interface:
+  display_name: "JS Async Event Loop Mental Model"
+  short_description: "Diagnose and explain async ordering issues (Promises/microtasks vs timers/tasks) and propose minimal-diff fixes."
+policy:
+  allow_implicit_invocation: false

@@ -64,3 +64,8 @@ Create or refactor a **single** Codex skill folder so it is:
 ## Step 7: Keep always-on repo rules out of skills
 1) Put repo-wide gates and conventions in `AGENTS.md` (always-on), not in a skill.
 2) Keep `AGENTS.md` small; skills are for on-demand workflows.
+
+## Step 8: Final self-audit (checklist)
+1) Read `references/checklist.md`.
+2) Confirm each item.
+3) If any item fails, revise the skill and re-run validation.

@@ -45,14 +45,85 @@ Notes:
 
 ---
 
+
+### 1.1 Recommended reference pack (optional)
+
+To keep skills consistent across the catalog, you *may* use this reference pack when it adds value. It is **recommended**, not required:
+
+references/
+- `catalog.md`   — Routing-first checklist + what to apply when (high-signal overview)
+- `patterns.md`  — Mechanical patterns (Before/After) + decision heuristics
+- `pitfalls.md`  — Common failure modes + negative examples (misfire prevention)
+
+Optional:
+- `assets/output.template.md` — A stable output skeleton when formatting consistency matters
+- `references/checklist.md` — Optional QA checklist (authoring/validation), not runtime guidance
+
+Notes:
+- Do **not** duplicate large rule sets in `SKILL.md`. Instead, instruct JiT reads of the reference files.
+- Keep these files small and scoped; if the content grows beyond "day-to-day", move it to the vault.
+
+Alternative structures (also valid):
+- **Single guide file**: `references/guide.md` (preferred when the skill is small).
+- **Playbook style**: an `AGENTS.md`-like document *inside* the skill folder (useful for large rule libraries), as long as:
+  - the skill still has a proper `SKILL.md` with routing metadata, and
+  - `SKILL.md` points to that playbook for details (progressive disclosure).
+
+
+
+
+Validation checklist (optional):
+- If the skill is complex (many decision points) or is a meta-skill (skill-forge/creator), include `references/checklist.md` and add a step in `SKILL.md` to self-audit against it.### 1.2 Skill profiles (choose one)
+
+Codex skills should stay "one job". In this catalog we recognize two common profiles:
+
+**A) Guardrail skills (pre-flight)**
+- Purpose: apply a small set of checks before returning code.
+- Expected invocation: frequent, often implicitly.
+- Structure:
+  - `SKILL.md` = 5–10 steps (scan → decide → apply 1–2 patterns → report)
+  - `references/catalog.md|patterns.md|pitfalls.md` = the bulk
+- Must include:
+  - Delegation rules: when to hand off to a more specific skill
+  - Stop conditions: when to ask for context instead of guessing
+
+**B) Job-based skills (single operation)**
+- Purpose: perform one mechanical task (e.g., normalize inputs, replace unsafe calls).
+- Expected invocation: on-demand, when specific triggers match.
+- Structure:
+  - `SKILL.md` = strict procedure with explicit inputs/outputs and minimal diffs
+  - References provide only what is necessary for correctness (not general education)
+
+### 1.3 Delegation rules (avoid duplication)
+
+When a guardrail skill detects a narrow, well-defined pattern:
+- **delegate** to a specialized job-based skill by name, instead of duplicating rules.
+
+Example (in `SKILL.md` body):
+
+- If the change touches `Array.prototype.sort/reverse/splice` on potentially shared arrays, delegate to `js-immutable-array-methods`.
+- Do not restate those patterns here.
+
+This keeps:
+- routing precise (skills stay "one job"),
+- context lean (progressive disclosure),
+- maintenance safe (single source of truth).
+
+### 1.4 AGENTS.md placement (catalog policy)
+
+- `AGENTS.md` is **repo-level always-on** guidance (outside skill folders).
+- Inside skill folders, prefer agent-facing skill files only: `SKILL.md`, plus `references/`, `assets/`, `scripts/`, and `agents/openai.yaml`.
+
+If you want "always apply before returning code", put a short directive in repo-level `AGENTS.md` that points to the relevant guardrail skill(s).
+
 ## 2) Where to save skills (Codex discovery)
 
 Codex scans skills from multiple scopes:
 
 - REPO: `.agents/skills` in every directory from `$CWD` up to `$REPO_ROOT`
-    - `$CWD/.agents/skills`
-    - `$CWD/../.agents/skills` (parents up to repo root)
-    - `$REPO_ROOT/.agents/skills`
+  - `$CWD/.agents/skills`
+  - `$CWD/../.agents/skills` (parents up to repo root)
+  - `$REPO_ROOT/.agents/skills`
 - USER: `$HOME/.agents/skills`
 - ADMIN: `/etc/codex/skills`
 - SYSTEM: bundled with Codex
@@ -110,7 +181,7 @@ allow_implicit_invocation: true|false
 dependencies:
 tools:
 - type: "mcp"
-value: "yourServerName"
+  value: "yourServerName"
 
 Use it for:
 - stable UI naming
