@@ -31,6 +31,7 @@ Step 4: Validate and close
 
 ## Error handling
 - **Missing context:** stop and ask for the minimal missing input (sample payload/type, discriminant field, constraints).
+- **No schema libraries by default:** do not introduce validation libraries (Zod/Valibot/etc.) unless the repo already uses them or the user explicitly requests them.
 - **Reference mismatch:** if no pattern fits, explain why and propose the smallest new pattern needed (or ask to expand scope).
 - **Typecheck failure:** iteratively fix until the validation step passes; avoid introducing casts to silence errors.
 

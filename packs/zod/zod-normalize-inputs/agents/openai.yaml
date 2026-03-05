@@ -1,0 +1,5 @@
+interface:
+  display_name: "zod-normalize-inputs"
+  short_description: "Normalize untrusted inputs with Zod coercion/transform/refine: query/path params, forms, and DB row decoding."
+policy:
+  allow_implicit_invocation: true
