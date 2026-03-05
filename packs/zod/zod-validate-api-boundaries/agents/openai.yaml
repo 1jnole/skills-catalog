@@ -2,4 +2,4 @@ interface:
   display_name: "zod-validate-api-boundaries"
   short_description: "Validate untrusted HTTP JSON at the boundary with Zod schemas and return inferred types."
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false
