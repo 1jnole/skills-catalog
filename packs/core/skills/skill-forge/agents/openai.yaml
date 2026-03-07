@@ -1,5 +1,5 @@
 interface:
   display_name: "Skill Forge"
-  short_description: "Create/refactor Codex skills with validated metadata and progressive disclosure"
+  short_description: "Create or refactor one agent skill from a lean, workflow-first template"
 policy:
   allow_implicit_invocation: false

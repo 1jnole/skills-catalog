@@ -1,0 +1,5 @@
+interface:
+  display_name: "React+TS Boundary Hardening"
+  short_description: "Validate unknown boundary inputs (fetch/storage/params/env) and map to safe UI types"
+policy:
+  allow_implicit_invocation: true

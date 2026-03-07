@@ -1,0 +1,5 @@
+interface:
+  display_name: "Refactor: Extract Hook or Component"
+  short_description: "Extract reusable hooks/components without losing type safety"
+policy:
+  allow_implicit_invocation: true

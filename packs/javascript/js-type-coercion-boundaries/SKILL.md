@@ -1,6 +1,6 @@
 ---
 name: "js-type-coercion-boundaries"
-description: "Normalize boundary inputs (DOM/query params/API payload fields) to avoid implicit JS coercion bugs. Prefer explicit coercion (Number/String/Boolean), strict equality (===), and explicit conditional checks. Use when inputs are strings and code performs math, '+' concatenation, conditionals, or comparisons. Don't use when schema validation is required (delegate to repo-approved validators) or when the logic is already type-safe and the bug isn't coercion-related."
+description: "Normalize boundary inputs (DOM/query params/API payload fields) to avoid implicit JS coercion bugs. Prefer explicit coercion (Number/String/Boolean), strict equality (===), and explicit conditional checks. Use when inputs are strings and code performs math, '+' concatenation, conditionals, or comparisons. Don't use when schema validation is required (delegate to repo-approved validators, e.g. Zod skills) or when the logic is already type-safe and the bug isn't coercion-related."
 ---
 
 # JS Type Coercion Boundaries
@@ -34,4 +34,5 @@ Step 4: Produce the output
 
 ## Error handling / stop conditions
 - If you cannot determine whether `""`, `" "`, `null`, `undefined`, or `0` are valid domain values, stop and ask; otherwise, propose a safe normalization step.
+- If the repo already validates that boundary with Zod schemas, route to `zod-normalize-inputs` (or `zod-validate-api-boundaries` for HTTP JSON responses) instead of duplicating coercion logic here.
 - Do not introduce validation libraries unless the repo already uses them or the user explicitly requests it.

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Safe React Context"
+  short_description: "Throw on missing Provider; stabilize Provider values; split state/actions when needed"
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,5 @@
+interface:
+  display_name: "React Performance Sanity"
+  short_description: "Targeted runtime/build performance fixes (compiler-first, stable deps, Vite+TS sanity)"
+policy:
+  allow_implicit_invocation: true

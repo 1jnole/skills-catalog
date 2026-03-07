@@ -1,71 +1,94 @@
 ---
 name: skill-forge
-description: "Creates or refactors Codex agent skills (folder + SKILL.md) with trigger-optimized metadata, progressive disclosure, and deterministic procedures."
+description: "Creates or refactors a single agent skill with clear routing metadata, a lean procedural SKILL.md, and optional support files only when they add real value. Don't use for repo-wide AGENTS.md authoring or broad vault content."
 ---
 
 # skill-forge
 
-Create or refactor a **single** Codex skill folder so it is:
-- discoverable (routing works from `name` + `description`)
-- deterministic (steps reduce guessing)
-- lean (progressive disclosure; load extra context only when needed)
+## When to use
+Use this skill when the task is to create, reshape, or standardize **one** reusable agent skill.
 
-## Step 1: Initialize and validate metadata
-1) Define a unique `name` (kebab-case, 1–64 chars; must match the folder name).
-2) Draft a `description` (<= 1024 chars) that:
-   - states capability in third person
-   - includes **negative triggers** ("Don't use when …")
-3) Execute the validation script:
-   - `python scripts/validate-metadata.py --name "<name>" --description "<description>"`
-4) If the script returns an error, self-correct and re-run until successful.
+Use it when the requested result is a workflow unit with:
+- a clear trigger;
+- a clear non-trigger;
+- a procedural core;
+- a small, maintainable folder structure.
 
-## Step 2: Choose where Codex should discover the skill
-1) Prefer repo-scoped install:
-   - `<repo>/.agents/skills/<name>/SKILL.md`
-2) Codex scans `.agents/skills` from your current working directory up to the repo root. If you want a skill to apply only to a sub-area, place it under that subdirectory’s `.agents/skills`.
-3) Optional user-scoped install:
-   - `$HOME/.agents/skills/<name>/SKILL.md`
-4) Note: if two skills share the same `name`, Codex does not merge them; both can appear.
+## Procedure
+Step 1: Classify the request before writing anything.
+1. Decide whether the content belongs in `AGENTS.md`, a skill, or the vault.
+2. If the request is repo-wide, always-on guidance, stop and route to `AGENTS.md` authoring.
+3. If the request is broad reference material, stop and route to the vault.
+4. Continue only if the request is a repeatable workflow with a clear trigger.
 
-## Step 3: Structure the directory
-1) Create the skill directory using the validated `name`.
-2) Create files/folders as needed (keep them flat; one level deep):
-   - `SKILL.md` (required)
-   - optional `scripts/` (tiny CLIs)
-   - optional `references/` (supplementary context)
-   - optional `assets/` (templates)
-   - optional `agents/openai.yaml` (appearance/policy/dependencies)
+Step 2: Define the contract.
+1. Identify the single job the skill will perform.
+2. Write the routing boundary:
+   - when to use it;
+   - when not to use it.
+3. Write a short definition of done.
+4. Identify 2–5 nearby negative cases to reduce overlap.
+5. If the skill cannot be explained as one job in one or two sentences, stop and split or narrow it.
 
-## Step 4: Draft core logic (SKILL.md)
-1) Use the template in `assets/skill-template.md` as a starting point.
-2) Write instructions in the **third-person imperative** (e.g., "Read …", "Run …", "Replace …").
-3) Enforce progressive disclosure:
-   - keep `SKILL.md` lean (recommended < 500 lines)
-   - move dense rules/templates/schemas to `references/` or `assets/`
-   - add explicit JiT reads (e.g. "Read `references/foo.md` when …")
-4) Keep YAML frontmatter in `SKILL.md` to **only**:
-   - `name`
-   - `description`
+Step 3: Choose the skill profile.
+1. Use `assets/skill-template.guardrail.md` for a small, frequent pre-flight or safety workflow.
+2. Use `assets/skill-template.job.md` for a single mechanical workflow with explicit steps.
+3. Prefer the smallest profile that fits.
 
-## Step 5: Verify Codex invocation behavior
-1) Explicit invocation:
-   - type `$` to mention the skill, or use `/skills` to select it
-2) Implicit invocation:
-   - Codex may choose it when the task matches `description`; tighten boundaries if it mis-triggers.
-3) Codex detects skill changes automatically; if an update doesn’t appear, restart Codex.
+Step 4: Draft metadata first.
+1. Define a unique kebab-case `name` that matches the folder name.
+2. Draft a `description` that states:
+   - what the skill does;
+   - when to use it;
+   - when not to use it.
+3. Run `python scripts/validate-metadata.py --name "<name>" --description "<description>"`.
+4. If validation fails, correct the metadata and run it again.
 
-## Step 6: Optional policy controls (Codex)
-1) If you want to prevent accidental auto-trigger, set:
-   - `policy.allow_implicit_invocation: false` in `<name>/agents/openai.yaml`
-2) To enable/disable a specific skill path without deleting it, use `skills.config` in `~/.codex/config.toml`:
-   - set `skills.config[].path` to the skill folder
-   - set `skills.config[].enabled` to `true` or `false`
+Step 5: Create the minimum useful structure.
+1. Create the skill folder with `SKILL.md`.
+2. Add `references/` only when routing notes, patterns, or pitfalls materially improve execution.
+3. Add `assets/` only when the skill needs reusable templates or static artifacts.
+4. Add `scripts/` only when plain instructions are not deterministic enough.
+5. Add provider-specific compatibility files under `agents/` only when they improve runtime behavior.
 
-## Step 7: Keep always-on repo rules out of skills
-1) Put repo-wide gates and conventions in `AGENTS.md` (always-on), not in a skill.
-2) Keep `AGENTS.md` small; skills are for on-demand workflows.
+Step 6: Write a lean `SKILL.md`.
+1. Start from the selected template.
+2. Keep the core file procedural and compact.
+3. Keep larger examples and supporting material outside `SKILL.md`.
+4. Make sure the final skill clearly communicates:
+   - when to use it;
+   - the procedure;
+   - what done looks like;
+   - when to stop and ask for context;
+   - when not to use it.
 
-## Step 8: Final self-audit (checklist)
-1) Read `references/checklist.md`.
-2) Confirm each item.
-3) If any item fails, revise the skill and re-run validation.
+Step 7: Self-audit before finishing.
+1. Read `references/checklist.md`.
+2. Confirm that the skill has one job, a clear trigger boundary, and no obvious overlap.
+3. Remove support files that do not add real value.
+4. Recommend manual dogfooding with:
+   - one explicit invocation;
+   - one plausible implicit trigger;
+   - one negative case;
+   - one edge case.
+
+## Definition of done
+The result is a single skill directory that:
+- has valid routing metadata;
+- can be explained as one reusable workflow;
+- uses a lean procedural `SKILL.md`;
+- includes support files only when justified;
+- is ready for manual testing.
+
+## Stop conditions
+Stop and ask for clarification when:
+- the request mixes more than one workflow into one skill;
+- the boundary between skill and vault is unclear;
+- the success condition cannot be stated clearly;
+- the skill overlaps heavily with an existing skill and the split is unresolved.
+
+## Don’t use when
+Do not use this skill when the task is:
+- writing or refactoring `AGENTS.md` for repo-wide rules;
+- building a broad knowledge base or course-note vault;
+- creating a multi-skill catalog plan without drafting one concrete skill.

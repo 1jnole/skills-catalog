@@ -8,6 +8,7 @@ description: "Normalizes untrusted stringly-typed inputs (query/path params, for
 Normalize untrusted inputs (especially strings) *at the boundary* so the rest of the codebase can rely on stable, typed values.
 
 This skill is about **input normalization** (coerce/transform/refine), not about validating API JSON responses.
+When schema-based boundary coercion overlaps with `js-type-coercion-boundaries`, prefer this skill.
 
 ## Procedures
 Step 1: Select the minimal pattern set (routing)

@@ -1,32 +1,32 @@
-# Skill QA checklist (authoring)
+# Skill authoring checklist
 
-Use this checklist **before** publishing/refactoring a skill.
+Use this checklist before considering a skill ready for manual testing.
 
-## Routing & metadata
-- [ ] `SKILL.md` YAML frontmatter has **name** and **description**.
-- [ ] `name` is kebab-case, 1–64 chars, and matches the skill folder name.
-- [ ] `description` is <= 1024 chars, third-person capability statement.
-- [ ] `description` includes **positive triggers** (use when) and **negative triggers** (don’t use when).
-- [ ] Triggers are objective (inputs/context), not vague intent (“write good code”).
+## Classification
+- [ ] The request belongs in a skill, not `AGENTS.md`.
+- [ ] The request belongs in a skill, not the vault.
 
-## One job & scope
-- [ ] Skill is either:
-  - **Guardrail** (pre-flight) with delegation rules, OR
-  - **Job-based** (single operation) with explicit inputs/outputs.
-- [ ] No “encyclopedia”: dense rules/examples live in `references/` or `assets/`.
+## Scope and routing
+- [ ] The skill does one job.
+- [ ] `name` matches the folder name.
+- [ ] `description` states what the skill does.
+- [ ] `description` makes the trigger clear.
+- [ ] `description` makes the non-trigger clear.
+- [ ] There is no obvious overlap with another skill.
 
-## Procedure quality
-- [ ] Steps are imperative, deterministic, and produce **minimal diffs**.
-- [ ] Includes stop conditions (when to ask for context instead of guessing).
-- [ ] Avoids adding dependencies/tools unless the user asks or the repo already uses them.
+## Core file quality
+- [ ] `SKILL.md` is procedural and lean.
+- [ ] `SKILL.md` includes: When to use, Procedure, Definition of done, Stop conditions, Don’t use when.
+- [ ] A human can explain what “done” means in one or two sentences.
 
-## References structure (optional)
-- [ ] If helpful, uses one of:
-  - `references/catalog.md`, `references/patterns.md`, `references/pitfalls.md`, OR
-  - a single `references/guide.md`, OR
-  - a playbook-style doc (e.g., `AGENTS.md`-like) referenced from `SKILL.md`.
+## Support files
+- [ ] `references/` exists only if it adds real execution value.
+- [ ] `assets/` exists only if templates or static artifacts are needed.
+- [ ] `scripts/` exists only if instructions alone are not deterministic enough.
+- [ ] Provider-specific files under `agents/` are optional and isolated.
 
-## Packaging
-- [ ] `agents/openai.yaml` exists (recommended) and sets safe invocation policy.
-- [ ] `assets/` contains any required templates (if the procedure references them).
-- [ ] `scripts/` contains only tiny, deterministic helpers (if needed).
+## Readiness
+- [ ] The skill is ready for one explicit test.
+- [ ] The skill is ready for one plausible implicit trigger test.
+- [ ] The skill is ready for one negative-case test.
+- [ ] The skill is ready for one edge-case test.

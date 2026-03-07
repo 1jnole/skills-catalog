@@ -1,0 +1,5 @@
+interface:
+  display_name: "React Testing Contract"
+  short_description: "Type-safe RTL patterns (custom render, async, mocks)"
+policy:
+  allow_implicit_invocation: true

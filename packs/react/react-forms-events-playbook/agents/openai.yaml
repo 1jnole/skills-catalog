@@ -1,0 +1,5 @@
+interface:
+  display_name: "React Forms & Events"
+  short_description: "Type event handlers correctly and normalize form values predictably"
+policy:
+  allow_implicit_invocation: true

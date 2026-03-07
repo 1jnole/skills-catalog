@@ -1,0 +1,5 @@
+interface:
+  display_name: "React Data Fetching Contract"
+  short_description: "Fetch with explicit states, runtime validation, and race-safe effects"
+policy:
+  allow_implicit_invocation: true

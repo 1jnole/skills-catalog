@@ -21,10 +21,13 @@ Step 2: Scan for high-risk patterns
    - Promises/`await` combined with timers/events, surprising log ordering, missing error handling.
 
 Step 3: Delegate (avoid duplication)
-1) If boundary coercion risk is present, delegate to **`js-type-coercion-boundaries`**.
-2) If array mutation risk is present, delegate to **`js-immutable-array-methods`**.
-3) If async ordering is the core issue, delegate to **`js-async-event-loop-mental-model`**.
-4) Do not restate those detailed patterns here; keep this skill lean.
+1) If boundary coercion risk is present and the repo uses Zod schemas at that boundary, delegate to:
+   - **`zod-normalize-inputs`** for query/path/form/row normalization
+   - **`zod-validate-api-boundaries`** for HTTP JSON boundary validation
+2) If boundary coercion risk is present and no schema-based boundary validation is used, delegate to **`js-type-coercion-boundaries`**.
+3) If array mutation risk is present, delegate to **`js-immutable-array-methods`**.
+4) If async ordering is the core issue, delegate to **`js-async-event-loop-mental-model`**.
+5) Do not restate those detailed patterns here; keep this skill lean.
 
 Step 4: Apply minimal local fixes (only if delegation is not required)
 1) Prefer strict equality (`===`) and explicit coercion at boundaries.

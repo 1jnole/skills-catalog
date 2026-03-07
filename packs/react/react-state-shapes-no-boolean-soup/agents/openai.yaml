@@ -1,0 +1,5 @@
+interface:
+  display_name: "State Shapes (No Boolean Soup)"
+  short_description: "Model UI state with discriminated unions and reducers"
+policy:
+  allow_implicit_invocation: true

@@ -12,7 +12,8 @@ Step 1: Select the minimal pattern set (routing)
 0) Read `references/mental-model-sets.md`.
 1) Read `references/catalog.md`.
 2) Pick 1–2 relevant patterns (and any matching pitfalls).
-3) If the task is out of scope, stop and route to the correct skill.
+3) If `unknown` comes from external boundaries (HTTP JSON, query/path/form, DB row decoding) and schema-based validation is expected, route to Zod boundary skills first.
+4) If the task is out of scope, stop and route to the correct skill.
 
 Step 2: Implement deterministically (progressive disclosure)
 1) Read only the selected reference sections in `references/patterns.md` (and `references/pitfalls.md` if present).
@@ -31,6 +32,7 @@ Step 4: Validate and close
 
 ## Error handling
 - **Missing context:** stop and ask for the minimal missing input (sample payload/type, discriminant field, constraints).
+- **Boundary-first rule:** for `unknown` from external boundaries, prefer `zod-validate-api-boundaries` / `zod-normalize-inputs` when schema validation/coercion is required; keep this skill for runtime branching after boundary trust is established.
 - **No schema libraries by default:** do not introduce validation libraries (Zod/Valibot/etc.) unless the repo already uses them or the user explicitly requests them.
 - **Reference mismatch:** if no pattern fits, explain why and propose the smallest new pattern needed (or ask to expand scope).
 - **Typecheck failure:** iteratively fix until the validation step passes; avoid introducing casts to silence errors.
