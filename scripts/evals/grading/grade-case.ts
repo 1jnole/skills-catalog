@@ -272,3 +272,4 @@ export function writeCaseArtifacts(
   const outputPath = path.join(caseDir, 'outputs', `${mode}.json`);
   return writeValidatedJsonFile(outputPath, caseModeOutputArtifactSchema, payload);
 }
+
