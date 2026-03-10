@@ -5,7 +5,7 @@ description: "Builds or rewrites one skill through a contract-first workflow and
 
 # skill-forge
 
-This folder is the operational source of truth for `skill-forge`. Use it to route requests, define success, and produce the handoff artifact.
+This folder is the source of truth for `skill-forge`. Use it to route requests, define success, and produce the handoff artifact.
 
 ## Routing precedence
 Apply these decisions in order. Do not skip ahead to missing-input checks before routing the request.
@@ -39,17 +39,19 @@ Use one of these response modes exactly.
 For trigger cases:
 1. Start with `Classification: trigger`.
 2. Name the workflow explicitly as one of: `Workflow: new-skill`, `Workflow: existing-skill-refactor`, or `Workflow: skill-rewrite`.
-3. If eval or runtime work appears but skill authoring is clearly primary, keep skill authoring as the active responsibility and add the exact sentence `Downstream eval work is out of scope here.` before the JSON artifact. Keep that note short and do not mention runner or benchmark behavior.
-4. Do not ask for confirmation if the skill target and authoring job are already clear.
-5. Produce the boundary-only JSON artifact.
-6. End with the exact line `Eval Brief ready`.
+3. If eval or runtime work appears but skill authoring is clearly primary, keep skill authoring as the active responsibility and add the exact sentence `Downstream eval work is out of scope here.` on its own line before the JSON artifact.
+4. Keep the downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.
+5. Do not ask for confirmation if the skill target and authoring job are already clear.
+6. Produce the boundary-only JSON artifact.
+7. End with the exact line `Eval Brief ready`.
 
 For non-trigger cases:
 1. Start with `Classification: non-trigger`.
 2. Say exactly `Out of scope for skill-forge.`
 3. Name the reason in one sentence.
-4. Use this mode for obvious non-authoring work such as AGENTS policy, runtime-only implementation, or eval-authoring-only requests, even if the request is missing inputs or the referenced brief content is not attached.
-5. Do not produce an Eval Brief.
+4. If the request is repository policy or `AGENTS.md` work, include `AGENTS` or `repository policy` explicitly in that sentence.
+5. Use this mode for obvious non-authoring work such as AGENTS policy, runtime-only implementation, or eval-authoring-only requests, even if the request is missing inputs or the referenced brief content is not attached.
+6. Do not produce an Eval Brief.
 
 For stop-and-ask cases:
 1. Start with `Classification: stop-and-ask`.
@@ -106,9 +108,11 @@ Step 5: Stabilize the local contract before handoff.
 
 Step 6: Produce the Eval Brief.
 1. Materialize the JSON artifact from the filled template.
-2. Keep the artifact boundary-only: no runtime implementation detail, no eval scaffold layout, no scorer logic. Keep any downstream defer note outside the JSON payload.
-3. Record any unresolved downstream dependency as a short note outside the JSON payload instead of inventing runtime behavior. Do not mention runner, grading, or benchmark behavior inside the brief payload.
-4. End the response with the exact line `Eval Brief ready`.
+2. Keep the artifact boundary-only: no runtime implementation detail, no eval scaffold layout, and no scorer logic.
+3. Keep any downstream defer note outside the JSON payload.
+4. Record any unresolved downstream dependency as a short note outside the JSON payload instead of inventing runtime behavior.
+5. Do not mention runner, benchmark, scorer, or grading behavior inside the brief payload.
+6. End the response with the exact line `Eval Brief ready`.
 
 Step 7: Metadata discipline.
 1. Keep the frontmatter name and description aligned with the actual skill boundary.
@@ -132,5 +136,4 @@ Stop and ask when:
 - the success contract cannot be stated as a small set of must-pass checks;
 - the frozen boundary would turn the request into more than one workflow or would require inventing missing contract details;
 - request needs runtime behavior changes to continue.
-
 
