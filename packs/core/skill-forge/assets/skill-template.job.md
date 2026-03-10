@@ -32,6 +32,6 @@ Step 3: Verify
 - <missing contract or source of truth>
 - <cannot continue safely without clarification>
 
-## Don’t use when
+## Don't use when
 - <this is actually a different workflow>
-- <this should be repo guidance or vault content>
+- <this is downstream eval authoring or shared runtime work>

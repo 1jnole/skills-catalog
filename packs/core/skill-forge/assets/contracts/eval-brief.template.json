@@ -10,10 +10,12 @@
         "Request asks to create or refactor one reusable skill"
       ],
       "shouldNotTriggerWhen": [
-        "Task is repository-wide AGENTS policy",
-        "Task is broad vault or course-note capture"
+        "Task is repository policy or AGENTS maintenance",
+        "Task starts from a finished Eval Brief and asks for downstream eval authoring",
+        "Task is shared eval runtime implementation"
       ],
       "stopConditions": [
+        "Skill target is unclear",
         "More than one workflow is requested",
         "No stable source references available"
       ]
@@ -23,8 +25,8 @@
     "outcomeGoals": [
       "Skill output boundary is explicit"
     ],
-    "processGoals": [
-      "Contract frozen before SKILL rewrite"
+    "boundaryGoals": [
+      "Request routes cleanly to trigger, non-trigger, or stop-and-ask"
     ],
     "styleGoals": [
       "Procedural and concise instructions"
@@ -36,7 +38,8 @@
       "Eval Brief ready"
     ],
     "nonGoals": [
-      "Implement eval runtime behavior"
+      "Implement eval runtime behavior",
+      "Write evals.json cases directly"
     ]
   },
   "activationProbes": [
@@ -59,11 +62,11 @@
     ]
   },
   "negativeSignals": [
-    "Asks for full eval runtime implementation"
+    "Asks for shared eval runtime implementation",
+    "Starts from a finished Eval Brief and asks for eval authoring"
   ],
   "sourceRefs": [
-    "plans/README.md",
-    "plans/02-eval-blueprint.md"
+    "packs/core/<target-skill>/SKILL.md",
+    "<path-to-domain-or-source-material>.md"
   ]
 }
-

@@ -11,7 +11,7 @@ The current path is a clean rebuild from scaffold-first contracts and workflow.
 ## Quick map
 - `AGENTS.md` -- always-on repo rules
 - `docs/catalog-authoring.md` -- what belongs in a skill vs AGENTS vs vault
-- `plans/README.md` -- eval and skill-domain source precedence
+- `plans/README.md` -- repo-level background and source precedence across shared docs
 - `scripts/evals/README.md` -- shared runner structure and commands
 - `docs/skill-system/README.md` -- stabilized modeling decisions for `skill-forge` / `skill-eval-forge`
 
@@ -49,4 +49,4 @@ The current path is a clean rebuild from scaffold-first contracts and workflow.
 `-- package.json
 ```
 
-For authoring policy and eval scaffold decisions, use the docs above as source of truth.
+Use the docs above for repo-wide background and shared tooling. For the operational behavior of a specific skill, use that skill folder as the source of truth.

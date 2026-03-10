@@ -44,7 +44,7 @@ Stop and ask if:
 Keep the root file short and discovery-safe. Detailed process belongs in:
 
 - `openspec/AGENTS.override.md` for OpenSpec workflow
-- `plans/README.md` for skill/eval source precedence
+- `plans/README.md` for repo-level background and source precedence across shared docs
 - `scripts/evals/README.md` for the current shared eval runner shape
 - nested `AGENTS.md` or `AGENTS.override.md` files for specialized areas
 
@@ -74,4 +74,5 @@ Keep the root file short and discovery-safe. Detailed process belongs in:
 - Keep the handoff aligned with the current source-of-truth docs.
 - Do not reintroduce per-skill harness duplication.
 - Keep provider-specific files isolated under `agents/`.
+
 
