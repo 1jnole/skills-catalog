@@ -41,7 +41,14 @@ Thumbs.db
 
 # Evals artifacts
 evals/artifacts/
+packs/core/*/evals/runs/
 
 # Codex / agent runtime
 .codex/
 traces/
+
+# Evals shared reports (generated; keep only docs/templates tracked)
+evals/shared/reports/*
+!evals/shared/reports/README.md
+!evals/shared/reports/templates/
+!evals/shared/reports/templates/real-run-review.template.md

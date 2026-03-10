@@ -1,5 +1,0 @@
-interface:
-  display_name: "JS Type Coercion Boundaries"
-  short_description: "Normalize boundary inputs (often strings) to avoid implicit coercion bugs (ToNumber/ToString/ToBoolean)."
-policy:
-  allow_implicit_invocation: false

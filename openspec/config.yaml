@@ -1,32 +1,20 @@
 schema: spec-driven
 
-context: |
-  Project: skills-catalog (Codex + OpenSpec workflow)
-  Purpose: maintain reusable AI skills in packs:
-  - core skills: packs/core/skills/<skill>/SKILL.md
-  - angular skills: packs/angular/skills/<skill>/SKILL.md
-  Primary workflow: spec-driven with OpenSpec artifacts (proposal -> specs -> design -> tasks).
-  Change strategy: prefer atomic, reviewable slugs; split large scopes into multiple changes.
-  Prompt policy: use stable prompts by default (openspec-proposal/apply/archive); use opsx-* only when explicitly requested.
-  Preferred gate command: npm run verify.
-  If verify is explicitly out of scope for a phase or currently blocked, use openspec validate plus task-local structural checks and record evidence in tasks.md.
+# Project context (optional)
+# This is shown to AI when creating artifacts.
+# Add your tech stack, conventions, style guides, domain knowledge, etc.
+# Example:
+#   context: |
+#     Tech stack: TypeScript, React, Node.js
+#     We use conventional commits
+#     Domain: e-commerce platform
 
-rules:
-  proposal:
-    - Keep scope small and explicit; include out-of-scope and success criteria.
-    - If scope is large, define an atomic split strategy (multiple slugs by domain/phase).
-    - State assumptions/defaults explicitly to avoid hidden decisions.
-  specs:
-    - Write normative requirements with SHALL or MUST.
-    - Every requirement MUST include at least one Scenario using WHEN/THEN.
-    - Use exact canonical names for folders, capabilities, and slugs.
-    - Prefer ADDED requirements unless existing behavior truly changes.
-  design:
-    - Document key decisions with rationale and alternatives considered.
-    - Include risks, trade-offs, mitigation, and rollback strategy.
-    - Include constraints relevant to this repo (minimal diffs, no unrelated refactors).
-  tasks: |
-    - Use strict checkbox format: - [ ] X.Y Task description.
-    - Keep tasks one-session sized and dependency-ordered.
-    - Add verification command(s) and evidence expectations per task.
-    - Require task-by-task evidence in openspec/changes/<slug>/tasks.md (command, result, date, note).
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours

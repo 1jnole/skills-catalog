@@ -1,0 +1,69 @@
+{
+  "skill": {
+    "name": "example-skill",
+    "version": "0.1.0"
+  },
+  "authoring": {
+    "singleJob": "Describe one repeatable skill workflow and stop at Eval Brief ready.",
+    "triggerBoundary": {
+      "shouldTriggerWhen": [
+        "Request asks to create or refactor one reusable skill"
+      ],
+      "shouldNotTriggerWhen": [
+        "Task is repository-wide AGENTS policy",
+        "Task is broad vault or course-note capture"
+      ],
+      "stopConditions": [
+        "More than one workflow is requested",
+        "No stable source references available"
+      ]
+    }
+  },
+  "successModel": {
+    "outcomeGoals": [
+      "Skill output boundary is explicit"
+    ],
+    "processGoals": [
+      "Contract frozen before SKILL rewrite"
+    ],
+    "styleGoals": [
+      "Procedural and concise instructions"
+    ],
+    "efficiencyGoals": [
+      "No duplicated runtime harness"
+    ],
+    "definitionOfDone": [
+      "Eval Brief ready"
+    ],
+    "nonGoals": [
+      "Implement eval runtime behavior"
+    ]
+  },
+  "activationProbes": [
+    {
+      "id": "probe-explicit-1",
+      "kind": "explicit",
+      "prompt": "Create one reusable skill from this request",
+      "expectedSignal": "Workflow is scoped and contract-first"
+    }
+  ],
+  "seedEvalIntent": {
+    "mustStopAt": "Eval Brief ready",
+    "comparisonFocus": [
+      "Requests that should trigger skill authoring",
+      "Nearby requests that should not trigger skill authoring"
+    ],
+    "notes": [
+      "This artifact carries authoring intent only",
+      "Downstream eval authoring turns this into packs/core/<skill-name>/evals/evals.json"
+    ]
+  },
+  "negativeSignals": [
+    "Asks for full eval runtime implementation"
+  ],
+  "sourceRefs": [
+    "plans/README.md",
+    "plans/02-eval-blueprint.md"
+  ]
+}
+

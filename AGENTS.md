@@ -35,23 +35,43 @@ Stop and ask if:
 <!-- END MANAGED: agents-bootstrap -->
 
 ## Repo-specific additions
-- Treat changes as non-trivial if any of these apply:
-  - touches more than 1 file
-  - changes observable behavior (feature, UI state, contract)
-  - touches build/config/deps (tooling, CI, tsconfig, nx, eslint, etc.)
-  - refactor with meaningful risk
-- Decision precedence:
-  - if acceptance criteria are missing and "done" cannot be verified, stop and ask
-  - if the decision is non-critical and verifiable, choose the documented default and record the assumption
-- Trivial fast-path (no approval checkpoint):
-  - no observable behavior or contract change
-  - no auth/permissions/tooling/deps/data model impact
-  - no destructive risk
-  - change is small, local, and reversible
+- Treat a change as non-trivial if it touches more than 1 file, changes observable behavior or contracts, touches tooling or dependencies, or carries meaningful refactor risk.
+- If acceptance criteria are missing and `done` cannot be verified, stop and ask.
+- If a decision is non-critical and verifiable, choose the documented default and record the assumption.
 
-## Autonomous execution policy
-- Autonomous end-to-end execution is the default.
-- Require explicit human approval before mutating actions only for critical decisions or destructive risk.
-- All other changes proceed autonomously with `/review` and repository gates.
-- If a decision is non-critical and verifiable, choose the documented default and record it as an assumption.
-- Stop and ask for conflicts, missing critical inputs, or permission elevation.
+## Repository operating rules
+
+Keep the root file short and discovery-safe. Detailed process belongs in:
+
+- `openspec/AGENTS.override.md` for OpenSpec workflow
+- `plans/README.md` for skill/eval source precedence
+- `scripts/evals/README.md` for the current shared eval runner shape
+- nested `AGENTS.md` or `AGENTS.override.md` files for specialized areas
+
+## Repository defaults
+
+- Treat `packs/` as portable skill artifacts.
+- Keep skill folders shallow: `SKILL.md`, then optional `references/`, `assets/`, `scripts/`, `agents/`, and `evals/` when a skill owns eval definitions.
+- Do not place a full shared eval harness inside a skill folder.
+- Keep repo-wide stable rules here; put specialized rules closer to the work.
+
+## Skill authoring defaults
+
+- Freeze the contract before editing `SKILL.md`.
+- Confirm one job, trigger, non-trigger, definition of done, stop conditions, and nearby negative cases.
+- If the workflow cannot be described as one job, split or narrow it before implementation.
+
+## Eval defaults
+
+- The legacy eval runtime was intentionally removed and is not a source of truth.
+- Eval definitions live next to each skill under `packs/core/<skill-name>/evals/`.
+- Offline iteration workspaces live under `packs/core/<skill-name>/evals/runs/`.
+- Rebuild the scaffold from `plans/` and current docs, not by restoring deleted runtime code.
+
+## When modifying `skill-forge`
+
+- Keep the workflow spec-driven.
+- Keep the handoff aligned with the current source-of-truth docs.
+- Do not reintroduce per-skill harness duplication.
+- Keep provider-specific files isolated under `agents/`.
+

@@ -2,8 +2,13 @@
   "name": "skills-catalog",
   "private": true,
   "type": "module",
-  "scripts": {
-    "verify:skills-frontmatter": "node ./scripts/verify-skills-frontmatter.mjs",
-    "verify": "npm run verify:skills-frontmatter && openspec list --json && openspec validate --specs"
+  "dependencies": {
+    "@ai-sdk/openai": "^3.0.41",
+    "ai": "^6.0.116",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.0",
+    "typescript": "^5.8.3"
   }
 }

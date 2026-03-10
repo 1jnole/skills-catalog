@@ -1,0 +1,5 @@
+interface:
+  display_name: "JS Guardrails - Type Coercion Boundaries"
+  short_description: "Local JS/TS boundary hardening for implicit primitive coercion at forms, DOM, URLSearchParams, storage, and browser/API edges. Delegates when the task is validation, object equality, or metaprogramming."
+policy:
+  allow_implicit_invocation: true
