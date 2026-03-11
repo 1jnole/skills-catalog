@@ -29,7 +29,6 @@ export const caseGradingResultSchema = z.object({
 export const modeArtifactsSummarySchema = z.object({
   status: artifactStatusSchema,
   duration_ms: z.number().nonnegative(),
-  output_path: z.string().min(1),
   score: z.number().min(0).max(1),
   passed: z.boolean(),
   provider: artifactProviderSchema.optional(),

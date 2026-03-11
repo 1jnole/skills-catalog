@@ -36,13 +36,6 @@ export function resolveNextIteration(runsRoot: string): number {
   return latestIteration === undefined ? 1 : latestIteration + 1;
 }
 
-export function ensureCaseArtifactsFolder(iterationDir: string, caseId: string): void {
-  const caseDir = path.join(iterationDir, caseId);
-  fs.mkdirSync(path.join(caseDir, 'with_skill'), { recursive: true });
-  fs.mkdirSync(path.join(caseDir, 'without_skill'), { recursive: true });
-  fs.mkdirSync(path.join(caseDir, 'outputs'), { recursive: true });
-}
-
 function writeBenchmarkStub(
   benchmarkPath: string,
   sourceEvalPath: string,
@@ -128,9 +121,6 @@ export function createIterationWorkspace(
   fs.mkdirSync(iterationDir, { recursive: true });
 
   const caseIds = collectCaseIds(definition);
-  for (const caseId of caseIds) {
-    ensureCaseArtifactsFolder(iterationDir, caseId);
-  }
 
   const benchmarkPath = path.join(iterationDir, 'benchmark.json');
   const runManifestPath = path.join(iterationDir, 'run.json');
@@ -162,11 +152,27 @@ export function openExistingIteration(skillName: string, iterationNumber: number
 
   const benchmarkPath = path.join(iterationDir, 'benchmark.json');
   const runManifestPath = path.join(iterationDir, 'run.json');
-  const caseIds = fs
-    .readdirSync(iterationDir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name)
-    .sort();
+  const caseIds = fs.existsSync(benchmarkPath)
+    ? (() => {
+        const rawBenchmark = JSON.parse(fs.readFileSync(benchmarkPath, 'utf8')) as {
+          case_ids?: unknown;
+          cases?: Array<{ case_id?: unknown }>;
+        };
+
+        if (Array.isArray(rawBenchmark.case_ids)) {
+          return rawBenchmark.case_ids.filter((caseId): caseId is string => typeof caseId === 'string').sort();
+        }
+
+        if (Array.isArray(rawBenchmark.cases)) {
+          return rawBenchmark.cases
+            .map((entry) => entry.case_id)
+            .filter((caseId): caseId is string => typeof caseId === 'string')
+            .sort();
+        }
+
+        return [];
+      })()
+    : [];
 
   return {
     runsRoot,

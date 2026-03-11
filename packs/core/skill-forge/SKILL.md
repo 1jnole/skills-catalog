@@ -12,12 +12,13 @@ Apply these decisions in order. Do not skip ahead to missing-input checks before
 
 1. If the request starts from a finished `Eval Brief`, asks for `golden` or `negative` cases, or asks to write `packs/core/<skill>/evals/evals.json`, return `Classification: non-trigger` immediately.
 2. If the request is obvious non-authoring work such as `AGENTS.md`, repo policy, runtime-only implementation, or downstream eval authoring, return `Classification: non-trigger` immediately.
-3. If the request is clearly skill authoring and eval or runtime work is only secondary or deferred, return `Classification: trigger` and keep skill authoring as the active responsibility.
+3. If the request is clearly skill authoring and eval or runtime work is only secondary, mixed in, or explicitly deferred, return `Classification: trigger` and keep skill authoring as the active responsibility.
 4. Only return `Classification: stop-and-ask` when the request still plausibly belongs to skill authoring but the skill target, single job, or authoring boundary is genuinely unclear.
 
 Routing examples:
 - `Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.` -> `Classification: non-trigger`
 - `Write a new skill for PR review routing and leave eval scaffold for later.` -> `Classification: trigger`
+- `Write a new skill for PR review routing and also set up the first eval scaffold, but keep the skill contract first and leave runtime for later.` -> `Classification: trigger`
 - `Create a skill, reorganize repo policies, and build the first runner in one pass.` -> `Classification: stop-and-ask`
 
 ## Single job
@@ -40,10 +41,12 @@ For trigger cases:
 1. Start with `Classification: trigger`.
 2. Name the workflow explicitly as one of: `Workflow: new-skill`, `Workflow: existing-skill-refactor`, or `Workflow: skill-rewrite`.
 3. If eval or runtime work appears but skill authoring is clearly primary, keep skill authoring as the active responsibility and add the exact sentence `Downstream eval work is out of scope here.` on its own line before the JSON artifact.
-4. Keep the downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.
-5. Do not ask for confirmation if the skill target and authoring job are already clear.
-6. Produce the boundary-only JSON artifact.
-7. End with the exact line `Eval Brief ready`.
+4. Treat requests that say `skill contract first`, `Eval Brief first`, or otherwise make authoring primary as trigger cases even if they also mention eval scaffold work for later.
+5. Do not switch to `stop-and-ask` just because eval scaffold work appears alongside authoring when the authoring boundary is already clear.
+6. Keep the downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.
+7. Do not ask for confirmation if the skill target and authoring job are already clear.
+8. Produce the boundary-only JSON artifact.
+9. End with the exact line `Eval Brief ready`.
 
 For non-trigger cases:
 1. Start with `Classification: non-trigger`.
@@ -86,7 +89,8 @@ Step 2: Route the request before authoring.
 1. Apply the routing precedence section above first.
 2. If the request is obvious non-authoring work, return `Classification: non-trigger` immediately.
 3. If the request mixes authoring with eval or runtime work but skill authoring is clearly primary, continue and defer the downstream work explicitly.
-4. Only use `stop-and-ask` if the request still looks like skill authoring but the target or boundary is unclear.
+4. If the request already says `contract first`, `Eval Brief first`, or otherwise freezes authoring as the active responsibility, do not degrade it to `stop-and-ask` just because eval scaffold work is also requested.
+5. Only use `stop-and-ask` if the request still looks like skill authoring but the target or boundary is unclear.
 
 Step 3: Freeze scope for one skill.
 1. Confirm one skill target and one single job.
@@ -97,7 +101,7 @@ Step 3: Freeze scope for one skill.
 Step 4: Capture boundary input.
 1. Start from `packs/core/skill-forge/assets/contracts/eval-brief.template.json`.
 2. Fill only boundary fields: skill identity, authoring boundary, success model, probes, negative signals, source refs.
-3. Keep the brief free of runtime, dataset, benchmark, or grader detail.
+3. Keep the brief free of runtime, dataset, benchmark, grader, or eval scaffold detail.
 4. Treat the success contract from Step 1 as required input to the brief, not as optional commentary.
 5. Keep `sourceRefs` limited to source material that justifies the target skill contract. Do not list repo planning documents as required inputs for the brief.
 

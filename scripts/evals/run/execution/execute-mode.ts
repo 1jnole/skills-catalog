@@ -1,8 +1,6 @@
-import * as path from 'node:path';
-
-import { createErroredCaseGrading, gradeCase, writeCaseArtifacts } from '../../grading/grade-case.js';
+import { createErroredCaseGrading, gradeCase } from '../../grading/grade-case.js';
 import { type EvalCase, type EvalCaseMode } from '../../domain/types/eval-case.types.js';
-import { type ArtifactError, type CaseGrading, type CaseModeOutputArtifact, type ModeArtifacts } from '../../domain/types/run-artifact.types.js';
+import { type ArtifactError, type CaseGrading, type ModeArtifacts } from '../../domain/types/run-artifact.types.js';
 import { runOpenAiText } from '../../providers/openai-provider.js';
 import { buildPrompt, buildSystemPrompt, loadCaseFiles } from './prompt-builder.js';
 
@@ -19,7 +17,6 @@ function classifyExecutionError(error: unknown): ArtifactError {
 export async function executeMode(params: {
   skillName: string;
   caseDefinition: EvalCase;
-  caseDir: string;
   mode: EvalCaseMode;
   modelId: string;
   skillPrompt: string | null;
@@ -46,27 +43,12 @@ export async function executeMode(params: {
       passingScoreThreshold: params.passingScoreThreshold,
     });
 
-    const outputArtifact: CaseModeOutputArtifact = {
-      case_id: params.caseDefinition.id,
-      mode: params.mode,
-      status: 'completed',
-      prompt,
-      system: systemPrompt,
-      output: execution.text,
-      provider: execution.provider,
-      model: execution.modelId,
-      duration_ms: durationMs,
-      usage: execution.usage,
-    };
-    writeCaseArtifacts(params.caseDir, params.mode, outputArtifact);
-
     return {
       modeArtifacts: {
         status: 'completed',
         duration_ms: durationMs,
         provider: execution.provider,
         model: execution.modelId,
-        output_path: path.join('outputs', `${params.mode}.json`),
         score: grading.score,
         passed: grading.passed,
         usage: execution.usage,
@@ -82,22 +64,10 @@ export async function executeMode(params: {
       error: artifactError,
     });
 
-    const outputArtifact: CaseModeOutputArtifact = {
-      case_id: params.caseDefinition.id,
-      mode: params.mode,
-      status: 'error',
-      prompt,
-      system: systemPrompt,
-      duration_ms: durationMs,
-      error: artifactError,
-    };
-    writeCaseArtifacts(params.caseDir, params.mode, outputArtifact);
-
     return {
       modeArtifacts: {
         status: 'error',
         duration_ms: durationMs,
-        output_path: path.join('outputs', `${params.mode}.json`),
         score: grading.score,
         passed: grading.passed,
         error: artifactError,

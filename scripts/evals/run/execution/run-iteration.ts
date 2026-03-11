@@ -1,13 +1,12 @@
 import * as path from 'node:path';
 
-import { writeBenchmark, writeCaseSummaryArtifacts, writeRunManifest } from '../artifacts/write-run-artifacts.js';
+import { writeBenchmark, writeRunManifest } from '../artifacts/write-run-artifacts.js';
 import {
-  ensureCaseArtifactsFolder,
   resetBenchmarkToRunning,
   writeBenchmarkProgress,
 } from '../artifacts/iteration-files.js';
 import { normalizeCaseArtifacts } from '../../domain/services/run-results.js';
-import { readCaseArtifactsIfComplete, readCompletedBenchmarkCaseArtifacts } from '../artifacts/read-run-artifacts.js';
+import { readCompletedBenchmarkCaseArtifacts } from '../artifacts/read-run-artifacts.js';
 import { executeReadEvalDefinition } from '../definition/read-eval-definition.js';
 import { collectCaseIds, collectCases } from '../../domain/types/eval-definition.types.js';
 import { type RunEvalIterationInput, type RunEvalIterationResult, type CaseArtifacts } from '../../domain/types/run.types.js';
@@ -72,11 +71,7 @@ export async function executeRunEvalIteration(input: RunEvalIterationInput): Pro
   console.log(`Total cases: ${cases.length}`);
 
   for (const [index, caseDefinition] of cases.entries()) {
-    ensureCaseArtifactsFolder(workspace.iterationDir, caseDefinition.id);
-
-    const caseDir = path.join(workspace.iterationDir, caseDefinition.id);
-    const existingCaseArtifacts = benchmarkCaseArtifacts.get(caseDefinition.id)
-      ?? readCaseArtifactsIfComplete(caseDir, caseDefinition);
+    const existingCaseArtifacts = benchmarkCaseArtifacts.get(caseDefinition.id);
     const shouldRetryExistingErrors = Boolean(existingCaseArtifacts && input.retryErrors && hasCaseError(existingCaseArtifacts));
 
     if (existingCaseArtifacts && !shouldRetryExistingErrors) {
@@ -112,7 +107,6 @@ export async function executeRunEvalIteration(input: RunEvalIterationInput): Pro
     const withSkill = await executeMode({
       skillName: definition.skill_name,
       caseDefinition,
-      caseDir,
       mode: 'with_skill',
       modelId: input.model,
       skillPrompt,
@@ -121,7 +115,6 @@ export async function executeRunEvalIteration(input: RunEvalIterationInput): Pro
     const withoutSkill = await executeMode({
       skillName: definition.skill_name,
       caseDefinition,
-      caseDir,
       mode: 'without_skill',
       modelId: input.model,
       skillPrompt: null,
@@ -135,15 +128,6 @@ export async function executeRunEvalIteration(input: RunEvalIterationInput): Pro
       with_skill: withSkill.modeArtifacts,
       without_skill: withoutSkill.modeArtifacts,
     };
-
-    writeCaseSummaryArtifacts(
-      caseDir,
-      {
-        with_skill: withSkill.grading,
-        without_skill: withoutSkill.grading,
-      },
-      caseArtifacts,
-    );
 
     caseResults.push(caseArtifacts);
     writeBenchmarkProgress({

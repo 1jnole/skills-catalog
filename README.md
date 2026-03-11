@@ -31,13 +31,7 @@ The current path is a clean rebuild from scaffold-first contracts and workflow.
 |       |       `-- runs/
 |       |           `-- iteration-N/
 |       |               |-- benchmark.json
-|       |               `-- <case-id>/
-|       |                   |-- with_skill/
-|       |                   |-- without_skill/
-|       |                   |-- outputs/
-|       |                   |-- timing.json
-|       |                   |-- grading.json
-|       |                   `-- feedback.json
+|       |               `-- run.json
 |       `-- skill-eval-forge/
 |           `-- SKILL.md
 |-- plans/
@@ -55,3 +49,5 @@ The current path is a clean rebuild from scaffold-first contracts and workflow.
 Use the docs above for repo-wide background and shared tooling. For the operational behavior of a specific skill, use that skill folder as the source of truth.
 
 Within `scripts/evals/`, treat `run-evals.ts` as the supported public execution entrypoint. `run-iteration.ts` remains in the tree as a legacy internal entrypoint during the migration.
+
+Historical iterations may still contain detailed per-case artifacts from the pre-closeout runner, but new supported iterations persist only `benchmark.json` and `run.json`.

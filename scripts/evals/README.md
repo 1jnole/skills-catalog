@@ -37,12 +37,6 @@ Each skill keeps its own run artifacts next to its eval definition:
 - `packs/core/<skill-name>/evals/files/`
 - `packs/core/<skill-name>/evals/runs/iteration-N/run.json` (neutral run metadata for the execution)
 - `packs/core/<skill-name>/evals/runs/iteration-N/benchmark.json` (gates, deltas, improvement summary, per-case comparison)
-- `packs/core/<skill-name>/evals/runs/iteration-N/<case-id>/with_skill/`
-- `packs/core/<skill-name>/evals/runs/iteration-N/<case-id>/without_skill/`
-- `packs/core/<skill-name>/evals/runs/iteration-N/<case-id>/outputs/`
-- `packs/core/<skill-name>/evals/runs/iteration-N/<case-id>/timing.json`
-- `packs/core/<skill-name>/evals/runs/iteration-N/<case-id>/grading.json`
-- `packs/core/<skill-name>/evals/runs/iteration-N/<case-id>/feedback.json`
 
 ## Commands
 
@@ -73,7 +67,8 @@ The runner validates those prerequisites before it creates a new iteration folde
 
 - `Eval Brief`, `evals.json`, local Zod schemas, local domain types, and benchmark semantics are the source of truth.
 - Laminar is an observability/eval platform boundary, not the authority for pass/fail semantics.
-- `benchmark.json` is computed from normalized run results in `domain/` even if legacy detailed artifacts are still written during the migration.
+- `benchmark.json` is computed from normalized run results in `domain/`.
+- Historical iterations may still contain legacy detailed per-case artifacts, but new supported iterations persist only `benchmark.json` and `run.json`.
 
 
 

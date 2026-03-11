@@ -1,10 +1,5 @@
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-
-import { caseModeOutputArtifactSchema } from '../domain/schemas/run-artifact.schema.js';
 import { type EvalCase, type EvalCaseMode } from '../domain/types/eval-case.types.js';
-import { type ArtifactError, type CaseGrading, type CaseModeOutputArtifact } from '../domain/types/run-artifact.types.js';
-import { writeValidatedJsonFile } from '../shared/json.js';
+import { type ArtifactError, type CaseGrading } from '../domain/types/run-artifact.types.js';
 
 const STOPWORDS = new Set([
   'the',
@@ -262,14 +257,5 @@ export function createErroredCaseGrading(params: {
       },
     ],
   };
-}
-
-export function writeCaseArtifacts(
-  caseDir: string,
-  mode: EvalCaseMode,
-  payload: CaseModeOutputArtifact,
-): CaseModeOutputArtifact {
-  const outputPath = path.join(caseDir, 'outputs', `${mode}.json`);
-  return writeValidatedJsonFile(outputPath, caseModeOutputArtifactSchema, payload);
 }
 

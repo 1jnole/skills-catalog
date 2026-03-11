@@ -35,7 +35,6 @@ function toCaseArtifactsFromBenchmarkEntry(caseDefinition: EvalCase, benchmark: 
     with_skill: {
       status: caseEntry.with_skill.status,
       duration_ms: caseEntry.with_skill.duration_ms,
-      output_path: path.join('benchmark.json', caseDefinition.id, 'with_skill'),
       score: caseEntry.with_skill.score,
       passed: caseEntry.with_skill.passed,
       error: caseEntry.with_skill.error,
@@ -43,7 +42,6 @@ function toCaseArtifactsFromBenchmarkEntry(caseDefinition: EvalCase, benchmark: 
     without_skill: {
       status: caseEntry.without_skill.status,
       duration_ms: caseEntry.without_skill.duration_ms,
-      output_path: path.join('benchmark.json', caseDefinition.id, 'without_skill'),
       score: caseEntry.without_skill.score,
       passed: caseEntry.without_skill.passed,
       error: caseEntry.without_skill.error,
@@ -75,7 +73,7 @@ export function readCompletedBenchmarkCaseArtifacts(
   );
 }
 
-export function readCaseArtifactsIfComplete(caseDir: string, caseDefinition: EvalCase): CaseArtifacts | null {
+export function readLegacyCaseArtifactsIfComplete(caseDir: string, caseDefinition: EvalCase): CaseArtifacts | null {
   const artifactPaths = resolveCaseArtifactPaths(caseDir);
   const requiredPaths = [
     artifactPaths.timing,
@@ -101,7 +99,6 @@ export function readCaseArtifactsIfComplete(caseDir: string, caseDefinition: Eva
     with_skill: {
       status: withSkillOutput.status,
       duration_ms: timing.with_skill,
-      output_path: path.join('outputs', 'with_skill.json'),
       score: grading.with_skill.score,
       passed: grading.with_skill.passed,
       provider: withSkillOutput.status === 'completed' ? withSkillOutput.provider : undefined,
@@ -112,7 +109,6 @@ export function readCaseArtifactsIfComplete(caseDir: string, caseDefinition: Eva
     without_skill: {
       status: withoutSkillOutput.status,
       duration_ms: timing.without_skill,
-      output_path: path.join('outputs', 'without_skill.json'),
       score: grading.without_skill.score,
       passed: grading.without_skill.passed,
       provider: withoutSkillOutput.status === 'completed' ? withoutSkillOutput.provider : undefined,
