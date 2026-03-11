@@ -218,7 +218,7 @@ The first scaffold should stay small and readable.
 ### 7.3 Shared runner code
 
 - `scripts/evals/read-evals.ts`
-- `scripts/evals/run-iteration.ts`
+- `scripts/evals/run-evals.ts`
 - supporting shared modules under `scripts/evals/`
 
 ### 7.4 Iteration workspace

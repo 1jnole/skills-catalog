@@ -119,7 +119,7 @@ They are connected, but they are not interchangeable.
 ### 6.3 Shared runner code
 
 - `scripts/evals/read-evals.ts`
-- `scripts/evals/run-iteration.ts`
+- `scripts/evals/run-evals.ts`
 - supporting shared modules under `scripts/evals/`
 
 ### 6.4 Iteration workspace

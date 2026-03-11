@@ -7,6 +7,7 @@ This folder contains the shared offline eval runner used by multiple skills.
 - `commands/` exposes runnable commands and keeps argument parsing thin.
 - `domain/types/` stores domain contracts.
 - `domain/schemas/` stores Zod validators with the `*.schema.ts` convention.
+- `platforms/laminar/` is the canonical observability/eval platform boundary.
 - `run/definition/` loads and summarizes skill-local eval definitions.
 - `run/execution/` coordinates iteration execution and prompt preparation.
 - `run/artifacts/` manages iteration files, folders, and artifact writing.
@@ -19,6 +20,7 @@ This folder contains the shared offline eval runner used by multiple skills.
 - semantic contracts go in `types/` with the `*.types.ts` suffix
 - Zod validators go in `schemas/` with the `*.schema.ts` suffix
 - commands stay in `commands/`
+- platform adapters stay in `platforms/`
 - eval loading stays in `run/definition/`
 - execution flow stays in `run/execution/`
 - persisted run files and artifact handling stays in `run/artifacts/`
@@ -45,12 +47,14 @@ Each skill keeps its own run artifacts next to its eval definition:
    `npx tsc -p scripts/evals/tsconfig.json`
 2. Validate one skill definition:
    `node scripts/evals/dist/read-evals.js --skill-name skill-forge`
-3. Run a new iteration:
-   `node scripts/evals/dist/run-iteration.js --skill-name skill-forge --model gpt-4.1-mini`
+3. Run a new iteration through the supported public command:
+   `node scripts/evals/dist/run-evals.js --skill-name skill-forge --model gpt-4.1-mini`
 4. Re-run an existing iteration explicitly:
-   `node scripts/evals/dist/run-iteration.js --skill-name skill-forge --iteration 2 --model gpt-4.1-mini`
+   `node scripts/evals/dist/run-evals.js --skill-name skill-forge --iteration 2 --model gpt-4.1-mini`
 5. Re-run only errored cases in an existing iteration:
-   `node scripts/evals/dist/run-iteration.js --skill-name skill-forge --iteration 2 --retry-errors --model gpt-4.1-mini`
+   `node scripts/evals/dist/run-evals.js --skill-name skill-forge --iteration 2 --retry-errors --model gpt-4.1-mini`
+
+`run-iteration` remains a legacy internal entrypoint during the migration and is no longer the documented public path.
 
 ## Requirements
 

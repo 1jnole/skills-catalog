@@ -45,8 +45,13 @@ The current path is a clean rebuild from scaffold-first contracts and workflow.
 |   `-- evals/
 |       |-- README.md
 |       |-- read-evals.ts
+|       |-- run-evals.ts
+|       |-- platforms/
+|       |   `-- laminar/
 |       `-- run-iteration.ts
 `-- package.json
 ```
 
 Use the docs above for repo-wide background and shared tooling. For the operational behavior of a specific skill, use that skill folder as the source of truth.
+
+Within `scripts/evals/`, treat `run-evals.ts` as the supported public execution entrypoint. `run-iteration.ts` remains in the tree as a legacy internal entrypoint during the migration.

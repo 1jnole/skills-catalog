@@ -45,10 +45,10 @@ Los Mermaid cumplen dos funciones distintas y complementarias:
 ### Estado actual
 ```mermaid
 flowchart TD
-    A["evals.json"] --> B["run-lmnr-eval / run-iteration"]
-    B --> C["spike lmnr + runner legacy"]
+    A["evals.json"] --> B["read-evals / run-evals"]
+    B --> C["shared runner source + legacy run-iteration path"]
     C --> D["AI SDK + OpenAI"]
-    C --> E["Laminar / artifacts legacy"]
+    C --> E["platforms/laminar + legacy artifact layout"]
     C --> F["benchmark.json"]
 ```
 
@@ -187,8 +187,8 @@ Objetivo: reducir incertidumbre antes de tocar arquitectura.
 ### Fase 1 — Límites y Contextos
 Objetivo: neutralizar naming y separar responsabilidades.
 
-- Renombrar el comando público a `run-evals`.
-- Renombrar `scripts/evals/lmnr/` a `scripts/evals/platforms/laminar/`.
+- Renombrar el comando público soportado a `run-evals`.
+- Establecer `scripts/evals/platforms/laminar/` como ubicación canónica de Laminar.
 - Mantener `scripts/evals/providers/` sólo para **model providers**.
 - Documentar explícitamente:
   - `core eval domain`
