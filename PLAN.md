@@ -49,7 +49,7 @@ flowchart TD
     B --> C["shared runner source + legacy run-iteration path"]
     C --> D["AI SDK + OpenAI"]
     C --> E["platforms/laminar + legacy artifact layout"]
-    C --> F["benchmark.json"]
+    C --> F["benchmark.json + run.json"]
 ```
 
 ### Diagrama final de relaciones y contextos
@@ -209,6 +209,7 @@ Objetivo: desacoplar benchmark y scoring de la plataforma.
   - `Eval Brief`
   - `evals.json`
   - Zod schemas
+  - domain types
   - benchmark semantics
 - Extraer o consolidar como lógica pura:
   - scoring por caso

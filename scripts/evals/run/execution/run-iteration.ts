@@ -1,12 +1,13 @@
 import * as path from 'node:path';
 
-import { writeBenchmark, writeCaseSummaryArtifacts } from '../artifacts/write-run-artifacts.js';
+import { writeBenchmark, writeCaseSummaryArtifacts, writeRunManifest } from '../artifacts/write-run-artifacts.js';
 import {
   ensureCaseArtifactsFolder,
   resetBenchmarkToRunning,
   writeBenchmarkProgress,
 } from '../artifacts/iteration-files.js';
-import { readCaseArtifactsIfComplete } from '../artifacts/read-run-artifacts.js';
+import { normalizeCaseArtifacts } from '../../domain/services/run-results.js';
+import { readCaseArtifactsIfComplete, readCompletedBenchmarkCaseArtifacts } from '../artifacts/read-run-artifacts.js';
 import { executeReadEvalDefinition } from '../definition/read-eval-definition.js';
 import { collectCaseIds, collectCases } from '../../domain/types/eval-definition.types.js';
 import { type RunEvalIterationInput, type RunEvalIterationResult, type CaseArtifacts } from '../../domain/types/run.types.js';
@@ -55,6 +56,7 @@ export async function executeRunEvalIteration(input: RunEvalIterationInput): Pro
   const skillPrompt = readSkillPrompt(definition.skill_name);
   const caseResults: CaseArtifacts[] = [];
   const cases = collectCases(definition);
+  const benchmarkCaseArtifacts = readCompletedBenchmarkCaseArtifacts(workspace.benchmarkPath, cases);
 
   if (input.iteration && input.retryErrors) {
     resetBenchmarkToRunning({
@@ -73,7 +75,8 @@ export async function executeRunEvalIteration(input: RunEvalIterationInput): Pro
     ensureCaseArtifactsFolder(workspace.iterationDir, caseDefinition.id);
 
     const caseDir = path.join(workspace.iterationDir, caseDefinition.id);
-    const existingCaseArtifacts = readCaseArtifactsIfComplete(caseDir, caseDefinition);
+    const existingCaseArtifacts = benchmarkCaseArtifacts.get(caseDefinition.id)
+      ?? readCaseArtifactsIfComplete(caseDir, caseDefinition);
     const shouldRetryExistingErrors = Boolean(existingCaseArtifacts && input.retryErrors && hasCaseError(existingCaseArtifacts));
 
     if (existingCaseArtifacts && !shouldRetryExistingErrors) {
@@ -161,8 +164,17 @@ export async function executeRunEvalIteration(input: RunEvalIterationInput): Pro
     skillName: definition.skill_name,
     evalVersion: definition.eval_version,
     iterationNumber: workspace.iterationNumber,
-    caseResults,
+    caseResults: caseResults.map(normalizeCaseArtifacts),
     gates: definition.gates,
+  });
+
+  writeRunManifest({
+    runManifestPath: workspace.runManifestPath,
+    skillName: definition.skill_name,
+    evalVersion: definition.eval_version,
+    iterationNumber: workspace.iterationNumber,
+    provider: 'openai',
+    model: input.model,
   });
 
   console.log(`Iteration ${workspace.iterationNumber} finished.`);

@@ -12,6 +12,7 @@ export type IterationWorkspace = {
   iterationNumber: number;
   iterationDir: string;
   benchmarkPath: string;
+  runManifestPath: string;
   caseIds: string[];
 };
 
@@ -132,6 +133,7 @@ export function createIterationWorkspace(
   }
 
   const benchmarkPath = path.join(iterationDir, 'benchmark.json');
+  const runManifestPath = path.join(iterationDir, 'run.json');
   writeBenchmarkStub(
     benchmarkPath,
     path.relative(process.cwd(), sourceEvalPath),
@@ -145,6 +147,7 @@ export function createIterationWorkspace(
     iterationNumber,
     iterationDir,
     benchmarkPath,
+    runManifestPath,
     caseIds,
   };
 }
@@ -158,6 +161,7 @@ export function openExistingIteration(skillName: string, iterationNumber: number
   }
 
   const benchmarkPath = path.join(iterationDir, 'benchmark.json');
+  const runManifestPath = path.join(iterationDir, 'run.json');
   const caseIds = fs
     .readdirSync(iterationDir, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
@@ -169,6 +173,7 @@ export function openExistingIteration(skillName: string, iterationNumber: number
     iterationNumber,
     iterationDir,
     benchmarkPath,
+    runManifestPath,
     caseIds,
   };
 }

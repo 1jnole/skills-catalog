@@ -2,11 +2,13 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 
 import {
+  benchmarkArtifactSchema,
   caseGradingArtifactSchema,
   caseModeOutputArtifactSchema,
   caseTimingArtifactSchema,
 } from '../../domain/schemas/run-artifact.schema.js';
 import { type EvalCase } from '../../domain/types/eval-case.types.js';
+import { type BenchmarkArtifact } from '../../domain/types/run-artifact.types.js';
 import { type CaseArtifacts } from '../../domain/types/run.types.js';
 import { readValidatedJsonFile } from '../../shared/json.js';
 
@@ -18,6 +20,59 @@ function resolveCaseArtifactPaths(caseDir: string) {
     withSkillOutput: path.join(caseDir, 'outputs', 'with_skill.json'),
     withoutSkillOutput: path.join(caseDir, 'outputs', 'without_skill.json'),
   };
+}
+
+function toCaseArtifactsFromBenchmarkEntry(caseDefinition: EvalCase, benchmark: BenchmarkArtifact): CaseArtifacts | null {
+  const caseEntry = benchmark.cases.find((entry) => entry.case_id === caseDefinition.id);
+  if (!caseEntry) {
+    return null;
+  }
+
+  return {
+    case_id: caseDefinition.id,
+    expected_stop: caseDefinition.stop_at,
+    should_trigger: caseDefinition.should_trigger,
+    with_skill: {
+      status: caseEntry.with_skill.status,
+      duration_ms: caseEntry.with_skill.duration_ms,
+      output_path: path.join('benchmark.json', caseDefinition.id, 'with_skill'),
+      score: caseEntry.with_skill.score,
+      passed: caseEntry.with_skill.passed,
+      error: caseEntry.with_skill.error,
+    },
+    without_skill: {
+      status: caseEntry.without_skill.status,
+      duration_ms: caseEntry.without_skill.duration_ms,
+      output_path: path.join('benchmark.json', caseDefinition.id, 'without_skill'),
+      score: caseEntry.without_skill.score,
+      passed: caseEntry.without_skill.passed,
+      error: caseEntry.without_skill.error,
+    },
+  };
+}
+
+export function readCompletedBenchmarkCaseArtifacts(
+  benchmarkPath: string,
+  caseDefinitions: EvalCase[],
+): Map<string, CaseArtifacts> {
+  if (!fs.existsSync(benchmarkPath)) {
+    return new Map();
+  }
+
+  const rawBenchmark = JSON.parse(fs.readFileSync(benchmarkPath, 'utf8')) as { status?: unknown };
+  if (rawBenchmark.status !== 'completed' && rawBenchmark.status !== 'completed_with_errors') {
+    return new Map();
+  }
+
+  const benchmark = benchmarkArtifactSchema.parse(rawBenchmark);
+  return new Map(
+    caseDefinitions
+      .map((caseDefinition) => {
+        const caseArtifacts = toCaseArtifactsFromBenchmarkEntry(caseDefinition, benchmark);
+        return caseArtifacts ? [caseDefinition.id, caseArtifacts] : null;
+      })
+      .filter((entry): entry is [string, CaseArtifacts] => entry !== null),
+  );
 }
 
 export function readCaseArtifactsIfComplete(caseDir: string, caseDefinition: EvalCase): CaseArtifacts | null {

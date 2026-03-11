@@ -1,0 +1,29 @@
+## ADDED Requirements
+
+### Requirement: Phase 2 SHALL declare the local eval source of truth
+Phase 2 SHALL document and enforce that `Eval Brief`, `packs/core/<skill>/evals/evals.json`, local Zod schemas, local domain types, and benchmark semantics are the authoritative source of truth for eval behavior.
+
+#### Scenario: Source of truth is explicit
+- **WHEN** a maintainer reads the phase 2 docs and code contracts
+- **THEN** Laminar MUST be described only as execution or observability infrastructure and not as the source of benchmark semantics
+
+### Requirement: Phase 2 SHALL make scoring, gates, and benchmark aggregation runner-neutral
+Phase 2 SHALL isolate scoring, gate decisions, and benchmark aggregation so they can consume normalized run results without depending on Laminar-specific result shapes or the legacy detailed artifact layout.
+
+#### Scenario: Pure logic consumes normalized results
+- **WHEN** the benchmark logic is reviewed after phase 2
+- **THEN** scoring, gates, and benchmark aggregation MUST be expressible from normalized run results instead of direct dependence on legacy detailed artifacts
+
+### Requirement: Phase 2 SHALL define a neutral `run.json`
+Phase 2 SHALL define `run.json` with neutral field names including `platform`, `run_ref`, `group_ref`, `provider`, `model`, `skill_name`, `eval_version`, `iteration`, and `created_at`.
+
+#### Scenario: `run.json` naming is vendor-neutral
+- **WHEN** a maintainer inspects the `run.json` contract after phase 2
+- **THEN** the schema MUST use neutral field names and MUST not include Laminar-prefixed or vendor-specific field names
+
+### Requirement: Phase 2 SHALL preserve current benchmark semantics
+Phase 2 SHALL preserve the current benchmark semantics for `benchmark.json`, including current pass-rate thresholds, `overall_passed`, and `with_skill` versus `without_skill` comparisons.
+
+#### Scenario: Benchmark meaning is unchanged
+- **WHEN** `skill-forge` benchmark behavior is compared before and after phase 2
+- **THEN** the benchmark semantics MUST remain aligned with the frozen parity baseline from phase 0
