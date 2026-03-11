@@ -60,6 +60,16 @@ function parsePositiveIntegerEnv(name: string, fallback: number): number {
   return parsedValue;
 }
 
+function readLaminarProjectApiKey(): string {
+  const apiKey = process.env.LMNR_PROJECT_API_KEY ?? process.env.LMNR_API_KEY;
+
+  if (!apiKey) {
+    throw new Error('LMNR_PROJECT_API_KEY is required for Laminar-backed eval runs. LMNR_API_KEY is also accepted as a compatibility alias.');
+  }
+
+  return apiKey;
+}
+
 async function importLaminarModule(): Promise<{ Laminar?: { initialize?: (params: { projectApiKey: string }) => void } }> {
   const moduleName = getLaminarSdkPackageName();
 
@@ -89,15 +99,12 @@ function buildPromptWithFiles(userPrompt: string, files: RunTextRequestFile[]): 
 }
 
 export async function assertLaminarReady(): Promise<number> {
-  if (!process.env.LMNR_PROJECT_API_KEY) {
-    throw new Error('LMNR_PROJECT_API_KEY is required for Laminar-backed eval runs.');
-  }
-
+  const projectApiKey = readLaminarProjectApiKey();
   const timeoutMs = parsePositiveIntegerEnv('EVAL_RUN_TIMEOUT_MS', 30000);
   await assertOpenAiReady();
 
   const { Laminar } = await importLaminarModule();
-  Laminar?.initialize?.({ projectApiKey: process.env.LMNR_PROJECT_API_KEY });
+  Laminar?.initialize?.({ projectApiKey });
 
   return timeoutMs;
 }
