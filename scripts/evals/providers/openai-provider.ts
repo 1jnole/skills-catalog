@@ -102,6 +102,7 @@ export async function runOpenAiText(params: {
   modelId: string;
   prompt: string;
   system?: string;
+  timeoutMs?: number;
 }): Promise<ModelExecution> {
   await assertOpenAiReady();
 
@@ -111,7 +112,7 @@ export async function runOpenAiText(params: {
     model: openai(params.modelId),
     prompt: params.prompt,
     system: params.system,
-    timeout: { totalMs: timeoutMs },
+    timeout: { totalMs: params.timeoutMs ?? timeoutMs },
     maxRetries,
   });
 

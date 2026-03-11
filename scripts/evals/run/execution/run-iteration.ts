@@ -1,6 +1,5 @@
 import * as path from 'node:path';
 
-import { writeBenchmark, writeRunManifest } from '../artifacts/write-run-artifacts.js';
 import {
   resetBenchmarkToRunning,
   writeBenchmarkProgress,
@@ -10,9 +9,14 @@ import { readCompletedBenchmarkCaseArtifacts } from '../artifacts/read-run-artif
 import { executeReadEvalDefinition } from '../definition/read-eval-definition.js';
 import { collectCaseIds, collectCases } from '../../domain/types/eval-definition.types.js';
 import { type RunEvalIterationInput, type RunEvalIterationResult, type CaseArtifacts } from '../../domain/types/run.types.js';
-import { assertOpenAiReady, readSkillPrompt } from '../../providers/openai-provider.js';
+import { buildLaminarBenchmark, buildLaminarRunManifest } from '../../platforms/laminar/report.js';
+import { assertLaminarReady } from '../../platforms/laminar/executor.js';
+import { readSkillPrompt } from '../../providers/openai-provider.js';
 import { executeMode } from './execute-mode.js';
 import { resolveWorkspace } from './resolve-workspace.js';
+import { benchmarkArtifactSchema } from '../../domain/schemas/run-artifact.schema.js';
+import { runManifestArtifactSchema } from '../../domain/schemas/run-result.schema.js';
+import { writeValidatedJsonFile } from '../../shared/json.js';
 
 function countErroredCases(caseResults: CaseArtifacts[]): number {
   return caseResults.filter((caseResult) => caseResult.with_skill.error || caseResult.without_skill.error).length;
@@ -49,7 +53,7 @@ export async function executeRunEvalIteration(input: RunEvalIterationInput): Pro
     file: input.file,
   });
 
-  await assertOpenAiReady();
+  const timeoutMs = await assertLaminarReady();
 
   const workspace = resolveWorkspace(input, definition.skill_name, filePath, definition);
   const skillPrompt = readSkillPrompt(definition.skill_name);
@@ -111,6 +115,7 @@ export async function executeRunEvalIteration(input: RunEvalIterationInput): Pro
       modelId: input.model,
       skillPrompt,
       passingScoreThreshold: definition.gates.case_score_threshold,
+      timeoutMs,
     });
     const withoutSkill = await executeMode({
       skillName: definition.skill_name,
@@ -119,6 +124,7 @@ export async function executeRunEvalIteration(input: RunEvalIterationInput): Pro
       modelId: input.model,
       skillPrompt: null,
       passingScoreThreshold: definition.gates.case_score_threshold,
+      timeoutMs,
     });
 
     const caseArtifacts: CaseArtifacts = {
@@ -143,23 +149,31 @@ export async function executeRunEvalIteration(input: RunEvalIterationInput): Pro
     logModeResult('without_skill', caseArtifacts.without_skill);
   }
 
-  writeBenchmark({
-    benchmarkPath: workspace.benchmarkPath,
-    skillName: definition.skill_name,
-    evalVersion: definition.eval_version,
-    iterationNumber: workspace.iterationNumber,
-    caseResults: caseResults.map(normalizeCaseArtifacts),
-    gates: definition.gates,
-  });
+  const normalizedCaseResults = caseResults.map(normalizeCaseArtifacts);
 
-  writeRunManifest({
-    runManifestPath: workspace.runManifestPath,
-    skillName: definition.skill_name,
-    evalVersion: definition.eval_version,
-    iterationNumber: workspace.iterationNumber,
-    provider: 'openai',
-    model: input.model,
-  });
+  writeValidatedJsonFile(
+    workspace.benchmarkPath,
+    benchmarkArtifactSchema,
+    buildLaminarBenchmark({
+      skillName: definition.skill_name,
+      evalVersion: definition.eval_version,
+      iterationNumber: workspace.iterationNumber,
+      caseResults: normalizedCaseResults,
+      definition,
+    }),
+  );
+
+  writeValidatedJsonFile(
+    workspace.runManifestPath,
+    runManifestArtifactSchema,
+    buildLaminarRunManifest({
+      skillName: definition.skill_name,
+      evalVersion: definition.eval_version,
+      iterationNumber: workspace.iterationNumber,
+      provider: 'openai',
+      model: input.model,
+    }),
+  );
 
   console.log(`Iteration ${workspace.iterationNumber} finished.`);
 

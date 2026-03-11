@@ -14,11 +14,15 @@ Read these files in order:
    Freeze the implementation defaults that must be closed before Batch 1 starts.
 3. [Phase 3 Batch 1 Boundary](C:/Users/Jorge/WebstormProjects/skills-catalog/roadmap2/phase-3-batch-1-boundary.md)
    Freeze the Laminar boundary shape before active routing starts.
-4. [Phase 3 Plan Alignment](C:/Users/Jorge/WebstormProjects/skills-catalog/roadmap2/phase-3-plan-alignment.md)
+4. [Phase 3 Batch 2 Active Path](C:/Users/Jorge/WebstormProjects/skills-catalog/roadmap2/phase-3-batch-2-active-path.md)
+   Record the supported Laminar routing and fail-fast behavior before parity work starts.
+5. [Phase 3 Batch 3 Artifacts and Reporting](C:/Users/Jorge/WebstormProjects/skills-catalog/roadmap2/phase-3-batch-3-artifacts-reporting.md)
+   Record how the active Laminar path produces the supported local artifacts.
+6. [Phase 3 Plan Alignment](C:/Users/Jorge/WebstormProjects/skills-catalog/roadmap2/phase-3-plan-alignment.md)
    Confirm that the preparation work covers every requirement in `PLAN.md`.
-5. [Phase 3 Task Batches](C:/Users/Jorge/WebstormProjects/skills-catalog/roadmap2/phase-3-task-batches.md)
+7. [Phase 3 Task Batches](C:/Users/Jorge/WebstormProjects/skills-catalog/roadmap2/phase-3-task-batches.md)
    Break the implementation into tangible, gated batches.
-6. [Phase 3 Gates and Parity](C:/Users/Jorge/WebstormProjects/skills-catalog/roadmap2/phase-3-gates-and-parity.md)
+8. [Phase 3 Gates and Parity](C:/Users/Jorge/WebstormProjects/skills-catalog/roadmap2/phase-3-gates-and-parity.md)
    Lock the readiness gate, batch gates, parity policy, and final done gate.
 
 ## Rules

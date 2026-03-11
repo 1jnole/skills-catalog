@@ -1,18 +1,9 @@
 import { createErroredCaseGrading, gradeCase } from '../../grading/grade-case.js';
 import { type EvalCase, type EvalCaseMode } from '../../domain/types/eval-case.types.js';
-import { type ArtifactError, type CaseGrading, type ModeArtifacts } from '../../domain/types/run-artifact.types.js';
-import { runOpenAiText } from '../../providers/openai-provider.js';
-import { buildPrompt, buildSystemPrompt, loadCaseFiles } from './prompt-builder.js';
-
-function classifyExecutionError(error: unknown): ArtifactError {
-  const message = error instanceof Error ? error.message : String(error);
-  const normalizedMessage = message.toLowerCase();
-
-  return {
-    kind: normalizedMessage.includes('timeout') ? 'timeout' : 'execution_error',
-    message,
-  };
-}
+import { type CaseGrading, type ModeArtifacts } from '../../domain/types/run-artifact.types.js';
+import { summarizeLaminarModeResult, type LaminarModeExecutionResult } from '../../platforms/laminar/evaluators-adapter.js';
+import { runText } from '../../platforms/laminar/executor.js';
+import { buildSystemPrompt, loadCaseFiles } from './prompt-builder.js';
 
 export async function executeMode(params: {
   skillName: string;
@@ -21,58 +12,58 @@ export async function executeMode(params: {
   modelId: string;
   skillPrompt: string | null;
   passingScoreThreshold: number;
+  timeoutMs: number;
 }): Promise<{ modeArtifacts: ModeArtifacts; grading: CaseGrading }> {
-  let prompt = params.caseDefinition.prompt;
   const systemPrompt = buildSystemPrompt(params.mode, params.skillPrompt);
-  const startedAt = Date.now();
+  const attachedFiles = loadCaseFiles(params.skillName, params.caseDefinition);
+  const execution = await runText({
+    mode: params.mode,
+    model: params.modelId,
+    systemPrompt: systemPrompt ?? '',
+    userPrompt: params.caseDefinition.prompt,
+    files: attachedFiles,
+    timeoutMs: params.timeoutMs,
+  });
 
-  try {
-    const attachedFiles = loadCaseFiles(params.skillName, params.caseDefinition);
-    prompt = buildPrompt(params.caseDefinition, attachedFiles);
-
-    const execution = await runOpenAiText({
-      modelId: params.modelId,
-      prompt,
-      system: systemPrompt,
-    });
-    const durationMs = Date.now() - startedAt;
-    const grading = gradeCase({
-      caseDefinition: params.caseDefinition,
-      mode: params.mode,
-      output: execution.text,
-      passingScoreThreshold: params.passingScoreThreshold,
-    });
-
-    return {
-      modeArtifacts: {
-        status: 'completed',
-        duration_ms: durationMs,
-        provider: execution.provider,
-        model: execution.modelId,
-        score: grading.score,
-        passed: grading.passed,
-        usage: execution.usage,
-      },
-      grading,
-    };
-  } catch (error) {
-    const durationMs = Date.now() - startedAt;
-    const artifactError = classifyExecutionError(error);
+  if (execution.status === 'error') {
     const grading = createErroredCaseGrading({
       caseDefinition: params.caseDefinition,
       mode: params.mode,
-      error: artifactError,
+      error: execution.error,
     });
 
     return {
-      modeArtifacts: {
-        status: 'error',
-        duration_ms: durationMs,
+      modeArtifacts: summarizeLaminarModeResult({
+        result: execution,
         score: grading.score,
         passed: grading.passed,
-        error: artifactError,
-      },
+      }),
       grading,
     };
   }
+
+  const grading = gradeCase({
+    caseDefinition: params.caseDefinition,
+    mode: params.mode,
+    output: execution.text,
+    passingScoreThreshold: params.passingScoreThreshold,
+  });
+
+  const summarizedExecution: LaminarModeExecutionResult = {
+    status: 'completed',
+    durationMs: execution.durationMs,
+    provider: execution.provider,
+    model: execution.model,
+    usage: execution.usage,
+    output: execution.text,
+  };
+
+  return {
+    modeArtifacts: summarizeLaminarModeResult({
+      result: summarizedExecution,
+      score: grading.score,
+      passed: grading.passed,
+    }),
+    grading,
+  };
 }
