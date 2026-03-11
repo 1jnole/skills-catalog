@@ -15,10 +15,12 @@ Work through the phases in order. Do not start the next phase until the current 
    Freeze source of truth, extract pure scoring/gates/benchmark logic, and define neutral `run.json`.
 4. [Phase 3](C:/Users/Jorge/WebstormProjects/skills-catalog/roadmap/laminar-migration-phase-3-tasks.md)
    Integrate Laminar as the supported observability/eval platform and retire the legacy runner after parity.
+   Preparation workspace before implementation: [roadmap2](C:/Users/Jorge/WebstormProjects/skills-catalog/roadmap2/README.md)
 
 ## Rules
 
 - `skill-forge` is the only migration pilot until parity is proven.
 - `PLAN.md` is the architecture/source-of-truth document for the migration.
+- `roadmap2/` is the preparation workspace for the revised phase 3 contract before implementation starts.
 - These roadmap files are operational documents: objective, end state, task list, validation, risks, done gate, and assumptions.
 - If a phase changes the intended architecture, update [PLAN.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/PLAN.md) first or in the same change.

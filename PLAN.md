@@ -241,7 +241,7 @@ Objetivo: desacoplar benchmark y scoring de la plataforma.
 - si mañana cambia la platform, scoring/gates/benchmark siguen siendo reutilizables
 
 ### Fase 3 — Integrar Laminar y retirar legacy
-Objetivo: hacer que Laminar sea la primera platform real sin contaminar el dominio.
+Objetivo: hacer que Laminar sea la primera platform real sin contaminar el dominio ni romper el contrato local del runner.
 
 - Mantener `platforms/laminar/` como implementación concreta, sin interfaz genérica extra en esta fase.
 - Separar dentro de esa carpeta sólo lo necesario:
@@ -251,21 +251,40 @@ Objetivo: hacer que Laminar sea la primera platform real sin contaminar el domin
   - `report`
 - Mantener AI SDK dentro del executor con contrato estable:
   - `runText({ mode, model, systemPrompt, userPrompt, files, timeoutMs })`
-- Ejecutar `with_skill` y `without_skill` desde esa integración.
+- Mantener la separación semántica:
+  - `platform = laminar`
+  - `provider = openai`
+- Ejecutar `with_skill` y `without_skill` desde la integración Laminar.
+- Mantener `--iteration` y `--retry-errors` como contrato público local:
+  - la semántica de retry/resume sigue basada en `iteration-N`
+  - la selección de casos completados o con error se decide desde `benchmark.json`
+  - `run.json` puede aportar referencias de la corrida Laminar, pero no define la semántica del benchmark
+- Validar credenciales y prerequisitos antes de crear `iteration-N`:
+  - `LMNR_PROJECT_API_KEY`
+  - `OPENAI_API_KEY`
+  - configuración de timeout
+  - disponibilidad del SDK o cliente Laminar
+- Mantener como artifacts soportados sólo:
+  - `benchmark.json`
+  - `run.json`
 - Retirar el runner legacy sólo cuando `skill-forge` mantenga paridad real.
+- En esta fase, retirar legacy significa que el flujo soportado ya no depende del runner anterior; la eliminación física de código residual puede hacerse de forma acotada si no bloquea la paridad.
 
 **Gate de salida Fase 3**
+- `run-evals` usa Laminar como flujo soportado
 - `skill-forge` mantiene `overall_passed: true`
 - `with_skill` sigue superando a `without_skill`
 - trigger / non-trigger / stop-and-ask siguen alineados
 - el flujo soportado ya no depende del runner anterior
+- sólo `benchmark.json` y `run.json` permanecen como artifacts soportados
 
 ## Interfaces y contratos
 - **Comando público final**:
   - `node scripts/evals/dist/run-evals.js --skill-name <skill> --model <model>`
   - `node scripts/evals/dist/run-evals.js --file <path> --model <model>`
-- **Opciones**:
-  - `--group-name` opcional
+- **Opciones soportadas en fase 3**:
+  - `--iteration`
+  - `--retry-errors`
 - **Variables de entorno**:
   - `LMNR_PROJECT_API_KEY`
   - `OPENAI_API_KEY`
@@ -277,23 +296,30 @@ Objetivo: hacer que Laminar sea la primera platform real sin contaminar el domin
   - `benchmark.json`
 - **Contrato nuevo neutral**:
   - `run.json`
+- **Contrato operativo de retry/resume**:
+  - el estado local de iteración sigue siendo la fuente de control del rerun
+  - Laminar aporta ejecución y trazabilidad, no sustituye la semántica local de `iteration-N`
 
 ## Test plan
 - `npx tsc -p scripts/evals/tsconfig.json`
 - el comando valida `evals.json` antes de correr
-- falla temprano si faltan credenciales, antes de crear `iteration-N`
+- el comando falla temprano si faltan credenciales o dependencias, antes de crear `iteration-N`
 - `skill-forge` es el único piloto hasta cerrar paridad
 - `with_skill` y `without_skill` siguen siendo comparables
 - `skill-forge` debe mantener `overall_passed: true`
 - el benchmark local debe conservar exactamente su semántica actual
+- la verificación de paridad de fase 3 se ejecuta con un timeout explícito suficiente para reducir ruido operativo
+- si una corrida falla sólo por `timeout` o `execution_error`, se permite una nueva corrida de verificación antes de declarar regresión real
 - Mermaid y docs se actualizan al cierre de cada fase
 
 ## Suposiciones y defaults
 - Se usan sólo **DDD Fase 3**, **Fase 4** y una **Fase 5 mínima**.
 - Laminar Cloud es la primera observability/eval platform.
 - AI SDK se mantiene durante toda la migración.
+- OpenAI sigue siendo el único model provider real en esta fase.
 - No se introduce una abstracción genérica de platform hasta que exista una segunda platform real.
 - El diagrama de relaciones/contextos es el artefacto arquitectónico final; los diagramas por fase describen la transición.
 - La mejor manera de acercarse al 100% de éxito es ejecutar **fase por fase con gates**, no en un bloque único.
+- `--group-name` queda fuera del contrato de fase 3; si vuelve a ser necesario, se tratará como cambio posterior explícito.
 
 
