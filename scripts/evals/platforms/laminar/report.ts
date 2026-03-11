@@ -18,6 +18,7 @@ export function buildLaminarRunManifest(params: {
 }): RunManifestArtifact {
   return {
     ...buildRunManifestArtifact({
+      platform: 'laminar',
       skillName: params.skillName,
       evalVersion: params.evalVersion,
       iterationNumber: params.iterationNumber,
@@ -25,7 +26,6 @@ export function buildLaminarRunManifest(params: {
       model: params.model,
       createdAt: params.createdAt,
     }),
-    platform: 'laminar',
     run_ref: params.runRef ?? `iteration-${params.iterationNumber}`,
     group_ref: params.groupRef ?? `${params.skillName}/evals/v${params.evalVersion}`,
   };

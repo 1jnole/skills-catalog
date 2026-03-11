@@ -51,7 +51,7 @@ Each skill keeps its own run artifacts next to its eval definition:
 5. Re-run only errored cases in an existing iteration:
    `node scripts/evals/dist/run-evals.js --skill-name skill-forge --iteration 2 --retry-errors --model gpt-4.1-mini`
 
-`run-iteration` remains a legacy internal entrypoint during the migration and is no longer the documented public path.
+`run-iteration` remains a legacy compatibility alias and is no longer the documented public path.
 
 ## Requirements
 
@@ -69,6 +69,8 @@ The runner validates those prerequisites before it creates a new iteration folde
 - Laminar is an observability/eval platform boundary, not the authority for pass/fail semantics.
 - `benchmark.json` is computed from normalized run results in `domain/`.
 - Historical iterations may still contain legacy detailed per-case artifacts, but new supported iterations persist only `benchmark.json` and `run.json`.
+- Historical helper implementations live under `run/historical/`; any old artifact-path imports are compatibility shims only.
+
 
 
 

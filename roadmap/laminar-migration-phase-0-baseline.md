@@ -144,13 +144,13 @@ This note is the canonical baseline for Phase 0 of the Laminar migration. It rec
 The current runner still depends on the following legacy artifact layout:
 
 - `outputs/`
-  `scripts/evals/run/artifacts/read-run-artifacts.ts` reads `outputs/with_skill.json` and `outputs/without_skill.json`.
+  `scripts/evals/run/historical/read-legacy-case-artifacts.ts` owns reads of `outputs/with_skill.json` and `outputs/without_skill.json`; `scripts/evals/run/artifacts/read-run-artifacts.ts` keeps only a compatibility re-export.
 - `timing.json`
-  `scripts/evals/run/artifacts/read-run-artifacts.ts` and `write-run-artifacts.ts` read or write it.
+  `scripts/evals/run/historical/read-legacy-case-artifacts.ts` and `write-legacy-run-artifacts.ts` own this legacy layout; `run/artifacts/*` may keep compatibility shims only.
 - `grading.json`
-  `scripts/evals/run/artifacts/read-run-artifacts.ts` and `write-run-artifacts.ts` read or write it.
+  `scripts/evals/run/historical/read-legacy-case-artifacts.ts` and `write-legacy-run-artifacts.ts` own this legacy layout; `run/artifacts/*` may keep compatibility shims only.
 - `feedback.json`
-  `scripts/evals/run/artifacts/read-run-artifacts.ts` and `write-run-artifacts.ts` read or write it.
+  `scripts/evals/run/historical/read-legacy-case-artifacts.ts` and `write-legacy-run-artifacts.ts` own this legacy layout; `run/artifacts/*` may keep compatibility shims only.
 - `with_skill/`
   `scripts/evals/run/artifacts/iteration-files.ts` creates the folder for each case.
 - `without_skill/`
@@ -195,3 +195,4 @@ The repo currently starts from this shape:
 - accepted passing baseline: `packs/core/skill-forge/evals/runs/iteration-1/benchmark.json`
 
 This is the baseline that phases 1 to 3 must preserve while changing naming, boundaries, and Laminar integration.
+

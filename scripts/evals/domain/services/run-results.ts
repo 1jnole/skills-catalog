@@ -30,6 +30,7 @@ export function normalizeCaseArtifacts(caseArtifacts: CaseArtifacts): Normalized
 }
 
 export function buildRunManifestArtifact(params: {
+  platform: string;
   skillName: string;
   evalVersion: number;
   iterationNumber: number;
@@ -38,7 +39,7 @@ export function buildRunManifestArtifact(params: {
   createdAt?: string;
 }): RunManifestArtifact {
   return {
-    platform: 'legacy-runner',
+    platform: params.platform,
     run_ref: `iteration-${params.iterationNumber}`,
     group_ref: `${params.skillName}/evals/v${params.evalVersion}`,
     provider: params.provider,
