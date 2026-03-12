@@ -8,10 +8,11 @@ This folder contains the shared offline eval runner used by multiple skills.
 - `domain/types/` stores domain contracts.
 - `domain/schemas/` stores Zod validators with the `*.schema.ts` convention.
 - `domain/services/` stores runner-neutral benchmark and normalization logic.
-- `platforms/laminar/` is the canonical observability/eval platform boundary.
+- `platforms/laminar/` owns the active supported Laminar execution path.
 - `run/definition/` loads and summarizes skill-local eval definitions.
-- `run/execution/` coordinates iteration execution and prompt preparation.
-- `run/artifacts/` manages iteration files, folders, and artifact writing.
+- `run/execution/` keeps compatibility shims and thin shared helpers that are not the supported path owner.
+- `run/artifacts/` manages the supported iteration files plus compatibility shims for moved historical helpers.
+- `run/historical/` stores retained legacy helper implementations that are no longer part of the supported flow.
 - `grading/` groups deterministic grading behavior.
 - `providers/` isolates model providers such as OpenAI through AI SDK.
 - `shared/` contains small helpers and cross-cutting input types/schemas.
@@ -22,10 +23,11 @@ This folder contains the shared offline eval runner used by multiple skills.
 - Zod validators go in `schemas/` with the `*.schema.ts` suffix
 - runner-neutral benchmark and normalization logic stays in `domain/services/`
 - commands stay in `commands/`
-- platform adapters stay in `platforms/`
+- the active supported execution path stays in `platforms/laminar/`
 - eval loading stays in `run/definition/`
-- execution flow stays in `run/execution/`
-- persisted run files and artifact handling stays in `run/artifacts/`
+- `run/execution/` is for compatibility shims or thin shared helpers, not for owning the supported path
+- supported persisted run files stay in `run/artifacts/`
+- historical compatibility helpers stay in `run/historical/`
 - scoring logic stays in `grading/`
 - model adapters stay in `providers/`
 
@@ -47,21 +49,24 @@ Each skill keeps its own run artifacts next to its eval definition:
 3. Run a new iteration through the supported public command:
    `node scripts/evals/dist/run-evals.js --skill-name skill-forge --model gpt-4.1-mini`
 4. Re-run an existing iteration explicitly:
-   `node scripts/evals/dist/run-evals.js --skill-name skill-forge --iteration 2 --model gpt-4.1-mini`
+   `node scripts/evals/dist/run-evals.js --skill-name skill-forge --iteration 13 --model gpt-4.1-mini`
 5. Re-run only errored cases in an existing iteration:
-   `node scripts/evals/dist/run-evals.js --skill-name skill-forge --iteration 2 --retry-errors --model gpt-4.1-mini`
+   `node scripts/evals/dist/run-evals.js --skill-name skill-forge --iteration 13 --retry-errors --model gpt-4.1-mini`
 
-`run-iteration` remains a legacy compatibility alias and is no longer the documented public path.
+`run-iteration` remains a legacy compatibility alias and is no longer part of the supported command story.
 
 ## Requirements
 
 The live runner expects:
 
+- `LMNR_PROJECT_API_KEY` or `LMNR_API_KEY` as the Laminar project key
 - `OPENAI_API_KEY`
+- optional `EVAL_RUN_TIMEOUT_MS` as a positive integer timeout override
+- installed `@lmnr-ai/lmnr`
 - installed `ai`
 - installed `@ai-sdk/openai`
 
-The runner validates those prerequisites before it creates a new iteration folder, so failed setup does not leave empty run directories behind.
+The runner validates these prerequisites before it creates a new iteration folder, and it guards each `iteration-N` with a lock file so two live processes cannot mutate the same iteration concurrently.
 
 ## Benchmark semantics
 
@@ -70,10 +75,3 @@ The runner validates those prerequisites before it creates a new iteration folde
 - `benchmark.json` is computed from normalized run results in `domain/`.
 - Historical iterations may still contain legacy detailed per-case artifacts, but new supported iterations persist only `benchmark.json` and `run.json`.
 - Historical helper implementations live under `run/historical/`; any old artifact-path imports are compatibility shims only.
-
-
-
-
-
-
-

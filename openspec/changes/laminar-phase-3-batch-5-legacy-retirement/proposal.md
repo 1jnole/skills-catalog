@@ -10,7 +10,7 @@ Batch 4 proved that the Laminar-backed path preserves the accepted `skill-forge`
 - keep `run-iteration` only as a compatibility alias to the supported command
 - isolate historical legacy artifact helpers outside the supported `run/artifacts/` path
 - remove the supported-path dependency on the `legacy-runner` manifest default
-- record Batch 5 implementation evidence and supported-flow retirement status in `roadmap2/`
+- record Batch 5 implementation evidence and supported-flow retirement status in OpenSpec evidence
 
 ## Capabilities
 
@@ -26,5 +26,7 @@ Batch 4 proved that the Laminar-backed path preserves the accepted `skill-forge`
 - `scripts/evals/run/`
 - `scripts/evals/domain/services/`
 - `scripts/evals/platforms/laminar/`
-- `roadmap2/`
+
 - `openspec/changes/laminar-phase-3-batch-5-legacy-retirement/`
+
+

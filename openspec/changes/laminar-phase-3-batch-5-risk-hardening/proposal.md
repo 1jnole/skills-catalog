@@ -23,6 +23,8 @@ Batch 5 removed supported reliance on the legacy execution path, but the follow-
 - `scripts/evals/run/artifacts/`
 - `scripts/evals/run/execution/`
 - `scripts/evals/run/historical/`
-- `roadmap/`
+
 - `scripts/evals/README.md`
 - `openspec/changes/laminar-phase-3-batch-5-risk-hardening/`
+
+

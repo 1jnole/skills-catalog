@@ -1,7 +1,7 @@
 import * as process from 'node:process';
 import { z } from 'zod';
 
-import { executeRunEvalIteration } from '../run/execution/run-iteration.js';
+import { executeRunEvalIteration } from '../platforms/laminar/run-eval-iteration.js';
 import { parseEvalInputSource } from '../run/definition/load-eval-definition.js';
 import { type EvalInputSource } from '../shared/types/eval-input-source.types.js';
 import { parsePositiveInteger, readNextArg } from '../shared/cli/args.js';

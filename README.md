@@ -1,18 +1,18 @@
 # Agent Skills Catalog
 
 This repository stores a provider-agnostic skills catalog with:
-- portable skill artifacts under `packs/`;
-- a shared offline eval runner under `scripts/evals/`;
-- repository-wide operating rules in `AGENTS.md`.
+- portable skill artifacts under `packs/`
+- a shared offline eval runner under `scripts/evals/`
+- repository-wide operating rules in `AGENTS.md`
 
 The previous eval runtime was intentionally removed.
-The current path is a clean rebuild from scaffold-first contracts and workflow.
+The current supported path is the scaffold-first rebuild backed by Laminar for execution and local repo logic for benchmark semantics.
 
 ## Quick map
 - `AGENTS.md` -- always-on repo rules
 - `docs/catalog-authoring.md` -- what belongs in a skill vs AGENTS vs vault
 - `plans/README.md` -- repo-level background and source precedence across shared docs
-- `scripts/evals/README.md` -- shared runner structure and commands
+- `scripts/evals/README.md` -- shared runner structure, commands, and requirements
 - `docs/skill-system/README.md` -- stabilized modeling decisions for `skill-forge` / `skill-eval-forge`
 
 ## Repository shape
@@ -38,16 +38,18 @@ The current path is a clean rebuild from scaffold-first contracts and workflow.
 |-- scripts/
 |   `-- evals/
 |       |-- README.md
+|       |-- commands/
 |       |-- read-evals.ts
 |       |-- run-evals.ts
 |       |-- platforms/
 |       |   `-- laminar/
-|       `-- run-iteration.ts
+|       `-- run/
+|           `-- historical/
 `-- package.json
 ```
 
 Use the docs above for repo-wide background and shared tooling. For the operational behavior of a specific skill, use that skill folder as the source of truth.
 
-Within `scripts/evals/`, treat `run-evals.ts` as the supported public execution entrypoint. `run-iteration.ts` remains in the tree as a legacy internal entrypoint during the migration.
+Within `scripts/evals/`, treat `run-evals.ts` as the supported public execution entrypoint. `run-iteration.ts` remains in the tree only as a compatibility alias to that supported command.
 
-Historical iterations may still contain detailed per-case artifacts from the pre-closeout runner, but new supported iterations persist only `benchmark.json` and `run.json`.
+Historical iterations may still contain detailed per-case artifacts from the pre-closeout runner, but the supported persisted outputs remain only `benchmark.json` and `run.json`. Historical helper implementations live under `scripts/evals/run/historical/`.

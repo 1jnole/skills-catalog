@@ -27,9 +27,11 @@ This change does not:
 ## Scope
 
 - `packs/core/skill-forge/evals/runs/`
-- `roadmap2/`
+
 - `openspec/changes/laminar-phase-3-batch-4-skill-forge-parity/`
 
 ## Specs
 
 - `laminar-skill-forge-parity`: Defines the parity evidence required before legacy retirement can begin.
+
+

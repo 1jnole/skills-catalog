@@ -8,6 +8,7 @@
 - `04-apply-workflow.md` -- workflow for applying the blueprint to skills and then to eval authoring
 - `05-artifacts-reference.md` -- concrete authoring and eval artifacts
 - `06-system-map.md` -- system map and layer separation
+- `07-laminar-migration-versions.md` -- stable Laminar migration plan with end state, v1/v2/v3, and acceptance gates
 
 ## Recommended reading order
 
@@ -17,6 +18,7 @@
 4. `03-system-governance.md`
 5. `05-artifacts-reference.md`
 6. `06-system-map.md`
+7. `07-laminar-migration-versions.md` when working on Laminar migration planning or status
 
 ## Two external sources, two purposes
 
@@ -38,7 +40,8 @@
 - which architecture we take from `Evaluating Skills`,
 - which workflow we take from the `eval-skills` blog,
 - which artifacts connect authoring, handoff, and eval,
-- and why `Eval Brief`, `evals.json`, and run outputs are different artifacts.
+- why `Eval Brief`, `evals.json`, and run outputs are different artifacts,
+- and where the stable Laminar migration plan now lives after removing transient roadmap folders.
 
 ## Note
 

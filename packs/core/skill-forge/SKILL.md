@@ -11,7 +11,7 @@ This folder is the source of truth for `skill-forge`. Use it to route requests, 
 Apply these decisions in order. Do not skip ahead to missing-input checks before routing the request.
 
 1. If the request starts from a finished `Eval Brief`, asks for `golden` or `negative` cases, or asks to write `packs/core/<skill>/evals/evals.json`, return `Classification: non-trigger` immediately.
-2. If the request is obvious non-authoring work such as `AGENTS.md`, repo policy, runtime-only implementation, or downstream eval authoring, return `Classification: non-trigger` immediately.
+2. If the request is obvious non-authoring work such as `AGENTS.md`, repo policy, runtime-only implementation, shared eval runtime implementation, or downstream eval authoring, return `Classification: non-trigger` immediately.
 3. If the request is clearly skill authoring and eval or runtime work is only secondary, mixed in, or explicitly deferred, return `Classification: trigger` and keep skill authoring as the active responsibility.
 4. Only return `Classification: stop-and-ask` when the request still plausibly belongs to skill authoring but the skill target, single job, or authoring boundary is genuinely unclear.
 
@@ -19,6 +19,7 @@ Routing examples:
 - `Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.` -> `Classification: non-trigger`
 - `Write a new skill for PR review routing and leave eval scaffold for later.` -> `Classification: trigger`
 - `Write a new skill for PR review routing and also set up the first eval scaffold, but keep the skill contract first and leave runtime for later.` -> `Classification: trigger`
+- `Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.` -> `Classification: non-trigger`
 - `Create a skill, reorganize repo policies, and build the first runner in one pass.` -> `Classification: stop-and-ask`
 
 ## Single job
@@ -30,7 +31,7 @@ Use this skill when the request is to create a new reusable skill or refactor on
 ## Do not use when
 Do not use this skill when:
 - the request is repository-wide policy (`AGENTS.md`);
-- the request is to implement eval runtime behavior, grading, or suite orchestration;
+- the request is to implement eval runtime behavior, shared eval runtime implementation, grading, timing, benchmark output, or suite orchestration;
 - the request is eval authoring downstream from an already-finished brief, including requests to turn a finished Eval Brief into `evals.json` cases;
 - the request mixes multiple independent workflows in one skill and authoring is not clearly primary.
 
@@ -40,21 +41,23 @@ Use one of these response modes exactly.
 For trigger cases:
 1. Start with `Classification: trigger`.
 2. Name the workflow explicitly as one of: `Workflow: new-skill`, `Workflow: existing-skill-refactor`, or `Workflow: skill-rewrite`.
-3. If eval or runtime work appears but skill authoring is clearly primary, keep skill authoring as the active responsibility and add the exact sentence `Downstream eval work is out of scope here.` on its own line before the JSON artifact.
-4. Treat requests that say `skill contract first`, `Eval Brief first`, or otherwise make authoring primary as trigger cases even if they also mention eval scaffold work for later.
-5. Do not switch to `stop-and-ask` just because eval scaffold work appears alongside authoring when the authoring boundary is already clear.
-6. Keep the downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.
-7. Do not ask for confirmation if the skill target and authoring job are already clear.
-8. Produce the boundary-only JSON artifact.
-9. End with the exact line `Eval Brief ready`.
+3. Add the exact sentence `Freeze the contract before final instructions.` on its own line before the JSON artifact.
+4. If eval or runtime work appears but skill authoring is clearly primary, keep skill authoring as the active responsibility and add the exact sentence `Downstream eval work is out of scope here.` on its own line before the JSON artifact.
+5. Treat requests that say `skill contract first`, `Eval Brief first`, or otherwise make authoring primary as trigger cases even if they also mention eval scaffold work for later.
+6. Do not switch to `stop-and-ask` just because eval scaffold work appears alongside authoring when the authoring boundary is already clear.
+7. Keep the required trigger note and any downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.
+8. Do not ask for confirmation if the skill target and authoring job are already clear.
+9. Produce the boundary-only JSON artifact.
+10. End with the exact line `Eval Brief ready`.
 
 For non-trigger cases:
 1. Start with `Classification: non-trigger`.
 2. Say exactly `Out of scope for skill-forge.`
 3. Name the reason in one sentence.
-4. If the request is repository policy or `AGENTS.md` work, include `AGENTS` or `repository policy` explicitly in that sentence.
-5. Use this mode for obvious non-authoring work such as AGENTS policy, runtime-only implementation, or eval-authoring-only requests, even if the request is missing inputs or the referenced brief content is not attached.
-6. Do not produce an Eval Brief.
+4. If the request is runtime-only implementation, use the exact sentence `The request is shared eval runtime implementation, not skill authoring, and an authoring-only output would not satisfy this request.`
+5. If the request is repository policy or `AGENTS.md` work, include `AGENTS` or `repository policy` explicitly in that sentence.
+6. Use this mode for obvious non-authoring work such as AGENTS policy, runtime-only implementation, shared eval runtime implementation, or eval-authoring-only requests, even if the request is missing inputs or the referenced brief content is not attached.
+7. Do not produce an Eval Brief.
 
 For stop-and-ask cases:
 1. Start with `Classification: stop-and-ask`.
@@ -62,7 +65,7 @@ For stop-and-ask cases:
 3. Use stop-and-ask only when the request is still plausibly skill authoring and the skill target, single job, or authoring boundary is genuinely unclear.
 4. Do not use stop-and-ask for obvious non-trigger requests.
 5. State which part of the authoring target or boundary is unclear.
-6. Do not produce an Eval Brief.
+7. Do not produce an Eval Brief.
 
 For this repository, the canonical template is:
 - `packs/core/skill-forge/assets/contracts/eval-brief.template.json`
@@ -88,9 +91,10 @@ Step 1: Define success before writing or refactoring the skill.
 Step 2: Route the request before authoring.
 1. Apply the routing precedence section above first.
 2. If the request is obvious non-authoring work, return `Classification: non-trigger` immediately.
-3. If the request mixes authoring with eval or runtime work but skill authoring is clearly primary, continue and defer the downstream work explicitly.
-4. If the request already says `contract first`, `Eval Brief first`, or otherwise freezes authoring as the active responsibility, do not degrade it to `stop-and-ask` just because eval scaffold work is also requested.
-5. Only use `stop-and-ask` if the request still looks like skill authoring but the target or boundary is unclear.
+3. If the request is runtime-only implementation, the reason sentence must make clear that the work is shared eval runtime implementation, not skill authoring, and that an authoring-only output would not satisfy the request.
+4. If the request mixes authoring with eval or runtime work but skill authoring is clearly primary, continue and defer the downstream work explicitly.
+5. If the request already says `contract first`, `Eval Brief first`, or otherwise freezes authoring as the active responsibility, do not degrade it to `stop-and-ask` just because eval scaffold work is also requested.
+6. Only use `stop-and-ask` if the request still looks like skill authoring but the target or boundary is unclear.
 
 Step 3: Freeze scope for one skill.
 1. Confirm one skill target and one single job.
@@ -140,4 +144,6 @@ Stop and ask when:
 - the success contract cannot be stated as a small set of must-pass checks;
 - the frozen boundary would turn the request into more than one workflow or would require inventing missing contract details;
 - request needs runtime behavior changes to continue.
+
+
 

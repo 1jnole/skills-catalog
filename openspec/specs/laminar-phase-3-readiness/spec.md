@@ -17,12 +17,13 @@ Before Laminar integration code is added, the repository SHALL record a concrete
 
 ### Requirement: The repository SHALL align Batch 0 with the revised Phase 3 contract
 
-The readiness decisions SHALL be consistent with the revised Phase 3 section of `PLAN.md` and the existing `roadmap2/` preparation documents.
+The readiness decisions SHALL be consistent with the revised Phase 3 section of `PLAN.md` and the active phase 3 preparation artifacts.
 
 #### Scenario: Readiness note is contract-aligned
 
-- **WHEN** the readiness note is compared against `PLAN.md` and `roadmap2/`
+- **WHEN** the readiness note is compared against `PLAN.md` and the active phase 3 preparation artifacts
 - **THEN** it MUST NOT reintroduce unsupported CLI scope such as `--group-name`
 - **AND** it MUST keep `platform = laminar` and `provider = openai` as separate concerns
 - **AND** it MUST NOT delegate benchmark semantics or retry control to Laminar
+
 

@@ -39,7 +39,7 @@ The active Laminar path already depends on `@lmnr-ai/lmnr`. Because the dependen
 2. Execute a fresh `skill-forge` iteration on the Laminar path.
 3. Inspect the resulting `benchmark.json` and `run.json`.
 4. Re-run the green Laminar iteration with local retry flags.
-5. Record the evidence in `roadmap2/` and OpenSpec.
+5. Record the evidence in OpenSpec and the resulting local run artifacts.
 
 ## Risks
 
@@ -47,3 +47,4 @@ The active Laminar path already depends on `@lmnr-ai/lmnr`. Because the dependen
 - If the SDK is missing, the batch cannot produce meaningful parity evidence at all.
 - If retry is not checked on the green iteration, the local contract can silently regress.
 - If parity fails, the repo should stop before legacy retirement starts.
+

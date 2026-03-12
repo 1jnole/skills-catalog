@@ -9,7 +9,7 @@
 - [x] 2.2 Convert `run-iteration` source entrypoints into compatibility aliases to the supported command.
 - [x] 2.3 Move historical legacy artifact helpers outside the supported `run/artifacts/` path.
 - [x] 2.4 Remove the active Laminar path dependency on a `legacy-runner` manifest default.
-- [x] 2.5 Add `roadmap2/phase-3-batch-5-legacy-retirement.md` with the supported-flow retirement evidence.
+- [x] 2.5 Record the supported-flow retirement evidence in OpenSpec task evidence.
 
 ## 3. Verification
 
@@ -43,3 +43,4 @@
   Result: PASS
   Date: 2026-03-11
   Note: The completed Batch 5 change validates after recording implementation and verification evidence.
+

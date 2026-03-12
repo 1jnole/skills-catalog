@@ -6,7 +6,7 @@
 - [x] 1.6 Verify trigger / non-trigger / stop-and-ask alignment on the Laminar run.
 - [x] 1.7 Apply the approved rerun policy if the first verification run fails only because of `timeout` or `execution_error`.
 - [x] 1.8 Re-run the accepted Laminar iteration with local `--iteration` and `--retry-errors`.
-- [x] 1.9 Add `roadmap2/phase-3-batch-4-skill-forge-parity.md` with the parity evidence and outcome.
+- [x] 1.9 Record the parity evidence and outcome in OpenSpec task evidence and local run artifacts.
 - [x] 1.10 Cross-check the result against `PLAN.md` and the Phase 3 gate policy.
 - [x] 1.11 Run validation checks and record evidence.
 
@@ -60,4 +60,6 @@
 - Command: `openspec validate "laminar-phase-3-batch-4-skill-forge-parity" --type change`
   Result: PASS
   Date: 2026-03-11
-  Note: The completed Batch 4 change still validates after recording parity evidence and roadmap alignment.
+  Note: The completed Batch 4 change still validates after recording parity evidence in OpenSpec and local run artifacts.
+
+
