@@ -75,3 +75,24 @@ The runner validates these prerequisites before it creates a new iteration folde
 - `benchmark.json` is computed from normalized run results in `domain/`.
 - Historical iterations may still contain legacy detailed per-case artifacts, but new supported iterations persist only `benchmark.json` and `run.json`.
 - Historical helper implementations live under `run/historical/`; any old artifact-path imports are compatibility shims only.
+## Unit test workflow
+
+Use the shared runner with a small Red -> Green -> Refactor loop:
+
+1. Write or adjust one colocated `*.test.ts` file for a single behavior.
+2. Run `npm run test:watch` for fast feedback while iterating.
+3. Keep the implementation minimal until the test passes.
+4. Run `npm run test:run` plus `npx tsc -p scripts/evals/tsconfig.json` before closing the change.
+
+### Supported commands
+
+- `npm run test:watch` -- interactive Vitest watch mode for local TDD
+- `npm run test:run` -- one-shot unit-test run
+- `npm test` -- alias of the one-shot unit-test run
+
+### Test placement
+
+- Place tests next to the module they exercise as `*.test.ts`.
+- The `scripts/evals/` TypeScript build excludes `*.test.ts`, so colocated tests stay out of `dist/`.
+- Keep unit tests focused on deterministic domain logic; broader integration flows still belong to the existing runner commands.
+

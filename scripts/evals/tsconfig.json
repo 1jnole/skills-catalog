@@ -7,12 +7,17 @@
     "noEmitOnError": true,
     "outDir": "dist",
     "rootDir": ".",
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "esModuleInterop": false,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["**/*.ts"]
+  "include": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "**/*.test.ts"
+  ]
 }
-
-
