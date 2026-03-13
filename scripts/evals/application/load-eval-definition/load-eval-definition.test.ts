@@ -30,23 +30,44 @@ describe('readEvalDefinition', () => {
     });
   });
 
-  it('loads the phase-4 pilot suite from the new evals/cases scaffold', ({ expect }) => {
-    const filePath = path.resolve('evals', 'cases', 'skill-forge', 'pilot-suite.v1.json');
+  it('loads the canonical phase-5 suite from the new evals/cases scaffold', ({ expect }) => {
+    const filePath = path.resolve('evals', 'cases', 'skill-forge', 'suite.v1.json');
 
     const definition = readEvalDefinition(filePath);
 
     expect(definition.skill_name).toBe('skill-forge');
-    expect(definition.golden).toHaveLength(1);
-    expect(definition.negative).toHaveLength(2);
-    expect(definition.golden[0].id).toBe('new-skill-one-clear-job');
+    expect(definition.golden).toHaveLength(4);
+    expect(definition.negative).toHaveLength(4);
+    expect(definition.golden.map((testCase) => testCase.id)).toEqual([
+      'new-skill-one-clear-job',
+      'existing-skill-refactor-clear-target',
+      'skill-rewrite-clear-target',
+      'mixed-authoring-and-eval-request',
+    ]);
     expect(definition.negative.map((testCase) => testCase.id)).toEqual([
+      'agents-policy-request',
       'runtime-harness-implementation',
+      'eval-authoring-only-request',
       'ambiguous-multi-workflow-request',
     ]);
+  });
+
+  it('keeps the phase-4 pilot snapshot available as historical context', ({ expect }) => {
+    const filePath = path.resolve('evals', 'cases', 'skill-forge', 'pilot-suite.v1.json');
+    const definition = readEvalDefinition(filePath);
+
+    expect(definition.golden).toHaveLength(1);
+    expect(definition.negative).toHaveLength(2);
   });
 });
 
 describe('path resolution integration', () => {
+  it('resolves the supported skill suite from the new scaffold by default', ({ expect }) => {
+    expect(resolveEvalPath({ skillName: 'skill-forge' })).toBe(
+      path.resolve('evals', 'cases', 'skill-forge', 'suite.v1.json'),
+    );
+  });
+
   it('resolves eval-definition and runs root from the configured path authority', ({ expect }) => {
     vi.stubEnv('EVALS_SKILLS_ROOT', 'skills');
     vi.stubEnv('EVALS_EVALS_DIR', 'cases');

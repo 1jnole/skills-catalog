@@ -1,10 +1,18 @@
-# Shared Eval Runner
+# Evals Runtime
 
-This folder contains the supported shared offline eval runner used by multiple skills.
+This folder contains the portable eval core plus the supported CLI surface for the closed migration state.
 
-Current migration notes:
-- `docs/fase-2-paths-contract.md` documents the current path authority and inherited layout assumptions.
-- `docs/fase-2-core-inventory.md` lists the surviving core, structural seams, and transitional supported pieces.
+## Final supported path
+
+The supported command surface is:
+- `npm run read-evals -- -- --skill-name skill-forge`
+- `npm run run-evals -- -- --skill-name skill-forge ...`
+
+The canonical suite for `skill-forge` is:
+- `evals/cases/skill-forge/suite.v1.json`
+
+The final supported-path summary lives at:
+- `evals/final-supported-path.md`
 
 ## Current scaffold
 
@@ -95,7 +103,7 @@ Inside `domain/`, prefer subdomain-local files such as:
 
 ### Infrastructure rules
 
-`infrastructure/laminar/` owns Laminar-specific execution and reporting glue.
+`infrastructure/laminar/` is historical compatibility code and is not the active supported path.
 
 `infrastructure/filesystem/eval-runs/` owns:
 - iteration workspace resolution
@@ -104,54 +112,56 @@ Inside `domain/`, prefer subdomain-local files such as:
 
 ## Output layout
 
-Each skill keeps its own run artifacts next to its eval definition:
+The supported `skill-forge` flow writes generated artifacts to:
 
-- `packs/core/<skill-name>/evals/evals.json`
-- `packs/core/<skill-name>/evals/files/`
-- `packs/core/<skill-name>/evals/runs/iteration-N/run.json` for neutral run metadata
-- `packs/core/<skill-name>/evals/runs/iteration-N/benchmark.json` for gates, deltas, improvement summary, and per-case comparison
+- `evals/engines/promptfoo/generated/skill-forge.promptfoo.json`
+- `evals/engines/promptfoo/generated/skill-forge.eval.json`
+- `evals/engines/promptfoo/generated/skill-forge.scoring.json`
+- `evals/engines/promptfoo/generated/skill-forge.benchmark.json`
 
 ## Commands
 
-1. Build the shared runner:
+### Supported flow
+
+1. Build the eval package:
    `npm run build-evals`
-2. Validate one skill definition:
+2. Validate the canonical suite by skill name:
    `npm run read-evals -- -- --skill-name skill-forge`
-3. Run a new iteration through the supported public command:
-   `npm run run-evals -- -- --skill-name skill-forge --model gpt-4.1-mini`
-4. Re-run an existing iteration explicitly:
-   `npm run run-evals -- -- --skill-name skill-forge --iteration 13 --model gpt-4.1-mini`
-5. Re-run only errored cases in an existing iteration:
-   `npm run run-evals -- -- --skill-name skill-forge --iteration 13 --retry-errors --model gpt-4.1-mini`
-6. Launch the Promptfoo pilot flow from the new scaffold (dry run):
-   `npm run run-promptfoo-pilot -- -- --skill-name skill-forge --dry-run`
-7. Run the Promptfoo pilot offline with fixed outputs (executes both `with_skill` and `without_skill` prompt paths):
-   `npm run run-promptfoo-pilot -- -- --skill-name skill-forge --model-outputs evals/engines/promptfoo/fixtures/pilot-model-outputs.json --output evals/engines/promptfoo/generated/skill-forge.pilot.eval.json`
-8. Write local scoring output to a custom path (optional):
-   `npm run run-promptfoo-pilot -- -- --skill-name skill-forge --score-output evals/engines/promptfoo/generated/custom.scoring.json`
+3. Dry-run the supported execution command:
+   `npm run run-evals -- -- --skill-name skill-forge --dry-run`
+4. Run the canonical suite offline with fixed outputs:
+   `npm run run-evals -- -- --skill-name skill-forge --model-outputs evals/engines/promptfoo/fixtures/skill-forge-suite-model-outputs.json`
+
+This is the only supported execution path.
+
+### Optional output overrides
+
+1. Write local scoring output to a custom path:
+   `npm run run-evals -- -- --skill-name skill-forge --score-output evals/engines/promptfoo/generated/custom.scoring.json`
+2. Write local benchmark output to a custom path:
+   `npm run run-evals -- -- --skill-name skill-forge --benchmark-output evals/engines/promptfoo/generated/custom.benchmark.json`
 
 When forwarding CLI args through `npm run`, use `npm run <script> -- -- <args>`.
 
 ## Requirements
 
-The live runner expects:
+The supported path expects:
+- `OPENAI_API_KEY` for live Promptfoo execution
+- or `--model-outputs <file>` for offline deterministic smoke runs
 
-- `LMNR_PROJECT_API_KEY` or `LMNR_API_KEY` as the Laminar project key
-- `OPENAI_API_KEY`
-- optional `EVAL_RUN_TIMEOUT_MS` as a positive integer timeout override
-- installed `@lmnr-ai/lmnr`
-- installed `ai`
-- installed `@ai-sdk/openai`
+The primary `skill-forge` suite lives at:
+- `evals/cases/skill-forge/suite.v1.json`
 
-The runner validates these prerequisites before it creates a new iteration folder, and it guards each `iteration-N` with a lock file so two live processes cannot mutate the same iteration concurrently.
+Historical references kept outside the supported path:
+- `evals/cases/skill-forge/pilot-suite.v1.json`
+- `packs/core/skill-forge/evals/evals.json`
 
 ## Benchmark semantics
 
-- `Eval Brief`, `evals.json`, local Zod schemas, local domain types, and benchmark semantics are the source of truth.
-- Laminar is an observability/eval platform boundary, not the authority for pass/fail semantics.
+- `Eval Brief`, `evals/cases/<skill>/suite.v1.json`, local Zod schemas, local domain types, and benchmark semantics are the source of truth.
+- Promptfoo is the engine adapter, not the authority for pass/fail semantics.
 - `benchmark.json` is computed from normalized run results in `domain/`.
-- Historical iterations may still contain legacy detailed per-case artifacts, but new supported iterations persist only `benchmark.json` and `run.json`.
-- Historical helper implementations were retired during the migration cleanup; supported iterations persist only `benchmark.json` and `run.json`.
+- Generated benchmark output for `skill-forge` lives at `evals/engines/promptfoo/generated/skill-forge.benchmark.json`.
 
 ## Unit test workflow
 

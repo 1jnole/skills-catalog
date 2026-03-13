@@ -28,6 +28,11 @@ describe('readPromptfooCaseModeOutputs', () => {
       error: { kind: 'execution_error', message: 'provider timeout' },
     });
   });
+
+  it('ignores rows that do not declare a prompt index', ({ expect }) => {
+    const outputs = readPromptfooCaseModeOutputs(resolveFixturePath('pilot-eval-output-missing-promptidx.json'));
+    expect(outputs.size).toBe(0);
+  });
 });
 
 describe('buildPromptfooPilotScoringArtifact', () => {
@@ -68,7 +73,7 @@ describe('buildPromptfooPilotScoringArtifact', () => {
 
   it('resolves a deterministic scoring artifact path', ({ expect }) => {
     expect(resolveGeneratedPromptfooScoringPath('skill-forge')).toBe(
-      path.resolve('evals', 'engines', 'promptfoo', 'generated', 'skill-forge.pilot.scoring.json'),
+      path.resolve('evals', 'engines', 'promptfoo', 'generated', 'skill-forge.scoring.json'),
     );
   });
 });

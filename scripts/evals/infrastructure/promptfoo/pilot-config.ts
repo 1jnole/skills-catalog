@@ -1,9 +1,8 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import * as process from 'node:process';
 
 import { collectCases, type EvalDefinition } from '../../domain/eval-definition/eval-definition.types.js';
-import { resolveSkillEvalDefinitionPath } from '../filesystem/eval-paths.js';
+import { resolveSupportedEvalPath } from '../../application/load-eval-definition/load-eval-definition.js';
 
 export type PromptfooPilotTest = {
   description: string;
@@ -48,30 +47,16 @@ const WITHOUT_SKILL_PROMPT_TEMPLATE = [
   '{{prompt}}',
 ].join('\n');
 
-function readTrimmedOrFallback(value: string | undefined, fallback: string): string {
-  const trimmed = value?.trim();
-  return trimmed && trimmed.length > 0 ? trimmed : fallback;
-}
-
-function withPilotResolverDefaults(env: NodeJS.ProcessEnv): NodeJS.ProcessEnv {
-  return {
-    ...env,
-    EVALS_SKILLS_ROOT: readTrimmedOrFallback(env.EVALS_SKILLS_ROOT, path.join('evals', 'cases')),
-    EVALS_EVALS_DIR: readTrimmedOrFallback(env.EVALS_EVALS_DIR, '.'),
-    EVALS_EVAL_DEFINITION_FILE: readTrimmedOrFallback(env.EVALS_EVAL_DEFINITION_FILE, 'pilot-suite.v1.json'),
-  };
-}
-
-export function resolvePilotSuitePath(skillName: string, env: NodeJS.ProcessEnv = process.env): string {
-  return resolveSkillEvalDefinitionPath(skillName, withPilotResolverDefaults(env));
+export function resolvePromptfooSuitePath(skillName: string, env?: NodeJS.ProcessEnv): string {
+  return resolveSupportedEvalPath(skillName, env);
 }
 
 export function resolveGeneratedPromptfooConfigPath(skillName: string): string {
-  return path.resolve('evals', 'engines', 'promptfoo', 'generated', `${skillName}.pilot.promptfoo.json`);
+  return path.resolve('evals', 'engines', 'promptfoo', 'generated', `${skillName}.promptfoo.json`);
 }
 
 export function resolveGeneratedPromptfooEvalPath(skillName: string): string {
-  return path.resolve('evals', 'engines', 'promptfoo', 'generated', `${skillName}.pilot.eval.json`);
+  return path.resolve('evals', 'engines', 'promptfoo', 'generated', `${skillName}.eval.json`);
 }
 
 export function buildPromptfooPilotConfig(params: {
@@ -82,7 +67,7 @@ export function buildPromptfooPilotConfig(params: {
   const cases = collectCases(params.definition);
 
   return {
-    description: `Fase 4 pilot suite for ${params.definition.skill_name}`,
+    description: `Canonical skill eval suite for ${params.definition.skill_name}`,
     providers: [params.provider],
     prompts: [WITH_SKILL_PROMPT_TEMPLATE, WITHOUT_SKILL_PROMPT_TEMPLATE],
     tests: cases.map((testCase) => ({

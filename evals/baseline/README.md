@@ -10,8 +10,8 @@ The surviving core only assumes:
 The comparison intent currently in scope is:
 - `with_skill_vs_without_skill`
 
-Current Fase 4 pilot execution path:
-- `npm run run-promptfoo-pilot -- -- --skill-name skill-forge ...`
+Current execution path:
+- `npm run run-evals -- -- --skill-name skill-forge ...`
 - runs both baseline modes through Promptfoo config generation.
 
 ## Out of scope for this phase

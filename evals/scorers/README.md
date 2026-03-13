@@ -22,6 +22,11 @@ Scorers should not own:
 ## Transition note
 This boundary is visible now before scorer files are physically rehomed from `scripts/evals/domain/grading/`.
 
-Current Promptfoo pilot scoring bridge:
+Current `skill-forge` scorer state:
+- useful deterministic scorer inputs now live in `evals/cases/skill-forge/suite.v1.json`
+- the historical `packs/core/skill-forge/evals/evals.json` file is no longer the primary scorer-input path
+- the portable scorer implementation still lives in `scripts/evals/domain/grading/grade-case.ts`
+
+Current Promptfoo scoring bridge:
 - adapter: `scripts/evals/infrastructure/promptfoo/pilot-scoring.ts`
 - scorer source of truth: `scripts/evals/domain/grading/grade-case.ts`

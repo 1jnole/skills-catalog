@@ -1,21 +1,29 @@
-# Skill-Forge Pilot Suite
+# Skill-Forge Suites
 
-This folder freezes the first Fase 4 pilot suite in the new scaffold.
+This folder contains the new-scaffold suites for `skill-forge`.
 
-## Pilot skill
+## Canonical suite
+- `evals/cases/skill-forge/suite.v1.json`
+
+This is the supported `skill-forge` eval-definition for the closed migration state.
+
+Coverage buckets represented in the suite:
+- `core`: `new-skill-one-clear-job`, `existing-skill-refactor-clear-target`
+- `edge`: `agents-policy-request`, `runtime-harness-implementation`, `eval-authoring-only-request`
+- `regression`: `skill-rewrite-clear-target`, `mixed-authoring-and-eval-request`, `ambiguous-multi-workflow-request`
+
+## Historical pilot snapshot
 - `skill-forge`
-
-## Suite file
 - `evals/cases/skill-forge/pilot-suite.v1.json`
 
-## Frozen minimum coverage
-- `1` golden trigger case:
-  - `new-skill-one-clear-job`
-- `2` negative cases:
-  - `runtime-harness-implementation` (`do_not_trigger`)
-  - `ambiguous-multi-workflow-request` (`stop_and_ask`, edge case)
+This file preserves the smaller Fase 4 bootstrap evidence. It is no longer the main suite for `skill-forge`.
 
-## Success definition for this pilot
-- the suite parses with the canonical eval-definition contract,
-- it is loadable by the current eval-definition loader from this new path,
-- and it becomes the reference suite for Promptfoo enablement in `4.2`.
+## Success definition for the canonical suite
+- the suite parses with the canonical eval-definition contract
+- it contains the useful migrated `golden` and `negative` cases from the inherited `evals.json`
+- it runs through Promptfoo with both baseline modes
+- it produces local scoring and local benchmark artifacts
+- it is the reference suite for the operational flow of `skill-forge`
+
+## Reference command
+`npm run run-evals -- -- --skill-name skill-forge --model-outputs evals/engines/promptfoo/fixtures/skill-forge-suite-model-outputs.json`

@@ -1,0 +1,21 @@
+{
+  "results": {
+    "prompts": [
+      {
+        "raw": "[mode:with_skill] example",
+        "label": "[mode:with_skill]"
+      }
+    ],
+    "results": [
+      {
+        "latencyMs": 11,
+        "vars": {
+          "case_id": "should-be-ignored"
+        },
+        "response": {
+          "output": "classification: trigger"
+        }
+      }
+    ]
+  }
+}

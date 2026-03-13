@@ -5,6 +5,11 @@ import type { EvalCaseMode } from '../../domain/baseline/baseline.js';
 import { collectCases, type EvalDefinition } from '../../domain/eval-definition/eval-definition.types.js';
 import { createErroredCaseGrading, gradeCase } from '../../domain/grading/grade-case.js';
 import type { CaseGrading, GradingError } from '../../domain/grading/grading.types.js';
+import {
+  promptfooPilotEvalOutputSchema,
+  type PromptfooPilotPrompt,
+  type PromptfooPilotResultRow,
+} from './pilot-output.schema.js';
 
 export type PromptfooModeOutput =
   | {
@@ -44,12 +49,8 @@ export type PromptfooPilotScoringArtifact = {
   cases: PromptfooPilotScoringCase[];
 };
 
-function parsePromptMode(prompt: unknown): EvalCaseMode | null {
-  if (!prompt || typeof prompt !== 'object') {
-    return null;
-  }
-
-  const source = `${String((prompt as { raw?: unknown }).raw ?? '')}\n${String((prompt as { label?: unknown }).label ?? '')}`;
+function parsePromptMode(prompt: PromptfooPilotPrompt): EvalCaseMode | null {
+  const source = `${prompt.raw ?? ''}\n${prompt.label ?? ''}`;
   if (source.includes('[mode:with_skill]')) {
     return 'with_skill';
   }
@@ -88,17 +89,10 @@ function readNumber(value: unknown): number {
   return typeof value === 'number' && Number.isFinite(value) ? value : 0;
 }
 
-function toPromptfooModeOutput(row: unknown): PromptfooModeOutput {
-  const rowObject = row as {
-    latencyMs?: unknown;
-    failureReason?: unknown;
-    provider?: { id?: unknown };
-    response?: { output?: unknown; latencyMs?: unknown };
-  };
-
-  const durationMs = readNumber(rowObject.latencyMs) || readNumber(rowObject.response?.latencyMs);
-  const failureReason = readString(rowObject.failureReason);
-  const output = readString(rowObject.response?.output);
+function toPromptfooModeOutput(row: PromptfooPilotResultRow): PromptfooModeOutput {
+  const durationMs = readNumber(row.latencyMs) || readNumber(row.response?.latencyMs);
+  const failureReason = readString(row.failureReason);
+  const output = readString(row.response?.output);
 
   if (!output || failureReason) {
     return {
@@ -108,7 +102,7 @@ function toPromptfooModeOutput(row: unknown): PromptfooModeOutput {
     };
   }
 
-  const providerModel = parseProviderModel(readString(rowObject.provider?.id));
+  const providerModel = parseProviderModel(readString(row.provider?.id));
   return {
     status: 'completed',
     output,
@@ -127,18 +121,13 @@ function modeError(mode: EvalCaseMode, reason: string): PromptfooModeOutput {
 }
 
 export function resolveGeneratedPromptfooScoringPath(skillName: string): string {
-  return path.resolve('evals', 'engines', 'promptfoo', 'generated', `${skillName}.pilot.scoring.json`);
+  return path.resolve('evals', 'engines', 'promptfoo', 'generated', `${skillName}.scoring.json`);
 }
 
 export function readPromptfooCaseModeOutputs(filePath: string): Map<string, Partial<Record<EvalCaseMode, PromptfooModeOutput>>> {
-  const raw = JSON.parse(fs.readFileSync(filePath, 'utf8')) as {
-    results?: {
-      prompts?: unknown[];
-      results?: unknown[];
-    };
-  };
-
-  const prompts = Array.isArray(raw.results?.prompts) ? raw.results.prompts : [];
+  const raw = JSON.parse(fs.readFileSync(filePath, 'utf8')) as unknown;
+  const parsed = promptfooPilotEvalOutputSchema.parse(raw);
+  const prompts = parsed.results.prompts;
   const promptModesByIndex = new Map<number, EvalCaseMode>();
   prompts.forEach((prompt, index) => {
     const mode = parsePromptMode(prompt);
@@ -147,23 +136,21 @@ export function readPromptfooCaseModeOutputs(filePath: string): Map<string, Part
     }
   });
 
-  const rows = Array.isArray(raw.results?.results) ? raw.results.results : [];
+  const rows = parsed.results.results;
   const outputsByCase = new Map<string, Partial<Record<EvalCaseMode, PromptfooModeOutput>>>();
 
   for (const row of rows) {
-    const rowObject = row as {
-      promptIdx?: unknown;
-      vars?: { case_id?: unknown };
-      testCase?: { vars?: { case_id?: unknown } };
-    };
+    if (row.promptIdx === undefined) {
+      continue;
+    }
 
-    const promptIndex = readNumber(rowObject.promptIdx);
+    const promptIndex = row.promptIdx;
     const mode = promptModesByIndex.get(promptIndex);
     if (!mode) {
       continue;
     }
 
-    const caseId = readString(rowObject.vars?.case_id) ?? readString(rowObject.testCase?.vars?.case_id);
+    const caseId = readString(row.vars?.case_id) ?? readString(row.testCase?.vars?.case_id);
     if (!caseId) {
       continue;
     }

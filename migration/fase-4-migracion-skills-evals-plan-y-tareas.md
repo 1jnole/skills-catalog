@@ -89,7 +89,33 @@ No se reabre en Fase 4:
   - la ejecución piloto ya produce scoring local por caso y por modo usando `gradeCase`,
   - el scoring sigue viviendo en el core local (no dentro de Promptfoo),
   - y la salida del engine queda conectada con señal interpretable para el siguiente paso de benchmark.
-- Siguiente slice recomendado: **Tarea 4.5** para hacer funcionar benchmark local sobre la suite nueva.
+- Slice ejecutado después: **Tarea 4.5** (benchmark local sobre la suite nueva).
+- Evidencia:
+  - `scripts/evals/infrastructure/promptfoo/pilot-benchmark.ts`
+  - `scripts/evals/infrastructure/promptfoo/pilot-benchmark.test.ts`
+  - `scripts/evals/cli/run-promptfoo-pilot.ts`
+- Resultado:
+  - la corrida piloto ya produce benchmark local a partir de resultados normalizados y scoring local,
+  - el benchmark sigue viviendo en el core y no en Promptfoo,
+  - y el flujo nuevo ya cierra el circuito ejecución → scoring → benchmark para la skill piloto.
+- Slice ejecutado después: **Tarea 4.6** (referencia operativa mínima sustituida).
+- Evidencia:
+  - `scripts/evals/README.md`
+  - `evals/README.md`
+  - `evals/cases/skill-forge/README.md`
+  - `evals/engines/promptfoo/README.md`
+- Resultado:
+  - el flujo piloto de Promptfoo ya se documenta como referencia mínima para `skill-forge`,
+  - el runner heredado queda explícitamente como camino transicional y no como referencia principal para esa suite,
+  - y la fase ya puede explicarse como operativa sin declarar la migración completa cerrada.
+
+## Veredicto provisional
+Con la evidencia actual, **Fase 4 puede considerarse cerrada** al nivel definido por este documento:
+- existe skill piloto,
+- existe suite nueva,
+- Promptfoo ejecuta el flujo nuevo,
+- baseline, scoring y benchmark locales ya funcionan,
+- y la referencia operativa mínima ya fue sustituida para `skill-forge`.
 
 ---
 
@@ -509,11 +535,11 @@ Marca Fase 4 como cerrada solo si todas las respuestas son **sí**:
 - [x] Promptfoo puede ejecutar esa suite desde el nuevo harness.
 - [x] El baseline `with-skill / without-skill` ya funciona sobre esa suite.
 - [x] La suite produce scoring útil.
-- [ ] La suite produce benchmark local útil.
-- [ ] El flujo nuevo ya puede usarse como referencia mínima para esa skill.
-- [ ] `previous-skill` sigue fuera de alcance.
-- [ ] El core sigue siendo provider-neutral.
-- [ ] Promptfoo sigue encapsulado como engine fino.
+- [x] La suite produce benchmark local útil.
+- [x] El flujo nuevo ya puede usarse como referencia mínima para esa skill.
+- [x] `previous-skill` sigue fuera de alcance.
+- [x] El core sigue siendo provider-neutral.
+- [x] Promptfoo sigue encapsulado como engine fino.
 
 ---
 

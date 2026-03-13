@@ -1,62 +1,63 @@
 import { describe, it } from 'vitest';
 
 import { parseRunEvalsArgs } from './run-evals.args.js';
-import { parsePositiveInteger } from '../shared/cli/args.js';
 
 describe('parseRunEvalsArgs', () => {
-  it('parses skill-name mode, iteration, model, and retry-errors', ({ expect }) => {
+  it('parses skill-name mode with default provider derived from model', ({ expect }) => {
     const result = parseRunEvalsArgs([
       '--skill-name', 'skill-forge',
-      '--iteration', '13',
       '--model', 'gpt-4.1-mini',
-      '--retry-errors',
+      '--model-outputs', 'evals/engines/promptfoo/fixtures/skill-forge-suite-model-outputs.json',
+      '--dry-run',
     ], {
       defaultModel: 'fallback-model',
     });
 
     expect(result).toMatchObject({
       skillName: 'skill-forge',
-      iteration: 13,
-      model: 'gpt-4.1-mini',
-      retryErrors: true,
+      provider: 'openai:gpt-4.1-mini',
+      modelOutputs: 'evals/engines/promptfoo/fixtures/skill-forge-suite-model-outputs.json',
+      dryRun: true,
     });
     expect(result.file).toBeUndefined();
   });
 
-  it('parses file mode and falls back to the injected default model', ({ expect }) => {
+  it('parses file mode and keeps an explicit provider override', ({ expect }) => {
     const result = parseRunEvalsArgs([
-      '--file', 'packs/core/skill-forge/evals/evals.json',
+      '--file', 'evals/cases/skill-forge/suite.v1.json',
+      '--provider', 'openai:gpt-4.1-nano',
+      '--output', 'evals/engines/promptfoo/generated/custom.eval.json',
     ], {
-      defaultModel: 'gpt-4.1-nano',
+      defaultModel: 'gpt-4.1-mini',
     });
 
     expect(result).toMatchObject({
-      file: 'packs/core/skill-forge/evals/evals.json',
-      model: 'gpt-4.1-nano',
-      retryErrors: false,
+      file: 'evals/cases/skill-forge/suite.v1.json',
+      provider: 'openai:gpt-4.1-nano',
+      output: 'evals/engines/promptfoo/generated/custom.eval.json',
+      dryRun: false,
     });
     expect(result.skillName).toBeUndefined();
-    expect(result.iteration).toBeUndefined();
   });
 
-  it('uses the built-in model default when none is injected', ({ expect }) => {
+  it('uses the built-in model default when neither model nor provider is injected', ({ expect }) => {
     const result = parseRunEvalsArgs([
       '--skill-name', 'skill-forge',
     ]);
 
-    expect(result.model).toBe('gpt-4.1-mini');
+    expect(result.provider).toBe('openai:gpt-4.1-mini');
   });
 
   it('fails when both skill-name and file are provided', ({ expect }) => {
     expect(() => parseRunEvalsArgs([
       '--skill-name', 'skill-forge',
-      '--file', 'packs/core/skill-forge/evals/evals.json',
+      '--file', 'evals/cases/skill-forge/suite.v1.json',
     ])).toThrow('Use either --skill-name or --file, not both.');
   });
 
   it('fails when neither skill-name nor file is provided', ({ expect }) => {
     expect(() => parseRunEvalsArgs([
-      '--retry-errors',
+      '--dry-run',
     ])).toThrow('Pass --skill-name <name> or --file <path>.');
   });
 
@@ -66,11 +67,11 @@ describe('parseRunEvalsArgs', () => {
     ])).toThrow('Missing value for --skill-name');
   });
 
-  it('fails when iteration is missing a value', ({ expect }) => {
+  it('fails when a provider value is missing', ({ expect }) => {
     expect(() => parseRunEvalsArgs([
       '--skill-name', 'skill-forge',
-      '--iteration',
-    ])).toThrow('Missing value for --iteration');
+      '--provider',
+    ])).toThrow('Missing value for --provider');
   });
 
   it('fails on unknown flags', ({ expect }) => {
@@ -80,25 +81,15 @@ describe('parseRunEvalsArgs', () => {
     ])).toThrow('Unknown argument: --bogus');
   });
 
-  it('fails when iteration is zero, negative, decimal, or suffixed', ({ expect }) => {
-    for (const value of ['0', '-1', '1.5', '1x']) {
-      expect(() => parseRunEvalsArgs([
-        '--skill-name', 'skill-forge',
-        '--iteration', value,
-      ])).toThrow(`Invalid --iteration value: ${value}`);
-    }
-  });
-});
+  it('fails on retired historical flags', ({ expect }) => {
+    expect(() => parseRunEvalsArgs([
+      '--skill-name', 'skill-forge',
+      '--iteration', '7',
+    ])).toThrow('--iteration is no longer supported in the final eval flow.');
 
-describe('parsePositiveInteger', () => {
-  it('accepts canonical positive integers', ({ expect }) => {
-    expect(parsePositiveInteger('1', '--iteration')).toBe(1);
-    expect(parsePositiveInteger('42', '--iteration')).toBe(42);
-  });
-
-  it('rejects non-canonical values', ({ expect }) => {
-    for (const value of ['0', '-2', '01', '1.0', '1x', ' 1', '1 ']) {
-      expect(() => parsePositiveInteger(value, '--iteration')).toThrow(`Invalid --iteration value: ${value}`);
-    }
+    expect(() => parseRunEvalsArgs([
+      '--skill-name', 'skill-forge',
+      '--retry-errors',
+    ])).toThrow('--retry-errors is no longer supported in the final eval flow.');
   });
 });

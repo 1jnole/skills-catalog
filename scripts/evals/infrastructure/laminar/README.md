@@ -1,15 +1,15 @@
-# Laminar platform boundary
+# Laminar Historical Compatibility
 
-This folder is the canonical source location for Laminar as an observability and eval platform.
+This folder is historical compatibility code from the inherited runner path.
 
-The supported `run-evals` flow reaches this folder through the application layer, while Laminar-specific execution and reporting stay here.
+It is not the active supported execution path after Fase 6 closeout.
 
-Current module ownership:
+Current historical ownership:
 
-- `prompt-builder.ts`: prepares Laminar-owned prompts and attached eval files
-- `execute-mode.ts`: executes `with_skill` and `without_skill` through the Laminar executor and local grader
-- `executor.ts`: owns the internal `runText(...)` contract, Laminar SDK readiness, and the current OpenAI SDK wiring used by the engine
-- `evaluators-adapter.ts`: translates platform execution outputs into local per-mode summaries
-- `report.ts`: prepares Laminar-derived results for the local benchmark and run manifest builders
+- `prompt-builder.ts`: historical Laminar prompt preparation
+- `execute-mode.ts`: historical Laminar mode execution
+- `executor.ts`: Laminar SDK and historical provider wiring
+- `evaluators-adapter.ts`: historical platform-to-local translation
+- `report.ts`: historical Laminar-derived report preparation
 
-Shared helpers that remain outside this folder are allowed only when they are not platform-owned concerns, such as eval definition loading, iteration workspace management, or supported artifact persistence.
+The supported path now runs through `run-evals` plus the Promptfoo adapter and canonical suite in `evals/cases/`.
