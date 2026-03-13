@@ -31,6 +31,15 @@ function normalizeText(value: string): string {
   return value.toLowerCase();
 }
 
+function escapeRegex(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function hasMarker(text: string, marker: string): boolean {
+  const pattern = new RegExp(`(^|[^a-z0-9_-])${escapeRegex(marker)}($|[^a-z0-9_-])`);
+  return pattern.test(text);
+}
+
 function extractKeywords(text: string): string[] {
   const matches = text.toLowerCase().match(/[a-z][a-z0-9_-]{2,}/g) ?? [];
   const filtered = matches.filter((token) => !STOPWORDS.has(token));
@@ -38,11 +47,11 @@ function extractKeywords(text: string): string[] {
 }
 
 function includesAny(text: string, markers: string[]): string[] {
-  return markers.filter((marker) => text.includes(marker));
+  return markers.filter((marker) => hasMarker(text, marker));
 }
 
 function includesAll(text: string, markers: string[]): boolean {
-  return markers.every((marker) => text.includes(marker));
+  return markers.every((marker) => hasMarker(text, marker));
 }
 
 function evaluateBoundary(caseDefinition: EvalCase, output: string): CaseGrading['checks'][number] {
@@ -50,7 +59,7 @@ function evaluateBoundary(caseDefinition: EvalCase, output: string): CaseGrading
 
   if (caseDefinition.should_trigger) {
     const markers = includesAny(normalizedOutput, ['classification: trigger', 'eval brief ready']);
-    const passed = markers.length === 2 || normalizedOutput.includes('eval brief ready');
+    const passed = markers.length === 2 || hasMarker(normalizedOutput, 'eval brief ready');
     return {
       label: 'Boundary stop condition',
       status: passed ? 'PASS' : 'FAIL',
@@ -186,7 +195,7 @@ function evaluateStructuredAssertion(assertion: string, output: string): CaseGra
     evidence: passed
       ? structuredCheck.mode === 'absent'
         ? `Confirmed absence of markers: ${structuredCheck.markers.join(', ')}`
-        : `Matched markers: ${structuredCheck.markers.filter((marker) => normalizedOutput.includes(marker)).join(', ') || structuredCheck.markers.join(', ')}`
+        : `Matched markers: ${structuredCheck.markers.filter((marker) => hasMarker(normalizedOutput, marker)).join(', ') || structuredCheck.markers.join(', ')}`
       : structuredCheck.mode === 'absent'
         ? `Unexpected markers present: ${matched.join(', ') || structuredCheck.markers.join(', ')}`
         : `Missing markers: ${structuredCheck.markers.join(', ')}`,
@@ -258,4 +267,3 @@ export function createErroredCaseGrading(params: {
     ],
   };
 }
-
