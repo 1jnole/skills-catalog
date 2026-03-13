@@ -1,6 +1,6 @@
 import * as process from 'node:process';
 
-import { executeRunEvalIteration } from '../platforms/laminar/run-eval-iteration.js';
+import { executeRunEvalIteration } from '../application/run-eval-iteration/execute-run-eval-iteration.js';
 import { parseRunEvalsArgs } from './run-evals.args.js';
 
 async function main(): Promise<void> {
@@ -25,3 +25,5 @@ main().catch((error) => {
   console.error(`run failed: ${message}`);
   process.exit(1);
 });
+
+

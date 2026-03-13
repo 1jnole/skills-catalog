@@ -1,1 +1,1 @@
-import './commands/run-iteration.js';
+import './compatibility/commands/run-iteration.js';

@@ -2,34 +2,111 @@
 
 This folder contains the shared offline eval runner used by multiple skills.
 
-## Structure
+## Target scaffold
 
-- `commands/` exposes runnable commands and keeps argument parsing thin.
-- `domain/types/` stores domain contracts.
-- `domain/schemas/` stores Zod validators with the `*.schema.ts` convention.
-- `domain/services/` stores runner-neutral benchmark and normalization logic.
-- `platforms/laminar/` owns the active supported Laminar execution path.
-- `run/definition/` loads and summarizes skill-local eval definitions.
-- `run/execution/` keeps compatibility shims and thin shared helpers that are not the supported path owner.
-- `run/artifacts/` manages the supported iteration files plus compatibility shims for moved historical helpers.
-- `run/historical/` stores retained legacy helper implementations that are no longer part of the supported flow.
-- `grading/` groups deterministic grading behavior.
-- `providers/` isolates model providers such as OpenAI through AI SDK.
-- `shared/` contains small helpers and cross-cutting input types/schemas.
+The runtime is being standardized around these ownership buckets:
 
-## Conventions
+- `commands/` for CLI entrypoints and argument parsing
+- `application/` for supported use cases and coordination
+- `domain/<subdomain>/` for domain contracts and pure business behavior
+- `infrastructure/` for Laminar, providers, and filesystem
+- `compatibility/` for historical helpers and migration shims only
+- `shared/` for tiny technical helpers that are genuinely cross-cutting
 
-- semantic contracts go in `types/` with the `*.types.ts` suffix
-- Zod validators go in `schemas/` with the `*.schema.ts` suffix
-- runner-neutral benchmark and normalization logic stays in `domain/services/`
-- commands stay in `commands/`
-- the active supported execution path stays in `platforms/laminar/`
-- eval loading stays in `run/definition/`
-- `run/execution/` is for compatibility shims or thin shared helpers, not for owning the supported path
-- supported persisted run files stay in `run/artifacts/`
-- historical compatibility helpers stay in `run/historical/`
-- scoring logic stays in `grading/`
-- model adapters stay in `providers/`
+Target shape:
+
+```text
+scripts/evals/
+  commands/
+  application/
+    load-eval-definition/
+    run-eval-iteration/
+  domain/
+    eval-case/
+    eval-definition/
+    grading/
+    benchmark/
+    run-results/
+  infrastructure/
+    filesystem/
+      eval-runs/
+    laminar/
+    providers/
+      openai/
+  compatibility/
+    commands/
+    run-execution/
+    historical-artifacts/
+  shared/
+    cli/
+    json/
+```
+
+## Placement rules
+
+- Folder names must describe ownership clearly.
+- Use business-language subdomains inside `domain/`.
+- Do not add new code to the root of `scripts/evals/` except docs, config, and required entrypoint wrappers.
+- Do not add `utils/`, `helpers/`, or `misc/` folders.
+- Do not add `index.ts` barrels.
+- Keep imports direct to the owning file.
+
+### Domain rules
+
+`domain/` is not only for types.
+
+`domain/` owns:
+- domain schemas and inferred types
+- pure business behavior
+- grading semantics
+- benchmark semantics
+- normalized run-result semantics
+
+`domain/` does not own:
+- CLI parsing
+- filesystem paths or writes
+- Laminar SDK wiring
+- provider SDK wiring
+- orchestration loops
+- compatibility shims
+
+Inside `domain/`, prefer subdomain-local files such as:
+- `domain/eval-case/eval-case.schema.ts`
+- `domain/eval-case/eval-case.types.ts`
+- `domain/benchmark/benchmark.ts`
+- `domain/run-results/run-results.ts`
+
+### Types and schemas
+
+- `*.types.ts` should exist only when the type is shared by more than one file or context.
+- Private types stay local to the module that uses them.
+- When a Zod schema is canonical, prefer inferred types over handwritten duplicates.
+- A schema belongs next to the concern that owns the runtime contract.
+- CLI or adapter-only schemas do not belong in `domain/`.
+
+### Application rules
+
+`application/` owns supported use cases such as:
+- loading eval definitions into the supported flow
+- orchestrating one run iteration
+- coordinating infrastructure and domain collaborators
+
+`application/` must stay free of domain semantics and provider/platform-specific logic.
+
+### Infrastructure rules
+
+`infrastructure/laminar/` owns Laminar-specific execution and reporting glue.
+
+`infrastructure/providers/` owns provider-specific integration.
+
+`infrastructure/filesystem/eval-runs/` owns:
+- iteration workspace resolution
+- supported run artifact reads and writes
+- locks and progress persistence
+
+### Compatibility rules
+
+Anything historical, aliased, or migration-only must live under `compatibility/` and be clearly non-authoritative for the supported path.
 
 ## Output layout
 
@@ -74,7 +151,8 @@ The runner validates these prerequisites before it creates a new iteration folde
 - Laminar is an observability/eval platform boundary, not the authority for pass/fail semantics.
 - `benchmark.json` is computed from normalized run results in `domain/`.
 - Historical iterations may still contain legacy detailed per-case artifacts, but new supported iterations persist only `benchmark.json` and `run.json`.
-- Historical helper implementations live under `run/historical/`; any old artifact-path imports are compatibility shims only.
+- Historical helper implementations live under `compatibility/`; any old artifact-path imports are compatibility shims only.
+
 ## Unit test workflow
 
 Use the shared runner with a small Red -> Green -> Refactor loop:

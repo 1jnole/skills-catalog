@@ -1,9 +1,9 @@
 import * as process from 'node:process';
 import { z } from 'zod';
 
-import { executeReadEvalDefinition } from '../run/definition/read-eval-definition.js';
-import { parseEvalInputSource } from '../run/definition/load-eval-definition.js';
-import { type EvalInputSource } from '../shared/types/eval-input-source.types.js';
+import { executeReadEvalDefinition } from '../application/load-eval-definition/read-eval-definition.js';
+import { parseEvalInputSource } from '../application/load-eval-definition/load-eval-definition.js';
+import { type EvalInputSource } from '../application/load-eval-definition/eval-input-source.types.js';
 import { readNextArg } from '../shared/cli/args.js';
 
 const argsSchema = z.object({
@@ -87,4 +87,5 @@ function main(): void {
 }
 
 main();
+
 

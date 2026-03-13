@@ -12,6 +12,8 @@
 - `08-v3-context-map.md` -- bounded contexts and dependency rules for the supported eval runtime post-V3
 - `09-v3-source-of-truth-audit.md` -- canonical-source audit for the supported eval runtime post-V3
 - `10-v3-service-boundaries-audit.md` -- service-boundary audit for the supported eval runtime post-V3
+- `11-v3-refactor-roadmap.md` -- implementation roadmap for closing V2 and preparing V3 under TDD
+- `12-evals-runtime-scaffold.md` -- target scaffold, naming rules, and placement rules for `scripts/evals/`
 
 ## Recommended reading order
 
@@ -25,6 +27,8 @@
 8. `08-v3-context-map.md` when working on ownership, context boundaries, or post-V3 cleanup
 9. `09-v3-source-of-truth-audit.md` when working on canonical contracts, precedence, or drift cleanup
 10. `10-v3-service-boundaries-audit.md` when working on module ownership, architectural roles, or cleanup sequencing
+11. `11-v3-refactor-roadmap.md` when implementing the ordered V2/V3 cleanup work
+12. `12-evals-runtime-scaffold.md` when deciding folder ownership, naming, and module placement inside `scripts/evals/`
 
 ## Two external sources, two purposes
 
@@ -50,7 +54,9 @@
 - where the stable Laminar migration plan lives,
 - which bounded contexts own the supported eval runtime after V3,
 - which artifact is the source of truth for each key runtime concept,
-- and which modules are still mixing domain, orchestration, persistence, platform, or historical concerns.
+- which modules are still mixing domain, orchestration, persistence, platform, or historical concerns,
+- what ordered refactor sequence should be implemented under TDD to close the remaining V2/V3 gaps,
+- and which scaffold and placement rules govern new modules inside `scripts/evals/`.
 
 ## Note
 
@@ -63,3 +69,5 @@
 - `08-v3-context-map.md` is the reference for bounded contexts and dependency rules in the supported post-V3 runtime.
 - `09-v3-source-of-truth-audit.md` is the reference for source-of-truth precedence in the supported post-V3 runtime.
 - `10-v3-service-boundaries-audit.md` is the reference for module-role classification and service-boundary cleanup in the supported post-V3 runtime.
+- `11-v3-refactor-roadmap.md` is the reference for the ordered implementation sequence and TDD discipline of the remaining cleanup work.
+- `12-evals-runtime-scaffold.md` is the reference for naming, ownership, and file-placement decisions inside `scripts/evals/`.
