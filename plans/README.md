@@ -71,3 +71,4 @@
 - `10-v3-service-boundaries-audit.md` is the reference for module-role classification and service-boundary cleanup in the supported post-V3 runtime.
 - `11-v3-refactor-roadmap.md` is the reference for the ordered implementation sequence and TDD discipline of the remaining cleanup work.
 - `12-evals-runtime-scaffold.md` is the reference for naming, ownership, and file-placement decisions inside `scripts/evals/`.
+- The current supported scaffold is now reflected in `scripts/evals/README.md`; future refactors should keep docs and tree shape aligned.

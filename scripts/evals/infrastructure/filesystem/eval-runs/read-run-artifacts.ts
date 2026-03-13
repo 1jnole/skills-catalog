@@ -56,8 +56,6 @@ export function readCompletedBenchmarkCaseArtifacts(
   );
 }
 
-export { readLegacyCaseArtifactsIfComplete } from '../../../compatibility/historical-artifacts/read-legacy-case-artifacts.js';
-
 
 
 

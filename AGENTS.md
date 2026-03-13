@@ -67,7 +67,7 @@ Keep the root file short and discovery-safe. Detailed process belongs in:
 - Eval definitions live next to each skill under `packs/core/<skill-name>/evals/`.
 - Offline iteration workspaces live under `packs/core/<skill-name>/evals/runs/`.
 - Treat `run-evals` as the supported public eval execution command.
-- Treat `scripts/evals/providers/` as the model provider layer and `scripts/evals/platforms/laminar/` as the observability/eval platform boundary.
+- Treat `scripts/evals/infrastructure/providers/` as the model provider layer and `scripts/evals/infrastructure/laminar/` as the observability/eval platform boundary.
 - Rebuild the scaffold from `plans/` and current docs, not by restoring deleted runtime code.
 
 ## When modifying `skill-forge`
@@ -76,5 +76,6 @@ Keep the root file short and discovery-safe. Detailed process belongs in:
 - Keep the handoff aligned with the current source-of-truth docs.
 - Do not reintroduce per-skill harness duplication.
 - Keep provider-specific files isolated under `agents/`.
+
 
 

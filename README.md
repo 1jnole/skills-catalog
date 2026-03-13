@@ -39,12 +39,30 @@ The current supported path is the scaffold-first rebuild backed by Laminar for e
 |   `-- evals/
 |       |-- README.md
 |       |-- commands/
+|       |-- application/
+|       |   |-- load-eval-definition/
+|       |   `-- run-eval-iteration/
+|       |-- domain/
+|       |   |-- benchmark/
+|       |   |-- eval-case/
+|       |   |-- eval-definition/
+|       |   |-- grading/
+|       |   `-- run-results/
+|       |-- infrastructure/
+|       |   |-- filesystem/
+|       |   |   `-- eval-runs/
+|       |   |-- laminar/
+|       |   `-- providers/
+|       |       `-- openai/
+|       |-- compatibility/
+|       |   |-- commands/
+|       |   |-- historical-artifacts/
+|       |   `-- run-execution/
+|       |-- shared/
+|       |   `-- cli/
 |       |-- read-evals.ts
 |       |-- run-evals.ts
-|       |-- platforms/
-|       |   `-- laminar/
-|       `-- run/
-|           `-- historical/
+|       `-- run-iteration.ts
 `-- package.json
 ```
 
@@ -52,4 +70,5 @@ Use the docs above for repo-wide background and shared tooling. For the operatio
 
 Within `scripts/evals/`, treat `run-evals.ts` as the supported public execution entrypoint. `run-iteration.ts` remains in the tree only as a compatibility alias to that supported command.
 
-Historical iterations may still contain detailed per-case artifacts from the pre-closeout runner, but the supported persisted outputs remain only `benchmark.json` and `run.json`. Historical helper implementations live under `scripts/evals/run/historical/`.
+Historical iterations may still contain detailed per-case artifacts from the pre-closeout runner, but the supported persisted outputs remain only `benchmark.json` and `run.json`. Historical helper implementations now live under `scripts/evals/compatibility/historical-artifacts/`.
+

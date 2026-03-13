@@ -1,19 +1,19 @@
 # Shared Eval Runner
 
-This folder contains the shared offline eval runner used by multiple skills.
+This folder contains the supported shared offline eval runner used by multiple skills.
 
-## Target scaffold
+## Current scaffold
 
-The runtime is being standardized around these ownership buckets:
+The runtime is organized by ownership:
 
 - `commands/` for CLI entrypoints and argument parsing
-- `application/` for supported use cases and coordination
+- `application/` for supported use cases and orchestration
 - `domain/<subdomain>/` for domain contracts and pure business behavior
-- `infrastructure/` for Laminar, providers, and filesystem
+- `infrastructure/` for Laminar, providers, and filesystem concerns
 - `compatibility/` for historical helpers and migration shims only
 - `shared/` for tiny technical helpers that are genuinely cross-cutting
 
-Target shape:
+Current shape:
 
 ```text
 scripts/evals/
@@ -39,8 +39,13 @@ scripts/evals/
     historical-artifacts/
   shared/
     cli/
-    json/
 ```
+
+Root-level files are intentionally minimal:
+
+- `run-evals.ts` and `read-evals.ts` are thin wrappers for the supported commands
+- `run-iteration.ts` is a legacy compatibility wrapper only
+- `README.md` and `tsconfig.json` remain at the root as stable package metadata
 
 ## Placement rules
 
@@ -114,8 +119,8 @@ Each skill keeps its own run artifacts next to its eval definition:
 
 - `packs/core/<skill-name>/evals/evals.json`
 - `packs/core/<skill-name>/evals/files/`
-- `packs/core/<skill-name>/evals/runs/iteration-N/run.json` (neutral run metadata for the execution)
-- `packs/core/<skill-name>/evals/runs/iteration-N/benchmark.json` (gates, deltas, improvement summary, per-case comparison)
+- `packs/core/<skill-name>/evals/runs/iteration-N/run.json` for neutral run metadata
+- `packs/core/<skill-name>/evals/runs/iteration-N/benchmark.json` for gates, deltas, improvement summary, and per-case comparison
 
 ## Commands
 
@@ -130,7 +135,7 @@ Each skill keeps its own run artifacts next to its eval definition:
 5. Re-run only errored cases in an existing iteration:
    `node scripts/evals/dist/run-evals.js --skill-name skill-forge --iteration 13 --retry-errors --model gpt-4.1-mini`
 
-`run-iteration` remains a legacy compatibility alias and is no longer part of the supported command story.
+`run-iteration` remains a compatibility alias and is not part of the supported command story.
 
 ## Requirements
 

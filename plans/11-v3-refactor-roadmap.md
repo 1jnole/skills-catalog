@@ -35,9 +35,9 @@ For structurally focused slugs, “following TDD” means characterization plus 
 
 | Order | Slug | Objective | Primary boundary fixed | Behavior change allowed? | Primary areas | Acceptance gate |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `v3-supported-use-case-owner` | Move ownership of the supported run use case out of the Laminar platform folder | Application orchestration vs platform adapter | No public behavior change | `scripts/evals/platforms/laminar/`, `scripts/evals/run/`, `scripts/evals/commands/` | `tsc`, unit suite, local `run-evals` smoke |
-| 2 | `v3-supported-vs-historical-artifacts` | Make supported persistence and historical compatibility explicit | Supported persistence vs historical compatibility | No supported artifact contract change | `scripts/evals/run/artifacts/`, `scripts/evals/run/historical/` | `tsc`, unit suite, supported artifact smoke |
-| 3 | `v3-run-execution-collapse` | Remove `run/execution/` as an ambiguous secondary execution architecture | Application orchestration vs compatibility indirection | No public behavior change | `scripts/evals/run/execution/`, callers in `run/` and `platforms/laminar/` | `tsc`, unit suite, import/smoke stability |
+| 1 | `v3-supported-use-case-owner` | Move ownership of the supported run use case out of the Laminar platform folder | Application orchestration vs platform adapter | No public behavior change | `scripts/evals/infrastructure/laminar/`, `scripts/evals/run/`, `scripts/evals/commands/` | `tsc`, unit suite, local `run-evals` smoke |
+| 2 | `v3-supported-vs-historical-artifacts` | Make supported persistence and historical compatibility explicit | Supported persistence vs historical compatibility | No supported artifact contract change | `scripts/evals/infrastructure/filesystem/eval-runs/`, `scripts/evals/compatibility/historical-artifacts/` | `tsc`, unit suite, supported artifact smoke |
+| 3 | `v3-run-execution-collapse` | Remove `run/execution/` as an ambiguous secondary execution architecture | Application orchestration vs compatibility indirection | No public behavior change | `scripts/evals/compatibility/run-execution/`, callers in `application/` and `infrastructure/laminar/` | `tsc`, unit suite, import/smoke stability |
 | 4 | `v3-source-tree-derived-output-cleanup` | Remove source-tree noise from generated JS and build outputs | Source vs derived output | No runtime behavior change | `scripts/evals/dist/`, generated `.js` under source subtrees | `tsc`, unit suite, build-output sanity |
 | 5 | `v3-docs-alignment-closeout` | Align supported docs with the final implemented ownership model | Docs vs implemented architecture | Docs only | `scripts/evals/README.md`, `plans/07-laminar-migration-versions.md`, `plans/README.md` | docs review, `tsc`, unit suite |
 
@@ -49,7 +49,7 @@ Intent:
 - make the supported application use case live in the application layer rather than inside the Laminar platform boundary.
 
 Closed decisions:
-- the recommended owner is `Eval Application / Run Orchestration`, not `platforms/laminar/`.
+- the recommended owner is `Eval Application / Run Orchestration`, not `infrastructure/laminar/`.
 - Laminar remains responsible for execution, dataset/prompt translation, platform readiness, and reporting glue.
 - `executeRunEvalIteration` may be renamed or split internally, but `run-evals` stays unchanged.
 
@@ -69,8 +69,8 @@ Intent:
 - make it obvious which persistence helpers belong to the supported V3 path and which are only historical compatibility.
 
 Closed decisions:
-- `run/artifacts/` is reserved for supported persistence.
-- historical or compatibility-only writers/readers must either move to `run/historical/` or be named so their status is unmistakable.
+- `infrastructure/filesystem/eval-runs/` is reserved for supported persistence.
+- historical or compatibility-only writers/readers must live under `compatibility/historical-artifacts/` or be named so their status is unmistakable.
 - supported outputs remain `benchmark.json` and `run.json`.
 
 Implementation constraints:
@@ -84,10 +84,10 @@ Minimum tests:
 ### 3. `v3-run-execution-collapse`
 
 Intent:
-- remove the architectural ambiguity of `run/execution/` as a shadow execution layer.
+- remove the architectural ambiguity of `compatibility/run-execution/` as a shadow execution layer.
 
 Closed decisions:
-- every file in `run/execution/` must end up as either a supported helper in the application layer or an explicitly marked compatibility shim.
+- every file in `compatibility/run-execution/` must end up as either a supported helper in the application layer or an explicitly marked compatibility shim.
 - no new “execution framework” is introduced.
 
 Implementation constraints:
@@ -137,7 +137,7 @@ Minimum tests:
 ## Execution order and stop rules
 
 - Do not start slug 2 before slug 1 is closed, because supported vs historical persistence depends on the final use-case owner.
-- Do not start slug 3 before slug 1 is closed, because `run/execution/` ownership depends on where the supported use case ends up.
+- Do not start slug 3 before slug 1 is closed, because `compatibility/run-execution/` ownership depends on where the supported use case ends up.
 - Do not start slug 4 before slugs 1-3 are closed, or cleanup may hide unresolved ownership problems.
 - Do not start slug 5 before slugs 1-4 are closed, or docs will drift again immediately.
 - If any slug discovers a contradiction with [08-v3-context-map.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/plans/08-v3-context-map.md) or [09-v3-source-of-truth-audit.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/plans/09-v3-source-of-truth-audit.md), stop and resolve the architecture decision before continuing.
@@ -152,3 +152,5 @@ It defines the minimum ordered refactor sequence needed to make the supported pa
 - Laminar-owned platform integration
 - explicit supported persistence
 - explicit historical compatibility
+
+

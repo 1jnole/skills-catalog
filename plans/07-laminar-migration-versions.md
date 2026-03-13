@@ -24,6 +24,14 @@ At the end of the third version:
 - the supported flow persists only:
   - `benchmark.json`
   - `run.json`
+- the supported code path is organized under:
+  - `commands/`
+  - `application/`
+  - `domain/`
+  - `infrastructure/laminar/`
+  - `infrastructure/providers/`
+  - `infrastructure/filesystem/`
+  - `compatibility/` for any remaining historical aliases
 
 ## Planning Rule
 
@@ -34,7 +42,7 @@ A version is only accepted when its own gate is met end-to-end.
 
 ## Current Status
 
-As of 2026-03-12:
+As of 2026-03-13:
 
 - **v1 hybrid**: accepted
 - **v2 consolidation**: partially implemented in code shape, not accepted as a closed version independently
@@ -43,7 +51,7 @@ As of 2026-03-12:
 Practical reason:
 
 - `iteration-13` is green and `iteration-13 --retry-errors` preserved the local retry contract, so the v1 gate is now closed
-- the repo still has transitional and historical structures that prevent treating v2 or v3 as already accepted
+- the repo still keeps compatibility aliases and historical structures, even though the supported scaffold has largely moved into `application/`, `domain/`, and `infrastructure/`
 
 ## Version 1 -- Hybrid
 
@@ -116,8 +124,8 @@ Partially implemented, but not treated as separately accepted.
 
 ### Next planning focus
 
-- keep benchmark and run-manifest semantics centralized in domain services
-- remove any remaining ambiguity about what still counts as compatibility glue versus domain logic
+- keep benchmark and run-manifest semantics centralized in domain code
+- remove any remaining ambiguity about what still counts as compatibility glue versus supported orchestration
 
 ## Version 3 -- Strong Migration
 
@@ -128,7 +136,7 @@ Make Laminar the real supported path, retire supported dependence on the old run
 ### Intended outcome
 
 - `run-evals` uses the Laminar-backed route as the real supported flow
-- `platforms/laminar/` contains the active platform integration
+- `infrastructure/laminar/` contains the active platform integration
 - legacy execution is no longer required by the supported path
 - only `benchmark.json` and `run.json` remain supported as persisted outputs
 - `skill-forge` validates the final supported behavior

@@ -14,7 +14,7 @@ import {
 } from '../../infrastructure/filesystem/eval-runs/iteration-files.js';
 import { readCompletedBenchmarkCaseArtifacts } from '../../infrastructure/filesystem/eval-runs/read-run-artifacts.js';
 import { executeReadEvalDefinition } from '../load-eval-definition/read-eval-definition.js';
-import { resolveWorkspace } from '../../compatibility/run-execution/resolve-workspace.js';
+import { resolveWorkspace } from '../../infrastructure/filesystem/eval-runs/resolve-workspace.js';
 import { buildLaminarBenchmark, buildLaminarRunManifest } from '../../infrastructure/laminar/report.js';
 import { assertLaminarReady } from '../../infrastructure/laminar/executor.js';
 import { executeMode } from '../../infrastructure/laminar/execute-mode.js';
@@ -313,4 +313,5 @@ export async function executeRunEvalIterationWithPorts(
 export async function executeRunEvalIteration(input: RunEvalIterationInput): Promise<RunEvalIterationResult> {
   return executeRunEvalIterationWithPorts(input, defaultPorts);
 }
+
 

@@ -92,7 +92,7 @@ Does not own:
 
 Primary locations:
 - `scripts/evals/domain/`
-- `scripts/evals/grading/`
+- `scripts/evals/domain/grading/`
 
 ### Eval Application / Run Orchestration
 
@@ -128,7 +128,7 @@ Does not own:
 - skill authoring or eval authoring contracts
 
 Primary location:
-- `scripts/evals/platforms/laminar/`
+- `scripts/evals/infrastructure/laminar/`
 
 ### Provider Boundary
 
@@ -143,7 +143,7 @@ Does not own:
 - iteration orchestration
 
 Primary location:
-- `scripts/evals/providers/`
+- `scripts/evals/infrastructure/providers/`
 
 ## Context relationships
 
@@ -196,10 +196,10 @@ flowchart LR
 | --- | --- | --- | --- | --- |
 | Skill Authoring | Skill contract and Eval Brief | Blueprint and governance docs | `evals.json`, runtime internals | `packs/core/skill-forge/` |
 | Eval Authoring | Cases, assertions, gates, eval files | Eval Brief and blueprint | skill contract renegotiation, runtime internals | `packs/core/skill-eval-forge/`, `packs/core/<skill>/evals/` |
-| Shared Eval Domain | Schemas, types, grading, benchmark semantics | Eval definition contracts only | platform adapters, provider SDK, persistence | `scripts/evals/domain/`, `scripts/evals/grading/` |
+| Shared Eval Domain | Schemas, types, grading, benchmark semantics | Eval definition contracts only | platform adapters, provider SDK, persistence | `scripts/evals/domain/`, `scripts/evals/domain/grading/` |
 | Eval Application / Run Orchestration | run-evals flow, iteration workspace, supported persistence | Shared Eval Domain, Laminar boundary, Provider boundary | platform-specific grading semantics | `scripts/evals/commands/`, `scripts/evals/run/` |
-| Laminar Platform Boundary | Laminar integration and platform adapters | Shared Eval Domain, Provider boundary | grading/gates/benchmark ownership | `scripts/evals/platforms/laminar/` |
-| Provider Boundary | model access integration | provider SDKs | grading, gates, benchmark, run ownership | `scripts/evals/providers/` |
+| Laminar Platform Boundary | Laminar integration and platform adapters | Shared Eval Domain, Provider boundary | grading/gates/benchmark ownership | `scripts/evals/infrastructure/laminar/` |
+| Provider Boundary | model access integration | provider SDKs | grading, gates, benchmark, run ownership | `scripts/evals/infrastructure/providers/` |
 
 ## Current repo interpretation
 
@@ -218,3 +218,4 @@ The runtime is architecturally ready for V3 only when all of this is true:
 - `run-evals` remains the only supported public command
 - historical compatibility is clearly marked as historical, not supported-path behavior
 - the codebase can be read through these contexts without ambiguous ownership
+
