@@ -12,7 +12,6 @@ evals/
   contracts/
   cases/
   fixtures/
-  scorers/
   reports/
   engines/
     promptfoo/
@@ -20,7 +19,6 @@ evals/
 
 The first visible contract boundary already exists at:
 - `evals/contracts/README.md`
-- `evals/scorers/README.md`
 - `evals/cases/README.md`
 - `evals/fixtures/README.md`
 
@@ -73,7 +71,6 @@ Current operational reference:
 - `contracts/` will own eval contracts that survive engine changes.
 - `cases/` will own case definitions and authoring-oriented organization.
 - `fixtures/` will own reusable eval files and test inputs.
-- `scorers/` will own reusable scoring logic.
 - `reports/` will own generated outputs that do not define the domain.
 - `engines/` will own engine-specific execution assets, with `engines/promptfoo/` as the target native tool boundary.
 
