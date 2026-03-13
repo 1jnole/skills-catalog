@@ -123,6 +123,12 @@ Each skill keeps its own run artifacts next to its eval definition:
    `npm run run-evals -- -- --skill-name skill-forge --iteration 13 --model gpt-4.1-mini`
 5. Re-run only errored cases in an existing iteration:
    `npm run run-evals -- -- --skill-name skill-forge --iteration 13 --retry-errors --model gpt-4.1-mini`
+6. Launch the Promptfoo pilot flow from the new scaffold (dry run):
+   `npm run run-promptfoo-pilot -- -- --skill-name skill-forge --dry-run`
+7. Run the Promptfoo pilot offline with fixed outputs (executes both `with_skill` and `without_skill` prompt paths):
+   `npm run run-promptfoo-pilot -- -- --skill-name skill-forge --model-outputs evals/engines/promptfoo/fixtures/pilot-model-outputs.json --output evals/engines/promptfoo/generated/skill-forge.pilot.eval.json`
+8. Write local scoring output to a custom path (optional):
+   `npm run run-promptfoo-pilot -- -- --skill-name skill-forge --score-output evals/engines/promptfoo/generated/custom.scoring.json`
 
 When forwarding CLI args through `npm run`, use `npm run <script> -- -- <args>`.
 

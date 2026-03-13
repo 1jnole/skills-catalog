@@ -256,6 +256,45 @@ describe('buildBenchmarkArtifact', () => {
     });
   });
 
+  it('builds the aggregate from normalized core fields without provider metadata', ({ expect }) => {
+    const result = buildBenchmarkArtifact(createBenchmarkParams([
+      createCaseResult({
+        case_id: 'core-only',
+        with_skill: {
+          status: 'completed',
+          duration_ms: 90,
+          score: 0.8,
+          passed: true,
+        },
+        without_skill: {
+          status: 'error',
+          duration_ms: 110,
+          score: 0,
+          passed: false,
+          error: { kind: 'timeout', message: 'slow' },
+        },
+      }),
+    ]));
+
+    expect(result.cases[0]).toMatchObject({
+      case_id: 'core-only',
+      stronger_mode: 'with_skill',
+      score_delta: 0.8,
+      pass_delta: 1,
+    });
+    expect(result.comparison).toMatchObject({
+      with_skill: {
+        error_count: 0,
+      },
+      without_skill: {
+        error_count: 1,
+      },
+      deltas: {
+        error_count: -1,
+      },
+    });
+  });
+
   it('counts one error case even when both modes errored and marks the run incomplete', ({ expect }) => {
     const result = buildBenchmarkArtifact(createBenchmarkParams([
       createCaseResult({

@@ -1,7 +1,6 @@
 import type { StrongerMode } from '../baseline/baseline.js';
-import { type CaseBenchmarkEntry } from '../run-results/run-artifact.types.js';
 import { type NormalizedCaseResult } from '../run-results/run-result.types.js';
-import type { BenchmarkCaseSummary } from './benchmark.types.js';
+import type { BenchmarkCaseSummary, CaseBenchmarkEntry } from './benchmark.types.js';
 
 import { roundToTwo } from './benchmark-metrics.js';
 

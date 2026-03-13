@@ -23,6 +23,19 @@ evals/
 The first visible contract boundary already exists at:
 - `evals/contracts/README.md`
 - `evals/baseline/README.md`
+- `evals/scorers/README.md`
+- `evals/benchmark/README.md`
+- `evals/cases/README.md`
+- `evals/fixtures/README.md`
+
+Current Fase 4 pilot artifacts:
+- `evals/cases/skill-forge/pilot-suite.v1.json`
+- `evals/cases/skill-forge/README.md`
+- `evals/fixtures/skill-forge/README.md`
+- `scripts/evals/cli/run-promptfoo-pilot.ts`
+
+Pilot baseline behavior:
+- Promptfoo pilot runs both `with_skill` and `without_skill` prompt paths.
 
 ## What this means now
 - The future scaffold is now explicit and visible at the repo root.

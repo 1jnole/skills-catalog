@@ -1,6 +1,7 @@
 import { createErroredCaseGrading, gradeCase } from '../../domain/grading/grade-case.js';
 import { type EvalCase, type EvalCaseMode } from '../../domain/eval-case/eval-case.types.js';
-import { type CaseGrading, type ModeArtifacts } from '../../domain/run-results/run-artifact.types.js';
+import type { CaseGrading } from '../../domain/grading/grading.types.js';
+import { type ModeArtifacts } from '../../domain/run-results/run-artifact.types.js';
 import { summarizeLaminarModeResult, type LaminarModeExecutionResult } from './evaluators-adapter.js';
 import { runText } from './executor.js';
 import { buildSystemPrompt, loadCaseFiles } from './prompt-builder.js';

@@ -1,17 +1,44 @@
 import { z } from 'zod';
 
 import { caseIdSchema } from '../eval-case/eval-case.schema.js';
-import { artifactErrorSchema, artifactProviderSchema, artifactStatusSchema, usageArtifactSchema } from './run-artifact.schema.js';
+import { gradingErrorSchema } from '../grading/grading.schema.js';
+
+export const normalizedModeStatusSchema = z.enum(['completed', 'error']);
+export const normalizedProviderSchema = z.string().min(1);
+export const normalizedUsageSchema = z.object({
+  inputTokens: z.number().int().nonnegative().optional(),
+  outputTokens: z.number().int().nonnegative().optional(),
+  totalTokens: z.number().int().nonnegative().optional(),
+});
 
 export const normalizedModeResultSchema = z.object({
-  status: artifactStatusSchema,
+  status: normalizedModeStatusSchema,
   duration_ms: z.number().nonnegative(),
   score: z.number().min(0).max(1),
   passed: z.boolean(),
-  provider: artifactProviderSchema.optional(),
+  provider: normalizedProviderSchema.optional(),
   model: z.string().min(1).optional(),
-  usage: usageArtifactSchema.optional(),
-  error: artifactErrorSchema.optional(),
+  usage: normalizedUsageSchema.optional(),
+  error: gradingErrorSchema.optional(),
+}).superRefine((result, ctx) => {
+  if (result.status === 'error') {
+    if (!result.error) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['error'],
+        message: 'error mode requires an error payload.',
+      });
+    }
+    return;
+  }
+
+  if (result.error) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['error'],
+      message: 'completed mode must not include an error payload.',
+    });
+  }
 });
 
 export const normalizedCaseResultSchema = z.object({

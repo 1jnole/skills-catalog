@@ -1,6 +1,6 @@
-import { type EvalDefinition } from '../eval-definition/eval-definition.types.js';
 import type {
   BenchmarkComparison,
+  BenchmarkGates,
   BenchmarkGateResults,
   BenchmarkImprovementSummary,
   BenchmarkRollup,
@@ -40,7 +40,7 @@ export function buildBenchmarkComparison(modeTotals: BenchmarkRollup['modeTotals
 
 export function buildBenchmarkGateResults(params: {
   gateTotals: BenchmarkRollup['gateTotals'];
-  gates: EvalDefinition['gates'];
+  gates: BenchmarkGates;
   caseCount: number;
   errorCaseCount: number;
 }): BenchmarkGateResults {

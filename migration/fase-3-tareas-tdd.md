@@ -30,7 +30,37 @@ Extraer y estabilizar el **núcleo portable** que sí sobrevive a la migración,
   - la semántica base `with_skill / without_skill` ya vive en un punto explícito del dominio,
   - schemas y tipos del core reutilizan esa autoridad,
   - y el scaffold nuevo ya hace visible también el boundary de baseline.
-- Siguiente slice recomendado: **Tarea 3.3** para extraer `grading` como lógica pura y portable.
+- Slice ejecutado después: **Tarea 3.3**.
+- Evidencia:
+  - `scripts/evals/domain/grading/grading.schema.ts`
+  - `scripts/evals/domain/grading/grading.types.ts`
+  - `scripts/evals/domain/grading/grade-case.test.ts`
+  - `evals/scorers/README.md`
+- Resultado:
+  - `grading` ya define su propio contrato semántico y deja de depender directamente de shapes de `run-results`,
+  - el grading acepta input semántico mínimo (sin campos de authoring ni wiring técnico),
+  - y el scaffold nuevo ya expone el boundary de scorers como parte del núcleo portable.
+- Slice ejecutado después: **Tarea 3.4**.
+- Evidencia:
+  - `scripts/evals/domain/benchmark/benchmark.types.ts`
+  - `scripts/evals/domain/benchmark/benchmark.test.ts`
+  - `evals/benchmark/README.md`
+- Resultado:
+  - benchmark ya define contrato propio de agregado y reduce acople directo con tipos de `run-results`,
+  - hay prueba explícita de agregado usando solo campos normalizados del core (sin metadata de provider),
+  - y el scaffold nuevo ya expone el boundary de benchmark.
+- Slice ejecutado después: **Tarea 3.5**.
+- Evidencia:
+  - `scripts/evals/domain/run-results/run-result.schema.ts`
+  - `scripts/evals/domain/run-results/run-result.schema.test.ts`
+  - `scripts/evals/domain/run-results/run-results.ts`
+  - `scripts/evals/domain/run-results/run-results.test.ts`
+  - `evals/contracts/run-results-normalization.md`
+- Resultado:
+  - la normalización quedó explícita como frontera del núcleo con reglas canónicas por status,
+  - benchmark consume ese shape local sin depender del report bruto de engine,
+  - y los artefactos heredados incompletos se normalizan con fallback controlado para no romper ejecución.
+- Siguiente slice recomendado: **Tarea 3.6** para revisar y limpiar residuos de provider en el núcleo.
 
 Esta fase sigue dos ideas ya cerradas en el plan maestro:
 

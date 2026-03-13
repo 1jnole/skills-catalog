@@ -32,6 +32,7 @@ The current source of truth still lives in `scripts/evals/domain/`, but only the
   - normalized per-mode result semantics
   - canonical run manifest semantics
   - provider metadata only as optional technical data
+- boundary note: `evals/contracts/run-results-normalization.md`
 
 ### Run artifact
 - current source: `scripts/evals/domain/run-results/run-artifact.schema.ts`

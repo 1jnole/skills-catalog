@@ -1,5 +1,4 @@
-import { type BenchmarkArtifact } from '../run-results/run-artifact.types.js';
-import type { BuildBenchmarkArtifactParams } from './benchmark.types.js';
+import type { BenchmarkArtifact, BuildBenchmarkArtifactParams } from './benchmark.types.js';
 
 import {
   buildBenchmarkComparison,

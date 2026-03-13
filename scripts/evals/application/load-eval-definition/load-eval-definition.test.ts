@@ -29,6 +29,21 @@ describe('readEvalDefinition', () => {
       ],
     });
   });
+
+  it('loads the phase-4 pilot suite from the new evals/cases scaffold', ({ expect }) => {
+    const filePath = path.resolve('evals', 'cases', 'skill-forge', 'pilot-suite.v1.json');
+
+    const definition = readEvalDefinition(filePath);
+
+    expect(definition.skill_name).toBe('skill-forge');
+    expect(definition.golden).toHaveLength(1);
+    expect(definition.negative).toHaveLength(2);
+    expect(definition.golden[0].id).toBe('new-skill-one-clear-job');
+    expect(definition.negative.map((testCase) => testCase.id)).toEqual([
+      'runtime-harness-implementation',
+      'ambiguous-multi-workflow-request',
+    ]);
+  });
 });
 
 describe('path resolution integration', () => {

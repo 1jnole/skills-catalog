@@ -1,7 +1,7 @@
 import { buildBenchmarkArtifact } from '../../domain/benchmark/benchmark.js';
+import { type BenchmarkArtifact } from '../../domain/benchmark/benchmark.types.js';
 import { buildRunManifestArtifact } from '../../domain/run-results/run-results.js';
 import { type EvalDefinition } from '../../domain/eval-definition/eval-definition.types.js';
-import { type BenchmarkArtifact } from '../../domain/run-results/run-artifact.types.js';
 import { type NormalizedCaseResult, type RunManifestArtifact } from '../../domain/run-results/run-result.types.js';
 
 // Owns platform-specific reporting glue while keeping benchmark semantics in the domain layer.

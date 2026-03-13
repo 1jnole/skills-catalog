@@ -2,6 +2,7 @@ import { describe, it } from 'vitest';
 
 import { createErroredCaseGrading, gradeCase } from './grade-case.js';
 import type { EvalCase, EvalCaseAssertionRules } from '../eval-case/eval-case.types.js';
+import type { GradingCaseDefinition } from './grading.types.js';
 
 function createTriggerCase(assertions: string[], assertionRules?: EvalCaseAssertionRules): EvalCase {
   return {
@@ -34,6 +35,32 @@ function createNonTriggerCase(
 }
 
 describe('gradeCase', () => {
+  it('grades from semantic case input without authoring-only fields', ({ expect }) => {
+    const semanticCase: GradingCaseDefinition = {
+      id: 'semantic-only-case',
+      should_trigger: false,
+      stop_at: 'do_not_trigger',
+      assertions: ['Alpha Beta Gamma'],
+      grading: {
+        assertion_rules: [null],
+      },
+    };
+
+    const result = gradeCase({
+      caseDefinition: semanticCase,
+      mode: 'without_skill',
+      output: 'classification: non-trigger\nout of scope\nalpha beta',
+      passingScoreThreshold: 0.5,
+    });
+
+    expect(result).toMatchObject({
+      case_id: 'semantic-only-case',
+      mode: 'without_skill',
+    });
+    expect(result.checks[0].label).toBe('Non-trigger boundary');
+    expect(result.checks[1].status).toBe('PASS');
+  });
+
   it('passes a trigger boundary when the output contains eval brief ready', ({ expect }) => {
     const result = gradeCase({
       caseDefinition: createTriggerCase(['new-skill workflow'], [{ markers: ['workflow: new-skill'] }]),

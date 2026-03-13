@@ -2,31 +2,23 @@ import { z } from 'zod';
 
 import { supportedEvalCaseModes, supportedStrongerModes } from '../baseline/baseline.js';
 import { caseIdSchema } from '../eval-case/eval-case.schema.js';
+import {
+  caseGradingSchema,
+  gradingCheckSchema,
+  gradingErrorSchema,
+} from '../grading/grading.schema.js';
 
 export const evalCaseModeSchema = z.enum(supportedEvalCaseModes);
 export const artifactProviderSchema = z.string().min(1);
 export const artifactStatusSchema = z.enum(['completed', 'error']);
-export const artifactErrorSchema = z.object({
-  kind: z.enum(['timeout', 'execution_error']),
-  message: z.string().min(1),
-});
+export const artifactErrorSchema = gradingErrorSchema;
 export const usageArtifactSchema = z.object({
   inputTokens: z.number().int().nonnegative().optional(),
   outputTokens: z.number().int().nonnegative().optional(),
   totalTokens: z.number().int().nonnegative().optional(),
 });
-export const checkResultArtifactSchema = z.object({
-  label: z.string().min(1),
-  status: z.enum(['PASS', 'FAIL']),
-  evidence: z.string().min(1),
-});
-export const caseGradingResultSchema = z.object({
-  case_id: caseIdSchema,
-  mode: evalCaseModeSchema,
-  score: z.number().min(0).max(1),
-  passed: z.boolean(),
-  checks: z.array(checkResultArtifactSchema),
-});
+export const checkResultArtifactSchema = gradingCheckSchema;
+export const caseGradingResultSchema = caseGradingSchema;
 export const modeArtifactsSummarySchema = z.object({
   status: artifactStatusSchema,
   duration_ms: z.number().nonnegative(),

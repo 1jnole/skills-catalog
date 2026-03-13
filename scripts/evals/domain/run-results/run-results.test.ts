@@ -68,6 +68,67 @@ describe('normalizeCaseArtifacts', () => {
     expect(result.without_skill.model).toBeUndefined();
     expect(result.without_skill.usage).toBeUndefined();
   });
+
+  it('canonicalizes mode metadata according to status before exposing normalized output', ({ expect }) => {
+    const result = normalizeCaseArtifacts({
+      ...createCaseArtifacts(),
+      with_skill: {
+        status: 'error',
+        duration_ms: 90,
+        score: 0,
+        passed: false,
+        provider: 'openai',
+        model: 'gpt-4.1-mini',
+        usage: { totalTokens: 9 },
+        error: { kind: 'execution_error', message: 'boom' },
+      },
+      without_skill: {
+        status: 'completed',
+        duration_ms: 60,
+        score: 1,
+        passed: true,
+        error: { kind: 'timeout', message: 'should-not-survive' },
+      },
+    });
+
+    expect(result.with_skill).toMatchObject({
+      status: 'error',
+      error: { kind: 'execution_error', message: 'boom' },
+    });
+    expect(result.with_skill.provider).toBeUndefined();
+    expect(result.with_skill.model).toBeUndefined();
+    expect(result.with_skill.usage).toBeUndefined();
+
+    expect(result.without_skill).toMatchObject({
+      status: 'completed',
+      score: 1,
+      passed: true,
+    });
+    expect(result.without_skill.error).toBeUndefined();
+  });
+
+  it('fills a fallback error payload when legacy errored artifacts omit error details', ({ expect }) => {
+    const result = normalizeCaseArtifacts({
+      ...createCaseArtifacts(),
+      with_skill: {
+        status: 'error',
+        duration_ms: 42,
+        score: 0,
+        passed: false,
+      },
+      without_skill: {
+        status: 'completed',
+        duration_ms: 60,
+        score: 1,
+        passed: true,
+      },
+    });
+
+    expect(result.with_skill.error).toMatchObject({
+      kind: 'execution_error',
+      message: 'missing error payload',
+    });
+  });
 });
 
 describe('buildRunManifestArtifact', () => {

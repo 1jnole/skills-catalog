@@ -1,9 +1,12 @@
 import {
-  type EvalCase,
   type EvalCaseAssertionRule,
-  type EvalCaseMode,
 } from '../eval-case/eval-case.types.js';
-import { type ArtifactError, type CaseGrading } from '../run-results/run-artifact.types.js';
+import {
+  type CaseGrading,
+  type GradeCaseInput,
+  type GradingCaseDefinition,
+  type GradingError,
+} from './grading.types.js';
 
 const STOPWORDS = new Set([
   'the',
@@ -73,7 +76,7 @@ function createAssertionCheck(params: {
   };
 }
 
-function evaluateBoundary(caseDefinition: EvalCase, output: string): CaseGrading['checks'][number] {
+function evaluateBoundary(caseDefinition: GradingCaseDefinition, output: string): CaseGrading['checks'][number] {
   const normalizedOutput = normalizeText(output);
 
   if (caseDefinition.should_trigger) {
@@ -111,7 +114,7 @@ function evaluateBoundary(caseDefinition: EvalCase, output: string): CaseGrading
   };
 }
 
-function resolveAssertionRule(caseDefinition: EvalCase, index: number): EvalCaseAssertionRule | null {
+function resolveAssertionRule(caseDefinition: GradingCaseDefinition, index: number): EvalCaseAssertionRule | null {
   const assertionRules = caseDefinition.grading?.assertion_rules;
   if (!assertionRules) {
     return null;
@@ -154,7 +157,12 @@ function evaluateAssertionRule(rule: EvalCaseAssertionRule, output: string): Cas
   return evaluatePresentAssertionRule(rule, matchedMarkers);
 }
 
-function evaluateAssertion(assertion: string, output: string, index: number, caseDefinition: EvalCase): CaseGrading['checks'][number] {
+function evaluateAssertion(
+  assertion: string,
+  output: string,
+  index: number,
+  caseDefinition: GradingCaseDefinition,
+): CaseGrading['checks'][number] {
   const assertionRule = resolveAssertionRule(caseDefinition, index);
   if (assertionRule) {
     return {
@@ -178,12 +186,7 @@ function evaluateAssertion(assertion: string, output: string, index: number, cas
   };
 }
 
-export function gradeCase(params: {
-  caseDefinition: EvalCase;
-  mode: EvalCaseMode;
-  output: string;
-  passingScoreThreshold: number;
-}): CaseGrading {
+export function gradeCase(params: GradeCaseInput): CaseGrading {
   const checks = [
     evaluateBoundary(params.caseDefinition, params.output),
     ...params.caseDefinition.assertions.map((assertion, index) =>
@@ -203,9 +206,9 @@ export function gradeCase(params: {
 }
 
 export function createErroredCaseGrading(params: {
-  caseDefinition: EvalCase;
-  mode: EvalCaseMode;
-  error: ArtifactError;
+  caseDefinition: GradingCaseDefinition;
+  mode: GradeCaseInput['mode'];
+  error: GradingError;
 }): CaseGrading {
   return {
     case_id: params.caseDefinition.id,

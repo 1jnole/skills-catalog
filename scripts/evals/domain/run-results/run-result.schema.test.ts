@@ -48,4 +48,50 @@ describe('surviving core run-result contracts', () => {
     expect(result.iteration).toBe(7);
     expect(result.skill_name).toBe('skill-forge');
   });
+
+  it('rejects mode payloads that violate canonical status semantics', ({ expect }) => {
+    expect(() =>
+      normalizedCaseResultSchema.parse({
+        case_id: 'case-bad-error',
+        should_trigger: false,
+        expected_stop: 'do_not_trigger',
+        with_skill: {
+          status: 'error',
+          duration_ms: 50,
+          score: 0,
+          passed: false,
+        },
+        without_skill: {
+          status: 'completed',
+          duration_ms: 70,
+          score: 1,
+          passed: true,
+        },
+      }),
+    ).toThrow('error mode requires an error payload.');
+
+    expect(() =>
+      normalizedCaseResultSchema.parse({
+        case_id: 'case-bad-completed',
+        should_trigger: true,
+        expected_stop: 'Eval Brief ready',
+        with_skill: {
+          status: 'completed',
+          duration_ms: 70,
+          score: 1,
+          passed: true,
+          error: {
+            kind: 'execution_error',
+            message: 'unexpected',
+          },
+        },
+        without_skill: {
+          status: 'completed',
+          duration_ms: 75,
+          score: 0.5,
+          passed: false,
+        },
+      }),
+    ).toThrow('completed mode must not include an error payload.');
+  });
 });

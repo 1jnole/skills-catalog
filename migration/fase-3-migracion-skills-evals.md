@@ -30,6 +30,36 @@ La **Fase 3** es la fase en la que la migración deja de ser solo preparación e
   - el baseline actual ya no está repartido entre literals aislados,
   - el core reutiliza una única autoridad para modos y comparison intent,
   - y el scaffold nuevo ya expone ese baseline como parte explícita del núcleo portable.
+- Slice ejecutado después: extracción de `grading` como lógica portable.
+- Evidencia:
+  - `scripts/evals/domain/grading/grading.schema.ts`
+  - `scripts/evals/domain/grading/grading.types.ts`
+  - `scripts/evals/domain/grading/grade-case.test.ts`
+  - `evals/scorers/README.md`
+- Alcance del slice:
+  - grading define su propio contrato semántico y reduce acople directo con `run-results`,
+  - queda probado que el scoring trabaja con input semántico mínimo,
+  - y el nuevo scaffold ya muestra el boundary de scorers para la reubicación física posterior.
+- Slice ejecutado después: consolidación de benchmark como agregado puro.
+- Evidencia:
+  - `scripts/evals/domain/benchmark/benchmark.types.ts`
+  - `scripts/evals/domain/benchmark/benchmark.test.ts`
+  - `evals/benchmark/README.md`
+- Alcance del slice:
+  - benchmark ya publica contrato propio de agregado y minimiza dependencia directa de tipos de `run-results`,
+  - queda cubierta una ruta de agregado desde resultados normalizados sin metadata técnica de provider,
+  - y el scaffold nuevo ya explicita el boundary de benchmark para la reubicación física posterior.
+- Slice ejecutado después: consolidación de normalización de resultados como frontera del núcleo.
+- Evidencia:
+  - `scripts/evals/domain/run-results/run-result.schema.ts`
+  - `scripts/evals/domain/run-results/run-results.ts`
+  - `scripts/evals/domain/run-results/run-result.schema.test.ts`
+  - `scripts/evals/domain/run-results/run-results.test.ts`
+  - `evals/contracts/run-results-normalization.md`
+- Alcance del slice:
+  - se definió y validó un shape local canónico para resultados normalizados,
+  - benchmark consume ese shape local en lugar de depender del report bruto de engine,
+  - y la transición tolera artefactos heredados incompletos con fallback explícito en la normalización.
 
 La Fase 2 ya dejó resueltos los dos bloqueos que impedían mover estructura con seguridad:
 - existe un **resolver/config de paths**,
