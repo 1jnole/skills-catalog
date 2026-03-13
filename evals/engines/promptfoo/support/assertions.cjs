@@ -25,7 +25,7 @@ const STOPWORDS = new Set([
 ]);
 
 function normalizeText(value) {
-  return value.toLowerCase();
+  return String(value ?? '').toLowerCase();
 }
 
 function escapeRegex(value) {
@@ -46,7 +46,7 @@ function includesAll(text, markers) {
 }
 
 function extractKeywords(text) {
-  const matches = text.toLowerCase().match(/[a-z][a-z0-9_-]{2,}/g) ?? [];
+  const matches = String(text ?? '').toLowerCase().match(/[a-z][a-z0-9_-]{2,}/g) ?? [];
   const filtered = matches.filter((token) => !STOPWORDS.has(token));
   return [...new Set(filtered)].slice(0, 6);
 }
@@ -67,12 +67,16 @@ function readOutputText(output) {
   return String(output ?? '');
 }
 
-function parseJsonArray(value) {
-  if (typeof value !== 'string' || value.length === 0) {
-    return [];
+function readArray(value) {
+  if (Array.isArray(value)) {
+    return value;
   }
 
-  return JSON.parse(value);
+  if (typeof value === 'string' && value.length > 0) {
+    return JSON.parse(value);
+  }
+
+  return [];
 }
 
 function createCheck(label, passed, evidence) {
@@ -84,7 +88,7 @@ function createCheck(label, passed, evidence) {
 }
 
 function evaluateBoundary(vars, normalizedOutput) {
-  if (vars.should_trigger === 'true') {
+  if (vars.should_trigger === true || vars.should_trigger === 'true') {
     const markers = includesAny(normalizedOutput, ['classification: trigger', 'eval brief ready']);
     const passed = markers.length === 2 || hasMarker(normalizedOutput, 'eval brief ready');
     return createCheck(
@@ -155,7 +159,7 @@ function evaluateAssertionRule(rule, normalizedOutput, label) {
 }
 
 function evaluateAssertion(assertion, index, vars, normalizedOutput) {
-  const assertionRules = parseJsonArray(vars.assertion_rules_json);
+  const assertionRules = readArray(vars.assertion_rules_json ?? vars.assertion_rules);
   const rule = assertionRules[index] ?? null;
   const label = `Assertion ${index + 1}`;
 
@@ -176,11 +180,11 @@ function evaluateAssertion(assertion, index, vars, normalizedOutput) {
   );
 }
 
-export function gradeSkillForgeCase(output, context) {
+function gradeSkillForgeCase(output, context) {
   const vars = readVars(context);
   const outputText = readOutputText(output);
   const normalizedOutput = normalizeText(outputText);
-  const assertions = parseJsonArray(vars.assertions_json);
+  const assertions = readArray(vars.assertions_json ?? vars.assertions);
   const threshold = Number(vars.case_score_threshold ?? 0.75);
 
   const checks = [
@@ -206,3 +210,7 @@ export function gradeSkillForgeCase(output, context) {
     })),
   };
 }
+
+module.exports = {
+  gradeSkillForgeCase,
+};

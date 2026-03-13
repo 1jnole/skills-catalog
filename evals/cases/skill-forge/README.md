@@ -2,10 +2,15 @@
 
 This folder contains the new-scaffold suites for `skill-forge`.
 
-## Canonical suite
+## Local authoring contract
 - `evals/cases/skill-forge/suite.v1.json`
 
-This is the supported `skill-forge` eval-definition for the closed migration state.
+This is the supported local `skill-forge` eval-definition and benchmark input.
+
+## Promptfoo execution suite
+- `evals/engines/promptfoo/tests/skill-forge.yaml`
+
+This is the supported execution entrypoint for Promptfoo.
 
 Coverage buckets represented in the suite:
 - `core`: `new-skill-one-clear-job`, `existing-skill-refactor-clear-target`
@@ -21,7 +26,8 @@ This file preserves the smaller Fase 4 bootstrap evidence. It is no longer the m
 ## Success definition for the canonical suite
 - the suite parses with the canonical eval-definition contract
 - it contains the useful migrated `golden` and `negative` cases from the inherited `evals.json`
-- it runs through Promptfoo with both baseline modes
+- it is serialized into the Promptfoo-native YAML suite
+- Promptfoo runs it with both baseline modes
 - it produces the native Promptfoo eval artifact plus the local benchmark summary artifact
 - it is the reference suite for the operational flow of `skill-forge`
 

@@ -1,13 +1,13 @@
 {
-  "evalId": "eval-q3g-2026-03-13T23:10:11",
+  "evalId": "eval-ddV-2026-03-13T23:41:10",
   "results": {
     "version": 3,
-    "timestamp": "2026-03-13T23:10:11.336Z",
+    "timestamp": "2026-03-13T23:41:10.829Z",
     "prompts": [
       {
-        "id": "b85c00ae99f74dff7fe8dd826c3a446bfdcba12dfb8810a7f1de25ca6a8cf3ea",
-        "raw": "[mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n---\r\nname: skill-forge\r\ndescription: \"Builds or rewrites one skill through a contract-first workflow and stops at Eval Brief ready. Use when the request is one skill-authoring job with clear boundaries. Don't use when the task is repository policy, downstream eval authoring, or shared eval runtime implementation.\"\r\n---\r\n\r\n# skill-forge\r\n\r\nThis folder is the source of truth for `skill-forge`. Use it to route requests, define success, and produce the handoff artifact.\r\n\r\n## Routing precedence\r\nApply these decisions in order. Do not skip ahead to missing-input checks before routing the request.\r\n\r\n1. If the request starts from a finished `Eval Brief`, asks for `golden` or `negative` cases, or asks to write `packs/core/<skill>/evals/evals.json`, return `Classification: non-trigger` immediately.\r\n2. If the request is obvious non-authoring work such as `AGENTS.md`, repo policy, runtime-only implementation, shared eval runtime implementation, or downstream eval authoring, return `Classification: non-trigger` immediately.\n3. If the request is clearly skill authoring and eval or runtime work is only secondary, mixed in, or explicitly deferred, return `Classification: trigger` and keep skill authoring as the active responsibility.\n4. Only return `Classification: stop-and-ask` when the request still plausibly belongs to skill authoring but the skill target, single job, or authoring boundary is genuinely unclear.\n\nRouting examples:\n- `Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.` -> `Classification: non-trigger`\n- `Write a new skill for PR review routing and leave eval scaffold for later.` -> `Classification: trigger`\n- `Write a new skill for PR review routing and also set up the first eval scaffold, but keep the skill contract first and leave runtime for later.` -> `Classification: trigger`\n- `Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.` -> `Classification: non-trigger`\r\n- `Create a skill, reorganize repo policies, and build the first runner in one pass.` -> `Classification: stop-and-ask`\n\r\n## Single job\r\nProduce one `Eval Brief ready` artifact for one skill by freezing: single job, trigger boundary, non-trigger boundary, success model, activation probes, nearby negatives, and stop conditions.\r\n\r\n## When to use\r\nUse this skill when the request is to create a new reusable skill or refactor one existing skill and you need a contract-first output that downstream eval authoring can consume without guessing intent.\r\n\r\n## Do not use when\r\nDo not use this skill when:\r\n- the request is repository-wide policy (`AGENTS.md`);\r\n- the request is to implement eval runtime behavior, shared eval runtime implementation, grading, timing, benchmark output, or suite orchestration;\r\n- the request is eval authoring downstream from an already-finished brief, including requests to turn a finished Eval Brief into `evals.json` cases;\r\n- the request mixes multiple independent workflows in one skill and authoring is not clearly primary.\r\n\r\n## Required output\r\nUse one of these response modes exactly.\r\n\r\nFor trigger cases:\r\n1. Start with `Classification: trigger`.\r\n2. Name the workflow explicitly as one of: `Workflow: new-skill`, `Workflow: existing-skill-refactor`, or `Workflow: skill-rewrite`.\r\n3. Add the exact sentence `Freeze the contract before final instructions.` on its own line before the JSON artifact.\r\n4. If eval or runtime work appears but skill authoring is clearly primary, keep skill authoring as the active responsibility and add the exact sentence `Downstream eval work is out of scope here.` on its own line before the JSON artifact.\n5. Treat requests that say `skill contract first`, `Eval Brief first`, or otherwise make authoring primary as trigger cases even if they also mention eval scaffold work for later.\n6. Do not switch to `stop-and-ask` just because eval scaffold work appears alongside authoring when the authoring boundary is already clear.\n7. Keep the required trigger note and any downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.\n8. Do not ask for confirmation if the skill target and authoring job are already clear.\n9. Produce the boundary-only JSON artifact.\n10. End with the exact line `Eval Brief ready`.\n\r\nFor non-trigger cases:\r\n1. Start with `Classification: non-trigger`.\r\n2. Say exactly `Out of scope for skill-forge.`\r\n3. Name the reason in one sentence.\r\n4. If the request is runtime-only implementation, use the exact sentence `The request is shared eval runtime implementation, not skill authoring, and an authoring-only output would not satisfy this request.`\r\n5. If the request is repository policy or `AGENTS.md` work, include `AGENTS` or `repository policy` explicitly in that sentence.\r\n6. Use this mode for obvious non-authoring work such as AGENTS policy, runtime-only implementation, shared eval runtime implementation, or eval-authoring-only requests, even if the request is missing inputs or the referenced brief content is not attached.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor stop-and-ask cases:\r\n1. Start with `Classification: stop-and-ask`.\r\n2. Say exactly `Scope clarification required.`\r\n3. Use stop-and-ask only when the request is still plausibly skill authoring and the skill target, single job, or authoring boundary is genuinely unclear.\r\n4. Do not use stop-and-ask for obvious non-trigger requests.\r\n5. State which part of the authoring target or boundary is unclear.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor this repository, the canonical template is:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json`\r\n\r\nFor the current in-repo eval example of this skill, the cases live at:\r\n- `packs/core/skill-forge/evals/evals.json`\r\n\r\n## Local materials\r\nUse these local files only when they help the current authoring run:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json` to structure the boundary-only handoff artifact.\r\n- `packs/core/skill-forge/assets/spec-template.md` to sanity-check that the brief stops at `Eval Brief ready`.\r\n- `packs/core/skill-forge/assets/skill-template.job.md` and `packs/core/skill-forge/assets/skill-template.guardrail.md` only when the target skill itself needs a local starting shape.\r\n- `packs/core/skill-forge/evals/evals.json` as a downstream validation example for this skill, not as an input required to author the brief.\r\n\r\n## Procedure\r\nStep 1: Define success before writing or refactoring the skill.\r\n1. Freeze a small success contract before touching final skill instructions.\r\n2. Record outcome goals: what the skill must successfully produce when it applies.\r\n3. Record boundary goals: trigger, non-trigger, and stop-and-ask.\r\n4. Record style goals: the required output shape and stop marker.\r\n5. Keep the list small and limited to must-pass checks for this skill.\r\n\r\nStep 2: Route the request before authoring.\r\n1. Apply the routing precedence section above first.\r\n2. If the request is obvious non-authoring work, return `Classification: non-trigger` immediately.\r\n3. If the request is runtime-only implementation, the reason sentence must make clear that the work is shared eval runtime implementation, not skill authoring, and that an authoring-only output would not satisfy the request.\r\n4. If the request mixes authoring with eval or runtime work but skill authoring is clearly primary, continue and defer the downstream work explicitly.\n5. If the request already says `contract first`, `Eval Brief first`, or otherwise freezes authoring as the active responsibility, do not degrade it to `stop-and-ask` just because eval scaffold work is also requested.\n6. Only use `stop-and-ask` if the request still looks like skill authoring but the target or boundary is unclear.\n\r\nStep 3: Freeze scope for one skill.\r\n1. Confirm one skill target and one single job.\r\n2. Confirm whether the workflow is `new-skill`, `existing-skill-refactor`, or `skill-rewrite`.\r\n3. Freeze trigger boundary and stop conditions.\r\n4. Freeze activation probes and nearby negatives.\r\n\r\nStep 4: Capture boundary input.\r\n1. Start from `packs/core/skill-forge/assets/contracts/eval-brief.template.json`.\r\n2. Fill only boundary fields: skill identity, authoring boundary, success model, probes, negative signals, source refs.\r\n3. Keep the brief free of runtime, dataset, benchmark, grader, or eval scaffold detail.\n4. Treat the success contract from Step 1 as required input to the brief, not as optional commentary.\r\n5. Keep `sourceRefs` limited to source material that justifies the target skill contract. Do not list repo planning documents as required inputs for the brief.\r\n\r\nStep 5: Stabilize the local contract before handoff.\r\n1. Check one trigger, one nearby non-trigger, and one edge case against the frozen boundary.\r\n2. Fold any failure back into routing, stop conditions, or success criteria before writing the final brief.\r\n3. Keep support files lean. Only rely on local templates that add real authoring value.\r\n\r\nStep 6: Produce the Eval Brief.\r\n1. Materialize the JSON artifact from the filled template.\r\n2. Keep the artifact boundary-only: no runtime implementation detail, no eval scaffold layout, and no scorer logic.\n3. Keep any downstream defer note outside the JSON payload.\r\n4. Record any unresolved downstream dependency as a short note outside the JSON payload instead of inventing runtime behavior.\r\n5. Do not mention runner, benchmark, scorer, or grading behavior inside the brief payload.\r\n6. End the response with the exact line `Eval Brief ready`.\r\n\r\nStep 7: Metadata discipline.\r\n1. Keep the frontmatter name and description aligned with the actual skill boundary.\r\n2. Do not add runtime, grading, or benchmark promises to the metadata.\r\n\r\n## Definition of done\r\nDone means all are true:\r\n- `Eval Brief ready` exists for the target skill when the case is a trigger;\r\n- the success contract was defined before writing or refactoring the skill;\r\n- authoring boundary, success model, and probes are explicit and source-backed;\r\n- a representative trigger, non-trigger, and edge case were checked against the frozen boundary before handoff;\r\n- output stops at the authoring-to-eval boundary and does not implement eval runtime behavior;\r\n- non-trigger responses say `Out of scope for skill-forge.` and do not emit an Eval Brief;\r\n- stop-and-ask responses say `Scope clarification required.` and do not emit an Eval Brief;\r\n- any downstream dependency is called out explicitly instead of being guessed.\r\n\r\n## Stop conditions\r\nStop and ask when:\r\n- target skill is unclear;\r\n- no stable source refs exist for the contract;\r\n- the success contract cannot be stated as a small set of must-pass checks;\r\n- the frozen boundary would turn the request into more than one workflow or would require inventing missing contract details;\r\n- request needs runtime behavior changes to continue.\n\nUser request:\n{{prompt}}",
-        "label": "with_skill",
+        "raw": "[mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n{{skill_prompt}}\n\nUser request:\n{{prompt}}",
+        "label": "with_skill: evals\\engines\\promptfoo\\prompts\\with-skill.txt: [mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n{{skill_prompt}}\n\nUser request:\n{{prompt}}",
+        "id": "bc27ddb2d155034b86c560d9dfcb149ca82ea4548f155536191cb2d044d8cb14",
         "provider": "openai:gpt-4.1-mini",
         "metrics": {
           "score": 7.5,
@@ -47,9 +47,9 @@
         }
       },
       {
-        "id": "34e60ab7bdd88a2e737989d073fa7e2b33a9a4c03f58f140dfeab80a2ee82b41",
         "raw": "[mode:without_skill]\nYou are operating without skill context.\n\nUser request:\n{{prompt}}",
-        "label": "without_skill",
+        "label": "without_skill: evals\\engines\\promptfoo\\prompts\\without-skill.txt: [mode:without_skill]\nYou are operating without skill context.\n\nUser request:\n{{prompt}}",
+        "id": "6ecbf05d6fdcfadbbbaf2f65efa67556cdf7b0bc77ab94907fb5554cf552a08c",
         "provider": "openai:gpt-4.1-mini",
         "metrics": {
           "score": 1,
@@ -130,11 +130,7 @@
                   "score": 1,
                   "reason": "Assertion 3: Matched keywords: stop, eval"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": true,
@@ -158,15 +154,15 @@
             }
           ]
         },
-        "id": "c5415a4d-500f-4d77-b5f7-f6378e128a41",
+        "id": "e3a90ce9-e218-4c0e-8bc5-26f883af8e11",
         "latencyMs": 11072,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n---\r\nname: skill-forge\r\ndescription: \"Builds or rewrites one skill through a contract-first workflow and stops at Eval Brief ready. Use when the request is one skill-authoring job with clear boundaries. Don't use when the task is repository policy, downstream eval authoring, or shared eval runtime implementation.\"\r\n---\r\n\r\n# skill-forge\r\n\r\nThis folder is the source of truth for `skill-forge`. Use it to route requests, define success, and produce the handoff artifact.\r\n\r\n## Routing precedence\r\nApply these decisions in order. Do not skip ahead to missing-input checks before routing the request.\r\n\r\n1. If the request starts from a finished `Eval Brief`, asks for `golden` or `negative` cases, or asks to write `packs/core/<skill>/evals/evals.json`, return `Classification: non-trigger` immediately.\r\n2. If the request is obvious non-authoring work such as `AGENTS.md`, repo policy, runtime-only implementation, shared eval runtime implementation, or downstream eval authoring, return `Classification: non-trigger` immediately.\n3. If the request is clearly skill authoring and eval or runtime work is only secondary, mixed in, or explicitly deferred, return `Classification: trigger` and keep skill authoring as the active responsibility.\n4. Only return `Classification: stop-and-ask` when the request still plausibly belongs to skill authoring but the skill target, single job, or authoring boundary is genuinely unclear.\n\nRouting examples:\n- `Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.` -> `Classification: non-trigger`\n- `Write a new skill for PR review routing and leave eval scaffold for later.` -> `Classification: trigger`\n- `Write a new skill for PR review routing and also set up the first eval scaffold, but keep the skill contract first and leave runtime for later.` -> `Classification: trigger`\n- `Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.` -> `Classification: non-trigger`\r\n- `Create a skill, reorganize repo policies, and build the first runner in one pass.` -> `Classification: stop-and-ask`\n\r\n## Single job\r\nProduce one `Eval Brief ready` artifact for one skill by freezing: single job, trigger boundary, non-trigger boundary, success model, activation probes, nearby negatives, and stop conditions.\r\n\r\n## When to use\r\nUse this skill when the request is to create a new reusable skill or refactor one existing skill and you need a contract-first output that downstream eval authoring can consume without guessing intent.\r\n\r\n## Do not use when\r\nDo not use this skill when:\r\n- the request is repository-wide policy (`AGENTS.md`);\r\n- the request is to implement eval runtime behavior, shared eval runtime implementation, grading, timing, benchmark output, or suite orchestration;\r\n- the request is eval authoring downstream from an already-finished brief, including requests to turn a finished Eval Brief into `evals.json` cases;\r\n- the request mixes multiple independent workflows in one skill and authoring is not clearly primary.\r\n\r\n## Required output\r\nUse one of these response modes exactly.\r\n\r\nFor trigger cases:\r\n1. Start with `Classification: trigger`.\r\n2. Name the workflow explicitly as one of: `Workflow: new-skill`, `Workflow: existing-skill-refactor`, or `Workflow: skill-rewrite`.\r\n3. Add the exact sentence `Freeze the contract before final instructions.` on its own line before the JSON artifact.\r\n4. If eval or runtime work appears but skill authoring is clearly primary, keep skill authoring as the active responsibility and add the exact sentence `Downstream eval work is out of scope here.` on its own line before the JSON artifact.\n5. Treat requests that say `skill contract first`, `Eval Brief first`, or otherwise make authoring primary as trigger cases even if they also mention eval scaffold work for later.\n6. Do not switch to `stop-and-ask` just because eval scaffold work appears alongside authoring when the authoring boundary is already clear.\n7. Keep the required trigger note and any downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.\n8. Do not ask for confirmation if the skill target and authoring job are already clear.\n9. Produce the boundary-only JSON artifact.\n10. End with the exact line `Eval Brief ready`.\n\r\nFor non-trigger cases:\r\n1. Start with `Classification: non-trigger`.\r\n2. Say exactly `Out of scope for skill-forge.`\r\n3. Name the reason in one sentence.\r\n4. If the request is runtime-only implementation, use the exact sentence `The request is shared eval runtime implementation, not skill authoring, and an authoring-only output would not satisfy this request.`\r\n5. If the request is repository policy or `AGENTS.md` work, include `AGENTS` or `repository policy` explicitly in that sentence.\r\n6. Use this mode for obvious non-authoring work such as AGENTS policy, runtime-only implementation, shared eval runtime implementation, or eval-authoring-only requests, even if the request is missing inputs or the referenced brief content is not attached.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor stop-and-ask cases:\r\n1. Start with `Classification: stop-and-ask`.\r\n2. Say exactly `Scope clarification required.`\r\n3. Use stop-and-ask only when the request is still plausibly skill authoring and the skill target, single job, or authoring boundary is genuinely unclear.\r\n4. Do not use stop-and-ask for obvious non-trigger requests.\r\n5. State which part of the authoring target or boundary is unclear.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor this repository, the canonical template is:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json`\r\n\r\nFor the current in-repo eval example of this skill, the cases live at:\r\n- `packs/core/skill-forge/evals/evals.json`\r\n\r\n## Local materials\r\nUse these local files only when they help the current authoring run:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json` to structure the boundary-only handoff artifact.\r\n- `packs/core/skill-forge/assets/spec-template.md` to sanity-check that the brief stops at `Eval Brief ready`.\r\n- `packs/core/skill-forge/assets/skill-template.job.md` and `packs/core/skill-forge/assets/skill-template.guardrail.md` only when the target skill itself needs a local starting shape.\r\n- `packs/core/skill-forge/evals/evals.json` as a downstream validation example for this skill, not as an input required to author the brief.\r\n\r\n## Procedure\r\nStep 1: Define success before writing or refactoring the skill.\r\n1. Freeze a small success contract before touching final skill instructions.\r\n2. Record outcome goals: what the skill must successfully produce when it applies.\r\n3. Record boundary goals: trigger, non-trigger, and stop-and-ask.\r\n4. Record style goals: the required output shape and stop marker.\r\n5. Keep the list small and limited to must-pass checks for this skill.\r\n\r\nStep 2: Route the request before authoring.\r\n1. Apply the routing precedence section above first.\r\n2. If the request is obvious non-authoring work, return `Classification: non-trigger` immediately.\r\n3. If the request is runtime-only implementation, the reason sentence must make clear that the work is shared eval runtime implementation, not skill authoring, and that an authoring-only output would not satisfy the request.\r\n4. If the request mixes authoring with eval or runtime work but skill authoring is clearly primary, continue and defer the downstream work explicitly.\n5. If the request already says `contract first`, `Eval Brief first`, or otherwise freezes authoring as the active responsibility, do not degrade it to `stop-and-ask` just because eval scaffold work is also requested.\n6. Only use `stop-and-ask` if the request still looks like skill authoring but the target or boundary is unclear.\n\r\nStep 3: Freeze scope for one skill.\r\n1. Confirm one skill target and one single job.\r\n2. Confirm whether the workflow is `new-skill`, `existing-skill-refactor`, or `skill-rewrite`.\r\n3. Freeze trigger boundary and stop conditions.\r\n4. Freeze activation probes and nearby negatives.\r\n\r\nStep 4: Capture boundary input.\r\n1. Start from `packs/core/skill-forge/assets/contracts/eval-brief.template.json`.\r\n2. Fill only boundary fields: skill identity, authoring boundary, success model, probes, negative signals, source refs.\r\n3. Keep the brief free of runtime, dataset, benchmark, grader, or eval scaffold detail.\n4. Treat the success contract from Step 1 as required input to the brief, not as optional commentary.\r\n5. Keep `sourceRefs` limited to source material that justifies the target skill contract. Do not list repo planning documents as required inputs for the brief.\r\n\r\nStep 5: Stabilize the local contract before handoff.\r\n1. Check one trigger, one nearby non-trigger, and one edge case against the frozen boundary.\r\n2. Fold any failure back into routing, stop conditions, or success criteria before writing the final brief.\r\n3. Keep support files lean. Only rely on local templates that add real authoring value.\r\n\r\nStep 6: Produce the Eval Brief.\r\n1. Materialize the JSON artifact from the filled template.\r\n2. Keep the artifact boundary-only: no runtime implementation detail, no eval scaffold layout, and no scorer logic.\n3. Keep any downstream defer note outside the JSON payload.\r\n4. Record any unresolved downstream dependency as a short note outside the JSON payload instead of inventing runtime behavior.\r\n5. Do not mention runner, benchmark, scorer, or grading behavior inside the brief payload.\r\n6. End the response with the exact line `Eval Brief ready`.\r\n\r\nStep 7: Metadata discipline.\r\n1. Keep the frontmatter name and description aligned with the actual skill boundary.\r\n2. Do not add runtime, grading, or benchmark promises to the metadata.\r\n\r\n## Definition of done\r\nDone means all are true:\r\n- `Eval Brief ready` exists for the target skill when the case is a trigger;\r\n- the success contract was defined before writing or refactoring the skill;\r\n- authoring boundary, success model, and probes are explicit and source-backed;\r\n- a representative trigger, non-trigger, and edge case were checked against the frozen boundary before handoff;\r\n- output stops at the authoring-to-eval boundary and does not implement eval runtime behavior;\r\n- non-trigger responses say `Out of scope for skill-forge.` and do not emit an Eval Brief;\r\n- stop-and-ask responses say `Scope clarification required.` and do not emit an Eval Brief;\r\n- any downstream dependency is called out explicitly instead of being guessed.\r\n\r\n## Stop conditions\r\nStop and ask when:\r\n- target skill is unclear;\r\n- no stable source refs exist for the contract;\r\n- the success contract cannot be stated as a small set of must-pass checks;\r\n- the frozen boundary would turn the request into more than one workflow or would require inventing missing contract details;\r\n- request needs runtime behavior changes to continue.\n\nUser request:\nCreate a new reusable skill for spotting JavaScript array mutation mistakes. Start from the contract, keep one job only, and do not implement eval runtime behavior.",
-          "label": "with_skill",
+          "label": "with_skill: evals\\engines\\promptfoo\\prompts\\with-skill.txt: [mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n{{skill_prompt}}\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "b85c00ae99f74dff7fe8dd826c3a446bfdcba12dfb8810a7f1de25ca6a8cf3ea",
+        "promptId": "bc27ddb2d155034b86c560d9dfcb149ca82ea4548f155536191cb2d044d8cb14",
         "promptIdx": 0,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -224,14 +220,15 @@
         "testCase": {
           "description": "new-skill-one-clear-job",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "new-skill-one-clear-job",
             "prompt": "Create a new reusable skill for spotting JavaScript array mutation mistakes. Start from the contract, keep one job only, and do not implement eval runtime behavior.",
             "expected_output": "Treat the request as a new-skill authoring workflow, freeze the contract before writing instructions, and stop at Eval Brief ready.",
             "expected_stop": "Eval Brief ready",
-            "should_trigger": "true",
+            "should_trigger": true,
             "assertions_json": "[\"must classify this as a new-skill workflow\",\"must define the contract before final skill instructions\",\"must stop before eval runtime implementation\"]",
-            "assertion_rules_json": "[{\"markers\":[\"workflow: new-skill\"]},{\"markers\":[\"contract\",\"before\",\"instructions\"]},null]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[{\"markers\":[\"workflow: new-skill\"]},{\"markers\":[\"contract\",\"before\",\"instructions\"]},null]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -240,21 +237,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 0,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "new-skill-one-clear-job",
           "prompt": "Create a new reusable skill for spotting JavaScript array mutation mistakes. Start from the contract, keep one job only, and do not implement eval runtime behavior.",
           "expected_output": "Treat the request as a new-skill authoring workflow, freeze the contract before writing instructions, and stop at Eval Brief ready.",
           "expected_stop": "Eval Brief ready",
-          "should_trigger": "true",
+          "should_trigger": true,
           "assertions_json": "[\"must classify this as a new-skill workflow\",\"must define the contract before final skill instructions\",\"must stop before eval runtime implementation\"]",
-          "assertion_rules_json": "[{\"markers\":[\"workflow: new-skill\"]},{\"markers\":[\"contract\",\"before\",\"instructions\"]},null]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"workflow: new-skill\"]},{\"markers\":[\"contract\",\"before\",\"instructions\"]},null]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -335,11 +334,7 @@
                   "score": 0,
                   "reason": "Assertion 3: Missing keywords. Matched none from stop, eval, runtime, implementation"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": false,
@@ -363,15 +358,15 @@
             }
           ]
         },
-        "id": "5fe15dca-1636-450b-9e6e-ebacce68be01",
+        "id": "a7218a6a-fb67-42a6-875f-006084bcf05b",
         "latencyMs": 5863,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:without_skill]\nYou are operating without skill context.\n\nUser request:\nCreate a new reusable skill for spotting JavaScript array mutation mistakes. Start from the contract, keep one job only, and do not implement eval runtime behavior.",
-          "label": "without_skill",
+          "label": "without_skill: evals\\engines\\promptfoo\\prompts\\without-skill.txt: [mode:without_skill]\nYou are operating without skill context.\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "34e60ab7bdd88a2e737989d073fa7e2b33a9a4c03f58f140dfeab80a2ee82b41",
+        "promptId": "6ecbf05d6fdcfadbbbaf2f65efa67556cdf7b0bc77ab94907fb5554cf552a08c",
         "promptIdx": 1,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -429,14 +424,15 @@
         "testCase": {
           "description": "new-skill-one-clear-job",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "new-skill-one-clear-job",
             "prompt": "Create a new reusable skill for spotting JavaScript array mutation mistakes. Start from the contract, keep one job only, and do not implement eval runtime behavior.",
             "expected_output": "Treat the request as a new-skill authoring workflow, freeze the contract before writing instructions, and stop at Eval Brief ready.",
             "expected_stop": "Eval Brief ready",
-            "should_trigger": "true",
+            "should_trigger": true,
             "assertions_json": "[\"must classify this as a new-skill workflow\",\"must define the contract before final skill instructions\",\"must stop before eval runtime implementation\"]",
-            "assertion_rules_json": "[{\"markers\":[\"workflow: new-skill\"]},{\"markers\":[\"contract\",\"before\",\"instructions\"]},null]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[{\"markers\":[\"workflow: new-skill\"]},{\"markers\":[\"contract\",\"before\",\"instructions\"]},null]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -445,21 +441,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 0,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "new-skill-one-clear-job",
           "prompt": "Create a new reusable skill for spotting JavaScript array mutation mistakes. Start from the contract, keep one job only, and do not implement eval runtime behavior.",
           "expected_output": "Treat the request as a new-skill authoring workflow, freeze the contract before writing instructions, and stop at Eval Brief ready.",
           "expected_stop": "Eval Brief ready",
-          "should_trigger": "true",
+          "should_trigger": true,
           "assertions_json": "[\"must classify this as a new-skill workflow\",\"must define the contract before final skill instructions\",\"must stop before eval runtime implementation\"]",
-          "assertion_rules_json": "[{\"markers\":[\"workflow: new-skill\"]},{\"markers\":[\"contract\",\"before\",\"instructions\"]},null]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"workflow: new-skill\"]},{\"markers\":[\"contract\",\"before\",\"instructions\"]},null]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -540,11 +538,7 @@
                   "score": 1,
                   "reason": "Assertion 3: Matched keywords: end, eval, brief, ready"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": true,
@@ -568,15 +562,15 @@
             }
           ]
         },
-        "id": "9d4daef6-226d-4018-94fa-e6f5fb238d4b",
+        "id": "f437c2a3-464f-41f1-8327-66e3d770fb44",
         "latencyMs": 10128,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n---\r\nname: skill-forge\r\ndescription: \"Builds or rewrites one skill through a contract-first workflow and stops at Eval Brief ready. Use when the request is one skill-authoring job with clear boundaries. Don't use when the task is repository policy, downstream eval authoring, or shared eval runtime implementation.\"\r\n---\r\n\r\n# skill-forge\r\n\r\nThis folder is the source of truth for `skill-forge`. Use it to route requests, define success, and produce the handoff artifact.\r\n\r\n## Routing precedence\r\nApply these decisions in order. Do not skip ahead to missing-input checks before routing the request.\r\n\r\n1. If the request starts from a finished `Eval Brief`, asks for `golden` or `negative` cases, or asks to write `packs/core/<skill>/evals/evals.json`, return `Classification: non-trigger` immediately.\r\n2. If the request is obvious non-authoring work such as `AGENTS.md`, repo policy, runtime-only implementation, shared eval runtime implementation, or downstream eval authoring, return `Classification: non-trigger` immediately.\n3. If the request is clearly skill authoring and eval or runtime work is only secondary, mixed in, or explicitly deferred, return `Classification: trigger` and keep skill authoring as the active responsibility.\n4. Only return `Classification: stop-and-ask` when the request still plausibly belongs to skill authoring but the skill target, single job, or authoring boundary is genuinely unclear.\n\nRouting examples:\n- `Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.` -> `Classification: non-trigger`\n- `Write a new skill for PR review routing and leave eval scaffold for later.` -> `Classification: trigger`\n- `Write a new skill for PR review routing and also set up the first eval scaffold, but keep the skill contract first and leave runtime for later.` -> `Classification: trigger`\n- `Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.` -> `Classification: non-trigger`\r\n- `Create a skill, reorganize repo policies, and build the first runner in one pass.` -> `Classification: stop-and-ask`\n\r\n## Single job\r\nProduce one `Eval Brief ready` artifact for one skill by freezing: single job, trigger boundary, non-trigger boundary, success model, activation probes, nearby negatives, and stop conditions.\r\n\r\n## When to use\r\nUse this skill when the request is to create a new reusable skill or refactor one existing skill and you need a contract-first output that downstream eval authoring can consume without guessing intent.\r\n\r\n## Do not use when\r\nDo not use this skill when:\r\n- the request is repository-wide policy (`AGENTS.md`);\r\n- the request is to implement eval runtime behavior, shared eval runtime implementation, grading, timing, benchmark output, or suite orchestration;\r\n- the request is eval authoring downstream from an already-finished brief, including requests to turn a finished Eval Brief into `evals.json` cases;\r\n- the request mixes multiple independent workflows in one skill and authoring is not clearly primary.\r\n\r\n## Required output\r\nUse one of these response modes exactly.\r\n\r\nFor trigger cases:\r\n1. Start with `Classification: trigger`.\r\n2. Name the workflow explicitly as one of: `Workflow: new-skill`, `Workflow: existing-skill-refactor`, or `Workflow: skill-rewrite`.\r\n3. Add the exact sentence `Freeze the contract before final instructions.` on its own line before the JSON artifact.\r\n4. If eval or runtime work appears but skill authoring is clearly primary, keep skill authoring as the active responsibility and add the exact sentence `Downstream eval work is out of scope here.` on its own line before the JSON artifact.\n5. Treat requests that say `skill contract first`, `Eval Brief first`, or otherwise make authoring primary as trigger cases even if they also mention eval scaffold work for later.\n6. Do not switch to `stop-and-ask` just because eval scaffold work appears alongside authoring when the authoring boundary is already clear.\n7. Keep the required trigger note and any downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.\n8. Do not ask for confirmation if the skill target and authoring job are already clear.\n9. Produce the boundary-only JSON artifact.\n10. End with the exact line `Eval Brief ready`.\n\r\nFor non-trigger cases:\r\n1. Start with `Classification: non-trigger`.\r\n2. Say exactly `Out of scope for skill-forge.`\r\n3. Name the reason in one sentence.\r\n4. If the request is runtime-only implementation, use the exact sentence `The request is shared eval runtime implementation, not skill authoring, and an authoring-only output would not satisfy this request.`\r\n5. If the request is repository policy or `AGENTS.md` work, include `AGENTS` or `repository policy` explicitly in that sentence.\r\n6. Use this mode for obvious non-authoring work such as AGENTS policy, runtime-only implementation, shared eval runtime implementation, or eval-authoring-only requests, even if the request is missing inputs or the referenced brief content is not attached.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor stop-and-ask cases:\r\n1. Start with `Classification: stop-and-ask`.\r\n2. Say exactly `Scope clarification required.`\r\n3. Use stop-and-ask only when the request is still plausibly skill authoring and the skill target, single job, or authoring boundary is genuinely unclear.\r\n4. Do not use stop-and-ask for obvious non-trigger requests.\r\n5. State which part of the authoring target or boundary is unclear.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor this repository, the canonical template is:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json`\r\n\r\nFor the current in-repo eval example of this skill, the cases live at:\r\n- `packs/core/skill-forge/evals/evals.json`\r\n\r\n## Local materials\r\nUse these local files only when they help the current authoring run:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json` to structure the boundary-only handoff artifact.\r\n- `packs/core/skill-forge/assets/spec-template.md` to sanity-check that the brief stops at `Eval Brief ready`.\r\n- `packs/core/skill-forge/assets/skill-template.job.md` and `packs/core/skill-forge/assets/skill-template.guardrail.md` only when the target skill itself needs a local starting shape.\r\n- `packs/core/skill-forge/evals/evals.json` as a downstream validation example for this skill, not as an input required to author the brief.\r\n\r\n## Procedure\r\nStep 1: Define success before writing or refactoring the skill.\r\n1. Freeze a small success contract before touching final skill instructions.\r\n2. Record outcome goals: what the skill must successfully produce when it applies.\r\n3. Record boundary goals: trigger, non-trigger, and stop-and-ask.\r\n4. Record style goals: the required output shape and stop marker.\r\n5. Keep the list small and limited to must-pass checks for this skill.\r\n\r\nStep 2: Route the request before authoring.\r\n1. Apply the routing precedence section above first.\r\n2. If the request is obvious non-authoring work, return `Classification: non-trigger` immediately.\r\n3. If the request is runtime-only implementation, the reason sentence must make clear that the work is shared eval runtime implementation, not skill authoring, and that an authoring-only output would not satisfy the request.\r\n4. If the request mixes authoring with eval or runtime work but skill authoring is clearly primary, continue and defer the downstream work explicitly.\n5. If the request already says `contract first`, `Eval Brief first`, or otherwise freezes authoring as the active responsibility, do not degrade it to `stop-and-ask` just because eval scaffold work is also requested.\n6. Only use `stop-and-ask` if the request still looks like skill authoring but the target or boundary is unclear.\n\r\nStep 3: Freeze scope for one skill.\r\n1. Confirm one skill target and one single job.\r\n2. Confirm whether the workflow is `new-skill`, `existing-skill-refactor`, or `skill-rewrite`.\r\n3. Freeze trigger boundary and stop conditions.\r\n4. Freeze activation probes and nearby negatives.\r\n\r\nStep 4: Capture boundary input.\r\n1. Start from `packs/core/skill-forge/assets/contracts/eval-brief.template.json`.\r\n2. Fill only boundary fields: skill identity, authoring boundary, success model, probes, negative signals, source refs.\r\n3. Keep the brief free of runtime, dataset, benchmark, grader, or eval scaffold detail.\n4. Treat the success contract from Step 1 as required input to the brief, not as optional commentary.\r\n5. Keep `sourceRefs` limited to source material that justifies the target skill contract. Do not list repo planning documents as required inputs for the brief.\r\n\r\nStep 5: Stabilize the local contract before handoff.\r\n1. Check one trigger, one nearby non-trigger, and one edge case against the frozen boundary.\r\n2. Fold any failure back into routing, stop conditions, or success criteria before writing the final brief.\r\n3. Keep support files lean. Only rely on local templates that add real authoring value.\r\n\r\nStep 6: Produce the Eval Brief.\r\n1. Materialize the JSON artifact from the filled template.\r\n2. Keep the artifact boundary-only: no runtime implementation detail, no eval scaffold layout, and no scorer logic.\n3. Keep any downstream defer note outside the JSON payload.\r\n4. Record any unresolved downstream dependency as a short note outside the JSON payload instead of inventing runtime behavior.\r\n5. Do not mention runner, benchmark, scorer, or grading behavior inside the brief payload.\r\n6. End the response with the exact line `Eval Brief ready`.\r\n\r\nStep 7: Metadata discipline.\r\n1. Keep the frontmatter name and description aligned with the actual skill boundary.\r\n2. Do not add runtime, grading, or benchmark promises to the metadata.\r\n\r\n## Definition of done\r\nDone means all are true:\r\n- `Eval Brief ready` exists for the target skill when the case is a trigger;\r\n- the success contract was defined before writing or refactoring the skill;\r\n- authoring boundary, success model, and probes are explicit and source-backed;\r\n- a representative trigger, non-trigger, and edge case were checked against the frozen boundary before handoff;\r\n- output stops at the authoring-to-eval boundary and does not implement eval runtime behavior;\r\n- non-trigger responses say `Out of scope for skill-forge.` and do not emit an Eval Brief;\r\n- stop-and-ask responses say `Scope clarification required.` and do not emit an Eval Brief;\r\n- any downstream dependency is called out explicitly instead of being guessed.\r\n\r\n## Stop conditions\r\nStop and ask when:\r\n- target skill is unclear;\r\n- no stable source refs exist for the contract;\r\n- the success contract cannot be stated as a small set of must-pass checks;\r\n- the frozen boundary would turn the request into more than one workflow or would require inventing missing contract details;\r\n- request needs runtime behavior changes to continue.\n\nUser request:\nRefactor the existing skill `skill-eval-forge`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.",
-          "label": "with_skill",
+          "label": "with_skill: evals\\engines\\promptfoo\\prompts\\with-skill.txt: [mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n{{skill_prompt}}\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "b85c00ae99f74dff7fe8dd826c3a446bfdcba12dfb8810a7f1de25ca6a8cf3ea",
+        "promptId": "bc27ddb2d155034b86c560d9dfcb149ca82ea4548f155536191cb2d044d8cb14",
         "promptIdx": 0,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -634,14 +628,15 @@
         "testCase": {
           "description": "existing-skill-refactor-clear-target",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "existing-skill-refactor-clear-target",
             "prompt": "Refactor the existing skill `skill-eval-forge`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.",
             "expected_output": "Treat the request as an existing-skill refactor workflow, keep the work contract-first, and end with Eval Brief ready.",
             "expected_stop": "Eval Brief ready",
-            "should_trigger": "true",
+            "should_trigger": true,
             "assertions_json": "[\"must classify this as an existing-skill refactor workflow\",\"must preserve the contract-first refactor sequence\",\"must end at Eval Brief ready\"]",
-            "assertion_rules_json": "[{\"markers\":[\"workflow: existing-skill-refactor\"]},{\"markers\":[\"contract-first\",\"refactor\"]},null]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[{\"markers\":[\"workflow: existing-skill-refactor\"]},{\"markers\":[\"contract-first\",\"refactor\"]},null]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -650,21 +645,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 1,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "existing-skill-refactor-clear-target",
           "prompt": "Refactor the existing skill `skill-eval-forge`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.",
           "expected_output": "Treat the request as an existing-skill refactor workflow, keep the work contract-first, and end with Eval Brief ready.",
           "expected_stop": "Eval Brief ready",
-          "should_trigger": "true",
+          "should_trigger": true,
           "assertions_json": "[\"must classify this as an existing-skill refactor workflow\",\"must preserve the contract-first refactor sequence\",\"must end at Eval Brief ready\"]",
-          "assertion_rules_json": "[{\"markers\":[\"workflow: existing-skill-refactor\"]},{\"markers\":[\"contract-first\",\"refactor\"]},null]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"workflow: existing-skill-refactor\"]},{\"markers\":[\"contract-first\",\"refactor\"]},null]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -745,11 +742,7 @@
                   "score": 0,
                   "reason": "Assertion 3: Missing keywords. Matched eval from end, eval, brief, ready"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": false,
@@ -773,15 +766,15 @@
             }
           ]
         },
-        "id": "76e8d73a-b5c7-42af-867d-5609099d5658",
+        "id": "d71493ed-1a9f-4082-8914-01e470379e23",
         "latencyMs": 11860,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:without_skill]\nYou are operating without skill context.\n\nUser request:\nRefactor the existing skill `skill-eval-forge`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.",
-          "label": "without_skill",
+          "label": "without_skill: evals\\engines\\promptfoo\\prompts\\without-skill.txt: [mode:without_skill]\nYou are operating without skill context.\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "34e60ab7bdd88a2e737989d073fa7e2b33a9a4c03f58f140dfeab80a2ee82b41",
+        "promptId": "6ecbf05d6fdcfadbbbaf2f65efa67556cdf7b0bc77ab94907fb5554cf552a08c",
         "promptIdx": 1,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -839,14 +832,15 @@
         "testCase": {
           "description": "existing-skill-refactor-clear-target",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "existing-skill-refactor-clear-target",
             "prompt": "Refactor the existing skill `skill-eval-forge`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.",
             "expected_output": "Treat the request as an existing-skill refactor workflow, keep the work contract-first, and end with Eval Brief ready.",
             "expected_stop": "Eval Brief ready",
-            "should_trigger": "true",
+            "should_trigger": true,
             "assertions_json": "[\"must classify this as an existing-skill refactor workflow\",\"must preserve the contract-first refactor sequence\",\"must end at Eval Brief ready\"]",
-            "assertion_rules_json": "[{\"markers\":[\"workflow: existing-skill-refactor\"]},{\"markers\":[\"contract-first\",\"refactor\"]},null]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[{\"markers\":[\"workflow: existing-skill-refactor\"]},{\"markers\":[\"contract-first\",\"refactor\"]},null]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -855,21 +849,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 1,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "existing-skill-refactor-clear-target",
           "prompt": "Refactor the existing skill `skill-eval-forge`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.",
           "expected_output": "Treat the request as an existing-skill refactor workflow, keep the work contract-first, and end with Eval Brief ready.",
           "expected_stop": "Eval Brief ready",
-          "should_trigger": "true",
+          "should_trigger": true,
           "assertions_json": "[\"must classify this as an existing-skill refactor workflow\",\"must preserve the contract-first refactor sequence\",\"must end at Eval Brief ready\"]",
-          "assertion_rules_json": "[{\"markers\":[\"workflow: existing-skill-refactor\"]},{\"markers\":[\"contract-first\",\"refactor\"]},null]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"workflow: existing-skill-refactor\"]},{\"markers\":[\"contract-first\",\"refactor\"]},null]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -950,11 +946,7 @@
                   "score": 1,
                   "reason": "Assertion 3: Matched keywords: stop, eval, brief, ready"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": true,
@@ -978,15 +970,15 @@
             }
           ]
         },
-        "id": "ce829184-2eaa-468f-ae6a-959ef3621da7",
+        "id": "a3335431-db01-43a6-a77d-23b645982abc",
         "latencyMs": 12319,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n---\r\nname: skill-forge\r\ndescription: \"Builds or rewrites one skill through a contract-first workflow and stops at Eval Brief ready. Use when the request is one skill-authoring job with clear boundaries. Don't use when the task is repository policy, downstream eval authoring, or shared eval runtime implementation.\"\r\n---\r\n\r\n# skill-forge\r\n\r\nThis folder is the source of truth for `skill-forge`. Use it to route requests, define success, and produce the handoff artifact.\r\n\r\n## Routing precedence\r\nApply these decisions in order. Do not skip ahead to missing-input checks before routing the request.\r\n\r\n1. If the request starts from a finished `Eval Brief`, asks for `golden` or `negative` cases, or asks to write `packs/core/<skill>/evals/evals.json`, return `Classification: non-trigger` immediately.\r\n2. If the request is obvious non-authoring work such as `AGENTS.md`, repo policy, runtime-only implementation, shared eval runtime implementation, or downstream eval authoring, return `Classification: non-trigger` immediately.\n3. If the request is clearly skill authoring and eval or runtime work is only secondary, mixed in, or explicitly deferred, return `Classification: trigger` and keep skill authoring as the active responsibility.\n4. Only return `Classification: stop-and-ask` when the request still plausibly belongs to skill authoring but the skill target, single job, or authoring boundary is genuinely unclear.\n\nRouting examples:\n- `Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.` -> `Classification: non-trigger`\n- `Write a new skill for PR review routing and leave eval scaffold for later.` -> `Classification: trigger`\n- `Write a new skill for PR review routing and also set up the first eval scaffold, but keep the skill contract first and leave runtime for later.` -> `Classification: trigger`\n- `Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.` -> `Classification: non-trigger`\r\n- `Create a skill, reorganize repo policies, and build the first runner in one pass.` -> `Classification: stop-and-ask`\n\r\n## Single job\r\nProduce one `Eval Brief ready` artifact for one skill by freezing: single job, trigger boundary, non-trigger boundary, success model, activation probes, nearby negatives, and stop conditions.\r\n\r\n## When to use\r\nUse this skill when the request is to create a new reusable skill or refactor one existing skill and you need a contract-first output that downstream eval authoring can consume without guessing intent.\r\n\r\n## Do not use when\r\nDo not use this skill when:\r\n- the request is repository-wide policy (`AGENTS.md`);\r\n- the request is to implement eval runtime behavior, shared eval runtime implementation, grading, timing, benchmark output, or suite orchestration;\r\n- the request is eval authoring downstream from an already-finished brief, including requests to turn a finished Eval Brief into `evals.json` cases;\r\n- the request mixes multiple independent workflows in one skill and authoring is not clearly primary.\r\n\r\n## Required output\r\nUse one of these response modes exactly.\r\n\r\nFor trigger cases:\r\n1. Start with `Classification: trigger`.\r\n2. Name the workflow explicitly as one of: `Workflow: new-skill`, `Workflow: existing-skill-refactor`, or `Workflow: skill-rewrite`.\r\n3. Add the exact sentence `Freeze the contract before final instructions.` on its own line before the JSON artifact.\r\n4. If eval or runtime work appears but skill authoring is clearly primary, keep skill authoring as the active responsibility and add the exact sentence `Downstream eval work is out of scope here.` on its own line before the JSON artifact.\n5. Treat requests that say `skill contract first`, `Eval Brief first`, or otherwise make authoring primary as trigger cases even if they also mention eval scaffold work for later.\n6. Do not switch to `stop-and-ask` just because eval scaffold work appears alongside authoring when the authoring boundary is already clear.\n7. Keep the required trigger note and any downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.\n8. Do not ask for confirmation if the skill target and authoring job are already clear.\n9. Produce the boundary-only JSON artifact.\n10. End with the exact line `Eval Brief ready`.\n\r\nFor non-trigger cases:\r\n1. Start with `Classification: non-trigger`.\r\n2. Say exactly `Out of scope for skill-forge.`\r\n3. Name the reason in one sentence.\r\n4. If the request is runtime-only implementation, use the exact sentence `The request is shared eval runtime implementation, not skill authoring, and an authoring-only output would not satisfy this request.`\r\n5. If the request is repository policy or `AGENTS.md` work, include `AGENTS` or `repository policy` explicitly in that sentence.\r\n6. Use this mode for obvious non-authoring work such as AGENTS policy, runtime-only implementation, shared eval runtime implementation, or eval-authoring-only requests, even if the request is missing inputs or the referenced brief content is not attached.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor stop-and-ask cases:\r\n1. Start with `Classification: stop-and-ask`.\r\n2. Say exactly `Scope clarification required.`\r\n3. Use stop-and-ask only when the request is still plausibly skill authoring and the skill target, single job, or authoring boundary is genuinely unclear.\r\n4. Do not use stop-and-ask for obvious non-trigger requests.\r\n5. State which part of the authoring target or boundary is unclear.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor this repository, the canonical template is:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json`\r\n\r\nFor the current in-repo eval example of this skill, the cases live at:\r\n- `packs/core/skill-forge/evals/evals.json`\r\n\r\n## Local materials\r\nUse these local files only when they help the current authoring run:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json` to structure the boundary-only handoff artifact.\r\n- `packs/core/skill-forge/assets/spec-template.md` to sanity-check that the brief stops at `Eval Brief ready`.\r\n- `packs/core/skill-forge/assets/skill-template.job.md` and `packs/core/skill-forge/assets/skill-template.guardrail.md` only when the target skill itself needs a local starting shape.\r\n- `packs/core/skill-forge/evals/evals.json` as a downstream validation example for this skill, not as an input required to author the brief.\r\n\r\n## Procedure\r\nStep 1: Define success before writing or refactoring the skill.\r\n1. Freeze a small success contract before touching final skill instructions.\r\n2. Record outcome goals: what the skill must successfully produce when it applies.\r\n3. Record boundary goals: trigger, non-trigger, and stop-and-ask.\r\n4. Record style goals: the required output shape and stop marker.\r\n5. Keep the list small and limited to must-pass checks for this skill.\r\n\r\nStep 2: Route the request before authoring.\r\n1. Apply the routing precedence section above first.\r\n2. If the request is obvious non-authoring work, return `Classification: non-trigger` immediately.\r\n3. If the request is runtime-only implementation, the reason sentence must make clear that the work is shared eval runtime implementation, not skill authoring, and that an authoring-only output would not satisfy the request.\r\n4. If the request mixes authoring with eval or runtime work but skill authoring is clearly primary, continue and defer the downstream work explicitly.\n5. If the request already says `contract first`, `Eval Brief first`, or otherwise freezes authoring as the active responsibility, do not degrade it to `stop-and-ask` just because eval scaffold work is also requested.\n6. Only use `stop-and-ask` if the request still looks like skill authoring but the target or boundary is unclear.\n\r\nStep 3: Freeze scope for one skill.\r\n1. Confirm one skill target and one single job.\r\n2. Confirm whether the workflow is `new-skill`, `existing-skill-refactor`, or `skill-rewrite`.\r\n3. Freeze trigger boundary and stop conditions.\r\n4. Freeze activation probes and nearby negatives.\r\n\r\nStep 4: Capture boundary input.\r\n1. Start from `packs/core/skill-forge/assets/contracts/eval-brief.template.json`.\r\n2. Fill only boundary fields: skill identity, authoring boundary, success model, probes, negative signals, source refs.\r\n3. Keep the brief free of runtime, dataset, benchmark, grader, or eval scaffold detail.\n4. Treat the success contract from Step 1 as required input to the brief, not as optional commentary.\r\n5. Keep `sourceRefs` limited to source material that justifies the target skill contract. Do not list repo planning documents as required inputs for the brief.\r\n\r\nStep 5: Stabilize the local contract before handoff.\r\n1. Check one trigger, one nearby non-trigger, and one edge case against the frozen boundary.\r\n2. Fold any failure back into routing, stop conditions, or success criteria before writing the final brief.\r\n3. Keep support files lean. Only rely on local templates that add real authoring value.\r\n\r\nStep 6: Produce the Eval Brief.\r\n1. Materialize the JSON artifact from the filled template.\r\n2. Keep the artifact boundary-only: no runtime implementation detail, no eval scaffold layout, and no scorer logic.\n3. Keep any downstream defer note outside the JSON payload.\r\n4. Record any unresolved downstream dependency as a short note outside the JSON payload instead of inventing runtime behavior.\r\n5. Do not mention runner, benchmark, scorer, or grading behavior inside the brief payload.\r\n6. End the response with the exact line `Eval Brief ready`.\r\n\r\nStep 7: Metadata discipline.\r\n1. Keep the frontmatter name and description aligned with the actual skill boundary.\r\n2. Do not add runtime, grading, or benchmark promises to the metadata.\r\n\r\n## Definition of done\r\nDone means all are true:\r\n- `Eval Brief ready` exists for the target skill when the case is a trigger;\r\n- the success contract was defined before writing or refactoring the skill;\r\n- authoring boundary, success model, and probes are explicit and source-backed;\r\n- a representative trigger, non-trigger, and edge case were checked against the frozen boundary before handoff;\r\n- output stops at the authoring-to-eval boundary and does not implement eval runtime behavior;\r\n- non-trigger responses say `Out of scope for skill-forge.` and do not emit an Eval Brief;\r\n- stop-and-ask responses say `Scope clarification required.` and do not emit an Eval Brief;\r\n- any downstream dependency is called out explicitly instead of being guessed.\r\n\r\n## Stop conditions\r\nStop and ask when:\r\n- target skill is unclear;\r\n- no stable source refs exist for the contract;\r\n- the success contract cannot be stated as a small set of must-pass checks;\r\n- the frozen boundary would turn the request into more than one workflow or would require inventing missing contract details;\r\n- request needs runtime behavior changes to continue.\n\nUser request:\nRewrite the existing skill `skill-eval-forge` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.",
-          "label": "with_skill",
+          "label": "with_skill: evals\\engines\\promptfoo\\prompts\\with-skill.txt: [mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n{{skill_prompt}}\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "b85c00ae99f74dff7fe8dd826c3a446bfdcba12dfb8810a7f1de25ca6a8cf3ea",
+        "promptId": "bc27ddb2d155034b86c560d9dfcb149ca82ea4548f155536191cb2d044d8cb14",
         "promptIdx": 0,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -1044,14 +1036,15 @@
         "testCase": {
           "description": "skill-rewrite-clear-target",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "skill-rewrite-clear-target",
             "prompt": "Rewrite the existing skill `skill-eval-forge` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.",
             "expected_output": "Treat the request as a skill-rewrite workflow, anchor the rewrite in source-backed contract work, and stop at Eval Brief ready.",
             "expected_stop": "Eval Brief ready",
-            "should_trigger": "true",
+            "should_trigger": true,
             "assertions_json": "[\"must classify this as a skill rewrite request\",\"must freeze contract elements before final instructions\",\"must stop at Eval Brief ready\"]",
-            "assertion_rules_json": "[{\"markers\":[\"workflow: skill-rewrite\"]},{\"markers\":[\"freeze\",\"contract\",\"before\",\"instructions\"]},null]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[{\"markers\":[\"workflow: skill-rewrite\"]},{\"markers\":[\"freeze\",\"contract\",\"before\",\"instructions\"]},null]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -1060,21 +1053,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 2,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "skill-rewrite-clear-target",
           "prompt": "Rewrite the existing skill `skill-eval-forge` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.",
           "expected_output": "Treat the request as a skill-rewrite workflow, anchor the rewrite in source-backed contract work, and stop at Eval Brief ready.",
           "expected_stop": "Eval Brief ready",
-          "should_trigger": "true",
+          "should_trigger": true,
           "assertions_json": "[\"must classify this as a skill rewrite request\",\"must freeze contract elements before final instructions\",\"must stop at Eval Brief ready\"]",
-          "assertion_rules_json": "[{\"markers\":[\"workflow: skill-rewrite\"]},{\"markers\":[\"freeze\",\"contract\",\"before\",\"instructions\"]},null]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"workflow: skill-rewrite\"]},{\"markers\":[\"freeze\",\"contract\",\"before\",\"instructions\"]},null]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -1155,11 +1150,7 @@
                   "score": 0,
                   "reason": "Assertion 3: Missing keywords. Matched eval from stop, eval, brief, ready"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": false,
@@ -1183,15 +1174,15 @@
             }
           ]
         },
-        "id": "9b0f07d7-98e7-4ea6-812e-a05c24eb0b74",
+        "id": "5d6f4dbd-fe05-4998-a07d-13574627801f",
         "latencyMs": 9029,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:without_skill]\nYou are operating without skill context.\n\nUser request:\nRewrite the existing skill `skill-eval-forge` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.",
-          "label": "without_skill",
+          "label": "without_skill: evals\\engines\\promptfoo\\prompts\\without-skill.txt: [mode:without_skill]\nYou are operating without skill context.\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "34e60ab7bdd88a2e737989d073fa7e2b33a9a4c03f58f140dfeab80a2ee82b41",
+        "promptId": "6ecbf05d6fdcfadbbbaf2f65efa67556cdf7b0bc77ab94907fb5554cf552a08c",
         "promptIdx": 1,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -1249,14 +1240,15 @@
         "testCase": {
           "description": "skill-rewrite-clear-target",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "skill-rewrite-clear-target",
             "prompt": "Rewrite the existing skill `skill-eval-forge` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.",
             "expected_output": "Treat the request as a skill-rewrite workflow, anchor the rewrite in source-backed contract work, and stop at Eval Brief ready.",
             "expected_stop": "Eval Brief ready",
-            "should_trigger": "true",
+            "should_trigger": true,
             "assertions_json": "[\"must classify this as a skill rewrite request\",\"must freeze contract elements before final instructions\",\"must stop at Eval Brief ready\"]",
-            "assertion_rules_json": "[{\"markers\":[\"workflow: skill-rewrite\"]},{\"markers\":[\"freeze\",\"contract\",\"before\",\"instructions\"]},null]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[{\"markers\":[\"workflow: skill-rewrite\"]},{\"markers\":[\"freeze\",\"contract\",\"before\",\"instructions\"]},null]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -1265,21 +1257,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 2,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "skill-rewrite-clear-target",
           "prompt": "Rewrite the existing skill `skill-eval-forge` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.",
           "expected_output": "Treat the request as a skill-rewrite workflow, anchor the rewrite in source-backed contract work, and stop at Eval Brief ready.",
           "expected_stop": "Eval Brief ready",
-          "should_trigger": "true",
+          "should_trigger": true,
           "assertions_json": "[\"must classify this as a skill rewrite request\",\"must freeze contract elements before final instructions\",\"must stop at Eval Brief ready\"]",
-          "assertion_rules_json": "[{\"markers\":[\"workflow: skill-rewrite\"]},{\"markers\":[\"freeze\",\"contract\",\"before\",\"instructions\"]},null]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"workflow: skill-rewrite\"]},{\"markers\":[\"freeze\",\"contract\",\"before\",\"instructions\"]},null]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -1360,11 +1354,7 @@
                   "score": 1,
                   "reason": "Assertion 3: Confirmed absence of markers: runner, grading, benchmark"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": true,
@@ -1388,15 +1378,15 @@
             }
           ]
         },
-        "id": "bfab38fd-0e05-4e22-b769-b31d2cc397ca",
+        "id": "41a21078-713e-4d85-83d1-8d3fd59b0a86",
         "latencyMs": 9680,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n---\r\nname: skill-forge\r\ndescription: \"Builds or rewrites one skill through a contract-first workflow and stops at Eval Brief ready. Use when the request is one skill-authoring job with clear boundaries. Don't use when the task is repository policy, downstream eval authoring, or shared eval runtime implementation.\"\r\n---\r\n\r\n# skill-forge\r\n\r\nThis folder is the source of truth for `skill-forge`. Use it to route requests, define success, and produce the handoff artifact.\r\n\r\n## Routing precedence\r\nApply these decisions in order. Do not skip ahead to missing-input checks before routing the request.\r\n\r\n1. If the request starts from a finished `Eval Brief`, asks for `golden` or `negative` cases, or asks to write `packs/core/<skill>/evals/evals.json`, return `Classification: non-trigger` immediately.\r\n2. If the request is obvious non-authoring work such as `AGENTS.md`, repo policy, runtime-only implementation, shared eval runtime implementation, or downstream eval authoring, return `Classification: non-trigger` immediately.\n3. If the request is clearly skill authoring and eval or runtime work is only secondary, mixed in, or explicitly deferred, return `Classification: trigger` and keep skill authoring as the active responsibility.\n4. Only return `Classification: stop-and-ask` when the request still plausibly belongs to skill authoring but the skill target, single job, or authoring boundary is genuinely unclear.\n\nRouting examples:\n- `Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.` -> `Classification: non-trigger`\n- `Write a new skill for PR review routing and leave eval scaffold for later.` -> `Classification: trigger`\n- `Write a new skill for PR review routing and also set up the first eval scaffold, but keep the skill contract first and leave runtime for later.` -> `Classification: trigger`\n- `Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.` -> `Classification: non-trigger`\r\n- `Create a skill, reorganize repo policies, and build the first runner in one pass.` -> `Classification: stop-and-ask`\n\r\n## Single job\r\nProduce one `Eval Brief ready` artifact for one skill by freezing: single job, trigger boundary, non-trigger boundary, success model, activation probes, nearby negatives, and stop conditions.\r\n\r\n## When to use\r\nUse this skill when the request is to create a new reusable skill or refactor one existing skill and you need a contract-first output that downstream eval authoring can consume without guessing intent.\r\n\r\n## Do not use when\r\nDo not use this skill when:\r\n- the request is repository-wide policy (`AGENTS.md`);\r\n- the request is to implement eval runtime behavior, shared eval runtime implementation, grading, timing, benchmark output, or suite orchestration;\r\n- the request is eval authoring downstream from an already-finished brief, including requests to turn a finished Eval Brief into `evals.json` cases;\r\n- the request mixes multiple independent workflows in one skill and authoring is not clearly primary.\r\n\r\n## Required output\r\nUse one of these response modes exactly.\r\n\r\nFor trigger cases:\r\n1. Start with `Classification: trigger`.\r\n2. Name the workflow explicitly as one of: `Workflow: new-skill`, `Workflow: existing-skill-refactor`, or `Workflow: skill-rewrite`.\r\n3. Add the exact sentence `Freeze the contract before final instructions.` on its own line before the JSON artifact.\r\n4. If eval or runtime work appears but skill authoring is clearly primary, keep skill authoring as the active responsibility and add the exact sentence `Downstream eval work is out of scope here.` on its own line before the JSON artifact.\n5. Treat requests that say `skill contract first`, `Eval Brief first`, or otherwise make authoring primary as trigger cases even if they also mention eval scaffold work for later.\n6. Do not switch to `stop-and-ask` just because eval scaffold work appears alongside authoring when the authoring boundary is already clear.\n7. Keep the required trigger note and any downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.\n8. Do not ask for confirmation if the skill target and authoring job are already clear.\n9. Produce the boundary-only JSON artifact.\n10. End with the exact line `Eval Brief ready`.\n\r\nFor non-trigger cases:\r\n1. Start with `Classification: non-trigger`.\r\n2. Say exactly `Out of scope for skill-forge.`\r\n3. Name the reason in one sentence.\r\n4. If the request is runtime-only implementation, use the exact sentence `The request is shared eval runtime implementation, not skill authoring, and an authoring-only output would not satisfy this request.`\r\n5. If the request is repository policy or `AGENTS.md` work, include `AGENTS` or `repository policy` explicitly in that sentence.\r\n6. Use this mode for obvious non-authoring work such as AGENTS policy, runtime-only implementation, shared eval runtime implementation, or eval-authoring-only requests, even if the request is missing inputs or the referenced brief content is not attached.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor stop-and-ask cases:\r\n1. Start with `Classification: stop-and-ask`.\r\n2. Say exactly `Scope clarification required.`\r\n3. Use stop-and-ask only when the request is still plausibly skill authoring and the skill target, single job, or authoring boundary is genuinely unclear.\r\n4. Do not use stop-and-ask for obvious non-trigger requests.\r\n5. State which part of the authoring target or boundary is unclear.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor this repository, the canonical template is:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json`\r\n\r\nFor the current in-repo eval example of this skill, the cases live at:\r\n- `packs/core/skill-forge/evals/evals.json`\r\n\r\n## Local materials\r\nUse these local files only when they help the current authoring run:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json` to structure the boundary-only handoff artifact.\r\n- `packs/core/skill-forge/assets/spec-template.md` to sanity-check that the brief stops at `Eval Brief ready`.\r\n- `packs/core/skill-forge/assets/skill-template.job.md` and `packs/core/skill-forge/assets/skill-template.guardrail.md` only when the target skill itself needs a local starting shape.\r\n- `packs/core/skill-forge/evals/evals.json` as a downstream validation example for this skill, not as an input required to author the brief.\r\n\r\n## Procedure\r\nStep 1: Define success before writing or refactoring the skill.\r\n1. Freeze a small success contract before touching final skill instructions.\r\n2. Record outcome goals: what the skill must successfully produce when it applies.\r\n3. Record boundary goals: trigger, non-trigger, and stop-and-ask.\r\n4. Record style goals: the required output shape and stop marker.\r\n5. Keep the list small and limited to must-pass checks for this skill.\r\n\r\nStep 2: Route the request before authoring.\r\n1. Apply the routing precedence section above first.\r\n2. If the request is obvious non-authoring work, return `Classification: non-trigger` immediately.\r\n3. If the request is runtime-only implementation, the reason sentence must make clear that the work is shared eval runtime implementation, not skill authoring, and that an authoring-only output would not satisfy the request.\r\n4. If the request mixes authoring with eval or runtime work but skill authoring is clearly primary, continue and defer the downstream work explicitly.\n5. If the request already says `contract first`, `Eval Brief first`, or otherwise freezes authoring as the active responsibility, do not degrade it to `stop-and-ask` just because eval scaffold work is also requested.\n6. Only use `stop-and-ask` if the request still looks like skill authoring but the target or boundary is unclear.\n\r\nStep 3: Freeze scope for one skill.\r\n1. Confirm one skill target and one single job.\r\n2. Confirm whether the workflow is `new-skill`, `existing-skill-refactor`, or `skill-rewrite`.\r\n3. Freeze trigger boundary and stop conditions.\r\n4. Freeze activation probes and nearby negatives.\r\n\r\nStep 4: Capture boundary input.\r\n1. Start from `packs/core/skill-forge/assets/contracts/eval-brief.template.json`.\r\n2. Fill only boundary fields: skill identity, authoring boundary, success model, probes, negative signals, source refs.\r\n3. Keep the brief free of runtime, dataset, benchmark, grader, or eval scaffold detail.\n4. Treat the success contract from Step 1 as required input to the brief, not as optional commentary.\r\n5. Keep `sourceRefs` limited to source material that justifies the target skill contract. Do not list repo planning documents as required inputs for the brief.\r\n\r\nStep 5: Stabilize the local contract before handoff.\r\n1. Check one trigger, one nearby non-trigger, and one edge case against the frozen boundary.\r\n2. Fold any failure back into routing, stop conditions, or success criteria before writing the final brief.\r\n3. Keep support files lean. Only rely on local templates that add real authoring value.\r\n\r\nStep 6: Produce the Eval Brief.\r\n1. Materialize the JSON artifact from the filled template.\r\n2. Keep the artifact boundary-only: no runtime implementation detail, no eval scaffold layout, and no scorer logic.\n3. Keep any downstream defer note outside the JSON payload.\r\n4. Record any unresolved downstream dependency as a short note outside the JSON payload instead of inventing runtime behavior.\r\n5. Do not mention runner, benchmark, scorer, or grading behavior inside the brief payload.\r\n6. End the response with the exact line `Eval Brief ready`.\r\n\r\nStep 7: Metadata discipline.\r\n1. Keep the frontmatter name and description aligned with the actual skill boundary.\r\n2. Do not add runtime, grading, or benchmark promises to the metadata.\r\n\r\n## Definition of done\r\nDone means all are true:\r\n- `Eval Brief ready` exists for the target skill when the case is a trigger;\r\n- the success contract was defined before writing or refactoring the skill;\r\n- authoring boundary, success model, and probes are explicit and source-backed;\r\n- a representative trigger, non-trigger, and edge case were checked against the frozen boundary before handoff;\r\n- output stops at the authoring-to-eval boundary and does not implement eval runtime behavior;\r\n- non-trigger responses say `Out of scope for skill-forge.` and do not emit an Eval Brief;\r\n- stop-and-ask responses say `Scope clarification required.` and do not emit an Eval Brief;\r\n- any downstream dependency is called out explicitly instead of being guessed.\r\n\r\n## Stop conditions\r\nStop and ask when:\r\n- target skill is unclear;\r\n- no stable source refs exist for the contract;\r\n- the success contract cannot be stated as a small set of must-pass checks;\r\n- the frozen boundary would turn the request into more than one workflow or would require inventing missing contract details;\r\n- request needs runtime behavior changes to continue.\n\nUser request:\nWrite a new skill for PR review routing and also set up the first eval scaffold for it. I want the skill contract first, but please leave the runtime for later.",
-          "label": "with_skill",
+          "label": "with_skill: evals\\engines\\promptfoo\\prompts\\with-skill.txt: [mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n{{skill_prompt}}\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "b85c00ae99f74dff7fe8dd826c3a446bfdcba12dfb8810a7f1de25ca6a8cf3ea",
+        "promptId": "bc27ddb2d155034b86c560d9dfcb149ca82ea4548f155536191cb2d044d8cb14",
         "promptIdx": 0,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -1454,14 +1444,15 @@
         "testCase": {
           "description": "mixed-authoring-and-eval-request",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "mixed-authoring-and-eval-request",
             "prompt": "Write a new skill for PR review routing and also set up the first eval scaffold for it. I want the skill contract first, but please leave the runtime for later.",
             "expected_output": "Handle the authoring part, call out that eval work is downstream, and stop at Eval Brief ready instead of implementing the scaffold.",
             "expected_stop": "Eval Brief ready",
-            "should_trigger": "true",
+            "should_trigger": true,
             "assertions_json": "[\"must preserve skill authoring as the active responsibility\",\"must explicitly defer eval scaffold implementation\",\"must not invent runner, grading, or benchmark behavior\"]",
-            "assertion_rules_json": "[null,{\"markers\":[\"downstream\",\"out of scope\"]},{\"markers\":[\"runner\",\"grading\",\"benchmark\"],\"absent\":true}]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[null,{\"markers\":[\"downstream\",\"out of scope\"]},{\"markers\":[\"runner\",\"grading\",\"benchmark\"],\"absent\":true}]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -1470,21 +1461,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 3,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "mixed-authoring-and-eval-request",
           "prompt": "Write a new skill for PR review routing and also set up the first eval scaffold for it. I want the skill contract first, but please leave the runtime for later.",
           "expected_output": "Handle the authoring part, call out that eval work is downstream, and stop at Eval Brief ready instead of implementing the scaffold.",
           "expected_stop": "Eval Brief ready",
-          "should_trigger": "true",
+          "should_trigger": true,
           "assertions_json": "[\"must preserve skill authoring as the active responsibility\",\"must explicitly defer eval scaffold implementation\",\"must not invent runner, grading, or benchmark behavior\"]",
-          "assertion_rules_json": "[null,{\"markers\":[\"downstream\",\"out of scope\"]},{\"markers\":[\"runner\",\"grading\",\"benchmark\"],\"absent\":true}]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[null,{\"markers\":[\"downstream\",\"out of scope\"]},{\"markers\":[\"runner\",\"grading\",\"benchmark\"],\"absent\":true}]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -1565,11 +1558,7 @@
                   "score": 1,
                   "reason": "Assertion 3: Confirmed absence of markers: runner, grading, benchmark"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": false,
@@ -1593,15 +1582,15 @@
             }
           ]
         },
-        "id": "24058546-906c-4c83-9a8f-fa9c330f9c64",
+        "id": "30391008-0192-4bc1-8416-365a3a01f605",
         "latencyMs": 11716,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:without_skill]\nYou are operating without skill context.\n\nUser request:\nWrite a new skill for PR review routing and also set up the first eval scaffold for it. I want the skill contract first, but please leave the runtime for later.",
-          "label": "without_skill",
+          "label": "without_skill: evals\\engines\\promptfoo\\prompts\\without-skill.txt: [mode:without_skill]\nYou are operating without skill context.\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "34e60ab7bdd88a2e737989d073fa7e2b33a9a4c03f58f140dfeab80a2ee82b41",
+        "promptId": "6ecbf05d6fdcfadbbbaf2f65efa67556cdf7b0bc77ab94907fb5554cf552a08c",
         "promptIdx": 1,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -1659,14 +1648,15 @@
         "testCase": {
           "description": "mixed-authoring-and-eval-request",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "mixed-authoring-and-eval-request",
             "prompt": "Write a new skill for PR review routing and also set up the first eval scaffold for it. I want the skill contract first, but please leave the runtime for later.",
             "expected_output": "Handle the authoring part, call out that eval work is downstream, and stop at Eval Brief ready instead of implementing the scaffold.",
             "expected_stop": "Eval Brief ready",
-            "should_trigger": "true",
+            "should_trigger": true,
             "assertions_json": "[\"must preserve skill authoring as the active responsibility\",\"must explicitly defer eval scaffold implementation\",\"must not invent runner, grading, or benchmark behavior\"]",
-            "assertion_rules_json": "[null,{\"markers\":[\"downstream\",\"out of scope\"]},{\"markers\":[\"runner\",\"grading\",\"benchmark\"],\"absent\":true}]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[null,{\"markers\":[\"downstream\",\"out of scope\"]},{\"markers\":[\"runner\",\"grading\",\"benchmark\"],\"absent\":true}]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -1675,21 +1665,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 3,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "mixed-authoring-and-eval-request",
           "prompt": "Write a new skill for PR review routing and also set up the first eval scaffold for it. I want the skill contract first, but please leave the runtime for later.",
           "expected_output": "Handle the authoring part, call out that eval work is downstream, and stop at Eval Brief ready instead of implementing the scaffold.",
           "expected_stop": "Eval Brief ready",
-          "should_trigger": "true",
+          "should_trigger": true,
           "assertions_json": "[\"must preserve skill authoring as the active responsibility\",\"must explicitly defer eval scaffold implementation\",\"must not invent runner, grading, or benchmark behavior\"]",
-          "assertion_rules_json": "[null,{\"markers\":[\"downstream\",\"out of scope\"]},{\"markers\":[\"runner\",\"grading\",\"benchmark\"],\"absent\":true}]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[null,{\"markers\":[\"downstream\",\"out of scope\"]},{\"markers\":[\"runner\",\"grading\",\"benchmark\"],\"absent\":true}]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -1770,11 +1762,7 @@
                   "score": 1,
                   "reason": "Assertion 3: Confirmed absence of markers: eval brief ready"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": true,
@@ -1798,15 +1786,15 @@
             }
           ]
         },
-        "id": "122af993-de70-4906-ad79-da6f17ca7ddd",
+        "id": "82f1e8cc-076d-4c31-9f93-8b0dabae21a8",
         "latencyMs": 1257,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n---\r\nname: skill-forge\r\ndescription: \"Builds or rewrites one skill through a contract-first workflow and stops at Eval Brief ready. Use when the request is one skill-authoring job with clear boundaries. Don't use when the task is repository policy, downstream eval authoring, or shared eval runtime implementation.\"\r\n---\r\n\r\n# skill-forge\r\n\r\nThis folder is the source of truth for `skill-forge`. Use it to route requests, define success, and produce the handoff artifact.\r\n\r\n## Routing precedence\r\nApply these decisions in order. Do not skip ahead to missing-input checks before routing the request.\r\n\r\n1. If the request starts from a finished `Eval Brief`, asks for `golden` or `negative` cases, or asks to write `packs/core/<skill>/evals/evals.json`, return `Classification: non-trigger` immediately.\r\n2. If the request is obvious non-authoring work such as `AGENTS.md`, repo policy, runtime-only implementation, shared eval runtime implementation, or downstream eval authoring, return `Classification: non-trigger` immediately.\n3. If the request is clearly skill authoring and eval or runtime work is only secondary, mixed in, or explicitly deferred, return `Classification: trigger` and keep skill authoring as the active responsibility.\n4. Only return `Classification: stop-and-ask` when the request still plausibly belongs to skill authoring but the skill target, single job, or authoring boundary is genuinely unclear.\n\nRouting examples:\n- `Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.` -> `Classification: non-trigger`\n- `Write a new skill for PR review routing and leave eval scaffold for later.` -> `Classification: trigger`\n- `Write a new skill for PR review routing and also set up the first eval scaffold, but keep the skill contract first and leave runtime for later.` -> `Classification: trigger`\n- `Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.` -> `Classification: non-trigger`\r\n- `Create a skill, reorganize repo policies, and build the first runner in one pass.` -> `Classification: stop-and-ask`\n\r\n## Single job\r\nProduce one `Eval Brief ready` artifact for one skill by freezing: single job, trigger boundary, non-trigger boundary, success model, activation probes, nearby negatives, and stop conditions.\r\n\r\n## When to use\r\nUse this skill when the request is to create a new reusable skill or refactor one existing skill and you need a contract-first output that downstream eval authoring can consume without guessing intent.\r\n\r\n## Do not use when\r\nDo not use this skill when:\r\n- the request is repository-wide policy (`AGENTS.md`);\r\n- the request is to implement eval runtime behavior, shared eval runtime implementation, grading, timing, benchmark output, or suite orchestration;\r\n- the request is eval authoring downstream from an already-finished brief, including requests to turn a finished Eval Brief into `evals.json` cases;\r\n- the request mixes multiple independent workflows in one skill and authoring is not clearly primary.\r\n\r\n## Required output\r\nUse one of these response modes exactly.\r\n\r\nFor trigger cases:\r\n1. Start with `Classification: trigger`.\r\n2. Name the workflow explicitly as one of: `Workflow: new-skill`, `Workflow: existing-skill-refactor`, or `Workflow: skill-rewrite`.\r\n3. Add the exact sentence `Freeze the contract before final instructions.` on its own line before the JSON artifact.\r\n4. If eval or runtime work appears but skill authoring is clearly primary, keep skill authoring as the active responsibility and add the exact sentence `Downstream eval work is out of scope here.` on its own line before the JSON artifact.\n5. Treat requests that say `skill contract first`, `Eval Brief first`, or otherwise make authoring primary as trigger cases even if they also mention eval scaffold work for later.\n6. Do not switch to `stop-and-ask` just because eval scaffold work appears alongside authoring when the authoring boundary is already clear.\n7. Keep the required trigger note and any downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.\n8. Do not ask for confirmation if the skill target and authoring job are already clear.\n9. Produce the boundary-only JSON artifact.\n10. End with the exact line `Eval Brief ready`.\n\r\nFor non-trigger cases:\r\n1. Start with `Classification: non-trigger`.\r\n2. Say exactly `Out of scope for skill-forge.`\r\n3. Name the reason in one sentence.\r\n4. If the request is runtime-only implementation, use the exact sentence `The request is shared eval runtime implementation, not skill authoring, and an authoring-only output would not satisfy this request.`\r\n5. If the request is repository policy or `AGENTS.md` work, include `AGENTS` or `repository policy` explicitly in that sentence.\r\n6. Use this mode for obvious non-authoring work such as AGENTS policy, runtime-only implementation, shared eval runtime implementation, or eval-authoring-only requests, even if the request is missing inputs or the referenced brief content is not attached.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor stop-and-ask cases:\r\n1. Start with `Classification: stop-and-ask`.\r\n2. Say exactly `Scope clarification required.`\r\n3. Use stop-and-ask only when the request is still plausibly skill authoring and the skill target, single job, or authoring boundary is genuinely unclear.\r\n4. Do not use stop-and-ask for obvious non-trigger requests.\r\n5. State which part of the authoring target or boundary is unclear.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor this repository, the canonical template is:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json`\r\n\r\nFor the current in-repo eval example of this skill, the cases live at:\r\n- `packs/core/skill-forge/evals/evals.json`\r\n\r\n## Local materials\r\nUse these local files only when they help the current authoring run:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json` to structure the boundary-only handoff artifact.\r\n- `packs/core/skill-forge/assets/spec-template.md` to sanity-check that the brief stops at `Eval Brief ready`.\r\n- `packs/core/skill-forge/assets/skill-template.job.md` and `packs/core/skill-forge/assets/skill-template.guardrail.md` only when the target skill itself needs a local starting shape.\r\n- `packs/core/skill-forge/evals/evals.json` as a downstream validation example for this skill, not as an input required to author the brief.\r\n\r\n## Procedure\r\nStep 1: Define success before writing or refactoring the skill.\r\n1. Freeze a small success contract before touching final skill instructions.\r\n2. Record outcome goals: what the skill must successfully produce when it applies.\r\n3. Record boundary goals: trigger, non-trigger, and stop-and-ask.\r\n4. Record style goals: the required output shape and stop marker.\r\n5. Keep the list small and limited to must-pass checks for this skill.\r\n\r\nStep 2: Route the request before authoring.\r\n1. Apply the routing precedence section above first.\r\n2. If the request is obvious non-authoring work, return `Classification: non-trigger` immediately.\r\n3. If the request is runtime-only implementation, the reason sentence must make clear that the work is shared eval runtime implementation, not skill authoring, and that an authoring-only output would not satisfy the request.\r\n4. If the request mixes authoring with eval or runtime work but skill authoring is clearly primary, continue and defer the downstream work explicitly.\n5. If the request already says `contract first`, `Eval Brief first`, or otherwise freezes authoring as the active responsibility, do not degrade it to `stop-and-ask` just because eval scaffold work is also requested.\n6. Only use `stop-and-ask` if the request still looks like skill authoring but the target or boundary is unclear.\n\r\nStep 3: Freeze scope for one skill.\r\n1. Confirm one skill target and one single job.\r\n2. Confirm whether the workflow is `new-skill`, `existing-skill-refactor`, or `skill-rewrite`.\r\n3. Freeze trigger boundary and stop conditions.\r\n4. Freeze activation probes and nearby negatives.\r\n\r\nStep 4: Capture boundary input.\r\n1. Start from `packs/core/skill-forge/assets/contracts/eval-brief.template.json`.\r\n2. Fill only boundary fields: skill identity, authoring boundary, success model, probes, negative signals, source refs.\r\n3. Keep the brief free of runtime, dataset, benchmark, grader, or eval scaffold detail.\n4. Treat the success contract from Step 1 as required input to the brief, not as optional commentary.\r\n5. Keep `sourceRefs` limited to source material that justifies the target skill contract. Do not list repo planning documents as required inputs for the brief.\r\n\r\nStep 5: Stabilize the local contract before handoff.\r\n1. Check one trigger, one nearby non-trigger, and one edge case against the frozen boundary.\r\n2. Fold any failure back into routing, stop conditions, or success criteria before writing the final brief.\r\n3. Keep support files lean. Only rely on local templates that add real authoring value.\r\n\r\nStep 6: Produce the Eval Brief.\r\n1. Materialize the JSON artifact from the filled template.\r\n2. Keep the artifact boundary-only: no runtime implementation detail, no eval scaffold layout, and no scorer logic.\n3. Keep any downstream defer note outside the JSON payload.\r\n4. Record any unresolved downstream dependency as a short note outside the JSON payload instead of inventing runtime behavior.\r\n5. Do not mention runner, benchmark, scorer, or grading behavior inside the brief payload.\r\n6. End the response with the exact line `Eval Brief ready`.\r\n\r\nStep 7: Metadata discipline.\r\n1. Keep the frontmatter name and description aligned with the actual skill boundary.\r\n2. Do not add runtime, grading, or benchmark promises to the metadata.\r\n\r\n## Definition of done\r\nDone means all are true:\r\n- `Eval Brief ready` exists for the target skill when the case is a trigger;\r\n- the success contract was defined before writing or refactoring the skill;\r\n- authoring boundary, success model, and probes are explicit and source-backed;\r\n- a representative trigger, non-trigger, and edge case were checked against the frozen boundary before handoff;\r\n- output stops at the authoring-to-eval boundary and does not implement eval runtime behavior;\r\n- non-trigger responses say `Out of scope for skill-forge.` and do not emit an Eval Brief;\r\n- stop-and-ask responses say `Scope clarification required.` and do not emit an Eval Brief;\r\n- any downstream dependency is called out explicitly instead of being guessed.\r\n\r\n## Stop conditions\r\nStop and ask when:\r\n- target skill is unclear;\r\n- no stable source refs exist for the contract;\r\n- the success contract cannot be stated as a small set of must-pass checks;\r\n- the frozen boundary would turn the request into more than one workflow or would require inventing missing contract details;\r\n- request needs runtime behavior changes to continue.\n\nUser request:\nUpdate the repo AGENTS.md managed block and tighten the repository policy wording.",
-          "label": "with_skill",
+          "label": "with_skill: evals\\engines\\promptfoo\\prompts\\with-skill.txt: [mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n{{skill_prompt}}\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "b85c00ae99f74dff7fe8dd826c3a446bfdcba12dfb8810a7f1de25ca6a8cf3ea",
+        "promptId": "bc27ddb2d155034b86c560d9dfcb149ca82ea4548f155536191cb2d044d8cb14",
         "promptIdx": 0,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -1864,14 +1852,15 @@
         "testCase": {
           "description": "agents-policy-request",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "agents-policy-request",
             "prompt": "Update the repo AGENTS.md managed block and tighten the repository policy wording.",
             "expected_output": "Do not trigger skill-forge because this is repository policy work, not skill authoring.",
             "expected_stop": "do_not_trigger",
-            "should_trigger": "false",
+            "should_trigger": false,
             "assertions_json": "[\"must classify AGENTS work as out of scope\",\"must avoid rewriting the task as a skill request\",\"must avoid producing an Eval Brief\"]",
-            "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"agents\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"agents\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -1880,21 +1869,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 4,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "agents-policy-request",
           "prompt": "Update the repo AGENTS.md managed block and tighten the repository policy wording.",
           "expected_output": "Do not trigger skill-forge because this is repository policy work, not skill authoring.",
           "expected_stop": "do_not_trigger",
-          "should_trigger": "false",
+          "should_trigger": false,
           "assertions_json": "[\"must classify AGENTS work as out of scope\",\"must avoid rewriting the task as a skill request\",\"must avoid producing an Eval Brief\"]",
-          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"agents\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"agents\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -1975,11 +1966,7 @@
                   "score": 1,
                   "reason": "Assertion 3: Confirmed absence of markers: eval brief ready"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": false,
@@ -2003,15 +1990,15 @@
             }
           ]
         },
-        "id": "8b49ab8e-457d-49ab-bce2-9a045d809229",
+        "id": "5713bd29-2875-4eff-a90d-8d727cdc7201",
         "latencyMs": 1843,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:without_skill]\nYou are operating without skill context.\n\nUser request:\nUpdate the repo AGENTS.md managed block and tighten the repository policy wording.",
-          "label": "without_skill",
+          "label": "without_skill: evals\\engines\\promptfoo\\prompts\\without-skill.txt: [mode:without_skill]\nYou are operating without skill context.\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "34e60ab7bdd88a2e737989d073fa7e2b33a9a4c03f58f140dfeab80a2ee82b41",
+        "promptId": "6ecbf05d6fdcfadbbbaf2f65efa67556cdf7b0bc77ab94907fb5554cf552a08c",
         "promptIdx": 1,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -2069,14 +2056,15 @@
         "testCase": {
           "description": "agents-policy-request",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "agents-policy-request",
             "prompt": "Update the repo AGENTS.md managed block and tighten the repository policy wording.",
             "expected_output": "Do not trigger skill-forge because this is repository policy work, not skill authoring.",
             "expected_stop": "do_not_trigger",
-            "should_trigger": "false",
+            "should_trigger": false,
             "assertions_json": "[\"must classify AGENTS work as out of scope\",\"must avoid rewriting the task as a skill request\",\"must avoid producing an Eval Brief\"]",
-            "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"agents\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"agents\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -2085,21 +2073,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 4,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "agents-policy-request",
           "prompt": "Update the repo AGENTS.md managed block and tighten the repository policy wording.",
           "expected_output": "Do not trigger skill-forge because this is repository policy work, not skill authoring.",
           "expected_stop": "do_not_trigger",
-          "should_trigger": "false",
+          "should_trigger": false,
           "assertions_json": "[\"must classify AGENTS work as out of scope\",\"must avoid rewriting the task as a skill request\",\"must avoid producing an Eval Brief\"]",
-          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"agents\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"agents\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -2180,11 +2170,7 @@
                   "score": 1,
                   "reason": "Assertion 3: Confirmed absence of markers: eval brief ready"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": true,
@@ -2208,15 +2194,15 @@
             }
           ]
         },
-        "id": "76e37d85-cd8e-4176-9a6f-c4ab0ca0c55c",
+        "id": "fbcd863b-30ae-484a-b244-bc38838157b2",
         "latencyMs": 2731,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n---\r\nname: skill-forge\r\ndescription: \"Builds or rewrites one skill through a contract-first workflow and stops at Eval Brief ready. Use when the request is one skill-authoring job with clear boundaries. Don't use when the task is repository policy, downstream eval authoring, or shared eval runtime implementation.\"\r\n---\r\n\r\n# skill-forge\r\n\r\nThis folder is the source of truth for `skill-forge`. Use it to route requests, define success, and produce the handoff artifact.\r\n\r\n## Routing precedence\r\nApply these decisions in order. Do not skip ahead to missing-input checks before routing the request.\r\n\r\n1. If the request starts from a finished `Eval Brief`, asks for `golden` or `negative` cases, or asks to write `packs/core/<skill>/evals/evals.json`, return `Classification: non-trigger` immediately.\r\n2. If the request is obvious non-authoring work such as `AGENTS.md`, repo policy, runtime-only implementation, shared eval runtime implementation, or downstream eval authoring, return `Classification: non-trigger` immediately.\n3. If the request is clearly skill authoring and eval or runtime work is only secondary, mixed in, or explicitly deferred, return `Classification: trigger` and keep skill authoring as the active responsibility.\n4. Only return `Classification: stop-and-ask` when the request still plausibly belongs to skill authoring but the skill target, single job, or authoring boundary is genuinely unclear.\n\nRouting examples:\n- `Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.` -> `Classification: non-trigger`\n- `Write a new skill for PR review routing and leave eval scaffold for later.` -> `Classification: trigger`\n- `Write a new skill for PR review routing and also set up the first eval scaffold, but keep the skill contract first and leave runtime for later.` -> `Classification: trigger`\n- `Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.` -> `Classification: non-trigger`\r\n- `Create a skill, reorganize repo policies, and build the first runner in one pass.` -> `Classification: stop-and-ask`\n\r\n## Single job\r\nProduce one `Eval Brief ready` artifact for one skill by freezing: single job, trigger boundary, non-trigger boundary, success model, activation probes, nearby negatives, and stop conditions.\r\n\r\n## When to use\r\nUse this skill when the request is to create a new reusable skill or refactor one existing skill and you need a contract-first output that downstream eval authoring can consume without guessing intent.\r\n\r\n## Do not use when\r\nDo not use this skill when:\r\n- the request is repository-wide policy (`AGENTS.md`);\r\n- the request is to implement eval runtime behavior, shared eval runtime implementation, grading, timing, benchmark output, or suite orchestration;\r\n- the request is eval authoring downstream from an already-finished brief, including requests to turn a finished Eval Brief into `evals.json` cases;\r\n- the request mixes multiple independent workflows in one skill and authoring is not clearly primary.\r\n\r\n## Required output\r\nUse one of these response modes exactly.\r\n\r\nFor trigger cases:\r\n1. Start with `Classification: trigger`.\r\n2. Name the workflow explicitly as one of: `Workflow: new-skill`, `Workflow: existing-skill-refactor`, or `Workflow: skill-rewrite`.\r\n3. Add the exact sentence `Freeze the contract before final instructions.` on its own line before the JSON artifact.\r\n4. If eval or runtime work appears but skill authoring is clearly primary, keep skill authoring as the active responsibility and add the exact sentence `Downstream eval work is out of scope here.` on its own line before the JSON artifact.\n5. Treat requests that say `skill contract first`, `Eval Brief first`, or otherwise make authoring primary as trigger cases even if they also mention eval scaffold work for later.\n6. Do not switch to `stop-and-ask` just because eval scaffold work appears alongside authoring when the authoring boundary is already clear.\n7. Keep the required trigger note and any downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.\n8. Do not ask for confirmation if the skill target and authoring job are already clear.\n9. Produce the boundary-only JSON artifact.\n10. End with the exact line `Eval Brief ready`.\n\r\nFor non-trigger cases:\r\n1. Start with `Classification: non-trigger`.\r\n2. Say exactly `Out of scope for skill-forge.`\r\n3. Name the reason in one sentence.\r\n4. If the request is runtime-only implementation, use the exact sentence `The request is shared eval runtime implementation, not skill authoring, and an authoring-only output would not satisfy this request.`\r\n5. If the request is repository policy or `AGENTS.md` work, include `AGENTS` or `repository policy` explicitly in that sentence.\r\n6. Use this mode for obvious non-authoring work such as AGENTS policy, runtime-only implementation, shared eval runtime implementation, or eval-authoring-only requests, even if the request is missing inputs or the referenced brief content is not attached.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor stop-and-ask cases:\r\n1. Start with `Classification: stop-and-ask`.\r\n2. Say exactly `Scope clarification required.`\r\n3. Use stop-and-ask only when the request is still plausibly skill authoring and the skill target, single job, or authoring boundary is genuinely unclear.\r\n4. Do not use stop-and-ask for obvious non-trigger requests.\r\n5. State which part of the authoring target or boundary is unclear.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor this repository, the canonical template is:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json`\r\n\r\nFor the current in-repo eval example of this skill, the cases live at:\r\n- `packs/core/skill-forge/evals/evals.json`\r\n\r\n## Local materials\r\nUse these local files only when they help the current authoring run:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json` to structure the boundary-only handoff artifact.\r\n- `packs/core/skill-forge/assets/spec-template.md` to sanity-check that the brief stops at `Eval Brief ready`.\r\n- `packs/core/skill-forge/assets/skill-template.job.md` and `packs/core/skill-forge/assets/skill-template.guardrail.md` only when the target skill itself needs a local starting shape.\r\n- `packs/core/skill-forge/evals/evals.json` as a downstream validation example for this skill, not as an input required to author the brief.\r\n\r\n## Procedure\r\nStep 1: Define success before writing or refactoring the skill.\r\n1. Freeze a small success contract before touching final skill instructions.\r\n2. Record outcome goals: what the skill must successfully produce when it applies.\r\n3. Record boundary goals: trigger, non-trigger, and stop-and-ask.\r\n4. Record style goals: the required output shape and stop marker.\r\n5. Keep the list small and limited to must-pass checks for this skill.\r\n\r\nStep 2: Route the request before authoring.\r\n1. Apply the routing precedence section above first.\r\n2. If the request is obvious non-authoring work, return `Classification: non-trigger` immediately.\r\n3. If the request is runtime-only implementation, the reason sentence must make clear that the work is shared eval runtime implementation, not skill authoring, and that an authoring-only output would not satisfy the request.\r\n4. If the request mixes authoring with eval or runtime work but skill authoring is clearly primary, continue and defer the downstream work explicitly.\n5. If the request already says `contract first`, `Eval Brief first`, or otherwise freezes authoring as the active responsibility, do not degrade it to `stop-and-ask` just because eval scaffold work is also requested.\n6. Only use `stop-and-ask` if the request still looks like skill authoring but the target or boundary is unclear.\n\r\nStep 3: Freeze scope for one skill.\r\n1. Confirm one skill target and one single job.\r\n2. Confirm whether the workflow is `new-skill`, `existing-skill-refactor`, or `skill-rewrite`.\r\n3. Freeze trigger boundary and stop conditions.\r\n4. Freeze activation probes and nearby negatives.\r\n\r\nStep 4: Capture boundary input.\r\n1. Start from `packs/core/skill-forge/assets/contracts/eval-brief.template.json`.\r\n2. Fill only boundary fields: skill identity, authoring boundary, success model, probes, negative signals, source refs.\r\n3. Keep the brief free of runtime, dataset, benchmark, grader, or eval scaffold detail.\n4. Treat the success contract from Step 1 as required input to the brief, not as optional commentary.\r\n5. Keep `sourceRefs` limited to source material that justifies the target skill contract. Do not list repo planning documents as required inputs for the brief.\r\n\r\nStep 5: Stabilize the local contract before handoff.\r\n1. Check one trigger, one nearby non-trigger, and one edge case against the frozen boundary.\r\n2. Fold any failure back into routing, stop conditions, or success criteria before writing the final brief.\r\n3. Keep support files lean. Only rely on local templates that add real authoring value.\r\n\r\nStep 6: Produce the Eval Brief.\r\n1. Materialize the JSON artifact from the filled template.\r\n2. Keep the artifact boundary-only: no runtime implementation detail, no eval scaffold layout, and no scorer logic.\n3. Keep any downstream defer note outside the JSON payload.\r\n4. Record any unresolved downstream dependency as a short note outside the JSON payload instead of inventing runtime behavior.\r\n5. Do not mention runner, benchmark, scorer, or grading behavior inside the brief payload.\r\n6. End the response with the exact line `Eval Brief ready`.\r\n\r\nStep 7: Metadata discipline.\r\n1. Keep the frontmatter name and description aligned with the actual skill boundary.\r\n2. Do not add runtime, grading, or benchmark promises to the metadata.\r\n\r\n## Definition of done\r\nDone means all are true:\r\n- `Eval Brief ready` exists for the target skill when the case is a trigger;\r\n- the success contract was defined before writing or refactoring the skill;\r\n- authoring boundary, success model, and probes are explicit and source-backed;\r\n- a representative trigger, non-trigger, and edge case were checked against the frozen boundary before handoff;\r\n- output stops at the authoring-to-eval boundary and does not implement eval runtime behavior;\r\n- non-trigger responses say `Out of scope for skill-forge.` and do not emit an Eval Brief;\r\n- stop-and-ask responses say `Scope clarification required.` and do not emit an Eval Brief;\r\n- any downstream dependency is called out explicitly instead of being guessed.\r\n\r\n## Stop conditions\r\nStop and ask when:\r\n- target skill is unclear;\r\n- no stable source refs exist for the contract;\r\n- the success contract cannot be stated as a small set of must-pass checks;\r\n- the frozen boundary would turn the request into more than one workflow or would require inventing missing contract details;\r\n- request needs runtime behavior changes to continue.\n\nUser request:\nBuild the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.",
-          "label": "with_skill",
+          "label": "with_skill: evals\\engines\\promptfoo\\prompts\\with-skill.txt: [mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n{{skill_prompt}}\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "b85c00ae99f74dff7fe8dd826c3a446bfdcba12dfb8810a7f1de25ca6a8cf3ea",
+        "promptId": "bc27ddb2d155034b86c560d9dfcb149ca82ea4548f155536191cb2d044d8cb14",
         "promptIdx": 0,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -2274,14 +2260,15 @@
         "testCase": {
           "description": "runtime-harness-implementation",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "runtime-harness-implementation",
             "prompt": "Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.",
             "expected_output": "Do not trigger skill-forge because the request is shared eval runtime implementation, not skill authoring.",
             "expected_stop": "do_not_trigger",
-            "should_trigger": "false",
+            "should_trigger": false,
             "assertions_json": "[\"must classify runtime implementation as out of scope\",\"must avoid proposing authoring-only output as if it satisfied the request\",\"must avoid producing an Eval Brief\"]",
-            "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"runtime\",\"implementation\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"runtime\",\"implementation\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -2290,21 +2277,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 5,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "runtime-harness-implementation",
           "prompt": "Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.",
           "expected_output": "Do not trigger skill-forge because the request is shared eval runtime implementation, not skill authoring.",
           "expected_stop": "do_not_trigger",
-          "should_trigger": "false",
+          "should_trigger": false,
           "assertions_json": "[\"must classify runtime implementation as out of scope\",\"must avoid proposing authoring-only output as if it satisfied the request\",\"must avoid producing an Eval Brief\"]",
-          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"runtime\",\"implementation\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"runtime\",\"implementation\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -2385,11 +2374,7 @@
                   "score": 1,
                   "reason": "Assertion 3: Confirmed absence of markers: eval brief ready"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": false,
@@ -2413,15 +2398,15 @@
             }
           ]
         },
-        "id": "3f6f7b2a-18e2-4430-9d6e-bc92416b4365",
+        "id": "26edde1e-74a3-4de1-a87e-4b09465b09a8",
         "latencyMs": 11987,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:without_skill]\nYou are operating without skill context.\n\nUser request:\nBuild the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.",
-          "label": "without_skill",
+          "label": "without_skill: evals\\engines\\promptfoo\\prompts\\without-skill.txt: [mode:without_skill]\nYou are operating without skill context.\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "34e60ab7bdd88a2e737989d073fa7e2b33a9a4c03f58f140dfeab80a2ee82b41",
+        "promptId": "6ecbf05d6fdcfadbbbaf2f65efa67556cdf7b0bc77ab94907fb5554cf552a08c",
         "promptIdx": 1,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -2479,14 +2464,15 @@
         "testCase": {
           "description": "runtime-harness-implementation",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "runtime-harness-implementation",
             "prompt": "Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.",
             "expected_output": "Do not trigger skill-forge because the request is shared eval runtime implementation, not skill authoring.",
             "expected_stop": "do_not_trigger",
-            "should_trigger": "false",
+            "should_trigger": false,
             "assertions_json": "[\"must classify runtime implementation as out of scope\",\"must avoid proposing authoring-only output as if it satisfied the request\",\"must avoid producing an Eval Brief\"]",
-            "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"runtime\",\"implementation\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"runtime\",\"implementation\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -2495,21 +2481,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 5,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "runtime-harness-implementation",
           "prompt": "Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.",
           "expected_output": "Do not trigger skill-forge because the request is shared eval runtime implementation, not skill authoring.",
           "expected_stop": "do_not_trigger",
-          "should_trigger": "false",
+          "should_trigger": false,
           "assertions_json": "[\"must classify runtime implementation as out of scope\",\"must avoid proposing authoring-only output as if it satisfied the request\",\"must avoid producing an Eval Brief\"]",
-          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"runtime\",\"implementation\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"runtime\",\"implementation\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -2590,11 +2578,7 @@
                   "score": 0,
                   "reason": "Assertion 3: Unexpected markers present: eval brief ready"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": true,
@@ -2618,15 +2602,15 @@
             }
           ]
         },
-        "id": "b89085f6-f546-4fb0-919e-0be3b172adbc",
+        "id": "53c5bee8-6214-41ae-931d-000ed92f9715",
         "latencyMs": 1581,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n---\r\nname: skill-forge\r\ndescription: \"Builds or rewrites one skill through a contract-first workflow and stops at Eval Brief ready. Use when the request is one skill-authoring job with clear boundaries. Don't use when the task is repository policy, downstream eval authoring, or shared eval runtime implementation.\"\r\n---\r\n\r\n# skill-forge\r\n\r\nThis folder is the source of truth for `skill-forge`. Use it to route requests, define success, and produce the handoff artifact.\r\n\r\n## Routing precedence\r\nApply these decisions in order. Do not skip ahead to missing-input checks before routing the request.\r\n\r\n1. If the request starts from a finished `Eval Brief`, asks for `golden` or `negative` cases, or asks to write `packs/core/<skill>/evals/evals.json`, return `Classification: non-trigger` immediately.\r\n2. If the request is obvious non-authoring work such as `AGENTS.md`, repo policy, runtime-only implementation, shared eval runtime implementation, or downstream eval authoring, return `Classification: non-trigger` immediately.\n3. If the request is clearly skill authoring and eval or runtime work is only secondary, mixed in, or explicitly deferred, return `Classification: trigger` and keep skill authoring as the active responsibility.\n4. Only return `Classification: stop-and-ask` when the request still plausibly belongs to skill authoring but the skill target, single job, or authoring boundary is genuinely unclear.\n\nRouting examples:\n- `Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.` -> `Classification: non-trigger`\n- `Write a new skill for PR review routing and leave eval scaffold for later.` -> `Classification: trigger`\n- `Write a new skill for PR review routing and also set up the first eval scaffold, but keep the skill contract first and leave runtime for later.` -> `Classification: trigger`\n- `Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.` -> `Classification: non-trigger`\r\n- `Create a skill, reorganize repo policies, and build the first runner in one pass.` -> `Classification: stop-and-ask`\n\r\n## Single job\r\nProduce one `Eval Brief ready` artifact for one skill by freezing: single job, trigger boundary, non-trigger boundary, success model, activation probes, nearby negatives, and stop conditions.\r\n\r\n## When to use\r\nUse this skill when the request is to create a new reusable skill or refactor one existing skill and you need a contract-first output that downstream eval authoring can consume without guessing intent.\r\n\r\n## Do not use when\r\nDo not use this skill when:\r\n- the request is repository-wide policy (`AGENTS.md`);\r\n- the request is to implement eval runtime behavior, shared eval runtime implementation, grading, timing, benchmark output, or suite orchestration;\r\n- the request is eval authoring downstream from an already-finished brief, including requests to turn a finished Eval Brief into `evals.json` cases;\r\n- the request mixes multiple independent workflows in one skill and authoring is not clearly primary.\r\n\r\n## Required output\r\nUse one of these response modes exactly.\r\n\r\nFor trigger cases:\r\n1. Start with `Classification: trigger`.\r\n2. Name the workflow explicitly as one of: `Workflow: new-skill`, `Workflow: existing-skill-refactor`, or `Workflow: skill-rewrite`.\r\n3. Add the exact sentence `Freeze the contract before final instructions.` on its own line before the JSON artifact.\r\n4. If eval or runtime work appears but skill authoring is clearly primary, keep skill authoring as the active responsibility and add the exact sentence `Downstream eval work is out of scope here.` on its own line before the JSON artifact.\n5. Treat requests that say `skill contract first`, `Eval Brief first`, or otherwise make authoring primary as trigger cases even if they also mention eval scaffold work for later.\n6. Do not switch to `stop-and-ask` just because eval scaffold work appears alongside authoring when the authoring boundary is already clear.\n7. Keep the required trigger note and any downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.\n8. Do not ask for confirmation if the skill target and authoring job are already clear.\n9. Produce the boundary-only JSON artifact.\n10. End with the exact line `Eval Brief ready`.\n\r\nFor non-trigger cases:\r\n1. Start with `Classification: non-trigger`.\r\n2. Say exactly `Out of scope for skill-forge.`\r\n3. Name the reason in one sentence.\r\n4. If the request is runtime-only implementation, use the exact sentence `The request is shared eval runtime implementation, not skill authoring, and an authoring-only output would not satisfy this request.`\r\n5. If the request is repository policy or `AGENTS.md` work, include `AGENTS` or `repository policy` explicitly in that sentence.\r\n6. Use this mode for obvious non-authoring work such as AGENTS policy, runtime-only implementation, shared eval runtime implementation, or eval-authoring-only requests, even if the request is missing inputs or the referenced brief content is not attached.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor stop-and-ask cases:\r\n1. Start with `Classification: stop-and-ask`.\r\n2. Say exactly `Scope clarification required.`\r\n3. Use stop-and-ask only when the request is still plausibly skill authoring and the skill target, single job, or authoring boundary is genuinely unclear.\r\n4. Do not use stop-and-ask for obvious non-trigger requests.\r\n5. State which part of the authoring target or boundary is unclear.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor this repository, the canonical template is:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json`\r\n\r\nFor the current in-repo eval example of this skill, the cases live at:\r\n- `packs/core/skill-forge/evals/evals.json`\r\n\r\n## Local materials\r\nUse these local files only when they help the current authoring run:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json` to structure the boundary-only handoff artifact.\r\n- `packs/core/skill-forge/assets/spec-template.md` to sanity-check that the brief stops at `Eval Brief ready`.\r\n- `packs/core/skill-forge/assets/skill-template.job.md` and `packs/core/skill-forge/assets/skill-template.guardrail.md` only when the target skill itself needs a local starting shape.\r\n- `packs/core/skill-forge/evals/evals.json` as a downstream validation example for this skill, not as an input required to author the brief.\r\n\r\n## Procedure\r\nStep 1: Define success before writing or refactoring the skill.\r\n1. Freeze a small success contract before touching final skill instructions.\r\n2. Record outcome goals: what the skill must successfully produce when it applies.\r\n3. Record boundary goals: trigger, non-trigger, and stop-and-ask.\r\n4. Record style goals: the required output shape and stop marker.\r\n5. Keep the list small and limited to must-pass checks for this skill.\r\n\r\nStep 2: Route the request before authoring.\r\n1. Apply the routing precedence section above first.\r\n2. If the request is obvious non-authoring work, return `Classification: non-trigger` immediately.\r\n3. If the request is runtime-only implementation, the reason sentence must make clear that the work is shared eval runtime implementation, not skill authoring, and that an authoring-only output would not satisfy the request.\r\n4. If the request mixes authoring with eval or runtime work but skill authoring is clearly primary, continue and defer the downstream work explicitly.\n5. If the request already says `contract first`, `Eval Brief first`, or otherwise freezes authoring as the active responsibility, do not degrade it to `stop-and-ask` just because eval scaffold work is also requested.\n6. Only use `stop-and-ask` if the request still looks like skill authoring but the target or boundary is unclear.\n\r\nStep 3: Freeze scope for one skill.\r\n1. Confirm one skill target and one single job.\r\n2. Confirm whether the workflow is `new-skill`, `existing-skill-refactor`, or `skill-rewrite`.\r\n3. Freeze trigger boundary and stop conditions.\r\n4. Freeze activation probes and nearby negatives.\r\n\r\nStep 4: Capture boundary input.\r\n1. Start from `packs/core/skill-forge/assets/contracts/eval-brief.template.json`.\r\n2. Fill only boundary fields: skill identity, authoring boundary, success model, probes, negative signals, source refs.\r\n3. Keep the brief free of runtime, dataset, benchmark, grader, or eval scaffold detail.\n4. Treat the success contract from Step 1 as required input to the brief, not as optional commentary.\r\n5. Keep `sourceRefs` limited to source material that justifies the target skill contract. Do not list repo planning documents as required inputs for the brief.\r\n\r\nStep 5: Stabilize the local contract before handoff.\r\n1. Check one trigger, one nearby non-trigger, and one edge case against the frozen boundary.\r\n2. Fold any failure back into routing, stop conditions, or success criteria before writing the final brief.\r\n3. Keep support files lean. Only rely on local templates that add real authoring value.\r\n\r\nStep 6: Produce the Eval Brief.\r\n1. Materialize the JSON artifact from the filled template.\r\n2. Keep the artifact boundary-only: no runtime implementation detail, no eval scaffold layout, and no scorer logic.\n3. Keep any downstream defer note outside the JSON payload.\r\n4. Record any unresolved downstream dependency as a short note outside the JSON payload instead of inventing runtime behavior.\r\n5. Do not mention runner, benchmark, scorer, or grading behavior inside the brief payload.\r\n6. End the response with the exact line `Eval Brief ready`.\r\n\r\nStep 7: Metadata discipline.\r\n1. Keep the frontmatter name and description aligned with the actual skill boundary.\r\n2. Do not add runtime, grading, or benchmark promises to the metadata.\r\n\r\n## Definition of done\r\nDone means all are true:\r\n- `Eval Brief ready` exists for the target skill when the case is a trigger;\r\n- the success contract was defined before writing or refactoring the skill;\r\n- authoring boundary, success model, and probes are explicit and source-backed;\r\n- a representative trigger, non-trigger, and edge case were checked against the frozen boundary before handoff;\r\n- output stops at the authoring-to-eval boundary and does not implement eval runtime behavior;\r\n- non-trigger responses say `Out of scope for skill-forge.` and do not emit an Eval Brief;\r\n- stop-and-ask responses say `Scope clarification required.` and do not emit an Eval Brief;\r\n- any downstream dependency is called out explicitly instead of being guessed.\r\n\r\n## Stop conditions\r\nStop and ask when:\r\n- target skill is unclear;\r\n- no stable source refs exist for the contract;\r\n- the success contract cannot be stated as a small set of must-pass checks;\r\n- the frozen boundary would turn the request into more than one workflow or would require inventing missing contract details;\r\n- request needs runtime behavior changes to continue.\n\nUser request:\nTake this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.",
-          "label": "with_skill",
+          "label": "with_skill: evals\\engines\\promptfoo\\prompts\\with-skill.txt: [mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n{{skill_prompt}}\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "b85c00ae99f74dff7fe8dd826c3a446bfdcba12dfb8810a7f1de25ca6a8cf3ea",
+        "promptId": "bc27ddb2d155034b86c560d9dfcb149ca82ea4548f155536191cb2d044d8cb14",
         "promptIdx": 0,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -2684,14 +2668,15 @@
         "testCase": {
           "description": "eval-authoring-only-request",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "eval-authoring-only-request",
             "prompt": "Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.",
             "expected_output": "Do not trigger skill-forge because this is eval authoring work that belongs downstream.",
             "expected_stop": "do_not_trigger",
-            "should_trigger": "false",
+            "should_trigger": false,
             "assertions_json": "[\"must classify eval definition work as out of scope for skill-forge\",\"must avoid redefining the task as skill authoring\",\"must avoid producing an Eval Brief\"]",
-            "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"downstream\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"downstream\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -2700,21 +2685,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 6,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "eval-authoring-only-request",
           "prompt": "Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.",
           "expected_output": "Do not trigger skill-forge because this is eval authoring work that belongs downstream.",
           "expected_stop": "do_not_trigger",
-          "should_trigger": "false",
+          "should_trigger": false,
           "assertions_json": "[\"must classify eval definition work as out of scope for skill-forge\",\"must avoid redefining the task as skill authoring\",\"must avoid producing an Eval Brief\"]",
-          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"downstream\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"downstream\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -2795,11 +2782,7 @@
                   "score": 1,
                   "reason": "Assertion 3: Confirmed absence of markers: eval brief ready"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": false,
@@ -2823,15 +2806,15 @@
             }
           ]
         },
-        "id": "834972d4-5967-4e5a-9b47-c23bac15e2b1",
+        "id": "752ea132-dcd8-4e9a-8ff7-f00a4d7d8842",
         "latencyMs": 809,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:without_skill]\nYou are operating without skill context.\n\nUser request:\nTake this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.",
-          "label": "without_skill",
+          "label": "without_skill: evals\\engines\\promptfoo\\prompts\\without-skill.txt: [mode:without_skill]\nYou are operating without skill context.\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "34e60ab7bdd88a2e737989d073fa7e2b33a9a4c03f58f140dfeab80a2ee82b41",
+        "promptId": "6ecbf05d6fdcfadbbbaf2f65efa67556cdf7b0bc77ab94907fb5554cf552a08c",
         "promptIdx": 1,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -2889,14 +2872,15 @@
         "testCase": {
           "description": "eval-authoring-only-request",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "eval-authoring-only-request",
             "prompt": "Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.",
             "expected_output": "Do not trigger skill-forge because this is eval authoring work that belongs downstream.",
             "expected_stop": "do_not_trigger",
-            "should_trigger": "false",
+            "should_trigger": false,
             "assertions_json": "[\"must classify eval definition work as out of scope for skill-forge\",\"must avoid redefining the task as skill authoring\",\"must avoid producing an Eval Brief\"]",
-            "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"downstream\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"downstream\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -2905,21 +2889,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 6,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "eval-authoring-only-request",
           "prompt": "Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.",
           "expected_output": "Do not trigger skill-forge because this is eval authoring work that belongs downstream.",
           "expected_stop": "do_not_trigger",
-          "should_trigger": "false",
+          "should_trigger": false,
           "assertions_json": "[\"must classify eval definition work as out of scope for skill-forge\",\"must avoid redefining the task as skill authoring\",\"must avoid producing an Eval Brief\"]",
-          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"downstream\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"downstream\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -3000,11 +2986,7 @@
                   "score": 1,
                   "reason": "Assertion 3: Matched keywords: eval, brief, scope"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": true,
@@ -3028,15 +3010,15 @@
             }
           ]
         },
-        "id": "0ffed94d-5d3d-4e98-aa9e-7f55d012cfcf",
+        "id": "143c301d-2381-4c24-b7ef-d1195c95d6f3",
         "latencyMs": 1203,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n---\r\nname: skill-forge\r\ndescription: \"Builds or rewrites one skill through a contract-first workflow and stops at Eval Brief ready. Use when the request is one skill-authoring job with clear boundaries. Don't use when the task is repository policy, downstream eval authoring, or shared eval runtime implementation.\"\r\n---\r\n\r\n# skill-forge\r\n\r\nThis folder is the source of truth for `skill-forge`. Use it to route requests, define success, and produce the handoff artifact.\r\n\r\n## Routing precedence\r\nApply these decisions in order. Do not skip ahead to missing-input checks before routing the request.\r\n\r\n1. If the request starts from a finished `Eval Brief`, asks for `golden` or `negative` cases, or asks to write `packs/core/<skill>/evals/evals.json`, return `Classification: non-trigger` immediately.\r\n2. If the request is obvious non-authoring work such as `AGENTS.md`, repo policy, runtime-only implementation, shared eval runtime implementation, or downstream eval authoring, return `Classification: non-trigger` immediately.\n3. If the request is clearly skill authoring and eval or runtime work is only secondary, mixed in, or explicitly deferred, return `Classification: trigger` and keep skill authoring as the active responsibility.\n4. Only return `Classification: stop-and-ask` when the request still plausibly belongs to skill authoring but the skill target, single job, or authoring boundary is genuinely unclear.\n\nRouting examples:\n- `Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.` -> `Classification: non-trigger`\n- `Write a new skill for PR review routing and leave eval scaffold for later.` -> `Classification: trigger`\n- `Write a new skill for PR review routing and also set up the first eval scaffold, but keep the skill contract first and leave runtime for later.` -> `Classification: trigger`\n- `Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.` -> `Classification: non-trigger`\r\n- `Create a skill, reorganize repo policies, and build the first runner in one pass.` -> `Classification: stop-and-ask`\n\r\n## Single job\r\nProduce one `Eval Brief ready` artifact for one skill by freezing: single job, trigger boundary, non-trigger boundary, success model, activation probes, nearby negatives, and stop conditions.\r\n\r\n## When to use\r\nUse this skill when the request is to create a new reusable skill or refactor one existing skill and you need a contract-first output that downstream eval authoring can consume without guessing intent.\r\n\r\n## Do not use when\r\nDo not use this skill when:\r\n- the request is repository-wide policy (`AGENTS.md`);\r\n- the request is to implement eval runtime behavior, shared eval runtime implementation, grading, timing, benchmark output, or suite orchestration;\r\n- the request is eval authoring downstream from an already-finished brief, including requests to turn a finished Eval Brief into `evals.json` cases;\r\n- the request mixes multiple independent workflows in one skill and authoring is not clearly primary.\r\n\r\n## Required output\r\nUse one of these response modes exactly.\r\n\r\nFor trigger cases:\r\n1. Start with `Classification: trigger`.\r\n2. Name the workflow explicitly as one of: `Workflow: new-skill`, `Workflow: existing-skill-refactor`, or `Workflow: skill-rewrite`.\r\n3. Add the exact sentence `Freeze the contract before final instructions.` on its own line before the JSON artifact.\r\n4. If eval or runtime work appears but skill authoring is clearly primary, keep skill authoring as the active responsibility and add the exact sentence `Downstream eval work is out of scope here.` on its own line before the JSON artifact.\n5. Treat requests that say `skill contract first`, `Eval Brief first`, or otherwise make authoring primary as trigger cases even if they also mention eval scaffold work for later.\n6. Do not switch to `stop-and-ask` just because eval scaffold work appears alongside authoring when the authoring boundary is already clear.\n7. Keep the required trigger note and any downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.\n8. Do not ask for confirmation if the skill target and authoring job are already clear.\n9. Produce the boundary-only JSON artifact.\n10. End with the exact line `Eval Brief ready`.\n\r\nFor non-trigger cases:\r\n1. Start with `Classification: non-trigger`.\r\n2. Say exactly `Out of scope for skill-forge.`\r\n3. Name the reason in one sentence.\r\n4. If the request is runtime-only implementation, use the exact sentence `The request is shared eval runtime implementation, not skill authoring, and an authoring-only output would not satisfy this request.`\r\n5. If the request is repository policy or `AGENTS.md` work, include `AGENTS` or `repository policy` explicitly in that sentence.\r\n6. Use this mode for obvious non-authoring work such as AGENTS policy, runtime-only implementation, shared eval runtime implementation, or eval-authoring-only requests, even if the request is missing inputs or the referenced brief content is not attached.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor stop-and-ask cases:\r\n1. Start with `Classification: stop-and-ask`.\r\n2. Say exactly `Scope clarification required.`\r\n3. Use stop-and-ask only when the request is still plausibly skill authoring and the skill target, single job, or authoring boundary is genuinely unclear.\r\n4. Do not use stop-and-ask for obvious non-trigger requests.\r\n5. State which part of the authoring target or boundary is unclear.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor this repository, the canonical template is:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json`\r\n\r\nFor the current in-repo eval example of this skill, the cases live at:\r\n- `packs/core/skill-forge/evals/evals.json`\r\n\r\n## Local materials\r\nUse these local files only when they help the current authoring run:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json` to structure the boundary-only handoff artifact.\r\n- `packs/core/skill-forge/assets/spec-template.md` to sanity-check that the brief stops at `Eval Brief ready`.\r\n- `packs/core/skill-forge/assets/skill-template.job.md` and `packs/core/skill-forge/assets/skill-template.guardrail.md` only when the target skill itself needs a local starting shape.\r\n- `packs/core/skill-forge/evals/evals.json` as a downstream validation example for this skill, not as an input required to author the brief.\r\n\r\n## Procedure\r\nStep 1: Define success before writing or refactoring the skill.\r\n1. Freeze a small success contract before touching final skill instructions.\r\n2. Record outcome goals: what the skill must successfully produce when it applies.\r\n3. Record boundary goals: trigger, non-trigger, and stop-and-ask.\r\n4. Record style goals: the required output shape and stop marker.\r\n5. Keep the list small and limited to must-pass checks for this skill.\r\n\r\nStep 2: Route the request before authoring.\r\n1. Apply the routing precedence section above first.\r\n2. If the request is obvious non-authoring work, return `Classification: non-trigger` immediately.\r\n3. If the request is runtime-only implementation, the reason sentence must make clear that the work is shared eval runtime implementation, not skill authoring, and that an authoring-only output would not satisfy the request.\r\n4. If the request mixes authoring with eval or runtime work but skill authoring is clearly primary, continue and defer the downstream work explicitly.\n5. If the request already says `contract first`, `Eval Brief first`, or otherwise freezes authoring as the active responsibility, do not degrade it to `stop-and-ask` just because eval scaffold work is also requested.\n6. Only use `stop-and-ask` if the request still looks like skill authoring but the target or boundary is unclear.\n\r\nStep 3: Freeze scope for one skill.\r\n1. Confirm one skill target and one single job.\r\n2. Confirm whether the workflow is `new-skill`, `existing-skill-refactor`, or `skill-rewrite`.\r\n3. Freeze trigger boundary and stop conditions.\r\n4. Freeze activation probes and nearby negatives.\r\n\r\nStep 4: Capture boundary input.\r\n1. Start from `packs/core/skill-forge/assets/contracts/eval-brief.template.json`.\r\n2. Fill only boundary fields: skill identity, authoring boundary, success model, probes, negative signals, source refs.\r\n3. Keep the brief free of runtime, dataset, benchmark, grader, or eval scaffold detail.\n4. Treat the success contract from Step 1 as required input to the brief, not as optional commentary.\r\n5. Keep `sourceRefs` limited to source material that justifies the target skill contract. Do not list repo planning documents as required inputs for the brief.\r\n\r\nStep 5: Stabilize the local contract before handoff.\r\n1. Check one trigger, one nearby non-trigger, and one edge case against the frozen boundary.\r\n2. Fold any failure back into routing, stop conditions, or success criteria before writing the final brief.\r\n3. Keep support files lean. Only rely on local templates that add real authoring value.\r\n\r\nStep 6: Produce the Eval Brief.\r\n1. Materialize the JSON artifact from the filled template.\r\n2. Keep the artifact boundary-only: no runtime implementation detail, no eval scaffold layout, and no scorer logic.\n3. Keep any downstream defer note outside the JSON payload.\r\n4. Record any unresolved downstream dependency as a short note outside the JSON payload instead of inventing runtime behavior.\r\n5. Do not mention runner, benchmark, scorer, or grading behavior inside the brief payload.\r\n6. End the response with the exact line `Eval Brief ready`.\r\n\r\nStep 7: Metadata discipline.\r\n1. Keep the frontmatter name and description aligned with the actual skill boundary.\r\n2. Do not add runtime, grading, or benchmark promises to the metadata.\r\n\r\n## Definition of done\r\nDone means all are true:\r\n- `Eval Brief ready` exists for the target skill when the case is a trigger;\r\n- the success contract was defined before writing or refactoring the skill;\r\n- authoring boundary, success model, and probes are explicit and source-backed;\r\n- a representative trigger, non-trigger, and edge case were checked against the frozen boundary before handoff;\r\n- output stops at the authoring-to-eval boundary and does not implement eval runtime behavior;\r\n- non-trigger responses say `Out of scope for skill-forge.` and do not emit an Eval Brief;\r\n- stop-and-ask responses say `Scope clarification required.` and do not emit an Eval Brief;\r\n- any downstream dependency is called out explicitly instead of being guessed.\r\n\r\n## Stop conditions\r\nStop and ask when:\r\n- target skill is unclear;\r\n- no stable source refs exist for the contract;\r\n- the success contract cannot be stated as a small set of must-pass checks;\r\n- the frozen boundary would turn the request into more than one workflow or would require inventing missing contract details;\r\n- request needs runtime behavior changes to continue.\n\nUser request:\nCreate a skill, reorganize the repo policies, and build the first runner in one pass so everything lands together.",
-          "label": "with_skill",
+          "label": "with_skill: evals\\engines\\promptfoo\\prompts\\with-skill.txt: [mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n{{skill_prompt}}\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "b85c00ae99f74dff7fe8dd826c3a446bfdcba12dfb8810a7f1de25ca6a8cf3ea",
+        "promptId": "bc27ddb2d155034b86c560d9dfcb149ca82ea4548f155536191cb2d044d8cb14",
         "promptIdx": 0,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -3094,14 +3076,15 @@
         "testCase": {
           "description": "ambiguous-multi-workflow-request",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "ambiguous-multi-workflow-request",
             "prompt": "Create a skill, reorganize the repo policies, and build the first runner in one pass so everything lands together.",
             "expected_output": "Do not trigger skill-forge as a clean fit because the request mixes multiple independent workflows and should stop for scope clarification.",
             "expected_stop": "stop_and_ask",
-            "should_trigger": "false",
+            "should_trigger": false,
             "assertions_json": "[\"must detect multiple workflows in one request\",\"must refuse to collapse policy, authoring, and runtime into one skill flow\",\"must avoid producing an Eval Brief before the scope is narrowed\"]",
-            "assertion_rules_json": "[{\"markers\":[\"multiple\",\"workflows\"]},null,null]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[{\"markers\":[\"multiple\",\"workflows\"]},null,null]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -3110,21 +3093,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 7,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "ambiguous-multi-workflow-request",
           "prompt": "Create a skill, reorganize the repo policies, and build the first runner in one pass so everything lands together.",
           "expected_output": "Do not trigger skill-forge as a clean fit because the request mixes multiple independent workflows and should stop for scope clarification.",
           "expected_stop": "stop_and_ask",
-          "should_trigger": "false",
+          "should_trigger": false,
           "assertions_json": "[\"must detect multiple workflows in one request\",\"must refuse to collapse policy, authoring, and runtime into one skill flow\",\"must avoid producing an Eval Brief before the scope is narrowed\"]",
-          "assertion_rules_json": "[{\"markers\":[\"multiple\",\"workflows\"]},null,null]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"multiple\",\"workflows\"]},null,null]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -3205,11 +3190,7 @@
                   "score": 0,
                   "reason": "Assertion 3: Missing keywords. Matched none from producing, eval, brief, scope, narrowed"
                 }
-              ],
-              "assertion": {
-                "type": "javascript",
-                "value": "function gradeSkillForgeCase(output, context) {\n  ..."
-              }
+              ]
             },
             {
               "pass": false,
@@ -3233,15 +3214,15 @@
             }
           ]
         },
-        "id": "b68b7076-c01d-410e-b082-94f8f0abdd88",
+        "id": "008ab22c-5204-4fef-8b49-db8e15d0f09d",
         "latencyMs": 9739,
         "namedScores": {},
         "prompt": {
           "raw": "[mode:without_skill]\nYou are operating without skill context.\n\nUser request:\nCreate a skill, reorganize the repo policies, and build the first runner in one pass so everything lands together.",
-          "label": "without_skill",
+          "label": "without_skill: evals\\engines\\promptfoo\\prompts\\without-skill.txt: [mode:without_skill]\nYou are operating without skill context.\n\nUser request:\n{{prompt}}",
           "config": {}
         },
-        "promptId": "34e60ab7bdd88a2e737989d073fa7e2b33a9a4c03f58f140dfeab80a2ee82b41",
+        "promptId": "6ecbf05d6fdcfadbbbaf2f65efa67556cdf7b0bc77ab94907fb5554cf552a08c",
         "promptIdx": 1,
         "provider": {
           "id": "openai:gpt-4.1-mini",
@@ -3299,14 +3280,15 @@
         "testCase": {
           "description": "ambiguous-multi-workflow-request",
           "vars": {
+            "case_score_threshold": 0.75,
+            "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
             "case_id": "ambiguous-multi-workflow-request",
             "prompt": "Create a skill, reorganize the repo policies, and build the first runner in one pass so everything lands together.",
             "expected_output": "Do not trigger skill-forge as a clean fit because the request mixes multiple independent workflows and should stop for scope clarification.",
             "expected_stop": "stop_and_ask",
-            "should_trigger": "false",
+            "should_trigger": false,
             "assertions_json": "[\"must detect multiple workflows in one request\",\"must refuse to collapse policy, authoring, and runtime into one skill flow\",\"must avoid producing an Eval Brief before the scope is narrowed\"]",
-            "assertion_rules_json": "[{\"markers\":[\"multiple\",\"workflows\"]},null,null]",
-            "case_score_threshold": "0.75"
+            "assertion_rules_json": "[{\"markers\":[\"multiple\",\"workflows\"]},null,null]"
           },
           "metadata": {
             "skill_name": "skill-forge",
@@ -3315,21 +3297,23 @@
           },
           "assert": [
             {
-              "type": "javascript"
+              "type": "javascript",
+              "value": "file://support/assertions.cjs:gradeSkillForgeCase"
             }
           ],
           "options": {}
         },
         "testIdx": 7,
         "vars": {
+          "case_score_threshold": 0.75,
+          "skill_prompt": "file://..\\..\\..\\packs\\core\\skill-forge\\SKILL.md",
           "case_id": "ambiguous-multi-workflow-request",
           "prompt": "Create a skill, reorganize the repo policies, and build the first runner in one pass so everything lands together.",
           "expected_output": "Do not trigger skill-forge as a clean fit because the request mixes multiple independent workflows and should stop for scope clarification.",
           "expected_stop": "stop_and_ask",
-          "should_trigger": "false",
+          "should_trigger": false,
           "assertions_json": "[\"must detect multiple workflows in one request\",\"must refuse to collapse policy, authoring, and runtime into one skill flow\",\"must avoid producing an Eval Brief before the scope is narrowed\"]",
-          "assertion_rules_json": "[{\"markers\":[\"multiple\",\"workflows\"]},null,null]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"multiple\",\"workflows\"]},null,null]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -3399,7 +3383,7 @@
           }
         }
       },
-      "durationMs": 434
+      "durationMs": 590
     }
   },
   "config": {
@@ -3408,11 +3392,11 @@
     "prompts": [
       {
         "label": "with_skill",
-        "raw": "[mode:with_skill]\nYou are operating with skill context enabled.\n\nSkill context:\n---\r\nname: skill-forge\r\ndescription: \"Builds or rewrites one skill through a contract-first workflow and stops at Eval Brief ready. Use when the request is one skill-authoring job with clear boundaries. Don't use when the task is repository policy, downstream eval authoring, or shared eval runtime implementation.\"\r\n---\r\n\r\n# skill-forge\r\n\r\nThis folder is the source of truth for `skill-forge`. Use it to route requests, define success, and produce the handoff artifact.\r\n\r\n## Routing precedence\r\nApply these decisions in order. Do not skip ahead to missing-input checks before routing the request.\r\n\r\n1. If the request starts from a finished `Eval Brief`, asks for `golden` or `negative` cases, or asks to write `packs/core/<skill>/evals/evals.json`, return `Classification: non-trigger` immediately.\r\n2. If the request is obvious non-authoring work such as `AGENTS.md`, repo policy, runtime-only implementation, shared eval runtime implementation, or downstream eval authoring, return `Classification: non-trigger` immediately.\n3. If the request is clearly skill authoring and eval or runtime work is only secondary, mixed in, or explicitly deferred, return `Classification: trigger` and keep skill authoring as the active responsibility.\n4. Only return `Classification: stop-and-ask` when the request still plausibly belongs to skill authoring but the skill target, single job, or authoring boundary is genuinely unclear.\n\nRouting examples:\n- `Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.` -> `Classification: non-trigger`\n- `Write a new skill for PR review routing and leave eval scaffold for later.` -> `Classification: trigger`\n- `Write a new skill for PR review routing and also set up the first eval scaffold, but keep the skill contract first and leave runtime for later.` -> `Classification: trigger`\n- `Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.` -> `Classification: non-trigger`\r\n- `Create a skill, reorganize repo policies, and build the first runner in one pass.` -> `Classification: stop-and-ask`\n\r\n## Single job\r\nProduce one `Eval Brief ready` artifact for one skill by freezing: single job, trigger boundary, non-trigger boundary, success model, activation probes, nearby negatives, and stop conditions.\r\n\r\n## When to use\r\nUse this skill when the request is to create a new reusable skill or refactor one existing skill and you need a contract-first output that downstream eval authoring can consume without guessing intent.\r\n\r\n## Do not use when\r\nDo not use this skill when:\r\n- the request is repository-wide policy (`AGENTS.md`);\r\n- the request is to implement eval runtime behavior, shared eval runtime implementation, grading, timing, benchmark output, or suite orchestration;\r\n- the request is eval authoring downstream from an already-finished brief, including requests to turn a finished Eval Brief into `evals.json` cases;\r\n- the request mixes multiple independent workflows in one skill and authoring is not clearly primary.\r\n\r\n## Required output\r\nUse one of these response modes exactly.\r\n\r\nFor trigger cases:\r\n1. Start with `Classification: trigger`.\r\n2. Name the workflow explicitly as one of: `Workflow: new-skill`, `Workflow: existing-skill-refactor`, or `Workflow: skill-rewrite`.\r\n3. Add the exact sentence `Freeze the contract before final instructions.` on its own line before the JSON artifact.\r\n4. If eval or runtime work appears but skill authoring is clearly primary, keep skill authoring as the active responsibility and add the exact sentence `Downstream eval work is out of scope here.` on its own line before the JSON artifact.\n5. Treat requests that say `skill contract first`, `Eval Brief first`, or otherwise make authoring primary as trigger cases even if they also mention eval scaffold work for later.\n6. Do not switch to `stop-and-ask` just because eval scaffold work appears alongside authoring when the authoring boundary is already clear.\n7. Keep the required trigger note and any downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.\n8. Do not ask for confirmation if the skill target and authoring job are already clear.\n9. Produce the boundary-only JSON artifact.\n10. End with the exact line `Eval Brief ready`.\n\r\nFor non-trigger cases:\r\n1. Start with `Classification: non-trigger`.\r\n2. Say exactly `Out of scope for skill-forge.`\r\n3. Name the reason in one sentence.\r\n4. If the request is runtime-only implementation, use the exact sentence `The request is shared eval runtime implementation, not skill authoring, and an authoring-only output would not satisfy this request.`\r\n5. If the request is repository policy or `AGENTS.md` work, include `AGENTS` or `repository policy` explicitly in that sentence.\r\n6. Use this mode for obvious non-authoring work such as AGENTS policy, runtime-only implementation, shared eval runtime implementation, or eval-authoring-only requests, even if the request is missing inputs or the referenced brief content is not attached.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor stop-and-ask cases:\r\n1. Start with `Classification: stop-and-ask`.\r\n2. Say exactly `Scope clarification required.`\r\n3. Use stop-and-ask only when the request is still plausibly skill authoring and the skill target, single job, or authoring boundary is genuinely unclear.\r\n4. Do not use stop-and-ask for obvious non-trigger requests.\r\n5. State which part of the authoring target or boundary is unclear.\r\n7. Do not produce an Eval Brief.\r\n\r\nFor this repository, the canonical template is:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json`\r\n\r\nFor the current in-repo eval example of this skill, the cases live at:\r\n- `packs/core/skill-forge/evals/evals.json`\r\n\r\n## Local materials\r\nUse these local files only when they help the current authoring run:\r\n- `packs/core/skill-forge/assets/contracts/eval-brief.template.json` to structure the boundary-only handoff artifact.\r\n- `packs/core/skill-forge/assets/spec-template.md` to sanity-check that the brief stops at `Eval Brief ready`.\r\n- `packs/core/skill-forge/assets/skill-template.job.md` and `packs/core/skill-forge/assets/skill-template.guardrail.md` only when the target skill itself needs a local starting shape.\r\n- `packs/core/skill-forge/evals/evals.json` as a downstream validation example for this skill, not as an input required to author the brief.\r\n\r\n## Procedure\r\nStep 1: Define success before writing or refactoring the skill.\r\n1. Freeze a small success contract before touching final skill instructions.\r\n2. Record outcome goals: what the skill must successfully produce when it applies.\r\n3. Record boundary goals: trigger, non-trigger, and stop-and-ask.\r\n4. Record style goals: the required output shape and stop marker.\r\n5. Keep the list small and limited to must-pass checks for this skill.\r\n\r\nStep 2: Route the request before authoring.\r\n1. Apply the routing precedence section above first.\r\n2. If the request is obvious non-authoring work, return `Classification: non-trigger` immediately.\r\n3. If the request is runtime-only implementation, the reason sentence must make clear that the work is shared eval runtime implementation, not skill authoring, and that an authoring-only output would not satisfy the request.\r\n4. If the request mixes authoring with eval or runtime work but skill authoring is clearly primary, continue and defer the downstream work explicitly.\n5. If the request already says `contract first`, `Eval Brief first`, or otherwise freezes authoring as the active responsibility, do not degrade it to `stop-and-ask` just because eval scaffold work is also requested.\n6. Only use `stop-and-ask` if the request still looks like skill authoring but the target or boundary is unclear.\n\r\nStep 3: Freeze scope for one skill.\r\n1. Confirm one skill target and one single job.\r\n2. Confirm whether the workflow is `new-skill`, `existing-skill-refactor`, or `skill-rewrite`.\r\n3. Freeze trigger boundary and stop conditions.\r\n4. Freeze activation probes and nearby negatives.\r\n\r\nStep 4: Capture boundary input.\r\n1. Start from `packs/core/skill-forge/assets/contracts/eval-brief.template.json`.\r\n2. Fill only boundary fields: skill identity, authoring boundary, success model, probes, negative signals, source refs.\r\n3. Keep the brief free of runtime, dataset, benchmark, grader, or eval scaffold detail.\n4. Treat the success contract from Step 1 as required input to the brief, not as optional commentary.\r\n5. Keep `sourceRefs` limited to source material that justifies the target skill contract. Do not list repo planning documents as required inputs for the brief.\r\n\r\nStep 5: Stabilize the local contract before handoff.\r\n1. Check one trigger, one nearby non-trigger, and one edge case against the frozen boundary.\r\n2. Fold any failure back into routing, stop conditions, or success criteria before writing the final brief.\r\n3. Keep support files lean. Only rely on local templates that add real authoring value.\r\n\r\nStep 6: Produce the Eval Brief.\r\n1. Materialize the JSON artifact from the filled template.\r\n2. Keep the artifact boundary-only: no runtime implementation detail, no eval scaffold layout, and no scorer logic.\n3. Keep any downstream defer note outside the JSON payload.\r\n4. Record any unresolved downstream dependency as a short note outside the JSON payload instead of inventing runtime behavior.\r\n5. Do not mention runner, benchmark, scorer, or grading behavior inside the brief payload.\r\n6. End the response with the exact line `Eval Brief ready`.\r\n\r\nStep 7: Metadata discipline.\r\n1. Keep the frontmatter name and description aligned with the actual skill boundary.\r\n2. Do not add runtime, grading, or benchmark promises to the metadata.\r\n\r\n## Definition of done\r\nDone means all are true:\r\n- `Eval Brief ready` exists for the target skill when the case is a trigger;\r\n- the success contract was defined before writing or refactoring the skill;\r\n- authoring boundary, success model, and probes are explicit and source-backed;\r\n- a representative trigger, non-trigger, and edge case were checked against the frozen boundary before handoff;\r\n- output stops at the authoring-to-eval boundary and does not implement eval runtime behavior;\r\n- non-trigger responses say `Out of scope for skill-forge.` and do not emit an Eval Brief;\r\n- stop-and-ask responses say `Scope clarification required.` and do not emit an Eval Brief;\r\n- any downstream dependency is called out explicitly instead of being guessed.\r\n\r\n## Stop conditions\r\nStop and ask when:\r\n- target skill is unclear;\r\n- no stable source refs exist for the contract;\r\n- the success contract cannot be stated as a small set of must-pass checks;\r\n- the frozen boundary would turn the request into more than one workflow or would require inventing missing contract details;\r\n- request needs runtime behavior changes to continue.\n\nUser request:\n{{prompt}}"
+        "raw": "file://prompts/with-skill.txt"
       },
       {
         "label": "without_skill",
-        "raw": "[mode:without_skill]\nYou are operating without skill context.\n\nUser request:\n{{prompt}}"
+        "raw": "file://prompts/without-skill.txt"
       }
     ],
     "providers": [
@@ -3422,14 +3406,14 @@
       {
         "description": "new-skill-one-clear-job",
         "vars": {
+          "skill_prompt": "file://../../../packs/core/skill-forge/SKILL.md",
           "case_id": "new-skill-one-clear-job",
           "prompt": "Create a new reusable skill for spotting JavaScript array mutation mistakes. Start from the contract, keep one job only, and do not implement eval runtime behavior.",
           "expected_output": "Treat the request as a new-skill authoring workflow, freeze the contract before writing instructions, and stop at Eval Brief ready.",
           "expected_stop": "Eval Brief ready",
-          "should_trigger": "true",
+          "should_trigger": true,
           "assertions_json": "[\"must classify this as a new-skill workflow\",\"must define the contract before final skill instructions\",\"must stop before eval runtime implementation\"]",
-          "assertion_rules_json": "[{\"markers\":[\"workflow: new-skill\"]},{\"markers\":[\"contract\",\"before\",\"instructions\"]},null]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"workflow: new-skill\"]},{\"markers\":[\"contract\",\"before\",\"instructions\"]},null]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -3440,14 +3424,14 @@
       {
         "description": "existing-skill-refactor-clear-target",
         "vars": {
+          "skill_prompt": "file://../../../packs/core/skill-forge/SKILL.md",
           "case_id": "existing-skill-refactor-clear-target",
           "prompt": "Refactor the existing skill `skill-eval-forge`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.",
           "expected_output": "Treat the request as an existing-skill refactor workflow, keep the work contract-first, and end with Eval Brief ready.",
           "expected_stop": "Eval Brief ready",
-          "should_trigger": "true",
+          "should_trigger": true,
           "assertions_json": "[\"must classify this as an existing-skill refactor workflow\",\"must preserve the contract-first refactor sequence\",\"must end at Eval Brief ready\"]",
-          "assertion_rules_json": "[{\"markers\":[\"workflow: existing-skill-refactor\"]},{\"markers\":[\"contract-first\",\"refactor\"]},null]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"workflow: existing-skill-refactor\"]},{\"markers\":[\"contract-first\",\"refactor\"]},null]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -3458,14 +3442,14 @@
       {
         "description": "skill-rewrite-clear-target",
         "vars": {
+          "skill_prompt": "file://../../../packs/core/skill-forge/SKILL.md",
           "case_id": "skill-rewrite-clear-target",
           "prompt": "Rewrite the existing skill `skill-eval-forge` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.",
           "expected_output": "Treat the request as a skill-rewrite workflow, anchor the rewrite in source-backed contract work, and stop at Eval Brief ready.",
           "expected_stop": "Eval Brief ready",
-          "should_trigger": "true",
+          "should_trigger": true,
           "assertions_json": "[\"must classify this as a skill rewrite request\",\"must freeze contract elements before final instructions\",\"must stop at Eval Brief ready\"]",
-          "assertion_rules_json": "[{\"markers\":[\"workflow: skill-rewrite\"]},{\"markers\":[\"freeze\",\"contract\",\"before\",\"instructions\"]},null]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"workflow: skill-rewrite\"]},{\"markers\":[\"freeze\",\"contract\",\"before\",\"instructions\"]},null]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -3476,14 +3460,14 @@
       {
         "description": "mixed-authoring-and-eval-request",
         "vars": {
+          "skill_prompt": "file://../../../packs/core/skill-forge/SKILL.md",
           "case_id": "mixed-authoring-and-eval-request",
           "prompt": "Write a new skill for PR review routing and also set up the first eval scaffold for it. I want the skill contract first, but please leave the runtime for later.",
           "expected_output": "Handle the authoring part, call out that eval work is downstream, and stop at Eval Brief ready instead of implementing the scaffold.",
           "expected_stop": "Eval Brief ready",
-          "should_trigger": "true",
+          "should_trigger": true,
           "assertions_json": "[\"must preserve skill authoring as the active responsibility\",\"must explicitly defer eval scaffold implementation\",\"must not invent runner, grading, or benchmark behavior\"]",
-          "assertion_rules_json": "[null,{\"markers\":[\"downstream\",\"out of scope\"]},{\"markers\":[\"runner\",\"grading\",\"benchmark\"],\"absent\":true}]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[null,{\"markers\":[\"downstream\",\"out of scope\"]},{\"markers\":[\"runner\",\"grading\",\"benchmark\"],\"absent\":true}]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -3494,14 +3478,14 @@
       {
         "description": "agents-policy-request",
         "vars": {
+          "skill_prompt": "file://../../../packs/core/skill-forge/SKILL.md",
           "case_id": "agents-policy-request",
           "prompt": "Update the repo AGENTS.md managed block and tighten the repository policy wording.",
           "expected_output": "Do not trigger skill-forge because this is repository policy work, not skill authoring.",
           "expected_stop": "do_not_trigger",
-          "should_trigger": "false",
+          "should_trigger": false,
           "assertions_json": "[\"must classify AGENTS work as out of scope\",\"must avoid rewriting the task as a skill request\",\"must avoid producing an Eval Brief\"]",
-          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"agents\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"agents\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -3512,14 +3496,14 @@
       {
         "description": "runtime-harness-implementation",
         "vars": {
+          "skill_prompt": "file://../../../packs/core/skill-forge/SKILL.md",
           "case_id": "runtime-harness-implementation",
           "prompt": "Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.",
           "expected_output": "Do not trigger skill-forge because the request is shared eval runtime implementation, not skill authoring.",
           "expected_stop": "do_not_trigger",
-          "should_trigger": "false",
+          "should_trigger": false,
           "assertions_json": "[\"must classify runtime implementation as out of scope\",\"must avoid proposing authoring-only output as if it satisfied the request\",\"must avoid producing an Eval Brief\"]",
-          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"runtime\",\"implementation\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"runtime\",\"implementation\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -3530,14 +3514,14 @@
       {
         "description": "eval-authoring-only-request",
         "vars": {
+          "skill_prompt": "file://../../../packs/core/skill-forge/SKILL.md",
           "case_id": "eval-authoring-only-request",
           "prompt": "Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.",
           "expected_output": "Do not trigger skill-forge because this is eval authoring work that belongs downstream.",
           "expected_stop": "do_not_trigger",
-          "should_trigger": "false",
+          "should_trigger": false,
           "assertions_json": "[\"must classify eval definition work as out of scope for skill-forge\",\"must avoid redefining the task as skill authoring\",\"must avoid producing an Eval Brief\"]",
-          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"downstream\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"out of scope\",\"downstream\"]},null,{\"markers\":[\"eval brief ready\"],\"absent\":true}]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -3548,14 +3532,14 @@
       {
         "description": "ambiguous-multi-workflow-request",
         "vars": {
+          "skill_prompt": "file://../../../packs/core/skill-forge/SKILL.md",
           "case_id": "ambiguous-multi-workflow-request",
           "prompt": "Create a skill, reorganize the repo policies, and build the first runner in one pass so everything lands together.",
           "expected_output": "Do not trigger skill-forge as a clean fit because the request mixes multiple independent workflows and should stop for scope clarification.",
           "expected_stop": "stop_and_ask",
-          "should_trigger": "false",
+          "should_trigger": false,
           "assertions_json": "[\"must detect multiple workflows in one request\",\"must refuse to collapse policy, authoring, and runtime into one skill flow\",\"must avoid producing an Eval Brief before the scope is narrowed\"]",
-          "assertion_rules_json": "[{\"markers\":[\"multiple\",\"workflows\"]},null,null]",
-          "case_score_threshold": "0.75"
+          "assertion_rules_json": "[{\"markers\":[\"multiple\",\"workflows\"]},null,null]"
         },
         "metadata": {
           "skill_name": "skill-forge",
@@ -3567,12 +3551,15 @@
     "scenarios": [],
     "env": {},
     "defaultTest": {
+      "vars": {
+        "case_score_threshold": 0.75
+      },
       "assert": [
         {
-          "type": "javascript"
+          "type": "javascript",
+          "value": "file://support/assertions.cjs:gradeSkillForgeCase"
         }
       ],
-      "vars": {},
       "options": {},
       "metadata": {}
     },
@@ -3589,7 +3576,7 @@
     "nodeVersion": "v22.13.0",
     "platform": "win32",
     "arch": "x64",
-    "exportedAt": "2026-03-13T23:10:12.637Z",
-    "evaluationCreatedAt": "2026-03-13T23:10:11.336Z"
+    "exportedAt": "2026-03-13T23:41:12.436Z",
+    "evaluationCreatedAt": "2026-03-13T23:41:10.829Z"
   }
 }

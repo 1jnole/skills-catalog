@@ -4,7 +4,6 @@ This note captures the canonical local result shape that separates engine output
 
 ## Current source of truth
 - `evals/engines/promptfoo/generated/skill-forge.eval.json`
-- `evals/engines/promptfoo/support/benchmark-summary.mjs`
 
 ## Canonical normalized shape
 A normalized case result always contains:
@@ -29,6 +28,6 @@ Each mode keeps only canonical fields:
 - legacy errored artifacts without error payload are upgraded with a fallback error marker during normalization.
 
 ## Boundary rule
-Engine-specific raw reports do not define benchmark or grading semantics directly.
+Engine-specific raw reports do not define the long-term contract directly.
 
-The core reads normalized case results and builds benchmark/scoring semantics from this stable local shape.
+`evals/contracts/` documents the canonical local shape that downstream tooling may rely on, while Promptfoo remains the active runtime boundary.

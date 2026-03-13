@@ -32,13 +32,6 @@ This directory marks the Phase 3 destination for the contracts that survive the 
   - provider metadata only as optional technical data
 - boundary note: `evals/contracts/run-results-normalization.md`
 
-### Run artifact
-- current source: `evals/engines/promptfoo/generated/skill-forge.benchmark.json`
-- portable responsibility:
-  - mode summary semantics
-  - benchmark artifact semantics
-  - result status and error semantics
-
 ## Supported baseline in scope
 The surviving core still assumes only:
 - `with_skill`

@@ -15,7 +15,11 @@ Promptfoo is the supported execution tool.
 
 ## Supported layout
 
-- canonical suite:
+- canonical Promptfoo config:
+  - `evals/engines/promptfoo/promptfooconfig.yaml`
+- canonical Promptfoo execution suite:
+  - `evals/engines/promptfoo/tests/skill-forge.yaml`
+- local eval authoring contract:
   - `evals/cases/skill-forge/suite.v1.json`
 - skill prompt source:
   - `packs/core/skill-forge/SKILL.md`
@@ -23,7 +27,6 @@ Promptfoo is the supported execution tool.
   - `evals/engines/promptfoo/fixtures/`
 - generated outputs:
   - `evals/engines/promptfoo/generated/skill-forge.eval.json`
-  - `evals/engines/promptfoo/generated/skill-forge.benchmark.json`
 
 ## Historical or deprecated pieces
 

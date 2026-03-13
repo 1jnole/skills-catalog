@@ -9,9 +9,11 @@ The eval harness is now **Promptfoo-first**.
 
 Supported state:
 - the repository installs and versions `promptfoo` locally
-- the canonical native config lives in `evals/engines/promptfoo/promptfooconfig.mjs`
-- the canonical suite lives in `evals/cases/skill-forge/suite.v1.json`
-- generated eval and benchmark outputs live under `evals/engines/promptfoo/generated/`
+- the canonical native config lives in `evals/engines/promptfoo/promptfooconfig.yaml`
+- the canonical Promptfoo execution suite lives in `evals/engines/promptfoo/tests/skill-forge.yaml`
+- prompt templates live in `evals/engines/promptfoo/prompts/`
+- the only repo-specific execution extension is the Promptfoo JavaScript assertion in `evals/engines/promptfoo/support/assertions.cjs`
+- generated Promptfoo outputs live under `evals/engines/promptfoo/generated/`
 
 Supported commands:
 - `npm run promptfoo:validate`
