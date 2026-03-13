@@ -7,9 +7,9 @@ export function readNextArg(argv: string[], index: number, flag: string): string
 }
 
 export function parsePositiveInteger(value: string, flag: string): number {
-  const parsed = Number.parseInt(value, 10);
-  if (!Number.isInteger(parsed) || parsed <= 0) {
+  if (!/^[1-9]\d*$/.test(value)) {
     throw new Error(`Invalid ${flag} value: ${value}`);
   }
-  return parsed;
+
+  return Number.parseInt(value, 10);
 }

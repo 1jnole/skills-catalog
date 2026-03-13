@@ -1,4 +1,8 @@
-import { type EvalCase, type EvalCaseMode } from '../domain/types/eval-case.types.js';
+import {
+  type EvalCase,
+  type EvalCaseAssertionRule,
+  type EvalCaseMode,
+} from '../domain/types/eval-case.types.js';
 import { type ArtifactError, type CaseGrading } from '../domain/types/run-artifact.types.js';
 
 const STOPWORDS = new Set([
@@ -54,6 +58,21 @@ function includesAll(text: string, markers: string[]): boolean {
   return markers.every((marker) => hasMarker(text, marker));
 }
 
+function formatMarkers(markers: string[]): string {
+  return markers.join(', ');
+}
+
+function createAssertionCheck(params: {
+  passed: boolean;
+  evidence: string;
+}): CaseGrading['checks'][number] {
+  return {
+    label: 'Assertion',
+    status: params.passed ? 'PASS' : 'FAIL',
+    evidence: params.evidence,
+  };
+}
+
 function evaluateBoundary(caseDefinition: EvalCase, output: string): CaseGrading['checks'][number] {
   const normalizedOutput = normalizeText(output);
 
@@ -92,121 +111,54 @@ function evaluateBoundary(caseDefinition: EvalCase, output: string): CaseGrading
   };
 }
 
-function evaluateStructuredAssertion(assertion: string, output: string): CaseGrading['checks'][number] | null {
-  const normalizedAssertion = normalizeText(assertion);
-  const normalizedOutput = normalizeText(output);
-
-  const structuredChecks: Array<{ match: (assertionText: string) => boolean; label: string; markers: string[]; mode: 'all' | 'any' | 'absent'; }> = [
-    {
-      match: (text) => text.includes('new-skill workflow'),
-      label: 'Assertion',
-      markers: ['workflow: new-skill'],
-      mode: 'any',
-    },
-    {
-      match: (text) => text.includes('existing-skill refactor workflow'),
-      label: 'Assertion',
-      markers: ['workflow: existing-skill-refactor'],
-      mode: 'any',
-    },
-    {
-      match: (text) => text.includes('skill rewrite request') || text.includes('skill-rewrite workflow'),
-      label: 'Assertion',
-      markers: ['workflow: skill-rewrite'],
-      mode: 'any',
-    },
-    {
-      match: (text) => text.includes('define the contract before final skill instructions'),
-      label: 'Assertion',
-      markers: ['contract', 'before', 'instructions'],
-      mode: 'all',
-    },
-    {
-      match: (text) => text.includes('preserve the contract-first refactor sequence') || text.includes('contract-first refactor sequence'),
-      label: 'Assertion',
-      markers: ['contract-first', 'refactor'],
-      mode: 'all',
-    },
-    {
-      match: (text) => text.includes('freeze contract elements before final instructions'),
-      label: 'Assertion',
-      markers: ['freeze', 'contract', 'before', 'instructions'],
-      mode: 'all',
-    },
-    {
-      match: (text) => text.includes('explicitly defer eval scaffold implementation'),
-      label: 'Assertion',
-      markers: ['downstream', 'out of scope'],
-      mode: 'all',
-    },
-    {
-      match: (text) => text.includes('must not invent runner, grading, or benchmark behavior'),
-      label: 'Assertion',
-      markers: ['runner', 'grading', 'benchmark'],
-      mode: 'absent',
-    },
-    {
-      match: (text) => text.includes('classify agents work as out of scope'),
-      label: 'Assertion',
-      markers: ['out of scope', 'agents'],
-      mode: 'all',
-    },
-    {
-      match: (text) => text.includes('classify runtime implementation as out of scope'),
-      label: 'Assertion',
-      markers: ['out of scope', 'runtime', 'implementation'],
-      mode: 'all',
-    },
-    {
-      match: (text) => text.includes('classify eval definition work as out of scope for skill-forge'),
-      label: 'Assertion',
-      markers: ['out of scope', 'downstream'],
-      mode: 'all',
-    },
-    {
-      match: (text) => text.includes('avoid producing an eval brief'),
-      label: 'Assertion',
-      markers: ['eval brief ready'],
-      mode: 'absent',
-    },
-    {
-      match: (text) => text.includes('detect multiple workflows in one request'),
-      label: 'Assertion',
-      markers: ['multiple', 'workflows'],
-      mode: 'all',
-    },
-  ];
-
-  const structuredCheck = structuredChecks.find((check) => check.match(normalizedAssertion));
-  if (!structuredCheck) {
+function resolveAssertionRule(caseDefinition: EvalCase, index: number): EvalCaseAssertionRule | null {
+  const assertionRules = caseDefinition.grading?.assertion_rules;
+  if (!assertionRules) {
     return null;
   }
 
-  const matched = includesAny(normalizedOutput, structuredCheck.markers);
-  const passed = structuredCheck.mode === 'all'
-    ? includesAll(normalizedOutput, structuredCheck.markers)
-    : structuredCheck.mode === 'any'
-      ? matched.length > 0
-      : matched.length === 0;
-
-  return {
-    label: structuredCheck.label,
-    status: passed ? 'PASS' : 'FAIL',
-    evidence: passed
-      ? structuredCheck.mode === 'absent'
-        ? `Confirmed absence of markers: ${structuredCheck.markers.join(', ')}`
-        : `Matched markers: ${structuredCheck.markers.filter((marker) => hasMarker(normalizedOutput, marker)).join(', ') || structuredCheck.markers.join(', ')}`
-      : structuredCheck.mode === 'absent'
-        ? `Unexpected markers present: ${matched.join(', ') || structuredCheck.markers.join(', ')}`
-        : `Missing markers: ${structuredCheck.markers.join(', ')}`,
-  };
+  return assertionRules[index] ?? null;
 }
 
-function evaluateAssertion(assertion: string, output: string, index: number): CaseGrading['checks'][number] {
-  const structuredResult = evaluateStructuredAssertion(assertion, output);
-  if (structuredResult) {
+function evaluatePresentAssertionRule(rule: EvalCaseAssertionRule, matchedMarkers: string[]): CaseGrading['checks'][number] {
+  const missingMarkers = rule.markers.filter((marker) => !matchedMarkers.includes(marker));
+  const passed = missingMarkers.length === 0;
+
+  return createAssertionCheck({
+    passed,
+    evidence: passed
+      ? `Matched markers: ${formatMarkers(matchedMarkers)}`
+      : `Missing markers: ${formatMarkers(missingMarkers)}`,
+  });
+}
+
+function evaluateAbsentAssertionRule(rule: EvalCaseAssertionRule, matchedMarkers: string[]): CaseGrading['checks'][number] {
+  const passed = matchedMarkers.length === 0;
+
+  return createAssertionCheck({
+    passed,
+    evidence: passed
+      ? `Confirmed absence of markers: ${formatMarkers(rule.markers)}`
+      : `Unexpected markers present: ${formatMarkers(matchedMarkers)}`,
+  });
+}
+
+function evaluateAssertionRule(rule: EvalCaseAssertionRule, output: string): CaseGrading['checks'][number] {
+  const normalizedOutput = normalizeText(output);
+  const matchedMarkers = includesAny(normalizedOutput, rule.markers);
+
+  if (rule.absent === true) {
+    return evaluateAbsentAssertionRule(rule, matchedMarkers);
+  }
+
+  return evaluatePresentAssertionRule(rule, matchedMarkers);
+}
+
+function evaluateAssertion(assertion: string, output: string, index: number, caseDefinition: EvalCase): CaseGrading['checks'][number] {
+  const assertionRule = resolveAssertionRule(caseDefinition, index);
+  if (assertionRule) {
     return {
-      ...structuredResult,
+      ...evaluateAssertionRule(assertionRule, output),
       label: `Assertion ${index + 1}`,
     };
   }
@@ -234,7 +186,9 @@ export function gradeCase(params: {
 }): CaseGrading {
   const checks = [
     evaluateBoundary(params.caseDefinition, params.output),
-    ...params.caseDefinition.assertions.map((assertion, index) => evaluateAssertion(assertion, params.output, index)),
+    ...params.caseDefinition.assertions.map((assertion, index) =>
+      evaluateAssertion(assertion, params.output, index, params.caseDefinition),
+    ),
   ];
   const passedChecks = checks.filter((check) => check.status === 'PASS').length;
   const score = checks.length === 0 ? 0 : Number((passedChecks / checks.length).toFixed(2));

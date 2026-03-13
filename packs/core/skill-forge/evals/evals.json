@@ -27,7 +27,24 @@
         "must define the contract before final skill instructions",
         "must stop before eval runtime implementation"
       ],
-      "files": []
+      "files": [],
+      "grading": {
+        "assertion_rules": [
+          {
+            "markers": [
+              "workflow: new-skill"
+            ]
+          },
+          {
+            "markers": [
+              "contract",
+              "before",
+              "instructions"
+            ]
+          },
+          null
+        ]
+      }
     },
     {
       "id": "existing-skill-refactor-clear-target",
@@ -40,7 +57,23 @@
         "must preserve the contract-first refactor sequence",
         "must end at Eval Brief ready"
       ],
-      "files": []
+      "files": [],
+      "grading": {
+        "assertion_rules": [
+          {
+            "markers": [
+              "workflow: existing-skill-refactor"
+            ]
+          },
+          {
+            "markers": [
+              "contract-first",
+              "refactor"
+            ]
+          },
+          null
+        ]
+      }
     },
     {
       "id": "skill-rewrite-clear-target",
@@ -53,7 +86,25 @@
         "must freeze contract elements before final instructions",
         "must stop at Eval Brief ready"
       ],
-      "files": []
+      "files": [],
+      "grading": {
+        "assertion_rules": [
+          {
+            "markers": [
+              "workflow: skill-rewrite"
+            ]
+          },
+          {
+            "markers": [
+              "freeze",
+              "contract",
+              "before",
+              "instructions"
+            ]
+          },
+          null
+        ]
+      }
     },
     {
       "id": "mixed-authoring-and-eval-request",
@@ -66,7 +117,26 @@
         "must explicitly defer eval scaffold implementation",
         "must not invent runner, grading, or benchmark behavior"
       ],
-      "files": []
+      "files": [],
+      "grading": {
+        "assertion_rules": [
+          null,
+          {
+            "markers": [
+              "downstream",
+              "out of scope"
+            ]
+          },
+          {
+            "markers": [
+              "runner",
+              "grading",
+              "benchmark"
+            ],
+            "absent": true
+          }
+        ]
+      }
     }
   ],
   "negative": [
@@ -81,7 +151,24 @@
         "must avoid rewriting the task as a skill request",
         "must avoid producing an Eval Brief"
       ],
-      "files": []
+      "files": [],
+      "grading": {
+        "assertion_rules": [
+          {
+            "markers": [
+              "out of scope",
+              "agents"
+            ]
+          },
+          null,
+          {
+            "markers": [
+              "eval brief ready"
+            ],
+            "absent": true
+          }
+        ]
+      }
     },
     {
       "id": "runtime-harness-implementation",
@@ -94,7 +181,25 @@
         "must avoid proposing authoring-only output as if it satisfied the request",
         "must avoid producing an Eval Brief"
       ],
-      "files": []
+      "files": [],
+      "grading": {
+        "assertion_rules": [
+          {
+            "markers": [
+              "out of scope",
+              "runtime",
+              "implementation"
+            ]
+          },
+          null,
+          {
+            "markers": [
+              "eval brief ready"
+            ],
+            "absent": true
+          }
+        ]
+      }
     },
     {
       "id": "eval-authoring-only-request",
@@ -107,7 +212,24 @@
         "must avoid redefining the task as skill authoring",
         "must avoid producing an Eval Brief"
       ],
-      "files": []
+      "files": [],
+      "grading": {
+        "assertion_rules": [
+          {
+            "markers": [
+              "out of scope",
+              "downstream"
+            ]
+          },
+          null,
+          {
+            "markers": [
+              "eval brief ready"
+            ],
+            "absent": true
+          }
+        ]
+      }
     },
     {
       "id": "ambiguous-multi-workflow-request",
@@ -120,7 +242,19 @@
         "must refuse to collapse policy, authoring, and runtime into one skill flow",
         "must avoid producing an Eval Brief before the scope is narrowed"
       ],
-      "files": []
+      "files": [],
+      "grading": {
+        "assertion_rules": [
+          {
+            "markers": [
+              "multiple",
+              "workflows"
+            ]
+          },
+          null,
+          null
+        ]
+      }
     }
   ]
 }

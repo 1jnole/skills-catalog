@@ -9,6 +9,9 @@
 - `05-artifacts-reference.md` -- concrete authoring and eval artifacts
 - `06-system-map.md` -- system map and layer separation
 - `07-laminar-migration-versions.md` -- stable Laminar migration plan with end state, v1/v2/v3, and acceptance gates
+- `08-v3-context-map.md` -- bounded contexts and dependency rules for the supported eval runtime post-V3
+- `09-v3-source-of-truth-audit.md` -- canonical-source audit for the supported eval runtime post-V3
+- `10-v3-service-boundaries-audit.md` -- service-boundary audit for the supported eval runtime post-V3
 
 ## Recommended reading order
 
@@ -19,6 +22,9 @@
 5. `05-artifacts-reference.md`
 6. `06-system-map.md`
 7. `07-laminar-migration-versions.md` when working on Laminar migration planning or status
+8. `08-v3-context-map.md` when working on ownership, context boundaries, or post-V3 cleanup
+9. `09-v3-source-of-truth-audit.md` when working on canonical contracts, precedence, or drift cleanup
+10. `10-v3-service-boundaries-audit.md` when working on module ownership, architectural roles, or cleanup sequencing
 
 ## Two external sources, two purposes
 
@@ -41,7 +47,10 @@
 - which workflow we take from the `eval-skills` blog,
 - which artifacts connect authoring, handoff, and eval,
 - why `Eval Brief`, `evals.json`, and run outputs are different artifacts,
-- and where the stable Laminar migration plan now lives after removing transient roadmap folders.
+- where the stable Laminar migration plan lives,
+- which bounded contexts own the supported eval runtime after V3,
+- which artifact is the source of truth for each key runtime concept,
+- and which modules are still mixing domain, orchestration, persistence, platform, or historical concerns.
 
 ## Note
 
@@ -51,3 +60,6 @@
 - The shared runner lives under `scripts/evals/`.
 - Run outputs stay local under `packs/core/<skill-name>/evals/runs/`.
 - The legacy runtime was reset on purpose; the rebuilt scaffold must start from this package, not from deleted folders.
+- `08-v3-context-map.md` is the reference for bounded contexts and dependency rules in the supported post-V3 runtime.
+- `09-v3-source-of-truth-audit.md` is the reference for source-of-truth precedence in the supported post-V3 runtime.
+- `10-v3-service-boundaries-audit.md` is the reference for module-role classification and service-boundary cleanup in the supported post-V3 runtime.

@@ -96,3 +96,8 @@ Use the shared runner with a small Red -> Green -> Refactor loop:
 - The `scripts/evals/` TypeScript build excludes `*.test.ts`, so colocated tests stay out of `dist/`.
 - Keep unit tests focused on deterministic domain logic; broader integration flows still belong to the existing runner commands.
 
+## Assertion grading seam
+
+- `expected_output` remains a narrative description for humans.
+- `grading.assertion_rules` is an optional machine-readable seam for assertions that are too specific for keyword fallback.
+- The current boundary protocol (`Eval Brief ready`, `do_not_trigger`, `stop_and_ask`) remains unchanged in this refactor.

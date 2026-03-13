@@ -177,6 +177,36 @@ describe('buildBenchmarkArtifact', () => {
     });
   });
 
+  it('keeps gate decisions based on the unrounded ratio even when the displayed pass rate rounds to the threshold', ({ expect }) => {
+    const result = buildBenchmarkArtifact(createBenchmarkParams([
+      createCaseResult({ case_id: 'case-a' }),
+      createCaseResult({ case_id: 'case-b' }),
+      createCaseResult({
+        case_id: 'case-c',
+        with_skill: {
+          status: 'completed',
+          duration_ms: 140,
+          score: 0.2,
+          passed: false,
+          provider: 'openai',
+          model: 'gpt-4.1-mini',
+          usage: { totalTokens: 5 },
+        },
+      }),
+    ], {
+      gates: {
+        golden_pass_rate: 0.67,
+        negative_pass_rate: 1,
+        case_score_threshold: 0.75,
+      },
+    }));
+
+    expect(result.gate_results).toMatchObject({
+      golden_pass_rate: 0.67,
+      golden_gate_passed: false,
+    });
+  });
+
   it('returns zeroed metrics and failed gates when there are no case results', ({ expect }) => {
     const result = buildBenchmarkArtifact(createBenchmarkParams([], {
       iterationNumber: 10,
