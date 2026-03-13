@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { baselineComparisonIntent } from '../baseline/baseline.js';
 import { nonTriggerEvalCaseSchema, triggerEvalCaseSchema } from '../eval-case/eval-case.schema.js';
 
 export const evalDefinitionSchema = z
@@ -8,7 +9,7 @@ export const evalDefinitionSchema = z
     eval_version: z.number().int().positive(),
     purpose: z.string().min(1),
     comparison_intent: z.object({
-      primary: z.literal('with_skill_vs_without_skill'),
+      primary: z.literal(baselineComparisonIntent),
       hypothesis: z.string().min(1),
     }),
     scoring: z.object({

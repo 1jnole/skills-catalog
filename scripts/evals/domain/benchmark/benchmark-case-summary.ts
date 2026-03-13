@@ -1,4 +1,5 @@
-import { type CaseBenchmarkEntry, type CaseFeedbackArtifact } from '../run-results/run-artifact.types.js';
+import type { StrongerMode } from '../baseline/baseline.js';
+import { type CaseBenchmarkEntry } from '../run-results/run-artifact.types.js';
 import { type NormalizedCaseResult } from '../run-results/run-result.types.js';
 import type { BenchmarkCaseSummary } from './benchmark.types.js';
 
@@ -12,7 +13,7 @@ function calculatePassDelta(caseResult: NormalizedCaseResult): number {
   return Number(caseResult.with_skill.passed) - Number(caseResult.without_skill.passed);
 }
 
-export function resolveStrongerMode(caseResult: NormalizedCaseResult): CaseFeedbackArtifact['stronger_mode'] {
+export function resolveStrongerMode(caseResult: NormalizedCaseResult): StrongerMode {
   const scoreDelta = calculateScoreDelta(caseResult);
   return scoreDelta === 0 ? 'tie' : scoreDelta > 0 ? 'with_skill' : 'without_skill';
 }

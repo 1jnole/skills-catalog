@@ -19,7 +19,7 @@ Cerrar el engine anterior y cualquier acoplamiento al provider sin perder reglas
 No se conserva ningún fichero solo “por si acaso”.
 
 ## Precondiciones
-- Gate C cerrado: contracts y artifacts ya no están acoplados a OpenAI.
+- Gate C cerrado al nivel mínimo exigido para continuar: contracts y artifacts ya no fijan OpenAI como contrato canónico, aunque el engine actual todavía usa wiring OpenAI.
 - Gate D cerrado si el fichero participa en discovery/layout.
 
 ## Alcance de revisión gris

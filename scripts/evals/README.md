@@ -2,6 +2,10 @@
 
 This folder contains the supported shared offline eval runner used by multiple skills.
 
+Current migration notes:
+- `docs/fase-2-paths-contract.md` documents the current path authority and inherited layout assumptions.
+- `docs/fase-2-core-inventory.md` lists the surviving core, structural seams, and transitional supported pieces.
+
 ## Current scaffold
 
 The runtime is organized by ownership:

@@ -10,7 +10,8 @@ Congelar el comportamiento mínimo útil **después** de cerrar los gates previo
 - Lote A: ejecutado sobre wrappers/reexports muertos y helpers legacy sin consumo real.
 - Lote B: ejecutado; el contrato público ya no depende de los entrypoints fuente viejos y no quedan aliases CLI legacy.
 - Lote C: ejecutado con revisión gris; desapareció el provider wrapper separado y se limpiaron módulos Laminar sin consumo real.
-- Siguiente paso de fase: cerrar Fase 1 como congelada y pasar a Fase 2 (`ownership` y matriz keep/migrate/delete final).
+- Criterio de salida: cumplido contra `migration/cierre-fase-1.md`.
+- Siguiente paso de fase: pasar a Fase 2 (`ownership` y matriz keep/migrate/delete final).
 
 ## Entrada
 - gates A/B/C/D cerrados,

@@ -6,7 +6,7 @@ Cerrar las cuatro decisiones bloqueantes antes de seguir con delete-first fuerte
 ## Estado de implementación (2026-03-13)
 - Gate A: **cerrado** con smoke real en `scripts/evals/smoke.test.ts` cubriendo lectura de definición (`read-evals`) y ejecución controlada con validación de `benchmark` + `run manifest`.
 - Gate B: **cerrado**. `--iteration` y `--retry-errors` sobreviven en v1 como contrato de `run-evals`; `run-iteration` ya fue retirado y el contrato canónico quedó concentrado en `run-evals`.
-- Gate C: **cerrado**. El core dejó de fijar `openai` como contrato canónico: provider pasó a metadata opcional y los schemas aceptan provider neutral.
+- Gate C: **cerrado al nivel exigido para Fase 1**. El core dejó de fijar `openai` como contrato canónico: provider pasó a metadata opcional y los schemas aceptan provider neutral. El desacoplamiento completo de provider sigue fuera del cierre mínimo de fase porque el engine actual todavía usa wiring OpenAI dentro de Laminar.
 - Gate D: **cerrado** con resolver/config de paths en `scripts/evals/infrastructure/filesystem/eval-paths.ts` y adopción en carga de evals, files y prompt de skill.
 
 ## Gate A — Smoke real

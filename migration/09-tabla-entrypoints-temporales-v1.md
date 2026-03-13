@@ -12,7 +12,6 @@ Cerrar la precondición documental para los lotes de borrado: qué entrypoints s
   - `scripts/evals/application/*`
   - `scripts/evals/domain/*`
   - `scripts/evals/infrastructure/*`
-  - `scripts/evals/compatibility/*` (excepto el alias documentado arriba)
 
 ## Decisión de Gate B (v1)
 El contrato de `--iteration` y `--retry-errors` **sobrevive en v1** como parte de `run-evals`:

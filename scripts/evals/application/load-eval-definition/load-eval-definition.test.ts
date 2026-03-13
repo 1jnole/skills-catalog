@@ -1,8 +1,12 @@
 import * as path from 'node:path';
 
-import { describe, it } from 'vitest';
+import { afterEach, describe, it, vi } from 'vitest';
 
-import { readEvalDefinition } from './load-eval-definition.js';
+import { readEvalDefinition, resolveEvalPath, resolveEvalRunsRoot } from './load-eval-definition.js';
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
 
 describe('readEvalDefinition', () => {
   it('loads the migrated skill-forge eval definition with assertion rules', ({ expect }) => {
@@ -24,5 +28,21 @@ describe('readEvalDefinition', () => {
         { markers: ['eval brief ready'], absent: true },
       ],
     });
+  });
+});
+
+describe('path resolution integration', () => {
+  it('resolves eval-definition and runs root from the configured path authority', ({ expect }) => {
+    vi.stubEnv('EVALS_SKILLS_ROOT', 'skills');
+    vi.stubEnv('EVALS_EVALS_DIR', 'cases');
+    vi.stubEnv('EVALS_EVAL_DEFINITION_FILE', 'definition.json');
+    vi.stubEnv('EVALS_RUNS_DIR', 'runs-data');
+
+    expect(resolveEvalPath({ skillName: 'skill-forge' })).toBe(
+      path.resolve('skills', 'skill-forge', 'cases', 'definition.json'),
+    );
+    expect(resolveEvalRunsRoot('skill-forge')).toBe(
+      path.resolve('skills', 'skill-forge', 'cases', 'runs-data'),
+    );
   });
 });

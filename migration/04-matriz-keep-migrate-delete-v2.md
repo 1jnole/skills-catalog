@@ -4,6 +4,12 @@
 - **Keep** ya consolidado: dominio portable, CLI soportada (`scripts/evals/cli/*`), adapter fino Laminar y filesystem soportado.
 - **Migrate** ya ejecutado en lo crítico: neutralidad de provider, resolver/config de paths y recolocación del contrato público CLI.
 - **Delete** ya ejecutado en lo obvio: wrappers legacy, entrypoints fuente viejos, compatibilidad sobrante y provider wrapper separado.
+- Ajustes incorporados explícitamente:
+  - coordinación entre `commands/*` y wrappers raíz,
+  - revisión de `run-iteration.ts` y su cadena de compatibilidad,
+  - dependencia previa entre `compatibility/historical-artifacts/*` y `filesystem/eval-runs/*` antes de borrar,
+  - revisión gris de `application/run-eval-iteration/*`,
+  - tratamiento específico del acoplamiento a provider.
 
 ## Keep
 ### Núcleo que debe sobrevivir

@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
+import { supportedEvalCaseModes, supportedStrongerModes } from '../baseline/baseline.js';
 import { caseIdSchema } from '../eval-case/eval-case.schema.js';
 
-export const evalCaseModeSchema = z.enum(['with_skill', 'without_skill']);
+export const evalCaseModeSchema = z.enum(supportedEvalCaseModes);
 export const artifactProviderSchema = z.string().min(1);
 export const artifactStatusSchema = z.enum(['completed', 'error']);
 export const artifactErrorSchema = z.object({
@@ -75,7 +76,7 @@ export const caseGradingArtifactSchema = z.object({
 
 export const caseFeedbackArtifactSchema = z.object({
   case_id: caseIdSchema,
-  stronger_mode: z.enum(['with_skill', 'without_skill', 'tie']),
+  stronger_mode: z.enum(supportedStrongerModes),
   score_delta: z.number(),
   observations: z.array(z.string().min(1)).min(1),
   next_actions: z.array(z.string().min(1)).min(1),
@@ -93,7 +94,7 @@ export const caseBenchmarkEntrySchema = z.object({
   case_id: caseIdSchema,
   should_trigger: z.boolean(),
   expected_stop: z.enum(['Eval Brief ready', 'do_not_trigger', 'stop_and_ask']),
-  stronger_mode: z.enum(['with_skill', 'without_skill', 'tie']),
+  stronger_mode: z.enum(supportedStrongerModes),
   score_delta: z.number(),
   pass_delta: z.number().int().min(-1).max(1),
   with_skill: benchmarkModeEntrySchema,
