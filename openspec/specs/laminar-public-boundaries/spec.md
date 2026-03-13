@@ -1,7 +1,7 @@
 # laminar-public-boundaries Specification
 
 ## Purpose
-TBD - created by archiving change laminar-phase-1-boundaries. Update Purpose after archive.
+Historical record of the archived Laminar Phase 1 boundary decisions. This spec does not describe the current Promptfoo-first supported eval path.
 ## Requirements
 ### Requirement: Phase 1 SHALL define `run-evals` as the supported public eval command
 Phase 1 SHALL establish `run-evals` as the supported public command for executing evals, and SHALL ensure that public documentation no longer presents `run-lmnr-eval` as the supported path.
@@ -30,4 +30,3 @@ Phase 1 SHALL update public documentation and architecture diagrams so they desc
 #### Scenario: Documentation tells one story
 - **WHEN** a maintainer compares `README.md`, `AGENTS.md`, `scripts/evals/README.md`, and `PLAN.md`
 - **THEN** those documents MUST describe the same public command, the same domain/provider/platform boundary meanings, and the same ownership of benchmark semantics
-

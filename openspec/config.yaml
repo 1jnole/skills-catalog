@@ -3,7 +3,7 @@ context: |
   Project: skills-catalog
   Purpose: Skill catalog and eval runner migration work with spec-driven changes.
   Scope: OpenSpec workflow bootstrap for deterministic changes.
-  Preferred gate command: npx tsc -p scripts/evals/tsconfig.json
+  Preferred gate command: npm run promptfoo:run:offline
   Prompt policy: stable prompts by default (`openspec-proposal`, `openspec-apply`, `openspec-archive`);
   use experimental `opsx-*` prompts only when explicitly requested.
 

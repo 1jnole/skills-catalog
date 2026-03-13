@@ -154,7 +154,7 @@ Stop conditions (during apply):
 
 ### 4) Verification and gates
 Preferred repo gate:
-- `npx tsc -p scripts/evals/tsconfig.json`
+- `npm run promptfoo:run:offline`
 
 For non-critical changes:
 - Run `/review` before completion.

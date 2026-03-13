@@ -5,12 +5,13 @@ This document defines the closed migration state for the eval harness.
 ## Supported command surface
 
 - validate a canonical suite:
-  - `npm run read-evals -- -- --skill-name skill-forge`
+  - `npm run promptfoo:validate`
 - run the supported eval flow:
-  - `npm run run-evals -- -- --skill-name skill-forge --model-outputs evals/engines/promptfoo/fixtures/skill-forge-suite-model-outputs.json`
+  - `npm run promptfoo:run`
+- run the supported offline eval flow:
+  - `npm run promptfoo:run:offline`
 
-`run-evals` is the supported execution command.
-`run-promptfoo-pilot` is a deprecated compatibility alias and is not part of the public script surface anymore.
+Promptfoo is the supported execution tool.
 
 ## Supported layout
 
@@ -21,9 +22,7 @@ This document defines the closed migration state for the eval harness.
 - engine fixtures:
   - `evals/engines/promptfoo/fixtures/`
 - generated outputs:
-  - `evals/engines/promptfoo/generated/skill-forge.promptfoo.json`
   - `evals/engines/promptfoo/generated/skill-forge.eval.json`
-  - `evals/engines/promptfoo/generated/skill-forge.scoring.json`
   - `evals/engines/promptfoo/generated/skill-forge.benchmark.json`
 
 ## Historical or deprecated pieces
@@ -32,8 +31,8 @@ This document defines the closed migration state for the eval harness.
   - historical compatibility only, not the supported suite source
 - `evals/cases/skill-forge/pilot-suite.v1.json`
   - historical Phase 4 bootstrap snapshot only
-- `scripts/evals/infrastructure/laminar/`
-  - historical compatibility code, not the active supported path
+- `scripts/evals/`
+  - retired wrapper runtime from the Phase 6 flow, not part of the supported path
 
 ## Out of scope for the closed migration
 

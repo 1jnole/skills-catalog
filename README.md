@@ -3,6 +3,22 @@
 A small, composable skills catalog for **spec-driven development** with a spec-first workflow and Codex.
 > Note: The *skill namespace* is framework-neutral (`spec-*`). The repository still uses an **OpenSpec-compatible** folder layout (`openspec/...`) as the current storage backend.
 
+## Evals migration status
+
+The eval harness is now **Promptfoo-first**.
+
+Supported state:
+- the repository installs and versions `promptfoo` locally
+- the canonical native config lives in `evals/engines/promptfoo/promptfooconfig.mjs`
+- the canonical suite lives in `evals/cases/skill-forge/suite.v1.json`
+- generated eval and benchmark outputs live under `evals/engines/promptfoo/generated/`
+
+Supported commands:
+- `npm run promptfoo:validate`
+- `npm run promptfoo:run`
+- `npm run promptfoo:run:offline`
+
+If you are reading the repo to understand eval execution, use Promptfoo (`https://www.promptfoo.dev/`) as the active tool for this repo. The active eval scaffold notes live in `evals/README.md`.
 
 ## What this catalog optimizes for
 - **No silent drops**: requirements present in the brief/README must be captured and traceable.
@@ -93,5 +109,3 @@ For extended human notes, see `docs/AGENTS.md`.
 - Prompts should be **orchestration only** (which skill, which order, when to STOP).
 - Spec structure, requirement inventory rules, and traceability rules live **only in SKILL.md**.
 - Lint/fix skills are the enforcement layer; generators are not trusted alone.
-
-

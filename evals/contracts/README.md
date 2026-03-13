@@ -3,14 +3,12 @@
 This directory marks the Phase 3 destination for the contracts that survive the migration.
 
 ## Intent
-`evals/contracts/` is the future structural home of the canonical local eval contracts.
-
-The current source of truth still lives in `scripts/evals/domain/`, but only the contracts listed below belong to the surviving core.
+`evals/contracts/` is the structural home of the canonical local eval contracts that survive the Promptfoo-first runtime.
 
 ## Surviving contracts
 
 ### Eval case
-- current source: `scripts/evals/domain/eval-case/`
+- current source: `evals/cases/skill-forge/suite.v1.json`
 - responsibility:
   - case identity
   - prompt
@@ -19,7 +17,7 @@ The current source of truth still lives in `scripts/evals/domain/`, but only the
   - trigger vs non-trigger intent
 
 ### Eval definition
-- current source: `scripts/evals/domain/eval-definition/`
+- current source: `evals/cases/skill-forge/suite.v1.json`
 - responsibility:
   - skill-level eval contract
   - gates
@@ -27,7 +25,7 @@ The current source of truth still lives in `scripts/evals/domain/`, but only the
   - comparison intent
 
 ### Run result
-- current source: `scripts/evals/domain/run-results/run-result.schema.ts`
+- current source: `evals/engines/promptfoo/generated/skill-forge.eval.json`
 - responsibility:
   - normalized per-mode result semantics
   - canonical run manifest semantics
@@ -35,7 +33,7 @@ The current source of truth still lives in `scripts/evals/domain/`, but only the
 - boundary note: `evals/contracts/run-results-normalization.md`
 
 ### Run artifact
-- current source: `scripts/evals/domain/run-results/run-artifact.schema.ts`
+- current source: `evals/engines/promptfoo/generated/skill-forge.benchmark.json`
 - portable responsibility:
   - mode summary semantics
   - benchmark artifact semantics
@@ -57,17 +55,5 @@ These concerns are not treated as canonical contracts for the future scaffold:
 - provider-specific runtime wiring
 - Promptfoo config and engine adapter shapes
 
-## Transitional nuance
-Some schemas in the current source tree still coexist with transitional runtime needs.
-
-Example:
-- benchmark stub/progress artifacts may still exist while iteration machinery survives
-
-That does not make iteration machinery part of the portable contract core.
-
-The rule is:
-
-> if a shape exists only to support local runner execution mechanics, it does not define the long-term contract set for `evals/contracts/`.
-
-## Phase 3 implication
-This directory now makes the contract destination explicit before the actual contract files are rehomed here in later slices.
+## Boundary rule
+If a shape exists only to support local Promptfoo execution mechanics, it does not define the long-term contract set for `evals/contracts/`.

@@ -10,13 +10,14 @@
   },
   "devDependencies": {
     "@types/node": "^24.6.0",
+    "promptfoo": "^0.120.19",
     "typescript": "^5.8.3",
     "vitest": "^4.1.0"
   },
   "scripts": {
-    "build-evals": "tsc -p scripts/evals/tsconfig.json",
-    "read-evals": "node scripts/evals/dist/cli/read-evals.js",
-    "run-evals": "node scripts/evals/dist/cli/run-evals.js",
+    "promptfoo:validate": "promptfoo validate -c evals/engines/promptfoo/promptfooconfig.mjs",
+    "promptfoo:run": "promptfoo eval -c evals/engines/promptfoo/promptfooconfig.mjs -o evals/engines/promptfoo/generated/skill-forge.eval.json --no-progress-bar --table-cell-max-length 80 && node evals/engines/promptfoo/support/benchmark-summary.mjs",
+    "promptfoo:run:offline": "promptfoo eval -c evals/engines/promptfoo/promptfooconfig.mjs --model-outputs evals/engines/promptfoo/fixtures/skill-forge-suite-model-outputs.json -o evals/engines/promptfoo/generated/skill-forge.eval.json --no-progress-bar --table-cell-max-length 80 && node evals/engines/promptfoo/support/benchmark-summary.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:run": "vitest run"

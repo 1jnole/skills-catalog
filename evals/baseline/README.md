@@ -11,8 +11,9 @@ The comparison intent currently in scope is:
 - `with_skill_vs_without_skill`
 
 Current execution path:
-- `npm run run-evals -- -- --skill-name skill-forge ...`
-- runs both baseline modes through Promptfoo config generation.
+- `npm run promptfoo:run`
+- `npm run promptfoo:run:offline`
+- both commands run the two baseline modes directly through the native Promptfoo config.
 
 ## Out of scope for this phase
 These do not belong to the current baseline:
@@ -21,6 +22,6 @@ These do not belong to the current baseline:
 - extra experimental modes
 
 ## Why this exists now
-The executable core still lives in `scripts/evals/domain/`, but the baseline it depends on is no longer implicit.
+The supported runtime already uses Promptfoo directly, but the baseline it depends on should stay explicit and engine-agnostic.
 
-This boundary makes it explicit before the concrete baseline-owned files are rehomed into the new scaffold.
+This boundary keeps that comparison intent visible without reintroducing a wrapper runtime.

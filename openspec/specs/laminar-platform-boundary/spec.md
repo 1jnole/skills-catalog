@@ -1,7 +1,7 @@
 # laminar-platform-boundary Specification
 
 ## Purpose
-TBD - created by archiving change laminar-phase-3-batch-1-boundary-skeleton. Update Purpose after archive.
+Historical record of the archived Laminar Batch 1 platform-boundary decisions. This spec does not describe the current Promptfoo-first supported eval path.
 ## Requirements
 ### Requirement: The repository SHALL define a minimal Laminar platform boundary before active routing
 
@@ -24,4 +24,3 @@ The Laminar executor SHALL define an internal `runText({ mode, model, systemProm
 - **THEN** the internal call shape MUST already exist in the executor boundary
 - **AND** the contract MUST remain internal to `scripts/evals/platforms/laminar/`
 - **AND** the boundary MUST NOT move benchmark semantics into the Laminar platform layer
-

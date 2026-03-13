@@ -1,7 +1,7 @@
 # laminar-active-execution-path Specification
 
 ## Purpose
-TBD - created by archiving change laminar-phase-3-batch-2-active-path. Update Purpose after archive.
+Historical record of the archived Laminar Batch 2 active-path decisions. This spec does not describe the current Promptfoo-first supported eval path.
 ## Requirements
 ### Requirement: The repository SHALL route the supported eval command through Laminar in Batch 2
 
@@ -24,4 +24,3 @@ Batch 2 SHALL validate execution prerequisites before creating `iteration-N`.
 - **THEN** the command MUST fail before creating `iteration-N`
 - **AND** the validation MUST cover `LMNR_PROJECT_API_KEY`, `OPENAI_API_KEY`, timeout configuration, and Laminar SDK readiness
 - **AND** local retry and resume semantics MUST remain unchanged
-

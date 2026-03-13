@@ -22,8 +22,8 @@ This file preserves the smaller Fase 4 bootstrap evidence. It is no longer the m
 - the suite parses with the canonical eval-definition contract
 - it contains the useful migrated `golden` and `negative` cases from the inherited `evals.json`
 - it runs through Promptfoo with both baseline modes
-- it produces local scoring and local benchmark artifacts
+- it produces the native Promptfoo eval artifact plus the local benchmark summary artifact
 - it is the reference suite for the operational flow of `skill-forge`
 
 ## Reference command
-`npm run run-evals -- -- --skill-name skill-forge --model-outputs evals/engines/promptfoo/fixtures/skill-forge-suite-model-outputs.json`
+`npm run promptfoo:run:offline`

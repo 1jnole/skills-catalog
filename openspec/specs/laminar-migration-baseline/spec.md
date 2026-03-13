@@ -1,7 +1,7 @@
 # laminar-migration-baseline Specification
 
 ## Purpose
-TBD - created by archiving change laminar-phase-0-baseline. Update Purpose after archive.
+Historical record of the archived Laminar migration baseline. This spec captures the starting state before the Promptfoo-first closeout and is not the current supported eval contract.
 ## Requirements
 ### Requirement: Phase 0 SHALL inventory the current eval runner state
 The phase 0 baseline SHALL identify the current eval runner commands, the relevant folders under `scripts/evals/`, and the documents that describe the runner as it exists today.

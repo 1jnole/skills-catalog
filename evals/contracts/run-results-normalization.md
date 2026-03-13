@@ -3,8 +3,8 @@
 This note captures the canonical local result shape that separates engine output from core semantics.
 
 ## Current source of truth
-- `scripts/evals/domain/run-results/run-result.schema.ts`
-- `scripts/evals/domain/run-results/run-results.ts`
+- `evals/engines/promptfoo/generated/skill-forge.eval.json`
+- `evals/engines/promptfoo/support/benchmark-summary.mjs`
 
 ## Canonical normalized shape
 A normalized case result always contains:
