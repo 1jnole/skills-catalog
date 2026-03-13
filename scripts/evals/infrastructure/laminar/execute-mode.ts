@@ -17,7 +17,6 @@ export async function executeMode(params: {
   const systemPrompt = buildSystemPrompt(params.mode, params.skillPrompt);
   const attachedFiles = loadCaseFiles(params.skillName, params.caseDefinition);
   const execution = await runText({
-    mode: params.mode,
     model: params.modelId,
     systemPrompt: systemPrompt ?? '',
     userPrompt: params.caseDefinition.prompt,

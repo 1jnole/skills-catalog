@@ -3,14 +3,13 @@ import { buildRunManifestArtifact } from '../../domain/run-results/run-results.j
 import { type EvalDefinition } from '../../domain/eval-definition/eval-definition.types.js';
 import { type BenchmarkArtifact } from '../../domain/run-results/run-artifact.types.js';
 import { type NormalizedCaseResult, type RunManifestArtifact } from '../../domain/run-results/run-result.types.js';
-import { type LaminarModelProvider } from './executor.js';
 
 // Owns platform-specific reporting glue while keeping benchmark semantics in the domain layer.
 export function buildLaminarRunManifest(params: {
   skillName: string;
   evalVersion: number;
   iterationNumber: number;
-  provider: LaminarModelProvider;
+  provider?: string;
   model: string;
   runRef?: string;
   groupRef?: string;

@@ -87,5 +87,3 @@ function main(): void {
 }
 
 main();
-
-

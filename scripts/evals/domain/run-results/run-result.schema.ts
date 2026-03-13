@@ -26,7 +26,7 @@ export const runManifestArtifactSchema = z.object({
   platform: z.string().min(1),
   run_ref: z.string().min(1),
   group_ref: z.string().min(1),
-  provider: z.string().min(1),
+  provider: z.string().min(1).optional(),
   model: z.string().min(1),
   skill_name: z.string().min(1),
   eval_version: z.number().int().positive(),

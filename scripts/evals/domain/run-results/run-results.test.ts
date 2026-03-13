@@ -112,4 +112,27 @@ describe('buildRunManifestArtifact', () => {
     expect(result.run_ref).toBe('iteration-14');
     expect(result.group_ref).toBe('skill-forge/evals/v2');
   });
+
+  it('omits provider metadata when no provider is passed', ({ expect }) => {
+    const result = buildRunManifestArtifact({
+      platform: 'laminar',
+      skillName: 'skill-forge',
+      evalVersion: 2,
+      iterationNumber: 15,
+      model: 'gpt-4.1-mini',
+      createdAt: '2026-03-13T13:00:00.000Z',
+    });
+
+    expect(result.provider).toBeUndefined();
+    expect(result).toMatchObject({
+      platform: 'laminar',
+      run_ref: 'iteration-15',
+      group_ref: 'skill-forge/evals/v2',
+      model: 'gpt-4.1-mini',
+      skill_name: 'skill-forge',
+      eval_version: 2,
+      iteration: 15,
+      created_at: '2026-03-13T13:00:00.000Z',
+    });
+  });
 });

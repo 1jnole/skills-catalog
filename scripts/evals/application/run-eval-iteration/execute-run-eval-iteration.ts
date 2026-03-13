@@ -6,6 +6,7 @@ import { runManifestArtifactSchema } from '../../domain/run-results/run-result.s
 import { type EvalCase, type EvalCaseMode } from '../../domain/eval-case/eval-case.types.js';
 import { collectCaseIds, collectCases, type EvalDefinition } from '../../domain/eval-definition/eval-definition.types.js';
 import { type ModeArtifacts } from '../../domain/run-results/run-artifact.types.js';
+import { type NormalizedCaseResult } from '../../domain/run-results/run-result.types.js';
 import { type CaseArtifacts } from '../../domain/run-results/run.types.js';
 import {
   resetBenchmarkToRunning,
@@ -18,7 +19,7 @@ import { resolveWorkspace } from '../../infrastructure/filesystem/eval-runs/reso
 import { buildLaminarBenchmark, buildLaminarRunManifest } from '../../infrastructure/laminar/report.js';
 import { assertLaminarReady } from '../../infrastructure/laminar/executor.js';
 import { executeMode } from '../../infrastructure/laminar/execute-mode.js';
-import { readSkillPrompt } from '../../infrastructure/providers/openai/openai-provider.js';
+import { readSkillPrompt } from '../../infrastructure/filesystem/read-skill-prompt.js';
 import { writeValidatedJsonFile } from '../../infrastructure/filesystem/eval-runs/validated-json-file.js';
 import { type RunEvalIterationInput, type RunEvalIterationResult } from './run-eval-iteration.types.js';
 
@@ -262,6 +263,7 @@ function persistRunOutputs(
   ports: RunIterationPorts,
 ): void {
   const normalizedCaseResults = caseResults.map(ports.normalizeCaseArtifacts);
+  const provider = resolveRunProvider(normalizedCaseResults);
 
   ports.writeValidatedJsonFile(
     context.workspace.benchmarkPath,
@@ -282,12 +284,26 @@ function persistRunOutputs(
       skillName: context.definition.skill_name,
       evalVersion: context.definition.eval_version,
       iterationNumber: context.workspace.iterationNumber,
-      provider: 'openai',
+      provider,
       model: input.model,
     }),
   );
 
   ports.logger.log(`Iteration ${context.workspace.iterationNumber} finished.`);
+}
+
+function resolveRunProvider(caseResults: NormalizedCaseResult[]): string | undefined {
+  for (const caseResult of caseResults) {
+    if (caseResult.with_skill.provider) {
+      return caseResult.with_skill.provider;
+    }
+
+    if (caseResult.without_skill.provider) {
+      return caseResult.without_skill.provider;
+    }
+  }
+
+  return undefined;
 }
 
 export async function executeRunEvalIterationWithPorts(

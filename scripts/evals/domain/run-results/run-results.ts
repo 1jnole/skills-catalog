@@ -34,7 +34,7 @@ export function buildRunManifestArtifact(params: {
   skillName: string;
   evalVersion: number;
   iterationNumber: number;
-  provider: string;
+  provider?: string;
   model: string;
   createdAt?: string;
 }): RunManifestArtifact {
@@ -42,7 +42,7 @@ export function buildRunManifestArtifact(params: {
     platform: params.platform,
     run_ref: `iteration-${params.iterationNumber}`,
     group_ref: `${params.skillName}/evals/v${params.evalVersion}`,
-    provider: params.provider,
+    ...(params.provider ? { provider: params.provider } : {}),
     model: params.model,
     skill_name: params.skillName,
     eval_version: params.evalVersion,

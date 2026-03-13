@@ -25,5 +25,3 @@ main().catch((error) => {
   console.error(`run failed: ${message}`);
   process.exit(1);
 });
-
-

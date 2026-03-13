@@ -1,6 +1,4 @@
-import { type EvalCase } from '../../domain/eval-case/eval-case.types.js';
 import { type ArtifactError, type ModeArtifacts, type Usage } from '../../domain/run-results/run-artifact.types.js';
-import { type CaseArtifacts } from '../../domain/run-results/run.types.js';
 import { type LaminarModelProvider } from './executor.js';
 
 // Owns translation from Laminar execution outputs into the local per-mode summary shape.
@@ -42,20 +40,6 @@ export function summarizeLaminarModeResult(input: {
     provider: input.result.provider,
     model: input.result.model,
     usage: input.result.usage,
-  };
-}
-
-export function buildLaminarCaseArtifacts(input: {
-  testCase: EvalCase;
-  withSkill: ModeArtifacts;
-  withoutSkill: ModeArtifacts;
-}): CaseArtifacts {
-  return {
-    case_id: input.testCase.id,
-    expected_stop: input.testCase.stop_at,
-    should_trigger: input.testCase.should_trigger,
-    with_skill: input.withSkill,
-    without_skill: input.withoutSkill,
   };
 }
 

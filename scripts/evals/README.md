@@ -6,18 +6,17 @@ This folder contains the supported shared offline eval runner used by multiple s
 
 The runtime is organized by ownership:
 
-- `commands/` for CLI entrypoints and argument parsing
+- `cli/` for supported CLI entrypoints and argument parsing
 - `application/` for supported use cases and orchestration
 - `domain/<subdomain>/` for domain contracts and pure business behavior
-- `infrastructure/` for Laminar, providers, and filesystem concerns
-- `compatibility/` for historical helpers and migration shims only
+- `infrastructure/` for Laminar-backed execution and filesystem concerns
 - `shared/` for tiny technical helpers that are genuinely cross-cutting
 
 Current shape:
 
 ```text
 scripts/evals/
-  commands/
+  cli/
   application/
     load-eval-definition/
     run-eval-iteration/
@@ -31,27 +30,19 @@ scripts/evals/
     filesystem/
       eval-runs/
     laminar/
-    providers/
-      openai/
-  compatibility/
-    commands/
-    run-execution/
-    historical-artifacts/
   shared/
     cli/
 ```
 
 Root-level files are intentionally minimal:
 
-- `run-evals.ts` and `read-evals.ts` are thin wrappers for the supported commands
-- `run-iteration.ts` is a legacy compatibility wrapper only
 - `README.md` and `tsconfig.json` remain at the root as stable package metadata
 
 ## Placement rules
 
 - Folder names must describe ownership clearly.
 - Use business-language subdomains inside `domain/`.
-- Do not add new code to the root of `scripts/evals/` except docs, config, and required entrypoint wrappers.
+- Do not add new code to the root of `scripts/evals/` except docs and config.
 - Do not add `utils/`, `helpers/`, or `misc/` folders.
 - Do not add `index.ts` barrels.
 - Keep imports direct to the owning file.
@@ -102,16 +93,10 @@ Inside `domain/`, prefer subdomain-local files such as:
 
 `infrastructure/laminar/` owns Laminar-specific execution and reporting glue.
 
-`infrastructure/providers/` owns provider-specific integration.
-
 `infrastructure/filesystem/eval-runs/` owns:
 - iteration workspace resolution
 - supported run artifact reads and writes
 - locks and progress persistence
-
-### Compatibility rules
-
-Anything historical, aliased, or migration-only must live under `compatibility/` and be clearly non-authoritative for the supported path.
 
 ## Output layout
 
@@ -125,17 +110,17 @@ Each skill keeps its own run artifacts next to its eval definition:
 ## Commands
 
 1. Build the shared runner:
-   `npx tsc -p scripts/evals/tsconfig.json`
+   `npm run build-evals`
 2. Validate one skill definition:
-   `node scripts/evals/dist/read-evals.js --skill-name skill-forge`
+   `npm run read-evals -- -- --skill-name skill-forge`
 3. Run a new iteration through the supported public command:
-   `node scripts/evals/dist/run-evals.js --skill-name skill-forge --model gpt-4.1-mini`
+   `npm run run-evals -- -- --skill-name skill-forge --model gpt-4.1-mini`
 4. Re-run an existing iteration explicitly:
-   `node scripts/evals/dist/run-evals.js --skill-name skill-forge --iteration 13 --model gpt-4.1-mini`
+   `npm run run-evals -- -- --skill-name skill-forge --iteration 13 --model gpt-4.1-mini`
 5. Re-run only errored cases in an existing iteration:
-   `node scripts/evals/dist/run-evals.js --skill-name skill-forge --iteration 13 --retry-errors --model gpt-4.1-mini`
+   `npm run run-evals -- -- --skill-name skill-forge --iteration 13 --retry-errors --model gpt-4.1-mini`
 
-`run-iteration` remains a compatibility alias and is not part of the supported command story.
+When forwarding CLI args through `npm run`, use `npm run <script> -- -- <args>`.
 
 ## Requirements
 
@@ -156,7 +141,7 @@ The runner validates these prerequisites before it creates a new iteration folde
 - Laminar is an observability/eval platform boundary, not the authority for pass/fail semantics.
 - `benchmark.json` is computed from normalized run results in `domain/`.
 - Historical iterations may still contain legacy detailed per-case artifacts, but new supported iterations persist only `benchmark.json` and `run.json`.
-- Historical helper implementations live under `compatibility/`; any old artifact-path imports are compatibility shims only.
+- Historical helper implementations were retired during the migration cleanup; supported iterations persist only `benchmark.json` and `run.json`.
 
 ## Unit test workflow
 

@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { caseIdSchema } from '../eval-case/eval-case.schema.js';
 
 export const evalCaseModeSchema = z.enum(['with_skill', 'without_skill']);
-export const artifactProviderSchema = z.literal('openai');
+export const artifactProviderSchema = z.string().min(1);
 export const artifactStatusSchema = z.enum(['completed', 'error']);
 export const artifactErrorSchema = z.object({
   kind: z.enum(['timeout', 'execution_error']),

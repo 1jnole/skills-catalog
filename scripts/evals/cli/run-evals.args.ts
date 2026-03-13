@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 import { parseEvalInputSource } from '../application/load-eval-definition/load-eval-definition.js';
-import { parsePositiveInteger, readNextArg } from '../shared/cli/args.js';
 import { type EvalInputSource } from '../application/load-eval-definition/eval-input-source.types.js';
+import { parsePositiveInteger, readNextArg } from '../shared/cli/args.js';
 
 const argsSchema = z.object({
   skillName: z.string().min(1).optional(),
@@ -75,4 +75,3 @@ export function parseRunEvalsArgs(argv: string[], options?: { defaultModel?: str
     retryErrors: parsed.retryErrors,
   };
 }
-

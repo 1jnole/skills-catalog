@@ -3,6 +3,7 @@ import * as path from 'node:path';
 
 import { evalDefinitionSchema } from '../../domain/eval-definition/eval-definition.schema.js';
 import { type EvalDefinition } from '../../domain/eval-definition/eval-definition.types.js';
+import { resolveSkillEvalDefinitionPath, resolveSkillEvalRunsRoot } from '../../infrastructure/filesystem/eval-paths.js';
 import { evalInputSourceSchema } from './eval-input-source.schema.js';
 import { type EvalInputSource } from './eval-input-source.types.js';
 
@@ -15,11 +16,11 @@ export function resolveEvalPath(source: EvalInputSource): string {
     return path.resolve(source.file);
   }
 
-  return path.resolve('packs', 'core', source.skillName!, 'evals', 'evals.json');
+  return resolveSkillEvalDefinitionPath(source.skillName!);
 }
 
 export function resolveEvalRunsRoot(skillName: string): string {
-  return path.resolve('packs', 'core', skillName, 'evals', 'runs');
+  return resolveSkillEvalRunsRoot(skillName);
 }
 
 export function readEvalDefinition(filePath: string): EvalDefinition {
