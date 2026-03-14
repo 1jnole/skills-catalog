@@ -1,113 +1,152 @@
-# Skills Catalog — Spec-First + Codex (2026)
+# Skills Catalog
 
-A small, composable skills catalog for **spec-driven development** with a spec-first workflow and Codex.
-> Note: The *skill namespace* is framework-neutral (`spec-*`). The repository still uses an **OpenSpec-compatible** folder layout (`openspec/...`) as the current storage backend.
+A spec-first catalog of reusable Codex skills, supporting docs, and eval assets.
 
-## Evals migration status
+This repository is organized around three ideas:
+- `packs/` contains portable skill artifacts grouped by domain.
+- `openspec/` governs non-trivial repository changes with a spec-first workflow.
+- `evals/` contains the Promptfoo-first evaluation scaffold for validating skill behavior.
 
-The eval harness is now **Promptfoo-first**.
+## Architecture
 
-Supported state:
-- the repository installs and versions `promptfoo` locally
-- the canonical native config lives in `evals/engines/promptfoo/promptfooconfig.yaml`
-- the canonical Promptfoo execution suite lives in `evals/engines/promptfoo/tests/skill-forge.yaml`
-- prompt templates live in `evals/engines/promptfoo/prompts/`
-- the only repo-specific execution extension is the Promptfoo JavaScript assertion in `evals/engines/promptfoo/support/assertions.cjs`
-- generated Promptfoo outputs live under `evals/engines/promptfoo/generated/`
+### 1. Skill catalog
+`packs/` is the product surface of the repo.
 
-Supported commands:
+Each skill is a shallow folder centered on `SKILL.md`, with optional supporting assets nearby:
+- `SKILL.md`
+- `references/`
+- `assets/`
+- `agents/`
+- `scripts/`
+- `evals/` only when the skill owns eval definitions
+
+Current pack groups include:
+- `packs/core/` for repo bootstrap and core workflow skills such as `skill-forge`, `openspec-bootstrap`, and `agents-bootstrap`
+- `packs/angular/skills/` for Angular-focused skills
+- `packs/react/` for React-focused skills
+- `packs/javascript/`, `packs/typescript/`, and `packs/zod/` for language and validation skills
+
+The catalog is designed so consumers can install only the skills they need.
+
+### 2. OpenSpec workflow layer
+`openspec/` is the repository change-management layer.
+
+It is used to:
+- define non-trivial changes before implementation
+- keep proposal, design, tasks, and resulting specs aligned
+- archive completed changes into stable specs under `openspec/specs/`
+
+Important pieces:
+- `openspec/config.yaml`: workspace config
+- `openspec/AGENTS.override.md`: OpenSpec operating rules for this repo
+- `openspec/specs/`: stable repository capabilities
+- `openspec/changes/archive/`: completed change history
+
+Current stable specs include:
+- `openspec-change-workspace-readiness`
+- `skill-metadata-validation`
+
+### 3. Evaluation runtime boundary
+`evals/` is the stable home of the repository evaluation scaffold.
+
+Promptfoo is the supported eval runtime for this repo. The active engine boundary lives under:
+- `evals/engines/promptfoo/`
+
+High-level shape:
+- `evals/contracts/` for stable eval contracts
+- `evals/cases/` for authored case definitions
+- `evals/fixtures/` for reusable inputs and model outputs
+- `evals/engines/promptfoo/` for engine-specific config, prompts, assertions, and generated outputs
+
+See [evals/README.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/evals/README.md) for the current supported eval path.
+
+### 4. Repository tooling
+`scripts/` contains small repo-level utilities that support the catalog without becoming a separate framework.
+
+Current tooling includes the skill metadata validator:
+- [validate-skill-metadata.ts](/C:/Users/Jorge/WebstormProjects/skills-catalog/scripts/validate-skill-metadata.ts)
+- [frontmatter.ts](/C:/Users/Jorge/WebstormProjects/skills-catalog/scripts/skill-metadata/frontmatter.ts)
+- [validate-file.ts](/C:/Users/Jorge/WebstormProjects/skills-catalog/scripts/skill-metadata/validation/validate-file.ts)
+
+The validator currently checks:
+- frontmatter presence and YAML validity
+- required `name` and `description`
+- optional `metadata.short-description`
+- `name` matching the containing skill directory
+
+## Repository layout
+
+```text
+skills-catalog/
+  packs/
+    core/
+    angular/
+    react/
+    javascript/
+    typescript/
+    zod/
+  openspec/
+    specs/
+    changes/
+  evals/
+    contracts/
+    cases/
+    fixtures/
+    engines/
+      promptfoo/
+  scripts/
+    skill-metadata/
+  AGENTS.md
+  README.md
+  package.json
+```
+
+## Working model
+
+### For skill consumers
+Install the specific skill folders you want into either:
+- repo-scoped: `.codex/skills/<skill>/SKILL.md`
+- user-scoped: `~/.codex/skills/<skill>/SKILL.md`
+
+This keeps the catalog modular and pack-based.
+
+### For repository contributors
+Use OpenSpec for non-trivial changes.
+
+In practice:
+1. define the change in `openspec/changes/<slug>/`
+2. implement only what the change artifacts require
+3. verify with repo gates
+4. archive the change so the resulting capability lands in `openspec/specs/`
+
+The repo-specific operating rules live in:
+- [AGENTS.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/AGENTS.md)
+- [openspec/AGENTS.override.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/openspec/AGENTS.override.md)
+
+## Commands
+
+Core commands:
+- `npm run test`
+- `npm run test:run`
+- `npm run validate:skill-metadata`
+
+Promptfoo commands:
 - `npm run promptfoo:validate`
 - `npm run promptfoo:run`
 - `npm run promptfoo:run:offline`
 
-If you are reading the repo to understand eval execution, use Promptfoo (`https://www.promptfoo.dev/`) as the active tool for this repo. The active eval scaffold notes live in `evals/README.md`.
+## What this repo optimizes for
 
-## What this catalog optimizes for
-- **No silent drops**: requirements present in the brief/README must be captured and traceable.
-- **Determinism**: explicit state rules and reproducible acceptance criteria.
-- **Low prompt burden**: the workflow is driven by skills + lint/fix loops, not ad-hoc prompting.
-- **Small changes**: PR-sized iterations and a single verification gate.
-
-## Install (Codex)
-
-### Option A: repo-scoped (recommended)
-Copy the skills you want into:
-- `.codex/skills/<skill>/SKILL.md`
-
-This keeps the workflow portable with the repository.
-
-### Option B: user-scoped
-Copy the skills you want into:
-- `~/.codex/skills/<skill>/SKILL.md`
-
-### Option C: installer (if available)
-If your Codex environment provides a `$skill-installer` command, prefer that for repeatable installs.
+- small, reviewable, spec-driven changes
+- portable skill artifacts
+- explicit validation boundaries
+- low drift between implementation, specs, and eval scaffolding
 
 ## References
-- OpenAI: Testing Agent Skills Systematically with Evals — https://developers.openai.com/blog/eval-skills/
-- OpenAI Codex CLI reference — https://developers.openai.com/codex/cli/reference/
-- OpenAI Codex changelog — https://developers.openai.com/codex/changelog/
-- OpenAI Codex: AGENTS.md guide — https://developers.openai.com/codex/guides/agents-md/
-- OpenAI Codex: Agent skills — https://developers.openai.com/codex/skills/
-- OpenAI: Unrolling the Codex agent loop — https://openai.com/index/unrolling-the-codex-agent-loop/
 
-
-## Repository layout
-This repo is organized as **packs** so you can install only what you need:
-
-- `packs/core/skills/<skill>/SKILL.md` (stable, default pack — OpenSpec + guardrails)
-- `packs/angular/skills/<skill>/SKILL.md` (Angular pack — framework guidance)
-
-To install, copy the skill folders from the pack(s) you want into one of:
-- Repo-scoped: `.codex/skills/<skill>/SKILL.md`
-- User-scoped: `~/.codex/skills/<skill>/SKILL.md`
-
-Keep `core` small and always-on; treat framework packs as opt-in.
-
-## Angular pack canonical catalog
-The Angular pack is consolidated to these 10 canonical skills:
-
-- `angular-docs-bootstrap`
-- `angular-tooling-bootstrap`
-- `angular21-state-model`
-- `angular21-template-control-flow`
-- `angular21-data-httpresource`
-- `angular21-routing-patterns`
-- `angular21-di-patterns`
-- `angular21-defer-hydration`
-- `angular21-rxjs-interop-concurrency`
-- `angular21-testing-strategy`
-
-## Recommended flows
-
-### Repo bootstrap (once per repo)
-1) `spec-bootstrap` (scaffold `openspec/` + templates)
-
-2) `agents-bootstrap` (add `AGENTS.md` managed block + `openspec/AGENTS.override.md`)
-
-For extended human notes, see `docs/AGENTS.md`.
-
-
-### Entry (when the prompt does NOT specify a flow)
-1) `spec-intake-router` (no file writes)
-2) Follow its **Next skill(s)** exactly.
-
-### Tech Test (README → Mini-SPEC → tasks)
-1) `spec-change-slugger` (recommended)
-2) `spec-spec-from-readme`
-3) `spec-spec-lint` → (if FAIL) `spec-spec-fix` → repeat until PASS
-4) `spec-slice-into-iterations-from-readme`
-5) `spec-tasks-lint` → (if FAIL) `spec-tasks-fix` → repeat until PASS
-6) Only after PASS: implement per-iteration using your repo gates + evidence policy.
-
-### Product Feature (brief → SPEC full → tasks)
-1) `spec-change-slugger` (recommended)
-2) `spec-spec-from-brief`
-3) `spec-spec-lint` → (if FAIL) `spec-spec-fix` → repeat until PASS
-4) `spec-slice-into-iterations-from-brief`
-5) `spec-tasks-lint` → (if FAIL) `spec-tasks-fix` → repeat until PASS
-
-## Conventions (to avoid overlap)
-- Prompts should be **orchestration only** (which skill, which order, when to STOP).
-- Spec structure, requirement inventory rules, and traceability rules live **only in SKILL.md**.
-- Lint/fix skills are the enforcement layer; generators are not trusted alone.
+- [OpenAI: Testing Agent Skills Systematically with Evals](https://developers.openai.com/blog/eval-skills/)
+- [OpenAI Codex CLI reference](https://developers.openai.com/codex/cli/reference/)
+- [OpenAI Codex changelog](https://developers.openai.com/codex/changelog/)
+- [OpenAI Codex: AGENTS.md guide](https://developers.openai.com/codex/guides/agents-md/)
+- [OpenAI Codex: Agent skills](https://developers.openai.com/codex/skills/)
+- [OpenAI: Unrolling the Codex agent loop](https://openai.com/index/unrolling-the-codex-agent-loop/)
