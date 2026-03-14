@@ -1,0 +1,18 @@
+[
+  "Classification: trigger\nWorkflow: new-skill\nFreeze the contract before final instructions.\nEval Brief ready",
+  "I can draft a reusable JavaScript skill and discuss implementation options.",
+  "Classification: trigger\nWorkflow: existing-skill-refactor\nKeep the contract-first refactor sequence.\nEval Brief ready",
+  "I will review the current skill and propose code updates for the runtime.",
+  "Classification: trigger\nWorkflow: skill-rewrite\nFreeze the contract before final instructions.\nEval Brief ready",
+  "I can rewrite the skill instructions directly from the docs.",
+  "Classification: trigger\nWorkflow: new-skill\nFreeze the contract before final instructions.\nDownstream eval work is out of scope here.\nEval Brief ready",
+  "I will build the runner, grading, and benchmark together with the skill scaffold.",
+  "Classification: non-trigger\nOut of scope for skill-forge.\nThis is repository policy work involving AGENTS and not skill authoring.",
+  "I can update the repository policy wording and then write the skill contract.",
+  "Classification: non-trigger\nOut of scope for skill-forge.\nThe request is shared eval runtime implementation, not skill authoring, and an authoring-only output would not satisfy this request.",
+  "Certainly. Below is a complete offline eval runner implementation plan with grading and benchmark output.",
+  "Classification: non-trigger\nOut of scope for skill-forge.\nThis is downstream eval authoring work, not skill authoring, and it belongs downstream from a finished Eval Brief.",
+  "Classification: trigger\nWorkflow: new-skill\nEval Brief ready",
+  "Classification: stop-and-ask\nScope clarification required.\nThe request mixes multiple workflows across skill authoring, repository policy, and runtime implementation.",
+  "I will create the skill, reorganize the repo policies, and build the runner in one combined plan."
+]

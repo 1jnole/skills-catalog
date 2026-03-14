@@ -1,0 +1,213 @@
+{
+  "status": "completed",
+  "skill_name": "skill-forge",
+  "eval_version": 1,
+  "iteration": 1,
+  "completed_at": "2026-03-13T21:41:40.728Z",
+  "gate_results": {
+    "golden_pass_rate": 1,
+    "negative_pass_rate": 1,
+    "case_score_threshold": 0.75,
+    "golden_gate_passed": true,
+    "negative_gate_passed": true,
+    "overall_passed": true,
+    "completed_case_count": 8,
+    "error_case_count": 0
+  },
+  "comparison": {
+    "with_skill": {
+      "pass_rate": 1,
+      "average_score": 0.94,
+      "average_duration_ms": 8602,
+      "error_count": 0
+    },
+    "without_skill": {
+      "pass_rate": 0,
+      "average_score": 0.13,
+      "average_duration_ms": 7856,
+      "error_count": 0
+    },
+    "deltas": {
+      "pass_rate": 1,
+      "average_score": 0.81,
+      "average_duration_ms": 746,
+      "error_count": 0
+    }
+  },
+  "improvement_summary": {
+    "score": {
+      "improved_cases": 8,
+      "regressed_cases": 0,
+      "tied_cases": 0,
+      "net_improvement": 6.5
+    },
+    "pass": {
+      "improved_cases": 8,
+      "regressed_cases": 0,
+      "tied_cases": 0,
+      "net_improvement": 8
+    }
+  },
+  "cases": [
+    {
+      "case_id": "new-skill-one-clear-job",
+      "should_trigger": true,
+      "expected_stop": "Eval Brief ready",
+      "stronger_mode": "with_skill",
+      "score_delta": 1,
+      "pass_delta": 1,
+      "with_skill": {
+        "status": "completed",
+        "score": 1,
+        "passed": true,
+        "duration_ms": 28700
+      },
+      "without_skill": {
+        "status": "completed",
+        "score": 0,
+        "passed": false,
+        "duration_ms": 5863
+      }
+    },
+    {
+      "case_id": "existing-skill-refactor-clear-target",
+      "should_trigger": true,
+      "expected_stop": "Eval Brief ready",
+      "stronger_mode": "with_skill",
+      "score_delta": 1,
+      "pass_delta": 1,
+      "with_skill": {
+        "status": "completed",
+        "score": 1,
+        "passed": true,
+        "duration_ms": 12360
+      },
+      "without_skill": {
+        "status": "completed",
+        "score": 0,
+        "passed": false,
+        "duration_ms": 11860
+      }
+    },
+    {
+      "case_id": "skill-rewrite-clear-target",
+      "should_trigger": true,
+      "expected_stop": "Eval Brief ready",
+      "stronger_mode": "with_skill",
+      "score_delta": 1,
+      "pass_delta": 1,
+      "with_skill": {
+        "status": "completed",
+        "score": 1,
+        "passed": true,
+        "duration_ms": 8035
+      },
+      "without_skill": {
+        "status": "completed",
+        "score": 0,
+        "passed": false,
+        "duration_ms": 9029
+      }
+    },
+    {
+      "case_id": "mixed-authoring-and-eval-request",
+      "should_trigger": true,
+      "expected_stop": "Eval Brief ready",
+      "stronger_mode": "with_skill",
+      "score_delta": 0.75,
+      "pass_delta": 1,
+      "with_skill": {
+        "status": "completed",
+        "score": 1,
+        "passed": true,
+        "duration_ms": 13783
+      },
+      "without_skill": {
+        "status": "completed",
+        "score": 0.25,
+        "passed": false,
+        "duration_ms": 11716
+      }
+    },
+    {
+      "case_id": "agents-policy-request",
+      "should_trigger": false,
+      "expected_stop": "do_not_trigger",
+      "stronger_mode": "with_skill",
+      "score_delta": 0.5,
+      "pass_delta": 1,
+      "with_skill": {
+        "status": "completed",
+        "score": 0.75,
+        "passed": true,
+        "duration_ms": 1763
+      },
+      "without_skill": {
+        "status": "completed",
+        "score": 0.25,
+        "passed": false,
+        "duration_ms": 1843
+      }
+    },
+    {
+      "case_id": "runtime-harness-implementation",
+      "should_trigger": false,
+      "expected_stop": "do_not_trigger",
+      "stronger_mode": "with_skill",
+      "score_delta": 0.75,
+      "pass_delta": 1,
+      "with_skill": {
+        "status": "completed",
+        "score": 1,
+        "passed": true,
+        "duration_ms": 1806
+      },
+      "without_skill": {
+        "status": "completed",
+        "score": 0.25,
+        "passed": false,
+        "duration_ms": 11987
+      }
+    },
+    {
+      "case_id": "eval-authoring-only-request",
+      "should_trigger": false,
+      "expected_stop": "do_not_trigger",
+      "stronger_mode": "with_skill",
+      "score_delta": 0.75,
+      "pass_delta": 1,
+      "with_skill": {
+        "status": "completed",
+        "score": 1,
+        "passed": true,
+        "duration_ms": 1281
+      },
+      "without_skill": {
+        "status": "completed",
+        "score": 0.25,
+        "passed": false,
+        "duration_ms": 809
+      }
+    },
+    {
+      "case_id": "ambiguous-multi-workflow-request",
+      "should_trigger": false,
+      "expected_stop": "stop_and_ask",
+      "stronger_mode": "with_skill",
+      "score_delta": 0.75,
+      "pass_delta": 1,
+      "with_skill": {
+        "status": "completed",
+        "score": 0.75,
+        "passed": true,
+        "duration_ms": 1084
+      },
+      "without_skill": {
+        "status": "completed",
+        "score": 0,
+        "passed": false,
+        "duration_ms": 9739
+      }
+    }
+  ]
+}

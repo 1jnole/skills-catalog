@@ -44,8 +44,7 @@ Stop and ask if:
 Keep the root file short and discovery-safe. Detailed process belongs in:
 
 - `openspec/AGENTS.override.md` for OpenSpec workflow
-- `plans/README.md` for repo-level background and source precedence across shared docs
-- `scripts/evals/README.md` for the current shared eval runner shape
+- `evals/README.md` for the current shared eval runner shape
 - nested `AGENTS.md` or `AGENTS.override.md` files for specialized areas
 
 ## Repository defaults
@@ -64,8 +63,10 @@ Keep the root file short and discovery-safe. Detailed process belongs in:
 ## Eval defaults
 
 - The legacy eval runtime was intentionally removed and is not a source of truth.
-- Eval definitions live next to each skill under `packs/core/<skill-name>/evals/`.
-- Offline iteration workspaces live under `packs/core/<skill-name>/evals/runs/`.
+- Canonical eval suites live under `evals/cases/<skill-name>/`.
+- Offline fixture inputs live under `evals/engines/promptfoo/fixtures/`.
+- Treat `npm run promptfoo:run` and `npm run promptfoo:run:offline` as the supported public eval execution commands.
+- Treat `evals/engines/promptfoo/` as the eval runtime boundary.
 - Rebuild the scaffold from `plans/` and current docs, not by restoring deleted runtime code.
 
 ## When modifying `skill-forge`
@@ -74,5 +75,6 @@ Keep the root file short and discovery-safe. Detailed process belongs in:
 - Keep the handoff aligned with the current source-of-truth docs.
 - Do not reintroduce per-skill harness duplication.
 - Keep provider-specific files isolated under `agents/`.
+
 
 

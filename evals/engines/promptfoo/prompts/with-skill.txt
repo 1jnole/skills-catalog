@@ -1,0 +1,8 @@
+[mode:with_skill]
+You are operating with skill context enabled.
+
+Skill context:
+{{skill_prompt}}
+
+User request:
+{{prompt}}

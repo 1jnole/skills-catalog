@@ -4,11 +4,22 @@
   "type": "module",
   "dependencies": {
     "@ai-sdk/openai": "^3.0.41",
+    "@lmnr-ai/lmnr": "^0.8.14",
     "ai": "^6.0.116",
     "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/node": "^24.6.0",
-    "typescript": "^5.8.3"
+    "promptfoo": "^0.120.19",
+    "typescript": "^5.8.3",
+    "vitest": "^4.1.0"
+  },
+  "scripts": {
+    "promptfoo:validate": "promptfoo validate -c evals/engines/promptfoo/promptfooconfig.yaml",
+    "promptfoo:run": "promptfoo eval -c evals/engines/promptfoo/promptfooconfig.yaml -o evals/engines/promptfoo/generated/skill-forge.eval.json --no-progress-bar --table-cell-max-length 80",
+    "promptfoo:run:offline": "promptfoo eval -c evals/engines/promptfoo/promptfooconfig.yaml --model-outputs evals/engines/promptfoo/fixtures/skill-forge-suite-model-outputs.json -o evals/engines/promptfoo/generated/skill-forge.eval.json --no-progress-bar --table-cell-max-length 80",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:run": "vitest run"
   }
 }

@@ -1,20 +1,27 @@
 schema: spec-driven
+context: |
+  Project: skills-catalog
+  Purpose: Skill catalog and eval runner migration work with spec-driven changes.
+  Scope: OpenSpec workflow bootstrap for deterministic changes.
+  Preferred gate command: npm run promptfoo:run:offline
+  Prompt policy: stable prompts by default (`openspec-proposal`, `openspec-apply`, `openspec-archive`);
+  use experimental `opsx-*` prompts only when explicitly requested.
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
-
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+rules:
+  proposal:
+    - Keep scope explicit and atomic; define out-of-scope and success criteria.
+    - If scope is broad, split into multiple reviewable slugs.
+    - State assumptions and defaults explicitly.
+  specs:
+    - Write normative requirements using SHALL or MUST.
+    - Every requirement MUST include at least one Scenario with WHEN/THEN.
+    - Use canonical names for capabilities, folders, and slugs.
+  design:
+    - Record key decisions with rationale and alternatives.
+    - Include risks, trade-offs, and mitigation or rollback notes.
+    - Preserve minimal-diff implementation constraints.
+  tasks:
+    - "Use strict checkbox format: - [ ] X.Y Task description."
+    - "Keep tasks session-sized and dependency-ordered."
+    - "Define verification commands and expected evidence per task."
+    - "Record command/result/date/note evidence in `openspec/changes/<slug>/tasks.md`."
