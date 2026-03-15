@@ -1,0 +1,173 @@
+- description: new-skill-one-clear-job
+  vars:
+    skill_prompt: file://../../../packs/core/skill-forge/SKILL.md
+    case_id: new-skill-one-clear-job
+    prompt: Create a new reusable skill for spotting JavaScript array mutation mistakes. Start from the contract, keep one job only, and do not implement eval runtime behavior.
+    expected_stop: Eval Brief ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-forge
+    case_bucket: golden
+    expected_stop: Eval Brief ready
+  assert:
+    - type: starts-with
+      value: "Classification: trigger"
+    - type: icontains
+      value: "Workflow: new-skill"
+    - type: icontains
+      value: "Freeze the contract before final instructions."
+    - type: icontains
+      value: "Eval Brief ready"
+    - type: not-icontains
+      value: "Classification: non-trigger"
+    - type: not-icontains
+      value: "Classification: stop-and-ask"
+
+- description: existing-skill-refactor-clear-target
+  vars:
+    skill_prompt: file://../../../packs/core/skill-forge/SKILL.md
+    case_id: existing-skill-refactor-clear-target
+    prompt: Refactor the existing skill `skill-eval-forge`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.
+    expected_stop: Eval Brief ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-forge
+    case_bucket: golden
+    expected_stop: Eval Brief ready
+  assert:
+    - type: starts-with
+      value: "Classification: trigger"
+    - type: icontains
+      value: "Workflow: existing-skill-refactor"
+    - type: icontains-any
+      value:
+        - "Freeze the contract before final instructions."
+        - "contract-first"
+    - type: icontains
+      value: "Eval Brief ready"
+    - type: not-icontains
+      value: "Classification: non-trigger"
+    - type: not-icontains
+      value: "Classification: stop-and-ask"
+
+- description: skill-rewrite-clear-target
+  vars:
+    skill_prompt: file://../../../packs/core/skill-forge/SKILL.md
+    case_id: skill-rewrite-clear-target
+    prompt: Rewrite the existing skill `skill-eval-forge` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.
+    expected_stop: Eval Brief ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-forge
+    case_bucket: golden
+    expected_stop: Eval Brief ready
+  assert:
+    - type: starts-with
+      value: "Classification: trigger"
+    - type: icontains
+      value: "Workflow: skill-rewrite"
+    - type: icontains
+      value: "Freeze the contract before final instructions."
+    - type: icontains
+      value: "Eval Brief ready"
+    - type: not-icontains
+      value: "Classification: non-trigger"
+    - type: not-icontains
+      value: "Classification: stop-and-ask"
+
+- description: agents-policy-request
+  vars:
+    skill_prompt: file://../../../packs/core/skill-forge/SKILL.md
+    case_id: agents-policy-request
+    prompt: Update the repo AGENTS.md managed block and tighten the repository policy wording.
+    expected_stop: do_not_trigger
+    should_trigger: false
+  metadata:
+    skill_name: skill-forge
+    case_bucket: negative
+    expected_stop: do_not_trigger
+  assert:
+    - type: starts-with
+      value: "Classification: non-trigger"
+    - type: icontains
+      value: "Out of scope for skill-forge."
+    - type: icontains-any
+      value:
+        - "AGENTS"
+        - "repository policy"
+    - type: not-icontains
+      value: "Classification: trigger"
+    - type: not-icontains
+      value: "Classification: stop-and-ask"
+
+- description: runtime-harness-implementation
+  vars:
+    skill_prompt: file://../../../packs/core/skill-forge/SKILL.md
+    case_id: runtime-harness-implementation
+    prompt: Build the offline eval runner for skill-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.
+    expected_stop: do_not_trigger
+    should_trigger: false
+  metadata:
+    skill_name: skill-forge
+    case_bucket: negative
+    expected_stop: do_not_trigger
+  assert:
+    - type: starts-with
+      value: "Classification: non-trigger"
+    - type: icontains
+      value: "Out of scope for skill-forge."
+    - type: icontains
+      value: "shared eval runtime implementation"
+    - type: not-icontains
+      value: "Classification: trigger"
+    - type: not-icontains
+      value: "Classification: stop-and-ask"
+
+- description: ambiguous-multi-workflow-request
+  vars:
+    skill_prompt: file://../../../packs/core/skill-forge/SKILL.md
+    case_id: ambiguous-multi-workflow-request
+    prompt: Create a skill, reorganize the repo policies, and build the first runner in one pass so everything lands together.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-forge
+    case_bucket: negative
+    expected_stop: stop_and_ask
+  assert:
+    - type: starts-with
+      value: "Classification: stop-and-ask"
+    - type: icontains
+      value: "Scope clarification required."
+    - type: icontains
+      value: "multiple workflows"
+    - type: not-icontains
+      value: "Classification: trigger"
+    - type: not-icontains
+      value: "Classification: non-trigger"
+
+- description: ambiguous-refactor-missing-target
+  vars:
+    skill_prompt: file://../../../packs/core/skill-forge/SKILL.md
+    case_id: ambiguous-refactor-missing-target
+    prompt: Refactor this skill so the contract is clearer, keep it contract-first, and stop at Eval Brief ready.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: starts-with
+      value: "Classification: stop-and-ask"
+    - type: icontains
+      value: "Scope clarification required."
+    - type: icontains-any
+      value:
+        - "skill target"
+        - "target skill"
+        - "unclear"
+    - type: not-icontains
+      value: "Classification: trigger"
+    - type: not-icontains
+      value: "Classification: non-trigger"

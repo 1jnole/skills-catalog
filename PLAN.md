@@ -1,179 +1,108 @@
-# Fase 2 — Separar la **suite comparativa** (`uplift suite`)
+# Fase 3 — Desacoplar **providers** del core de Promptfoo
 
 ## Objetivo
 
-Crear una capa de evaluación **comparativa** que responda solo a esta pregunta:
+Sacar la elección de proveedor/modelo del config principal de Promptfoo para que el sistema pase de:
 
-> **“¿La presencia de `skill-forge` mejora el comportamiento frente al baseline sin skill?”**
+> **"esta evaluación usa OpenAI porque el config principal lo dice"**
 
-Esta fase **no** redefine el contrato de la skill y **no** sustituye el gate contractual de la Fase 1.
+a:
 
-La `uplift suite` existe para medir **valor comparativo**, no para volver a usar la misma semántica de pass/fail de la `contract suite`.
+> **"esta evaluación usa el provider que se inyecta desde un adapter/config externo"**
+
+Esta fase no introduce todavía una matriz multi‑vendor completa ni benchmarking entre proveedores.  
+Su objetivo es más básico y más importante:
+
+> **que el core de `evals/` deje de depender semánticamente de un proveedor concreto.**
 
 ---
 
 ## Contexto de partida
 
-### Precondición
+### Estado tras Fase 1 y Fase 2
 
-La **Fase 1** ya debe estar cerrada.
+A estas alturas, el estado objetivo previo ya debería ser este:
 
-Eso implica que el repo ya tiene:
+- existe una **contract suite** canónica
+- existe una **uplift suite** separada del gate contractual
+- `skill-forge/SKILL.md` ya no es el lugar donde viven detalles de Promptfoo
+- Promptfoo sigue siendo el engine soportado
+- la elección del proveedor todavía vive dentro de los configs principales
 
-- una config canónica de Promptfoo para el **gate contractual**
-- una suite propia para el contrato
-- una semántica clara donde `promptfooconfig.yaml` ya no mezcla `with_skill` y `without_skill`
+### Acoplamiento que sigue quedando
 
-### Estado esperado tras Fase 1
+Hoy el problema no es ya `with_skill` vs `without_skill`.  
+El acoplamiento pendiente es este:
 
-Debe existir, como mínimo:
+- `promptfooconfig.yaml` y configs hermanas siguen declarando algo tipo:
+  - `providers:`
+  - `openai:gpt-4.1-mini`
 
-```text
- evals/
-   engines/
-     promptfoo/
-       promptfooconfig.yaml
-       prompts/
-         with-skill.txt
-         without-skill.txt
-       tests/
-         skill-forge.contract.yaml
-```
+Eso significa que:
 
-### Problema que resuelve esta fase
-
-Después de Fase 1, el gate contractual ya responde a:
-
-> “Con skill activa, ¿el contrato se cumple?”
-
-Pero todavía **no existe una capa formal** que responda a:
-
-> “¿Con skill activa estamos mejor que sin skill?”
-
-Si no separas esto en una fase propia, vuelves a caer en el problema original:
-
-- mezclar baseline con gate
-- leer como fallo del sistema lo que en realidad es una diferencia entre modos
-- generar resúmenes engañosos del tipo:
-    - `passed_modes: X`
-    - `failed_modes: Y`
-    - `fully_passed_cases: 0`
+- cambiar de proveedor implica editar configs canónicas
+- el repo sigue transmitiendo que OpenAI es la opción “normal”
+- la neutralidad de proveedor no está cerrada aún
 
 ---
 
 ## Resultado esperado al cerrar esta fase
 
-Al terminar esta fase, debe existir una evaluación comparativa con estas propiedades:
+Al terminar esta fase, la estructura debe permitir esto:
 
-- usa el mismo conjunto de casos comparativos
-- se puede ejecutar en dos modos:
-    - `with_skill`
-    - `without_skill`
-- **no** trata el baseline como si tuviera que aprobar el contrato fuerte
-- genera una lectura comparativa limpia entre ambos modos
+- las suites (`contract`, `uplift`) siguen intactas
+- Promptfoo sigue siendo el runner soportado
+- la selección de proveedor se hace desde archivos separados
+- el config principal deja de codificar un vendor concreto como identidad del sistema
 
-### Significado operativo final
+### En términos prácticos
 
-Tras esta fase, el sistema debe quedar con dos preguntas separadas:
+Debe quedar posible decir:
 
-#### Contract suite
-> **“¿La skill sigue cumpliendo su contrato?”**
-
-#### Uplift suite
-> **“¿La skill aporta mejora frente al baseline?”**
+> **“La suite es estable; el provider es intercambiable.”**
 
 ---
 
 ## Alcance de la fase
 
 ### Sí entra
-- crear la suite comparativa propia
-- crear configs independientes para `with_skill` y `without_skill`
-- definir una semántica de lectura comparativa
-- documentar cómo se interpreta la salida
-- dejar preparada la base para reporting separado en fases posteriores
+- extraer el bloque `providers` fuera de los configs canónicos
+- introducir una carpeta de `providers/` en Promptfoo
+- dejar un provider inicial operativo y explícitamente intercambiable
+- actualizar documentación operativa
+- preparar el terreno para una futura matrix multi‑vendor
 
 ### No entra
-- scoring custom avanzado
-- provider matrix
-- multi-provider
-- cambio de schema del brief
-- reescritura masiva de casos
-- agent runners alternativos
-- refactor del contrato de la skill
-- endurecimiento profundo de assertions
+- comparar proveedores todavía
+- añadir Anthropic/Google/etc. si no se van a usar ya
+- endurecer assertions
+- cambiar tests contract/uplift
+- cambiar prompts `with-skill` / `without-skill`
+- cambiar `SKILL.md`
+- cambiar contratos JSON/schema
+- crear un runner nuevo
 
 ---
 
-## Principio rector de la fase
-
-**La uplift suite no es un gate contractual.**
-
-Eso significa que:
-
-- `with_skill` y `without_skill` **no** deben juzgarse con la misma severidad
-- `without_skill` no tiene por qué producir el payload contractual completo
-- el valor de esta fase está en la **comparación**, no en el pass/fail fuerte por caso
-
----
-
-## Archivos a crear
+## Archivos a tocar
 
 ### Crear
-- `evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`
-- `evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`
-- `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
+- `evals/engines/promptfoo/providers/`
+- `evals/engines/promptfoo/providers/default.openai.yaml`
 
 ### Modificar
+- `evals/engines/promptfoo/promptfooconfig.yaml`
+- `evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`
+- `evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`
 - `evals/README.md`
 - `evals/engines/promptfoo/README.md`
 
 ### Mantener sin tocar
-- `evals/engines/promptfoo/promptfooconfig.yaml`
-- `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
-- `evals/contracts/skill-forge/eval-brief-output.schema.json`
-- `evals/cases/skill-forge/suite.v1.json`
-- `evals/cases/skill-forge/pilot-suite.v1.json`
+- `evals/engines/promptfoo/prompts/*`
+- `evals/engines/promptfoo/tests/*`
+- `evals/contracts/*`
+- `evals/cases/*`
 - `skill-forge/SKILL.md`
-
----
-
-## Diseño objetivo de esta fase
-
-### Contract suite
-Sigue siendo el gate canónico:
-
-```text
-promptfooconfig.yaml
-  -> tests/skill-forge.contract.yaml
-  -> prompt: with_skill
-```
-
-### Uplift suite
-Se descompone en **dos ejecuciones comparables**:
-
-```text
-promptfooconfig.uplift.with-skill.yaml
-  -> tests/skill-forge.uplift.yaml
-  -> prompt: with_skill
-
-promptfooconfig.uplift.without-skill.yaml
-  -> tests/skill-forge.uplift.yaml
-  -> prompt: without_skill
-```
-
-### Ventaja de este diseño
-
-No inventa arquitectura adicional.
-
-Se apoya en capacidades estándar de Promptfoo:
-
-- configs separadas
-- prompts separados
-- mismo dataset reutilizable
-- ejecución y comparación por suites distintas
-
-Además evita el problema conceptual de intentar meter dos semánticas diferentes dentro del mismo gate.
 
 ---
 
@@ -181,289 +110,260 @@ Además evita el problema conceptual de intentar meter dos semánticas diferente
 
 ---
 
-### TSK-F2-01 — Crear la suite comparativa base
+### TSK-F3-01 — Crear carpeta `providers/` para adapters de proveedor
 
 ## Qué hacer
-Crear:
+Crear la carpeta:
 
 ```text
-evals/engines/promptfoo/tests/skill-forge.uplift.yaml
+ evals/engines/promptfoo/providers/
 ```
 
 ## Intención
-Definir una batería de casos pensada para **comparar comportamiento entre modos**, no para exigir conformidad contractual completa.
+Establecer una separación explícita entre:
 
-## Instrucción concreta
-Usar como punto de partida la suite contractual actual, pero **reducirla a una batería comparativa inicial**.
+- **suite/config de evaluación**
+- **adapter de proveedor**
 
-### Recomendación mínima inicial
-Empezar con un subconjunto pequeño y legible:
-
-- **3 triggers claros**
-- **2 non-triggers claros**
-- **2 stop-and-ask claros**
-
-### Casos recomendados para esta primera versión
-Tomar desde la suite existente casos equivalentes a estos grupos:
-
-#### Trigger
-- `new-skill-one-clear-job`
-- `existing-skill-refactor-clear-target`
-- `skill-rewrite-clear-target`
-
-#### Non-trigger
-- `agents-policy-request`
-- `runtime-harness-implementation`
-
-#### Stop-and-ask
-- `ambiguous-multi-workflow-request`
-- `ambiguous-refactor-missing-target`
-
-## Qué mantener
-- el mismo `skill_prompt`
-- el mismo patrón de variables base
-- la misma fuente de verdad del `SKILL.md`
-
-## Qué simplificar en esta fase
-No pedir en `uplift` todo el payload contractual completo.
-
-Es decir, en la suite comparativa inicial **no exijas** como requisito central:
-
-- `contains-json` del brief completo
-- markers exhaustivos del payload final
-- toda la estructura pensada para el `Eval Brief ready`
-
-## Qué sí medir
-La suite comparativa inicial debe centrarse en señales pequeñas y comparables:
-
-- clasificación correcta (`trigger`, `non-trigger`, `stop-and-ask`)
-- workflow correcto cuando el caso es trigger
-- stop marker cuando aplique en trigger
-- presencia de rationale compatible con el boundary
+La carpeta `providers/` pasa a ser el lugar donde vive la decisión de vendor/modelo.
 
 ## Guardrails
-- no copiar la contract suite entera sin cambios
-- no exigir a `without_skill` el brief completo
-- no introducir अभी scoring custom
-- no añadir casos nuevos inventados
-- no tocar el wording del `SKILL.md`
+- no metas aquí tests
+- no metas prompts
+- no metas casos
+- no metas documentación duplicada de toda la arquitectura
+- esta carpeta solo debe contener definición de provider
 
 ## Output esperado
-Existe una suite:
-
-```text
-evals/engines/promptfoo/tests/skill-forge.uplift.yaml
-```
-
-que expresa una batería comparativa mínima y legible.
+Existe una carpeta `providers/` reservada únicamente para configuraciones de proveedor.
 
 ---
 
-### TSK-F2-02 — Crear la config comparativa `with_skill`
+### TSK-F3-02 — Crear el primer adapter de proveedor desacoplado
 
 ## Qué hacer
-Crear:
+Crear el fichero:
 
 ```text
-evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml
+ evals/engines/promptfoo/providers/default.openai.yaml
 ```
 
 ## Intención
-Definir una ejecución estándar de Promptfoo para el modo **con skill** dentro del contexto comparativo.
+Mover el provider actualmente embebido en los configs a un fichero dedicado.
 
 ## Contenido esperado
-Conceptualmente debe quedar así:
+Debe contener el provider que hoy ya usa el repo, pero fuera del core de la suite.
+
+Ejemplo conceptual:
 
 ```yaml
-description: Uplift comparison suite for skill-forge (with skill)
-prompts:
-  - label: with_skill
-    raw: file://prompts/with-skill.txt
 providers:
   - openai:gpt-4.1-mini
-tests: file://tests/skill-forge.uplift.yaml
 ```
 
+Si el repo ya usa configuración más detallada para el provider, esa información debe vivir aquí también, no en los configs canónicos.
+
 ## Guardrails
-- no reutilizar `promptfooconfig.yaml`
-- no tocar el gate contractual
-- no cambiar provider aún
-- no meter múltiples prompts en esta config
+- no cambies de modelo en esta fase solo por desacoplar
+- no añadas todavía varios providers “por si acaso”
+- no introduzcas una matrix multi‑vendor si aún no se va a usar
+- no mezcles provider config con prompts ni defaults de tests
 
 ## Output esperado
-Existe una config específica para ejecutar la `uplift suite` con skill activa.
+Existe un adapter mínimo, funcional y explícito para el provider actual.
 
 ---
 
-### TSK-F2-03 — Crear la config comparativa `without_skill`
+### TSK-F3-03 — Hacer que la contract suite lea el provider desde `providers/`
 
 ## Qué hacer
-Crear:
+Modificar:
 
 ```text
-evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml
+ evals/engines/promptfoo/promptfooconfig.yaml
 ```
 
-## Intención
-Definir una ejecución estándar de Promptfoo para el baseline **sin skill** sobre exactamente la misma suite comparativa.
+para que deje de declarar directamente el provider.
 
-## Contenido esperado
-Conceptualmente debe quedar así:
+## Intención
+La contract suite debe describir:
+
+- qué prompt usa
+- qué tests usa
+- qué propósito tiene
+
+pero no quedar acoplada a un vendor concreto.
+
+## Cambio esperado
+### Antes
+El fichero contiene algo como:
 
 ```yaml
-description: Uplift comparison suite for skill-forge (without skill)
-prompts:
-  - label: without_skill
-    raw: file://prompts/without-skill.txt
 providers:
   - openai:gpt-4.1-mini
-tests: file://tests/skill-forge.uplift.yaml
 ```
 
+### Después
+Debe consumir el provider desde el fichero desacoplado.  
+La forma concreta debe seguir las capacidades estándar de Promptfoo para composición/reutilización de configuración.
+
 ## Guardrails
-- no reutilizar la contract suite
-- no añadir `with_skill` aquí
-- no cambiar provider aún
-- no inventar un baseline alternativo
+- no cambies la suite contractual
+- no cambies el prompt `with_skill`
+- no cambies el path de tests
+- no aproveches para endurecer assertions
+- no cambies el propósito del fichero
 
 ## Output esperado
-Existe una config específica para ejecutar la `uplift suite` sin skill.
+La config principal del gate contractual ya no codifica OpenAI directamente.
 
 ---
 
-### TSK-F2-04 — Definir la semántica de lectura de la `uplift suite`
+### TSK-F3-04 — Aplicar el mismo desacople a las configs de uplift
 
 ## Qué hacer
-Documentar en los READMEs cómo debe leerse esta suite.
+Modificar:
+
+```text
+ evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml
+ evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml
+```
+
+para que tampoco declaren providers inline.
 
 ## Intención
-Evitar que en el futuro se vuelva a interpretar la comparación como si fuera un gate contractual.
-
-## Qué debe quedar escrito
-La documentación debe dejar claro que:
-
-- `promptfooconfig.yaml` sigue siendo el **gate contractual**
-- `promptfooconfig.uplift.with-skill.yaml` y `promptfooconfig.uplift.without-skill.yaml` son **ejecuciones comparativas**
-- la `uplift suite` no está diseñada para demostrar conformidad contractual completa
-- su función es medir diferencia entre modos
-
-## Texto conceptual que debe poder leerse
-Algo equivalente a esto:
-
-- `contract` responde a cumplimiento del contrato con la skill activa
-- `uplift` responde a mejora comparativa frente al baseline sin skill
-- una ejecución `without_skill` peor no significa que la skill falle
-- el baseline no es el gate
+Evitar que el desacople quede solo en la contract suite y que uplift siga acoplada al vendor.
 
 ## Guardrails
-- no documentar todavía un reporte sofisticado si aún no existe
-- no declarar métricas automáticas que todavía no has implementado
-- no presentar la uplift suite como sustituto del gate contractual
+- no cambies la semántica de uplift
+- no alteres qué prompt usa cada config
+- no cambies tests ni prompts
+- no conviertas esta fase en una comparación entre vendors
 
 ## Output esperado
-Los READMEs cuentan una historia coherente y no mezclan `contract` con `uplift`.
+Las tres configs de Promptfoo pasan a depender del mismo adapter de proveedor desacoplado.
 
 ---
 
-### TSK-F2-05 — Actualizar `evals/README.md`
+### TSK-F3-05 — Declarar qué fichero es el provider activo por defecto
 
 ## Qué hacer
-Actualizar el README top-level para reflejar la nueva arquitectura mínima.
+Dejar explícito en documentación cuál es el adapter activo por defecto.
 
-## Cambios mínimos esperados
-Debe pasar a describir dos superficies distintas:
+## Intención
+Cuando solo existe un provider desacoplado, sigue habiendo que dejar claro:
 
-### 1. Contract suite
-- config canónica
-- gate
-- solo `with_skill`
+- cuál usa el repo hoy
+- dónde se cambia
+- qué no forma parte del contrato
 
-### 2. Uplift suite
-- comparación entre dos ejecuciones separadas
-- una con skill
-- una sin skill
-- mismo conjunto de casos comparativos
+## Sitio recomendado
+Documentarlo en:
+
+- `evals/engines/promptfoo/README.md`
+
+Y, si hace falta una nota breve adicional, también en:
+
+- `evals/README.md`
+
+## Qué debe quedar claro
+- Promptfoo es el engine soportado
+- el provider por defecto hoy es `default.openai.yaml`
+- el provider es un adapter reemplazable
+- cambiar de proveedor no implica tocar contratos ni suites
 
 ## Guardrails
-- no sobreexplicar futuras fases
-- no introducir provider matrix todavía
-- no documentar scoring custom si aún no existe
+- no presentar OpenAI como parte del estándar de la skill
+- no prometer multi‑vendor si aún no se ha implementado
+- no documentar una matrix que no existe
 
 ## Output esperado
-El README top-level explica correctamente por qué existen dos tipos de ejecución.
+La operación diaria del repo queda clara sin volver a acoplar el core a OpenAI.
 
 ---
 
-### TSK-F2-06 — Actualizar `evals/engines/promptfoo/README.md`
+### TSK-F3-06 — Limpiar lenguaje vendor‑centric de la documentación de evals
 
 ## Qué hacer
-Actualizar el README del engine para documentar las nuevas rutas de ejecución.
+Revisar y ajustar lenguaje en:
 
-## Debe incluir
-Como mínimo:
+- `evals/README.md`
+- `evals/engines/promptfoo/README.md`
 
-- qué hace `promptfooconfig.yaml`
-- qué hace `promptfooconfig.uplift.with-skill.yaml`
-- qué hace `promptfooconfig.uplift.without-skill.yaml`
-- qué significa `tests/skill-forge.contract.yaml`
-- qué significa `tests/skill-forge.uplift.yaml`
+## Intención
+Que la documentación no sugiera que:
 
-## Debe dejar claro
-- contract y uplift son superficies distintas
-- uplift no sustituye contract
-- el baseline no es un gate
+- OpenAI es parte del contrato
+- el diseño está pensado “para Codex” o “para OpenAI”
+- el provider actual es la identidad del sistema
+
+## Reescrituras esperadas
+### Evitar
+- “the canonical suite uses OpenAI ...”
+- “the repo runs on OpenAI ...”
+- “provider default baked into the canonical config ...”
+
+### Preferir
+- “the repo currently ships a default provider adapter ...”
+- “provider selection is external to the suite contract ...”
+- “Promptfoo remains the supported engine; provider choice is swappable”
 
 ## Guardrails
-- no prometer reporting avanzado todavía
-- no documentar multi-provider aún
-- no mover assets de sitio en esta fase
+- no reescribir los README completos si no hace falta
+- no introducir jerga innecesaria
+- no inventar soporte para vendors no configurados aún
 
 ## Output esperado
-El README del engine permite ejecutar cada suite sabiendo qué responde cada una.
+La documentación refleja neutralidad de proveedor de forma explícita y consistente.
 
 ---
 
-### TSK-F2-07 — Verificación manual mínima de coherencia
+### TSK-F3-07 — Verificación manual mínima de coherencia
 
 ## Qué hacer
-Hacer una comprobación estructural final.
+Comprobar que el desacople ha quedado consistente.
 
-## Checklist
-- existe `tests/skill-forge.uplift.yaml`
-- existe `promptfooconfig.uplift.with-skill.yaml`
-- existe `promptfooconfig.uplift.without-skill.yaml`
-- ambas configs apuntan al mismo fichero de tests comparativos
-- cada config usa un solo prompt
-- `promptfooconfig.yaml` sigue intacto como gate contractual
-- los READMEs no confunden `contract` con `uplift`
+## Checklist de verificación
+- existe `providers/default.openai.yaml`
+- `promptfooconfig.yaml` ya no contiene provider inline
+- `promptfooconfig.uplift.with-skill.yaml` ya no contiene provider inline
+- `promptfooconfig.uplift.without-skill.yaml` ya no contiene provider inline
+- los README cuentan la misma historia
+- `tests/` no se han tocado
+- `prompts/` no se han tocado
+- `contracts/` y `cases/` no se han tocado
 
 ## Guardrails
-- no mezclar esta verificación con endurecimiento semántico
-- no tocar generated a mano
-- no usar todavía los resultados históricos como criterio de cierre
+- no regenerar suites como criterio de cierre funcional si aún no se necesita
+- no tocar outputs en `generated/` a mano
+- no usar esta fase para introducir cambios de modelo
 
 ## Output esperado
-La estructura queda preparada para una comparación limpia entre ambos modos.
+La estructura ya distingue correctamente entre:
+
+- **suite**
+- **engine**
+- **provider adapter**
 
 ---
 
 ## Guardarraíles globales de la fase
 
-### No hacer en Fase 2
-- no convertir la uplift suite en el nuevo gate
-- no exigir el brief completo a `without_skill`
-- no introducir scoring custom todavía
-- no pasar a multi-provider aún
-- no tocar el schema del brief
+### No hacer en Fase 3
+- no introducir matrix multi‑vendor aún
+- no comparar modelos todavía
+- no cambiar de proveedor por defecto solo por hacer la separación
 - no tocar `SKILL.md`
-- no inventar un runner alternativo a Promptfoo
+- no tocar tests contract/uplift
+- no rediseñar la estructura de casos
+- no crear wrappers custom sobre Promptfoo
 
 ### Mantener estable
-- `contract suite` como gate principal
-- mismo `SKILL.md`
-- mismo contrato estructural del brief
-- mismo engine Promptfoo
-- mismos prompts base
+- contract suite
+- uplift suite
+- prompts actuales
+- contratos JSON actuales
+- Promptfoo como único engine soportado
 
 ---
 
@@ -487,6 +387,8 @@ evals/
       promptfooconfig.yaml
       promptfooconfig.uplift.with-skill.yaml
       promptfooconfig.uplift.without-skill.yaml
+      providers/
+        default.openai.yaml
       prompts/
         with-skill.txt
         without-skill.txt
@@ -499,13 +401,15 @@ evals/
 
 ## Definición de completitud
 
-La Fase 2 está cerrada cuando se cumplen estas condiciones:
+La Fase 3 está cerrada cuando se cumplen estas 5 condiciones:
 
-1. existe una `uplift suite` propia
-2. la comparación se ejecuta en dos configs separadas
-3. `contract` sigue siendo el único gate canónico
-4. `uplift` ya no se interpreta como pass/fail contractual
-5. la documentación explica claramente la diferencia entre ambas superficies
+1. Ninguna config canónica de Promptfoo declara el provider inline.
+2. Existe un adapter de proveedor dedicado y operativo.
+3. La documentación deja claro que el provider es reemplazable.
+4. `tests/`, `prompts/`, `contracts/` y `cases/` no han sufrido cambios semánticos.
+5. El sistema ya puede describirse así:
+
+> **“Promptfoo es el engine; el provider es un adapter intercambiable.”**
 
 ---
 
@@ -514,31 +418,21 @@ La Fase 2 está cerrada cuando se cumplen estas condiciones:
 ### Título
 
 ```text
-phase-2: add uplift comparison suite without changing the canonical contract gate
+phase-3: decouple provider selection from canonical promptfoo suites
 ```
 
-### Alcance
+### Alcance del PR
+Pequeño y estructural.
 
-Debe limitarse a:
-
-- nuevas configs Promptfoo de comparación
-- nuevo fichero de tests comparativos
-- documentación mínima
-
-Sin tocar:
-
-- schema
-- skill contract
-- provider matrix
-- scoring avanzado
+Sin cambios de lógica de evaluación, sin matrix multi‑vendor todavía y sin tocar contratos ni tests.
 
 ---
 
 ## Nota de continuidad
 
-La **Fase 3** empezará después y se centrará en:
+La **Fase 4** empezará después de esta y ya sí puede abrir dos caminos, según quieras ser más conservador o más ambicioso:
 
-- **desacoplar providers** del core Promptfoo
-- preparar el sistema para ser realmente **agnóstico de LLM/vendor**
-- mover el provider OpenAI actual fuera de la config principal
+- **camino mínimo:** endurecer scoring/validación dentro del mismo provider
+- **camino agnóstico fuerte:** introducir provider matrix controlada para comparar robustez entre vendors
 
+La recomendación es no abrir ambos caminos a la vez.

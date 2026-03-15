@@ -31,7 +31,10 @@ Supported runtime:
 
 For `skill-forge`, the active Promptfoo execution surface is:
 - `evals/engines/promptfoo/promptfooconfig.yaml`
+- `evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`
+- `evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`
 - `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
+- `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
 - `evals/engines/promptfoo/prompts/with-skill.txt`
 - `evals/engines/promptfoo/prompts/without-skill.txt`
 - `evals/contracts/skill-forge/eval-brief-output.schema.json`
@@ -47,17 +50,28 @@ Canonical Promptfoo config is read from:
 Canonical contract suite is read from:
 - `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
 
+Comparative uplift configs are read from:
+- `evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`
+- `evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`
+
+Comparative uplift suite is read from:
+- `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
+
 Promptfoo raw eval output is written to:
 - `evals/engines/promptfoo/generated/skill-forge.eval.json`
 
 The canonical gate runs only:
 - `with_skill` prompt path (skill context injected from `SKILL.md`)
 
-Retained for future comparison work only:
-- `without_skill` prompt path (same user request without skill context)
+The uplift comparison surface runs in two separate executions:
+- `with_skill` via `promptfooconfig.uplift.with-skill.yaml`
+- `without_skill` via `promptfooconfig.uplift.without-skill.yaml`
 
 Repo-specific logic stays in native Promptfoo assertions authored per case in `tests/skill-forge.contract.yaml`.
 Trigger cases use schema-backed `contains-json` checks against the Eval Brief contract file.
+
+Repo-specific uplift logic stays in native Promptfoo assertions authored per case in `tests/skill-forge.uplift.yaml`.
+Those uplift assertions are comparative by design and do not replace the contract gate.
 
 The repository does not maintain a second runner around Promptfoo.
 

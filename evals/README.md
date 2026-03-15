@@ -34,14 +34,18 @@ Supported command surface:
 Supported runtime shape:
 - native Promptfoo config, prompt templates, tests, assertions, fixtures, and generated outputs live under `evals/engines/promptfoo/`
 - the canonical Promptfoo contract suite lives in `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
-- trigger cases in that suite now require schema-backed Eval Brief JSON using `evals/contracts/skill-forge/eval-brief-output.schema.json`
+- the comparative Promptfoo uplift suite lives in `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
+- trigger cases in the contract suite require schema-backed Eval Brief JSON using `evals/contracts/skill-forge/eval-brief-output.schema.json`
 - `evals/cases/skill-forge/suite.v1.json` remains a local authoring contract, not the runtime entrypoint
 - the supported offline path uses Promptfoo `--model-outputs` fixtures under `evals/engines/promptfoo/fixtures/`
 - the canonical generated runtime artifact is `evals/engines/promptfoo/generated/skill-forge.eval.json`
 
 Current `skill-forge` supported artifacts:
 - `evals/engines/promptfoo/promptfooconfig.yaml`
+- `evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`
+- `evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`
 - `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
+- `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
 - `evals/engines/promptfoo/prompts/with-skill.txt`
 - `evals/engines/promptfoo/prompts/without-skill.txt`
 - `evals/cases/skill-forge/pilot-suite.v1.json`
@@ -54,8 +58,15 @@ Current contractual behavior:
 - Promptfoo runs the canonical `skill-forge` contract suite with the `with_skill` prompt path only.
 - Promptfoo executes the declarative YAML test suite directly and derives pass/fail from native per-case assertions.
 - trigger outputs are expected to include contract markers plus embedded JSON that satisfies the Eval Brief schema.
-- `without_skill` is retained as a prompt asset for a later uplift/comparison phase and is not part of the canonical contract gate today.
+- `without_skill` is not part of the canonical contract gate.
 - The repo does not ship a separate local eval runner.
+
+Current uplift behavior:
+- Promptfoo compares `skill-forge` behavior through two separate executions that reuse the same comparative suite.
+- `promptfooconfig.uplift.with-skill.yaml` runs `tests/skill-forge.uplift.yaml` with `with_skill`.
+- `promptfooconfig.uplift.without-skill.yaml` runs `tests/skill-forge.uplift.yaml` with `without_skill`.
+- the uplift suite measures comparative signals such as classification, workflow selection, and stop boundaries.
+- the uplift suite is not designed to prove full contractual conformance for the baseline path.
 
 Current operational reference:
 - live:
@@ -67,7 +78,8 @@ Current operational reference:
 ## What this means now
 - The scaffold is explicit and visible at the repo root.
 - Promptfoo is the active eval tool and the supported runtime boundary.
-- The canonical Promptfoo run is now contract-first rather than mixed with baseline comparison.
+- The canonical Promptfoo run is contract-first and remains the only contract gate.
+- Comparative uplift execution now exists as a separate surface and does not replace the gate.
 - the old wrapper runtime no longer participates in the supported flow.
 - The inherited physical layout under `packs/core/<skill>/evals/` is historical compatibility only and not the supported path.
 

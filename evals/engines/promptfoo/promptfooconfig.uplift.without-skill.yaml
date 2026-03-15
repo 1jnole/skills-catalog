@@ -1,0 +1,7 @@
+description: Uplift comparison suite for skill-forge (without skill)
+prompts:
+  - label: without_skill
+    raw: file://prompts/without-skill.txt
+providers:
+  - openai:gpt-4.1-mini
+tests: file://tests/skill-forge.uplift.yaml
