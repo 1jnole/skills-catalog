@@ -1,4 +1,4 @@
-description: Canonical Promptfoo contract suite for skill-forge
+description: Promptfoo contract gate for skill-forge
 prompts:
   - label: with_skill
     raw: file://prompts/with-skill.txt

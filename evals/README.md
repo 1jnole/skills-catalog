@@ -36,6 +36,7 @@ Supported runtime shape:
 - provider selection is externalized through Promptfoo provider adapter files under `evals/engines/promptfoo/providers/`
 - the canonical Promptfoo contract suite lives in `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
 - the comparative Promptfoo uplift suite lives in `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
+- Promptfoo entrypoints stay single-purpose: one contract gate config and two uplift comparison configs
 - trigger cases in the contract suite require schema-backed Eval Brief JSON using `evals/contracts/skill-forge/eval-brief-output.schema.json`
 - `evals/cases/skill-forge/suite.v1.json` remains a local authoring contract, not the runtime entrypoint
 - the supported offline path uses Promptfoo `--model-outputs` fixtures under `evals/engines/promptfoo/fixtures/`
@@ -85,6 +86,7 @@ Current operational reference:
 - The repo currently ships a default provider adapter, but provider choice is external to the suite contract.
 - The canonical Promptfoo run is contract-first and remains the only contract gate.
 - Comparative uplift execution now exists as a separate surface and does not replace the gate.
+- The Promptfoo layer is organized by responsibility across `prompts/`, `tests/`, and `providers/`.
 - the old wrapper runtime no longer participates in the supported flow.
 - The inherited physical layout under `packs/core/<skill>/evals/` is historical compatibility only and not the supported path.
 

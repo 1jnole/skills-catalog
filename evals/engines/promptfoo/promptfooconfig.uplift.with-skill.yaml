@@ -1,4 +1,4 @@
-description: Uplift comparison suite for skill-forge (with skill)
+description: Promptfoo uplift comparison for skill-forge (with_skill)
 prompts:
   - label: with_skill
     raw: file://prompts/with-skill.txt

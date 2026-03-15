@@ -30,6 +30,20 @@ Supported commands:
 Supported runtime:
 - native Promptfoo execution from `evals/engines/promptfoo/` with repo-owned wrappers removed
 
+## Entrypoints
+- `promptfooconfig.yaml` is the canonical contract gate entrypoint.
+- `promptfooconfig.uplift.with-skill.yaml` is the comparative uplift entrypoint for `with_skill`.
+- `promptfooconfig.uplift.without-skill.yaml` is the comparative uplift entrypoint for `without_skill`.
+
+## Shared Assets
+- `prompts/` holds prompt templates only.
+- `tests/` holds Promptfoo test suites only.
+- `providers/` holds provider adapter files only.
+- `fixtures/` and `generated/` remain runtime support/output areas and are not suite-definition entrypoints.
+
+No `tests/defaults.yaml` is shipped in this phase.
+The current duplication between contract and uplift suites is small and semantically meaningful, so a shared defaults layer would add indirection without enough payoff yet.
+
 For `skill-forge`, the active Promptfoo execution surface is:
 - `evals/engines/promptfoo/promptfooconfig.yaml`
 - `evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`
