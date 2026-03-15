@@ -3,5 +3,5 @@ prompts:
   - label: without_skill
     raw: file://prompts/without-skill.txt
 providers:
-  - openai:gpt-4.1-mini
+  - file://providers/default.openai.yaml
 tests: file://tests/skill-forge.uplift.yaml
