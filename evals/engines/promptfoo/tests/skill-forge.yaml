@@ -16,6 +16,8 @@
       value: "Workflow: new-skill"
     - type: icontains
       value: "Freeze the contract before final instructions."
+    - type: contains-json
+      value: file://evals/contracts/skill-forge/eval-brief-output.schema.json
     - type: icontains
       value: "Eval Brief ready"
     - type: not-icontains
@@ -39,12 +41,14 @@
       value: "Classification: trigger"
     - type: icontains
       value: "Workflow: existing-skill-refactor"
-    - type: icontains
-      value: "Eval Brief ready"
     - type: icontains-any
       value:
         - "Freeze the contract before final instructions."
-        - "contract-first refactor sequence"
+        - "contract-first"
+    - type: contains-json
+      value: file://evals/contracts/skill-forge/eval-brief-output.schema.json
+    - type: icontains
+      value: "Eval Brief ready"
     - type: not-icontains
       value: "Classification: non-trigger"
     - type: not-icontains
@@ -68,6 +72,8 @@
       value: "Workflow: skill-rewrite"
     - type: icontains
       value: "Freeze the contract before final instructions."
+    - type: contains-json
+      value: file://evals/contracts/skill-forge/eval-brief-output.schema.json
     - type: icontains
       value: "Eval Brief ready"
     - type: not-icontains
@@ -95,6 +101,37 @@
       value: "Freeze the contract before final instructions."
     - type: icontains
       value: "Downstream eval work is out of scope here."
+    - type: contains-json
+      value: file://evals/contracts/skill-forge/eval-brief-output.schema.json
+    - type: icontains
+      value: "Eval Brief ready"
+    - type: not-icontains
+      value: "Classification: non-trigger"
+    - type: not-icontains
+      value: "Classification: stop-and-ask"
+
+- description: trigger-with-benchmark-noise
+  vars:
+    skill_prompt: file://../../../packs/core/skill-forge/SKILL.md
+    case_id: trigger-with-benchmark-noise
+    prompt: Create a new reusable skill for repo ownership routing. Freeze the contract first and stop at Eval Brief ready. We can design the benchmark suite and model comparison later.
+    expected_stop: Eval Brief ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-forge
+    case_bucket: regression
+    expected_stop: Eval Brief ready
+  assert:
+    - type: starts-with
+      value: "Classification: trigger"
+    - type: icontains
+      value: "Workflow: new-skill"
+    - type: icontains
+      value: "Freeze the contract before final instructions."
+    - type: icontains
+      value: "Downstream eval work is out of scope here."
+    - type: contains-json
+      value: file://evals/contracts/skill-forge/eval-brief-output.schema.json
     - type: icontains
       value: "Eval Brief ready"
     - type: not-icontains
@@ -125,6 +162,8 @@
     - type: not-icontains
       value: "Classification: trigger"
     - type: not-icontains
+      value: "Classification: stop-and-ask"
+    - type: not-icontains
       value: "Eval Brief ready"
 
 - description: runtime-harness-implementation
@@ -147,6 +186,8 @@
       value: "shared eval runtime implementation"
     - type: not-icontains
       value: "Classification: trigger"
+    - type: not-icontains
+      value: "Classification: stop-and-ask"
     - type: not-icontains
       value: "Eval Brief ready"
 
@@ -171,6 +212,39 @@
     - type: not-icontains
       value: "Classification: trigger"
     - type: not-icontains
+      value: "Classification: stop-and-ask"
+    - type: not-icontains
+      value: "Eval Brief ready"
+
+- description: eval-authoring-benchmark-suite-request
+  vars:
+    skill_prompt: file://../../../packs/core/skill-forge/SKILL.md
+    case_id: eval-authoring-benchmark-suite-request
+    prompt: The brief is already done. Create the eval definition, golden cases, and benchmark suite for this skill so we can wire the runtime today.
+    expected_stop: do_not_trigger
+    should_trigger: false
+  metadata:
+    skill_name: skill-forge
+    case_bucket: regression
+    expected_stop: do_not_trigger
+  assert:
+    - type: starts-with
+      value: "Classification: non-trigger"
+    - type: icontains
+      value: "Out of scope for skill-forge."
+    - type: icontains-any
+      value:
+        - "downstream eval authoring"
+        - "eval definition"
+    - type: icontains-any
+      value:
+        - "benchmark"
+        - "golden"
+    - type: not-icontains
+      value: "Classification: trigger"
+    - type: not-icontains
+      value: "Classification: stop-and-ask"
+    - type: not-icontains
       value: "Eval Brief ready"
 
 - description: ambiguous-multi-workflow-request
@@ -191,6 +265,34 @@
       value: "Scope clarification required."
     - type: icontains
       value: "multiple workflows"
+    - type: not-icontains
+      value: "Classification: trigger"
+    - type: not-icontains
+      value: "Classification: non-trigger"
+    - type: not-icontains
+      value: "Eval Brief ready"
+
+- description: ambiguous-refactor-missing-target
+  vars:
+    skill_prompt: file://../../../packs/core/skill-forge/SKILL.md
+    case_id: ambiguous-refactor-missing-target
+    prompt: Refactor this skill so the contract is clearer, keep it contract-first, and stop at Eval Brief ready.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: starts-with
+      value: "Classification: stop-and-ask"
+    - type: icontains
+      value: "Scope clarification required."
+    - type: icontains-any
+      value:
+        - "skill target"
+        - "target skill"
+        - "unclear"
     - type: not-icontains
       value: "Classification: trigger"
     - type: not-icontains

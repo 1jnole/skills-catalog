@@ -34,6 +34,7 @@ Supported command surface:
 Supported runtime shape:
 - native Promptfoo config, prompt templates, tests, assertions, fixtures, and generated outputs live under `evals/engines/promptfoo/`
 - the canonical Promptfoo execution suite lives in `evals/engines/promptfoo/tests/skill-forge.yaml`
+- trigger cases in that suite now require schema-backed Eval Brief JSON using `evals/contracts/skill-forge/eval-brief-output.schema.json`
 - `evals/cases/skill-forge/suite.v1.json` remains a local authoring contract, not the runtime entrypoint
 - the supported offline path uses Promptfoo `--model-outputs` fixtures under `evals/engines/promptfoo/fixtures/`
 - the canonical generated runtime artifact is `evals/engines/promptfoo/generated/skill-forge.eval.json`
@@ -52,6 +53,7 @@ Current `skill-forge` supported artifacts:
 Current baseline behavior:
 - Promptfoo runs both `with_skill` and `without_skill` prompt paths for the canonical `skill-forge` suite.
 - Promptfoo executes the declarative YAML test suite directly and derives pass/fail from native per-case assertions.
+- trigger outputs are expected to include contract markers plus embedded JSON that satisfies the Eval Brief schema.
 - The repo does not ship a separate local eval runner.
 
 Current operational reference:

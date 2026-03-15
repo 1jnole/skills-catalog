@@ -11,11 +11,12 @@ This is the supported local `skill-forge` eval authoring contract. It is not the
 - `evals/engines/promptfoo/tests/skill-forge.yaml`
 
 This is the supported execution entrypoint for Promptfoo.
+Trigger cases in that suite require schema-backed Eval Brief JSON via `evals/contracts/skill-forge/eval-brief-output.schema.json`.
 
 Coverage buckets represented in the suite:
 - `core`: `new-skill-one-clear-job`, `existing-skill-refactor-clear-target`
 - `edge`: `agents-policy-request`, `runtime-harness-implementation`, `eval-authoring-only-request`
-- `regression`: `skill-rewrite-clear-target`, `mixed-authoring-and-eval-request`, `ambiguous-multi-workflow-request`
+- `regression`: `skill-rewrite-clear-target`, `mixed-authoring-and-eval-request`, `trigger-with-benchmark-noise`, `eval-authoring-benchmark-suite-request`, `ambiguous-multi-workflow-request`, `ambiguous-refactor-missing-target`
 
 ## Historical pilot snapshot
 - `skill-forge`

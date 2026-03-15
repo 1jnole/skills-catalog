@@ -1,5 +1,5 @@
 interface:
   display_name: "Skill Forge"
-  short_description: "Create or refactor one skill through spec, manual dogfooding, and shared-eval registration"
+  short_description: "Create or refactor one skill through a contract-first workflow and stop at Eval Brief ready"
 policy:
   allow_implicit_invocation: false
