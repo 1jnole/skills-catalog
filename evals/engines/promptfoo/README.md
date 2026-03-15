@@ -34,7 +34,6 @@ For `skill-forge`, the active Promptfoo execution surface is:
 - `evals/engines/promptfoo/tests/skill-forge.yaml`
 - `evals/engines/promptfoo/prompts/with-skill.txt`
 - `evals/engines/promptfoo/prompts/without-skill.txt`
-- `evals/engines/promptfoo/support/assertions.cjs`
 
 The local case contract still lives at:
 - `evals/cases/skill-forge/suite.v1.json`
@@ -51,8 +50,7 @@ The config runs both baseline modes:
 - `with_skill` prompt path (skill context injected from `SKILL.md`)
 - `without_skill` prompt path (same user request without skill context)
 
-Repo-specific logic is intentionally minimal:
-- one JavaScript assertion for domain scoring
+Repo-specific logic stays in native Promptfoo assertions authored per case in `tests/skill-forge.yaml`.
 
 The repository does not maintain a second runner around Promptfoo.
 

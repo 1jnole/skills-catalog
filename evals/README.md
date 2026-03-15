@@ -43,7 +43,6 @@ Current `skill-forge` supported artifacts:
 - `evals/engines/promptfoo/tests/skill-forge.yaml`
 - `evals/engines/promptfoo/prompts/with-skill.txt`
 - `evals/engines/promptfoo/prompts/without-skill.txt`
-- `evals/engines/promptfoo/support/assertions.cjs`
 - `evals/cases/skill-forge/pilot-suite.v1.json`
 - `evals/cases/skill-forge/suite.v1.json`
 - `evals/cases/skill-forge/README.md`
@@ -52,7 +51,8 @@ Current `skill-forge` supported artifacts:
 
 Current baseline behavior:
 - Promptfoo runs both `with_skill` and `without_skill` prompt paths for the canonical `skill-forge` suite.
-- Promptfoo executes the declarative YAML test suite directly; the repo does not ship a separate local eval runner.
+- Promptfoo executes the declarative YAML test suite directly and derives pass/fail from native per-case assertions.
+- The repo does not ship a separate local eval runner.
 
 Current operational reference:
 - live:

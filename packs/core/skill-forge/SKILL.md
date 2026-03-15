@@ -70,15 +70,18 @@ For stop-and-ask cases:
 For this repository, the canonical template is:
 - `packs/core/skill-forge/assets/contracts/eval-brief.template.json`
 
-For the current in-repo eval example of this skill, the cases live at:
-- `packs/core/skill-forge/evals/evals.json`
+For this repository, the runtime execution suite for this skill lives at:
+- `evals/engines/promptfoo/tests/skill-forge.yaml`
+
+For the local eval authoring contract used by repo eval docs, the cases live at:
+- `evals/cases/skill-forge/suite.v1.json`
 
 ## Local materials
 Use these local files only when they help the current authoring run:
 - `packs/core/skill-forge/assets/contracts/eval-brief.template.json` to structure the boundary-only handoff artifact.
 - `packs/core/skill-forge/assets/spec-template.md` to sanity-check that the brief stops at `Eval Brief ready`.
 - `packs/core/skill-forge/assets/skill-template.job.md` and `packs/core/skill-forge/assets/skill-template.guardrail.md` only when the target skill itself needs a local starting shape.
-- `packs/core/skill-forge/evals/evals.json` as a downstream validation example for this skill, not as an input required to author the brief.
+- `evals/cases/skill-forge/suite.v1.json` as downstream eval authoring context, not as runtime pass/fail authority and not as an input required to author the brief.
 
 ## Procedure
 Step 1: Define success before writing or refactoring the skill.
