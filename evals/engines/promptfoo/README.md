@@ -31,7 +31,7 @@ Supported runtime:
 
 For `skill-forge`, the active Promptfoo execution surface is:
 - `evals/engines/promptfoo/promptfooconfig.yaml`
-- `evals/engines/promptfoo/tests/skill-forge.yaml`
+- `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
 - `evals/engines/promptfoo/prompts/with-skill.txt`
 - `evals/engines/promptfoo/prompts/without-skill.txt`
 - `evals/contracts/skill-forge/eval-brief-output.schema.json`
@@ -44,14 +44,19 @@ The smaller `pilot-suite.v1.json` file remains as historical Phase 4 bootstrap c
 Canonical Promptfoo config is read from:
 - `evals/engines/promptfoo/promptfooconfig.yaml`
 
+Canonical contract suite is read from:
+- `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
+
 Promptfoo raw eval output is written to:
 - `evals/engines/promptfoo/generated/skill-forge.eval.json`
 
-The config runs both baseline modes:
+The canonical gate runs only:
 - `with_skill` prompt path (skill context injected from `SKILL.md`)
+
+Retained for future comparison work only:
 - `without_skill` prompt path (same user request without skill context)
 
-Repo-specific logic stays in native Promptfoo assertions authored per case in `tests/skill-forge.yaml`.
+Repo-specific logic stays in native Promptfoo assertions authored per case in `tests/skill-forge.contract.yaml`.
 Trigger cases use schema-backed `contains-json` checks against the Eval Brief contract file.
 
 The repository does not maintain a second runner around Promptfoo.

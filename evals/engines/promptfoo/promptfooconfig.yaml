@@ -1,9 +1,7 @@
-description: Canonical Promptfoo-first suite for skill-forge
+description: Canonical Promptfoo contract suite for skill-forge
 prompts:
   - label: with_skill
     raw: file://prompts/with-skill.txt
-  - label: without_skill
-    raw: file://prompts/without-skill.txt
 providers:
   - openai:gpt-4.1-mini
-tests: file://tests/skill-forge.yaml
+tests: file://tests/skill-forge.contract.yaml
