@@ -19,6 +19,8 @@ Promptfoo is the supported execution tool.
   - `evals/engines/promptfoo/promptfooconfig.yaml`
 - canonical Promptfoo execution suite:
   - `evals/engines/promptfoo/tests/skill-forge.yaml`
+- hardened trigger schema:
+  - `evals/contracts/skill-forge/eval-brief-output.schema.json`
 - local eval authoring contract:
   - `evals/cases/skill-forge/suite.v1.json`
 - skill prompt source:

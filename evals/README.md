@@ -33,26 +33,45 @@ Supported command surface:
 
 Supported runtime shape:
 - native Promptfoo config, prompt templates, tests, assertions, fixtures, and generated outputs live under `evals/engines/promptfoo/`
-- the canonical Promptfoo execution suite lives in `evals/engines/promptfoo/tests/skill-forge.yaml`
+- provider selection is externalized through Promptfoo provider adapter files under `evals/engines/promptfoo/providers/`
+- the canonical Promptfoo contract suite lives in `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
+- the comparative Promptfoo uplift suite lives in `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
+- Promptfoo entrypoints stay single-purpose: one contract gate config and two uplift comparison configs
+- trigger cases in the contract suite require schema-backed Eval Brief JSON using `evals/contracts/skill-forge/eval-brief-output.schema.json`
 - `evals/cases/skill-forge/suite.v1.json` remains a local authoring contract, not the runtime entrypoint
 - the supported offline path uses Promptfoo `--model-outputs` fixtures under `evals/engines/promptfoo/fixtures/`
 - the canonical generated runtime artifact is `evals/engines/promptfoo/generated/skill-forge.eval.json`
 
 Current `skill-forge` supported artifacts:
 - `evals/engines/promptfoo/promptfooconfig.yaml`
-- `evals/engines/promptfoo/tests/skill-forge.yaml`
+- `evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`
+- `evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`
+- `evals/engines/promptfoo/providers/default.openai.yaml`
+- `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
+- `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
 - `evals/engines/promptfoo/prompts/with-skill.txt`
 - `evals/engines/promptfoo/prompts/without-skill.txt`
-- `evals/engines/promptfoo/support/assertions.cjs`
 - `evals/cases/skill-forge/pilot-suite.v1.json`
 - `evals/cases/skill-forge/suite.v1.json`
 - `evals/cases/skill-forge/README.md`
 - `evals/fixtures/skill-forge/README.md`
 - `evals/final-supported-path.md`
 
-Current baseline behavior:
-- Promptfoo runs both `with_skill` and `without_skill` prompt paths for the canonical `skill-forge` suite.
-- Promptfoo executes the declarative YAML test suite directly; the repo does not ship a separate local eval runner.
+Current contractual behavior:
+- Promptfoo runs the canonical `skill-forge` contract suite with the `with_skill` prompt path only.
+- the contract suite reads its provider from the default provider adapter rather than declaring a vendor inline.
+- Promptfoo executes the declarative YAML test suite directly and derives pass/fail from native per-case assertions.
+- trigger outputs are expected to include contract markers plus embedded JSON that satisfies the Eval Brief schema.
+- `without_skill` is not part of the canonical contract gate.
+- The repo does not ship a separate local eval runner.
+
+Current uplift behavior:
+- Promptfoo compares `skill-forge` behavior through two separate executions that reuse the same comparative suite.
+- `promptfooconfig.uplift.with-skill.yaml` runs `tests/skill-forge.uplift.yaml` with `with_skill`.
+- `promptfooconfig.uplift.without-skill.yaml` runs `tests/skill-forge.uplift.yaml` with `without_skill`.
+- both uplift configs read the active provider from the same default provider adapter.
+- the uplift suite measures comparative signals such as classification, workflow selection, and stop boundaries.
+- the uplift suite is not designed to prove full contractual conformance for the baseline path.
 
 Current operational reference:
 - live:
@@ -64,6 +83,10 @@ Current operational reference:
 ## What this means now
 - The scaffold is explicit and visible at the repo root.
 - Promptfoo is the active eval tool and the supported runtime boundary.
+- The repo currently ships a default provider adapter, but provider choice is external to the suite contract.
+- The canonical Promptfoo run is contract-first and remains the only contract gate.
+- Comparative uplift execution now exists as a separate surface and does not replace the gate.
+- The Promptfoo layer is organized by responsibility across `prompts/`, `tests/`, and `providers/`.
 - the old wrapper runtime no longer participates in the supported flow.
 - The inherited physical layout under `packs/core/<skill>/evals/` is historical compatibility only and not the supported path.
 

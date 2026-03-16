@@ -1,0 +1,7 @@
+description: Promptfoo comparative uplift signals for skill-forge (without_skill)
+prompts:
+  - label: without_skill
+    raw: file://prompts/without-skill.txt
+providers:
+  - file://providers/default.openai.yaml
+tests: file://tests/skill-forge.uplift.yaml

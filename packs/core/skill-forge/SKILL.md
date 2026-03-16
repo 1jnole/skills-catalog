@@ -47,7 +47,7 @@ For trigger cases:
 6. Do not switch to `stop-and-ask` just because eval scaffold work appears alongside authoring when the authoring boundary is already clear.
 7. Keep the required trigger note and any downstream note outside the JSON artifact and do not mention runner, benchmark, scorer, or grading behavior inside the JSON payload.
 8. Do not ask for confirmation if the skill target and authoring job are already clear.
-9. Produce the boundary-only JSON artifact.
+9. Produce the boundary-only JSON artifact using the canonical top-level keys exactly: `skill`, `authoring`, `successModel`, `activationProbes`, `negativeSignals`, and `sourceRefs`. Keep `seedEvalIntent` optional.
 10. End with the exact line `Eval Brief ready`.
 
 For non-trigger cases:
@@ -65,20 +65,24 @@ For stop-and-ask cases:
 3. Use stop-and-ask only when the request is still plausibly skill authoring and the skill target, single job, or authoring boundary is genuinely unclear.
 4. Do not use stop-and-ask for obvious non-trigger requests.
 5. State which part of the authoring target or boundary is unclear.
-7. Do not produce an Eval Brief.
+6. Do not produce an Eval Brief.
 
 For this repository, the canonical template is:
 - `packs/core/skill-forge/assets/contracts/eval-brief.template.json`
 
-For the current in-repo eval example of this skill, the cases live at:
-- `packs/core/skill-forge/evals/evals.json`
+For this repository, engine-specific eval execution assets live outside this skill contract.
+Use repository eval docs only when they help orient downstream authoring, not to redefine the brief boundary.
+
+For the local eval authoring contract used by repo eval docs, the cases live at:
+- `evals/cases/skill-forge/suite.v1.json`
 
 ## Local materials
 Use these local files only when they help the current authoring run:
 - `packs/core/skill-forge/assets/contracts/eval-brief.template.json` to structure the boundary-only handoff artifact.
+- Keep the template's top-level key names stable because downstream structural validation depends on them.
 - `packs/core/skill-forge/assets/spec-template.md` to sanity-check that the brief stops at `Eval Brief ready`.
 - `packs/core/skill-forge/assets/skill-template.job.md` and `packs/core/skill-forge/assets/skill-template.guardrail.md` only when the target skill itself needs a local starting shape.
-- `packs/core/skill-forge/evals/evals.json` as a downstream validation example for this skill, not as an input required to author the brief.
+- `evals/cases/skill-forge/suite.v1.json` as downstream eval authoring context, not as runtime pass/fail authority and not as an input required to author the brief.
 
 ## Procedure
 Step 1: Define success before writing or refactoring the skill.
@@ -105,9 +109,10 @@ Step 3: Freeze scope for one skill.
 Step 4: Capture boundary input.
 1. Start from `packs/core/skill-forge/assets/contracts/eval-brief.template.json`.
 2. Fill only boundary fields: skill identity, authoring boundary, success model, probes, negative signals, source refs.
-3. Keep the brief free of runtime, dataset, benchmark, grader, or eval scaffold detail.
-4. Treat the success contract from Step 1 as required input to the brief, not as optional commentary.
-5. Keep `sourceRefs` limited to source material that justifies the target skill contract. Do not list repo planning documents as required inputs for the brief.
+3. Keep the template's top-level keys stable: do not rename `authoring`, `activationProbes`, `negativeSignals`, or `sourceRefs`.
+4. Keep the brief free of runtime, dataset, benchmark, grader, or eval scaffold detail.
+5. Treat the success contract from Step 1 as required input to the brief, not as optional commentary.
+6. Keep `sourceRefs` limited to source material that justifies the target skill contract. Do not list repo planning documents as required inputs for the brief.
 
 Step 5: Stabilize the local contract before handoff.
 1. Check one trigger, one nearby non-trigger, and one edge case against the frozen boundary.
@@ -117,10 +122,11 @@ Step 5: Stabilize the local contract before handoff.
 Step 6: Produce the Eval Brief.
 1. Materialize the JSON artifact from the filled template.
 2. Keep the artifact boundary-only: no runtime implementation detail, no eval scaffold layout, and no scorer logic.
-3. Keep any downstream defer note outside the JSON payload.
-4. Record any unresolved downstream dependency as a short note outside the JSON payload instead of inventing runtime behavior.
-5. Do not mention runner, benchmark, scorer, or grading behavior inside the brief payload.
-6. End the response with the exact line `Eval Brief ready`.
+3. Preserve the template's top-level structure so downstream structural validation can consume the brief without reshaping it.
+4. Keep any downstream defer note outside the JSON payload.
+5. Record any unresolved downstream dependency as a short note outside the JSON payload instead of inventing runtime behavior.
+6. Do not mention runner, benchmark, scorer, or grading behavior inside the brief payload.
+7. End the response with the exact line `Eval Brief ready`.
 
 Step 7: Metadata discipline.
 1. Keep the frontmatter name and description aligned with the actual skill boundary.

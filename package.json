@@ -11,15 +11,20 @@
   "devDependencies": {
     "@types/node": "^24.6.0",
     "promptfoo": "^0.120.19",
+    "tsx": "^4.21.0",
     "typescript": "^5.8.3",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.0",
+    "yaml": "^2.8.2"
   },
   "scripts": {
     "promptfoo:validate": "promptfoo validate -c evals/engines/promptfoo/promptfooconfig.yaml",
+    "promptfoo:validate:uplift:with-skill": "promptfoo validate -c evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml",
+    "promptfoo:validate:uplift:without-skill": "promptfoo validate -c evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml",
     "promptfoo:run": "promptfoo eval -c evals/engines/promptfoo/promptfooconfig.yaml -o evals/engines/promptfoo/generated/skill-forge.eval.json --no-progress-bar --table-cell-max-length 80",
     "promptfoo:run:offline": "promptfoo eval -c evals/engines/promptfoo/promptfooconfig.yaml --model-outputs evals/engines/promptfoo/fixtures/skill-forge-suite-model-outputs.json -o evals/engines/promptfoo/generated/skill-forge.eval.json --no-progress-bar --table-cell-max-length 80",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "validate:skill-metadata": "tsx scripts/validate-skill-metadata.ts"
   }
 }
