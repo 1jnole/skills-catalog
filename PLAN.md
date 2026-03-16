@@ -1,134 +1,110 @@
-# Fase 4 — Modularizar Promptfoo con configuración estándar y reusable
+# Fase 5 — Endurecimiento de la evaluación sin cambiar de tool
 
 ## Objetivo
 
-Reorganizar la capa `evals/engines/promptfoo/` para que la configuración quede **modular, mantenible y agnóstica de proveedor**, usando únicamente capacidades estándar de Promptfoo.
+Aumentar la **fiabilidad** de la capa de evaluación usando únicamente capacidades nativas de Promptfoo y la estructura ya creada en fases anteriores.
 
-Esta fase responde a esta pregunta:
+Esta fase **no** cambia el contrato de la skill ni introduce un runner nuevo.  
+La meta es que la señal de evaluación deje de depender tanto de texto superficial y pase a depender más de:
 
-> **¿La capa Promptfoo está organizada por responsabilidades claras, sin duplicación innecesaria y sin mezclar contrato, uplift, providers y defaults en un único fichero?**
+- estructura
+- invariantes del contrato
+- checks críticos explícitos
+- semántica correcta por suite
 
 ---
 
 ## Contexto de partida
 
-### Estado esperado tras Fase 3
+### Estado esperado al entrar en esta fase
 
-Después de las fases anteriores, el repo debería estar conceptualmente así:
+Se asume que ya existen, o están cerradas, estas decisiones previas:
 
-- `skill-forge/SKILL.md` ya es agnóstico del engine.
-- La **contract suite** ya existe y es el gate principal.
-- La **uplift suite** ya existe o está prevista como ejecución comparativa separada.
-- Los **providers** ya no deberían vivir embebidos como única verdad dentro del config principal.
+- `skill-forge/SKILL.md` ya actúa como contrato portable de la skill
+- el engine operativo soportado sigue siendo **Promptfoo**
+- la evaluación ya está separada en:
+    - **contract suite**
+    - **uplift suite**
+- los providers ya no están embebidos rígidamente en la config principal
+- la modularización de Promptfoo ya ha reducido duplicación básica entre configs/tests/providers/prompts
 
 ### Problema que resuelve esta fase
 
-Aunque contract y uplift ya estén separados, todavía puede quedar deuda estructural en `evals/engines/promptfoo/`:
+Aunque la separación por suites mejora mucho la semántica, todavía puede quedar un problema típico:
 
-- configs con demasiadas responsabilidades mezcladas
-- duplicación de assertions o rutas
-- providers repartidos de forma inconsistente
-- READMEs que no reflejan bien el entrypoint de cada ejecución
-- demasiada lógica operativa concentrada en un único YAML
+> la suite pasa o falla por **frases concretas** más que por la **corrección real del contrato**
 
-Esta fase **no cambia la semántica** de contract o uplift.
+Eso genera dos riesgos:
 
-La misión aquí es:
+1. **fragilidad por rewording**  
+   pequeños cambios inocentes rompen la suite
 
-> **ordenar Promptfoo como adapter estable del repo**
-
-sin inventar un runner propio y sin rediseñar el sistema.
+2. **falsos positivos superficiales**  
+   el modelo dice las palabras correctas, pero no respeta bien el boundary
 
 ---
 
 ## Resultado esperado al cerrar esta fase
 
-Debe quedar una estructura en la que:
+Al terminar esta fase, la evaluación debería ser más fuerte en estos términos:
 
-- cada config Promptfoo tenga **una responsabilidad clara**
-- prompts, tests y providers estén **separados por carpeta**
-- haya una convención clara de entrypoints
-- la documentación explique qué ejecuta cada config
-- la duplicación innecesaria se reduzca al mínimo razonable
+### Contract suite
+- valida el contrato de manera más **estructural**
+- falla con dureza si se rompe algo crítico
+- depende menos de wording accidental
 
-### Significado operativo
+### Uplift suite
+- mide mejor señales comparables
+- deja de exigir al baseline lo que solo corresponde al modo con skill
+- produce una lectura más clara de mejora relativa
 
-Al terminar esta fase, cualquier persona debería poder ver `evals/engines/promptfoo/` y entender:
-
-- qué config corre el **gate contractual**
-- qué config corre el **uplift**
-- dónde viven los **providers**
-- dónde viven los **prompts**
-- dónde viven los **tests**
-- qué parte es shared/default y qué parte es específica
+### Lectura final buscada
+- `contract` responde: **“¿cumple?”**
+- `uplift` responde: **“¿aporta valor?”**
 
 ---
 
 ## Alcance de la fase
 
 ### Sí entra
-- modularizar configs Promptfoo
-- separar por responsabilidad
-- introducir `defaultTest` o refs compartidas si reducen duplicación real
-- consolidar naming y rutas
-- alinear READMEs con la estructura final
+- endurecer assertions
+- introducir métricas explícitas
+- usar `defaultTest` o piezas compartidas si ya encaja con la modularización anterior
+- reforzar hard-fail en checks críticos
+- reducir dependencia de `icontains` donde sea razonable
+- mejorar semántica de la uplift suite sin cambiar de herramienta
 
 ### No entra
-- cambiar el contrato de la skill
-- cambiar el schema del Eval Brief
-- rediseñar los casos
-- introducir un runner nuevo
-- añadir LLM-as-a-judge
-- reescribir la lógica de uplift
-- introducir multi-provider real si aún no está listo
-- cambiar el contenido semántico de `SKILL.md`
+- cambiar `SKILL.md`
+- cambiar el schema canónico del brief salvo bug claro
+- introducir un runner propio
+- cambiar de engine
+- crear una capa de ejecución agent-level adicional
+- introducir una matriz grande multi-vendor
+- rediseñar los casos fuente desde cero
 
 ---
 
 ## Archivos a tocar
 
-### Crear o consolidar
-- `evals/engines/promptfoo/tests/defaults.yaml` *(si aporta valor real)*
-- `evals/engines/promptfoo/providers/` *(si todavía no está cerrada esta carpeta tras Fase 3)*
-
 ### Modificar
+- `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
+- `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
 - `evals/engines/promptfoo/promptfooconfig.yaml`
 - `evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`
 - `evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`
 - `evals/engines/promptfoo/README.md`
-- opcionalmente `evals/README.md` si la topología cambia de forma visible
 
-### Mantener sin tocar
+### Posibles creaciones
+- `evals/engines/promptfoo/tests/defaults.yaml`
+- `evals/engines/promptfoo/tests/shared/*.yaml`
+- `evals/engines/promptfoo/reports/README.md` si hace falta aclarar semántica de métricas
+
+### Mantener estables
 - `skill-forge/SKILL.md`
 - `evals/contracts/skill-forge/eval-brief-output.schema.json`
-- `evals/cases/skill-forge/*`
-- prompts base salvo cambios de naming estrictamente necesarios
-
----
-
-## Estructura objetivo
-
-```text
- evals/
-   engines/
-     promptfoo/
-       README.md
-       promptfooconfig.yaml
-       promptfooconfig.uplift.with-skill.yaml
-       promptfooconfig.uplift.without-skill.yaml
-       prompts/
-         with-skill.txt
-         without-skill.txt
-       tests/
-         skill-forge.contract.yaml
-         skill-forge.uplift.yaml
-         defaults.yaml            # opcional, solo si reduce duplicación real
-       providers/
-         smoke.openai.yaml        # o equivalente ya definido en Fase 3
-```
-
-> `defaults.yaml` solo debe existir si de verdad elimina duplicación útil.
-> No crear archivos auxiliares por crear.
+- `evals/cases/skill-forge/suite.v1.json`
+- prompts base `with-skill.txt` / `without-skill.txt` salvo necesidad menor
 
 ---
 
@@ -136,345 +112,339 @@ Al terminar esta fase, cualquier persona debería poder ver `evals/engines/promp
 
 ---
 
-### TSK-F4-01 — Normalizar los entrypoints de Promptfoo
+### TSK-F5-01 — Clasificar assertions en críticas vs auxiliares
 
 ## Qué hacer
+Revisar las assertions actuales de ambas suites y clasificarlas en dos grupos:
 
-Revisar todos los archivos `promptfooconfig*.yaml` y dejar claro cuál es el rol de cada uno.
+### Críticas
+Las que definen si el contrato o la clasificación se ha roto de verdad.
 
-## Intención
+### Auxiliares
+Las que ayudan a detectar deriva o regresión, pero no deberían ser la única causa de fallo duro.
 
-Que no exista duda sobre qué ejecuta cada entrypoint.
+## Candidatas a críticas
 
-## Estado objetivo
+### Contract suite
+- `classification` correcta
+- `workflow` correcto cuando aplica
+- schema / JSON estructural válido
+- marker terminal `Eval Brief ready`
+- ausencia de clasificaciones incompatibles (`non-trigger`, `stop-and-ask` cuando no tocan)
 
-### `promptfooconfig.yaml`
-Debe significar:
-
-> ejecución canónica del **gate contractual**
-
-### `promptfooconfig.uplift.with-skill.yaml`
-Debe significar:
-
-> ejecución comparativa de uplift en modo **with_skill**
-
-### `promptfooconfig.uplift.without-skill.yaml`
-Debe significar:
-
-> ejecución comparativa de uplift en modo **without_skill**
+### Uplift suite
+- `classification` correcta
+- distinción correcta entre:
+    - trigger
+    - non-trigger
+    - stop-and-ask
+- marker terminal solo cuando el caso lo exige
 
 ## Guardrails
-- no dejar configs con doble propósito
-- no usar nombres ambiguos
-- no mantener configs legacy sin documentar
-- no introducir un cuarto config “mixto” si no es estrictamente necesario
+- no cambies todavía todos los tests a la vez sin clasificar antes
+- no des por “crítica” una assertion solo porque existe
+- no conviertas checks cosméticos en gate duro
 
 ## Output esperado
-
-Los entrypoints están nombrados y documentados de forma inequívoca.
+Una lista clara, documentada en comentarios o README, de:
+- assertions críticas
+- assertions auxiliares
 
 ---
 
-### TSK-F4-02 — Extraer y consolidar rutas compartidas
+### TSK-F5-02 — Endurecer la contract suite con checks estructurales
 
 ## Qué hacer
+Modificar `skill-forge.contract.yaml` para que el peso de la validación descanse menos en frases literales y más en estructura y shape.
 
-Revisar las configs Promptfoo y mover a una convención estable:
+## Instrucción concreta
+Mantener algunos markers externos si son parte del contrato visible, pero reforzar:
 
-- prompts siempre desde `prompts/`
-- tests siempre desde `tests/`
-- providers siempre desde `providers/`
+- validación de JSON embebido o estructurado
+- validación contra schema
+- invariantes de campos
+- ausencia de payloads incompatibles
+
+## Dirección esperada
+Reducir dependencia de cadenas como:
+- `Freeze the contract before final instructions.`
+
+y depender más de que el brief:
+- exista
+- valide
+- tenga la forma esperada
+- no se salga del boundary
+
+## Guardrails
+- no elimines todos los markers textuales si siguen siendo parte del contrato
+- no conviertas la suite en una eval semántica blanda
+- no metas judge LLM si el criterio puede expresarse de forma determinista
+
+## Output esperado
+La contract suite pasa a ser más resistente a rewording y más estricta con el artefacto contractual.
+
+---
+
+### TSK-F5-03 — Introducir métricas explícitas para checks críticos
+
+## Qué hacer
+Añadir métricas nombradas a las assertions importantes para que el resultado de Promptfoo sea más interpretable.
+
+## Ejemplos de métricas
+- `classification`
+- `workflow`
+- `schema_valid`
+- `terminal_marker`
+- `out_of_scope_behavior`
+- `stop_and_ask_behavior`
 
 ## Intención
+Que el reporte no sea solo:
+- pass/fail global
 
-Que la estructura sea navegable y predecible.
+sino también:
+- qué parte falló
+- cuántas veces
+- en qué dimensión
+
+## Guardrails
+- no nombres métricas redundantes o ambiguas
+- no mezcles una métrica con varias semánticas
+- no rompas la legibilidad por exceso de granularidad
+
+## Output esperado
+Los resultados permiten entender con más precisión qué dimensión falla.
+
+---
+
+### TSK-F5-04 — Definir hard-fail para lo que realmente rompe contrato
+
+## Qué hacer
+Usar capacidades nativas de Promptfoo como:
+- `threshold`
+- scoring controlado
+- `assertScoringFunction`
+
+solo si hace falta, para que ciertos fallos críticos tumben el test aunque otras assertions pasen.
+
+## Casos típicos de hard-fail
+### Contract suite
+- clasificación errónea
+- schema inválido
+- falta del marker terminal cuando el caso lo exige
+
+### Uplift suite
+- clasificación incompatible con el caso
+- comportamiento terminal cuando no toca
+- trigger/non-trigger invertido
+
+## Guardrails
+- no conviertas toda la suite en hard-fail absoluto
+- no añadas scoring custom por deporte
+- usa scoring custom solo donde el comportamiento por defecto de Promptfoo no exprese bien la severidad
+
+## Output esperado
+Los fallos críticos dejan de quedar diluidos por averages o checks secundarios.
+
+---
+
+### TSK-F5-05 — Limpiar la uplift suite para que mida comparación, no conformidad completa
+
+## Qué hacer
+Revisar `skill-forge.uplift.yaml` para asegurar que no exige al baseline `without_skill` el mismo nivel contractual que al modo con skill.
 
 ## Cambio esperado
+La uplift suite debe centrarse en señales comparables como:
 
-Cada config debe limitarse a declarar:
+- clasificación correcta
+- tasa de trigger correcta
+- tasa de non-trigger correcta
+- tasa de stop-and-ask correcta
+- marker terminal solo cuando aplica
 
-- descripción
-- prompt(s)
-- provider(s)
-- tests
-- defaults solo si toca
-
-No debe contener lógica accidental que debería vivir en otro fichero.
+No debe exigir al baseline:
+- brief completo perfecto
+- shape contractual fuerte que solo tiene sentido con la skill activa
 
 ## Guardrails
-- no mover archivos si no mejora claridad real
-- no romper rutas existentes sin actualizar READMEs
-- no meter datos de cases o contracts dentro de configs Promptfoo
+- no conviertas uplift en otra contract suite duplicada
+- no uses uplift como gate contractual principal
+- no sobrecargues la comparación con demasiadas condiciones de salida
 
 ## Output esperado
-
-Las configs quedan ligeras y las rutas siguen una convención uniforme.
+La uplift suite responde mejor a:
+> “¿con skill rinde mejor que sin skill?”
 
 ---
 
-### TSK-F4-03 — Introducir `tests/defaults.yaml` solo si reduce duplicación real
+### TSK-F5-06 — Extraer defaults compartidos solo si reducen complejidad real
 
 ## Qué hacer
-
-Auditar si las suites `contract` y `uplift` comparten:
-
-- metadata común
-- assertions repetidas
-- settings repetidos de test
-
-Si la duplicación es real y estable, crear:
+Si tras endurecer ambas suites aparece duplicación clara y estable, extraer defaults compartidos a:
 
 ```text
- evals/engines/promptfoo/tests/defaults.yaml
+evals/engines/promptfoo/tests/defaults.yaml
 ```
 
-usando la capacidad estándar de Promptfoo para `defaultTest` o estructura compartida equivalente.
+o a ficheros compartidos equivalentes.
 
-## Intención
-
-Reducir duplicación sin esconder la intención de cada suite.
-
-## Cuándo sí hacerlo
-- si hay 2 o más bloques repetidos claros
-- si el shared default no hace opaco el test
-- si evita drift entre suites
-
-## Cuándo no hacerlo
-- si solo ahorra 4 líneas
-- si complica más de lo que simplifica
-- si hace menos legible la contract suite
+## Qué puede ir ahí
+- provider defaults si aplica por config
+- assertions auxiliares recurrentes
+- transformaciones compartidas
+- thresholds comunes razonables
 
 ## Guardrails
-- no abstraer por estética
-- no crear capas de YAML difíciles de seguir
-- la claridad pesa más que DRY extremo
+- no modularices por estética
+- no ocultes lógica importante en demasiadas capas
+- si compartirlo hace más difícil entender la suite, no lo extraigas
 
 ## Output esperado
-
-Existe `defaults.yaml` **solo si** mejora legibilidad y mantenibilidad.
+Menos duplicación, sin perder legibilidad.
 
 ---
 
-### TSK-F4-04 — Separar con claridad providers, prompts y tests
+### TSK-F5-07 — Actualizar README del engine con la nueva semántica fuerte
 
 ## Qué hacer
+Actualizar `evals/engines/promptfoo/README.md` para reflejar:
 
-Verificar que la topología final de Promptfoo está dividida por responsabilidad:
+- qué garantiza la contract suite
+- qué no garantiza
+- qué garantiza la uplift suite
+- qué no garantiza
+- qué checks son críticos
+- por qué no se usa un runner propio
 
-- `providers/`
-- `prompts/`
-- `tests/`
-
-Si en la fase anterior quedaron providers embebidos o mezclados, terminar de extraerlos ahora.
-
-## Intención
-
-Que Promptfoo funcione como adapter modular, no como fichero monolítico.
+## Debe quedar claro
+- `contract` = gate de conformidad
+- `uplift` = comparación operativa
+- Promptfoo sigue siendo el engine soportado
+- el endurecimiento se hace con capacidades nativas del engine
 
 ## Guardrails
-- no duplicar providers idénticos en varios configs
-- no volver a embutir providers por comodidad
-- no mezclar el naming de providers con el naming de suites
+- no documentes features que aún no existan
+- no metas teoría larga si no cambia decisiones de implementación
+- no reintroduzcas acoplamiento conceptual con un proveedor concreto
 
 ## Output esperado
-
-La capa Promptfoo queda claramente modularizada por responsabilidad.
+La documentación del engine explica correctamente la nueva fiabilidad del sistema.
 
 ---
 
-### TSK-F4-05 — Revisar naming y convenciones de salida
+### TSK-F5-08 — Verificación final de robustez mínima
 
 ## Qué hacer
+Ejecutar una verificación manual corta sobre los casos más representativos:
 
-Alinear naming en:
+- 2 trigger claros
+- 2 non-trigger claros
+- 1 stop-and-ask claro
+- 1 caso con wording ligeramente reformulado
 
-- ficheros config
-- nombres de suites en README
-- referencias en scripts/comandos si existen
-- directorios de generated/reports si ya están en uso
+## Objetivo
+Comprobar dos cosas:
 
-## Intención
-
-Evitar que la organización lógica y la operativa diverjan.
-
-## Ejemplos de consistencia buscada
-
-- `contract` siempre significa gate contractual
-- `uplift.with-skill` y `uplift.without-skill` siempre significan comparativa
-- no mezclar `baseline`, `without_skill`, `comparison` y `uplift` como sinónimos caóticos
+1. que la suite no se rompe por rewording inocente
+2. que sí se rompe cuando el boundary se incumple de verdad
 
 ## Guardrails
-- no renombrar por gustos personales
-- no crear convenciones nuevas si ya existe una clara
-- si un término se conserva, usarlo igual en todo el repo
+- no convertir esta verificación en una recalibración completa del dataset
+- no mezclar aquí cambios de casos fuente
+- no reescribir casos masivamente en esta fase
 
 ## Output esperado
-
-El naming operativo queda coherente y repetible.
-
----
-
-### TSK-F4-06 — Actualizar `evals/engines/promptfoo/README.md`
-
-## Qué hacer
-
-Reescribir o ajustar el README del engine para que describa la estructura modular final.
-
-## Debe explicar como mínimo
-
-- cuál es el entrypoint canónico (`contract`)
-- cuáles son los entrypoints comparativos (`uplift`)
-- dónde viven prompts, tests y providers
-- si existe `defaults.yaml`, para qué sirve
-- qué piezas son compartidas y cuáles específicas
-
-## Guardrails
-- no documentar futuras fases como si ya existieran
-- no hablar de OpenAI como identidad del sistema
-- no mezclar engine docs con contrato de la skill
-
-## Output esperado
-
-El README del engine pasa a ser una guía fiel de la estructura final de Promptfoo.
-
----
-
-### TSK-F4-07 — Ajustar `evals/README.md` solo si cambia la topología visible
-
-## Qué hacer
-
-Si la modularización introduce una estructura visible nueva para quien navega `evals/`, actualizar el README top-level.
-
-## Intención
-
-Que la documentación del repositorio no contradiga la del engine.
-
-## Guardrails
-- no tocar este README si no hace falta
-- no duplicar explicaciones detalladas del engine que ya viven en su README
-- mantener el top-level como mapa de alto nivel
-
-## Output esperado
-
-`evals/README.md` y `evals/engines/promptfoo/README.md` cuentan la misma historia sin duplicarse mal.
-
----
-
-### TSK-F4-08 — Verificación manual de coherencia estructural
-
-## Qué hacer
-
-Comprobar al final que la capa Promptfoo queda consistente.
-
-## Checklist
-
-- `promptfooconfig.yaml` sigue siendo el gate contractual
-- los uplift configs siguen apuntando a su suite comparativa correcta
-- prompts, tests y providers están separados por carpeta
-- no quedan rutas legacy vivas sin documentar
-- no hay defaults opacos o innecesarios
-- la documentación coincide con la estructura en disco
-
-## Guardrails
-- no modificar outputs generados a mano
-- no introducir cambios semánticos de assertions en esta fase
-- no usar esta fase para “arreglar de paso” cosas de Fase 5
-
-## Output esperado
-
-La modularización queda cerrada sin drift entre estructura y documentación.
+Confianza razonable en que la suite detecta errores reales y no solo cambios de phrasing.
 
 ---
 
 ## Guardarraíles globales de la fase
 
-### No hacer en Fase 4
-- no tocar el contenido de `SKILL.md`
-- no rediseñar contract vs uplift
-- no cambiar el schema del Eval Brief
-- no añadir judge LLM
-- no cambiar buckets o contenido semántico de casos
-- no crear wrappers propios alrededor de Promptfoo
-- no introducir abstracciones que oculten demasiado la intención
+### No hacer en Fase 5
+- no crear un runner alternativo
+- no cambiar de Promptfoo
+- no introducir judge LLM donde un check determinista sirve
+- no rediseñar todo `cases/`
+- no tocar el core de la skill
+- no mezclar endurecimiento con expansión grande de alcance
 
-### Prioridades de decisión
-1. claridad estructural
-2. compatibilidad con Promptfoo estándar
-3. baja duplicación razonable
-4. no sobreingeniería
+### Mantener estable
+- contrato de la skill
+- boundary del Eval Brief
+- separación contract vs uplift
+- agnosticismo de proveedor en el core
 
 ---
 
 ## Output esperado de la fase
 
-## Estado final en disco (objetivo)
+## Estado final en disco
 
 ```text
- evals/
-   README.md
-   contracts/
-     skill-forge/
-       eval-brief-output.schema.json
-   cases/
-     skill-forge/
-       suite.v1.json
-       pilot-suite.v1.json
-   engines/
-     promptfoo/
-       README.md
-       promptfooconfig.yaml
-       promptfooconfig.uplift.with-skill.yaml
-       promptfooconfig.uplift.without-skill.yaml
-       prompts/
-         with-skill.txt
-         without-skill.txt
-       tests/
-         skill-forge.contract.yaml
-         skill-forge.uplift.yaml
-         defaults.yaml            # solo si aporta valor real
-       providers/
-         smoke.openai.yaml        # o el provider file acordado
+evals/
+  contracts/
+    skill-forge/
+      eval-brief-output.schema.json
+  cases/
+    skill-forge/
+      suite.v1.json
+      pilot-suite.v1.json
+  engines/
+    promptfoo/
+      README.md
+      promptfooconfig.yaml
+      promptfooconfig.uplift.with-skill.yaml
+      promptfooconfig.uplift.without-skill.yaml
+      tests/
+        skill-forge.contract.yaml
+        skill-forge.uplift.yaml
+        defaults.yaml          # opcional
 ```
+
+## Semántica final esperada
+
+### Contract suite
+- más estricta
+- más estructural
+- menos frágil
+
+### Uplift suite
+- más comparativa
+- menos confusa
+- más útil para leer valor real de la skill
 
 ---
 
 ## Definición de completitud
 
-La Fase 4 está cerrada cuando se cumplen estas condiciones:
+La Fase 5 está cerrada cuando se cumplen estas condiciones:
 
-1. Cada config Promptfoo tiene un solo propósito claro.
-2. La estructura `prompts/`, `tests/`, `providers/` es consistente.
-3. La duplicación compartida se ha reducido solo donde merece la pena.
-4. Los READMEs reflejan exactamente la topología real.
-5. La capa Promptfoo queda modularizada sin cambiar la semántica de contract/uplift.
+1. la contract suite depende más de estructura que de phrasing accidental
+2. los fallos críticos pueden tumbar el test aunque otros checks pasen
+3. la uplift suite ya no exige al baseline lo que pertenece al modo con skill
+4. los resultados son más interpretables por métrica
+5. Promptfoo sigue siendo la única tool de ejecución soportada
 
 ---
 
 ## PR sugerido
 
 ### Título
-
-```text
-phase-4: modularize promptfoo configs and shared evaluation assets
+```md
+phase-5: harden promptfoo evaluation semantics without changing the engine
 ```
 
 ### Alcance del PR
-
-PR estructural y de mantenibilidad.
-
-- sin cambios de contrato
-- sin nuevos casos
-- sin nueva semántica de scoring
-- sin cambio de engine
+Medio.  
+Debe tocar semántica de evaluación, pero sin reabrir arquitectura ya cerrada.
 
 ---
 
 ## Nota de continuidad
 
-La **Fase 5** debería centrarse ya en **endurecer la fiabilidad**:
+La siguiente fase natural después de esta ya no sería de estructura básica, sino de **calibración y expansión controlada del dataset**:
 
-- menos dependencia de substrings frágiles
-- más validación estructural
-- defaults y métricas más sólidas donde proceda
-- preparación para una verdadera matriz multi-provider
-
+- detectar falsos positivos
+- detectar falsos negativos
+- revisar near-misses
+- mejorar cobertura sin inflar ruido

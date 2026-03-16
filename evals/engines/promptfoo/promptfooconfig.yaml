@@ -1,4 +1,4 @@
-description: Promptfoo contract gate for skill-forge
+description: Promptfoo structural contract gate for skill-forge
 prompts:
   - label: with_skill
     raw: file://prompts/with-skill.txt

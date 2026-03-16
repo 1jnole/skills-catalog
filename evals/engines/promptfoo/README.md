@@ -31,7 +31,7 @@ Supported runtime:
 - native Promptfoo execution from `evals/engines/promptfoo/` with repo-owned wrappers removed
 
 ## Entrypoints
-- `promptfooconfig.yaml` is the canonical contract gate entrypoint.
+- `promptfooconfig.yaml` is the canonical structural contract gate entrypoint.
 - `promptfooconfig.uplift.with-skill.yaml` is the comparative uplift entrypoint for `with_skill`.
 - `promptfooconfig.uplift.without-skill.yaml` is the comparative uplift entrypoint for `without_skill`.
 
@@ -43,6 +43,19 @@ Supported runtime:
 
 No `tests/defaults.yaml` is shipped in this phase.
 The current duplication between contract and uplift suites is small and semantically meaningful, so a shared defaults layer would add indirection without enough payoff yet.
+
+## Reliability semantics
+- `contract` answers "does this output satisfy the skill boundary?"
+- `uplift` answers "does the skill improve routing and stop-boundary behavior compared to the baseline prompt?"
+- Both suites now use native Promptfoo `assert-set`, `threshold`, and `metric` fields so critical checks are explicit and metrics show which dimension failed.
+
+### Critical checks
+- Contract critical checks cover classification, workflow when applicable, embedded Eval Brief schema validity on trigger paths, terminal markers, and incompatible classification absence.
+- Uplift critical checks cover classification, workflow when applicable, terminal markers when expected, and incompatible classification absence.
+
+### Auxiliary checks
+- Guidance wording such as `Freeze the contract before final instructions.` remains visible as an auxiliary drift signal.
+- Auxiliary checks are intentionally lighter than the critical contract and uplift groups.
 
 For `skill-forge`, the active Promptfoo execution surface is:
 - `evals/engines/promptfoo/promptfooconfig.yaml`
@@ -89,10 +102,10 @@ The uplift comparison surface runs in two separate executions:
 - provider selection via the same default provider adapter
 
 Repo-specific logic stays in native Promptfoo assertions authored per case in `tests/skill-forge.contract.yaml`.
-Trigger cases use schema-backed `contains-json` checks against the Eval Brief contract file.
+Trigger cases use schema-backed `contains-json` checks against the Eval Brief contract file, and the critical contract checks are grouped separately from softer wording checks.
 
 Repo-specific uplift logic stays in native Promptfoo assertions authored per case in `tests/skill-forge.uplift.yaml`.
-Those uplift assertions are comparative by design and do not replace the contract gate.
+Those uplift assertions are comparative by design, expose named metrics for routing dimensions, and do not replace the contract gate.
 
 The repository currently ships `default.openai.yaml` as the operational default provider adapter.
 Changing provider choice is an adapter swap, not a suite or contract change.
