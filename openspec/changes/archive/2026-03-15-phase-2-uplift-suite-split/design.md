@@ -18,7 +18,7 @@ Keep the architecture simple and native to Promptfoo:
 
 ### Decision 2 — Uplift uses a reduced comparative suite
 
-**Decision:** `skill-forge.uplift.yaml` SHALL use a subset of the current suite with lighter assertions.
+**Decision:** `skill-contract-forge.uplift.yaml` SHALL use a subset of the current suite with lighter assertions.
 
 **Rationale:** The purpose is to compare modes, not demand the full contract payload from the baseline path.
 

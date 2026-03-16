@@ -1,0 +1,119 @@
+- description: new-skill-one-clear-job
+  vars:
+    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: new-skill-one-clear-job
+    prompt: Create a new reusable skill for spotting JavaScript array mutation mistakes. Start from the contract, keep one job only, and do not implement eval runtime behavior.
+    expected_output: Treat the request as a new-skill authoring workflow, freeze the contract before writing instructions, and stop at Eval Brief ready.
+    expected_stop: Eval Brief ready
+    should_trigger: true
+    assertions_json: '["must classify this as a new-skill workflow","must define the contract before final skill instructions","must stop before eval runtime implementation"]'
+    assertion_rules_json: '[{"markers":["workflow: new-skill"]},{"markers":["contract","before","instructions"]},null]'
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: golden
+    expected_stop: Eval Brief ready
+
+- description: existing-skill-refactor-clear-target
+  vars:
+    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: existing-skill-refactor-clear-target
+    prompt: Refactor the existing skill `skill-eval-forge`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.
+    expected_output: Treat the request as an existing-skill refactor workflow, keep the work contract-first, and end with Eval Brief ready.
+    expected_stop: Eval Brief ready
+    should_trigger: true
+    assertions_json: '["must classify this as an existing-skill refactor workflow","must preserve the contract-first refactor sequence","must end at Eval Brief ready"]'
+    assertion_rules_json: '[{"markers":["workflow: existing-skill-refactor"]},{"markers":["contract-first","refactor"]},null]'
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: golden
+    expected_stop: Eval Brief ready
+
+- description: skill-rewrite-clear-target
+  vars:
+    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: skill-rewrite-clear-target
+    prompt: Rewrite the existing skill `skill-eval-forge` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.
+    expected_output: Treat the request as a skill-rewrite workflow, anchor the rewrite in source-backed contract work, and stop at Eval Brief ready.
+    expected_stop: Eval Brief ready
+    should_trigger: true
+    assertions_json: '["must classify this as a skill rewrite request","must freeze contract elements before final instructions","must stop at Eval Brief ready"]'
+    assertion_rules_json: '[{"markers":["workflow: skill-rewrite"]},{"markers":["freeze","contract","before","instructions"]},null]'
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: golden
+    expected_stop: Eval Brief ready
+
+- description: mixed-authoring-and-eval-request
+  vars:
+    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: mixed-authoring-and-eval-request
+    prompt: Write a new skill for PR review routing and also set up the first eval scaffold for it. I want the skill contract first, but please leave the runtime for later.
+    expected_output: Handle the authoring part, call out that eval work is downstream, and stop at Eval Brief ready instead of implementing the scaffold.
+    expected_stop: Eval Brief ready
+    should_trigger: true
+    assertions_json: '["must preserve skill authoring as the active responsibility","must explicitly defer eval scaffold implementation","must not invent runner, grading, or benchmark behavior"]'
+    assertion_rules_json: '[null,{"markers":["downstream","out of scope"]},{"markers":["runner","grading","benchmark"],"absent":true}]'
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: golden
+    expected_stop: Eval Brief ready
+
+- description: agents-policy-request
+  vars:
+    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: agents-policy-request
+    prompt: Update the repo AGENTS.md managed block and tighten the repository policy wording.
+    expected_output: Do not trigger skill-contract-forge because this is repository policy work, not skill authoring.
+    expected_stop: do_not_trigger
+    should_trigger: false
+    assertions_json: '["must classify AGENTS work as out of scope","must avoid rewriting the task as a skill request","must avoid producing an Eval Brief"]'
+    assertion_rules_json: '[{"markers":["out of scope","agents"]},null,{"markers":["eval brief ready"],"absent":true}]'
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: negative
+    expected_stop: do_not_trigger
+
+- description: runtime-harness-implementation
+  vars:
+    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: runtime-harness-implementation
+    prompt: Build the offline eval runner for skill-contract-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.
+    expected_output: Do not trigger skill-contract-forge because the request is shared eval runtime implementation, not skill authoring.
+    expected_stop: do_not_trigger
+    should_trigger: false
+    assertions_json: '["must classify runtime implementation as out of scope","must avoid proposing authoring-only output as if it satisfied the request","must avoid producing an Eval Brief"]'
+    assertion_rules_json: '[{"markers":["out of scope","runtime","implementation"]},null,{"markers":["eval brief ready"],"absent":true}]'
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: negative
+    expected_stop: do_not_trigger
+
+- description: eval-authoring-only-request
+  vars:
+    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: eval-authoring-only-request
+    prompt: Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.
+    expected_output: Do not trigger skill-contract-forge because this is eval authoring work that belongs downstream.
+    expected_stop: do_not_trigger
+    should_trigger: false
+    assertions_json: '["must classify eval definition work as out of scope for skill-contract-forge","must avoid redefining the task as skill authoring","must avoid producing an Eval Brief"]'
+    assertion_rules_json: '[{"markers":["out of scope","downstream"]},null,{"markers":["eval brief ready"],"absent":true}]'
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: negative
+    expected_stop: do_not_trigger
+
+- description: ambiguous-multi-workflow-request
+  vars:
+    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: ambiguous-multi-workflow-request
+    prompt: Create a skill, reorganize the repo policies, and build the first runner in one pass so everything lands together.
+    expected_output: Do not trigger skill-contract-forge as a clean fit because the request mixes multiple independent workflows and should stop for scope clarification.
+    expected_stop: stop_and_ask
+    should_trigger: false
+    assertions_json: '["must detect multiple workflows in one request","must refuse to collapse policy, authoring, and runtime into one skill flow","must avoid producing an Eval Brief before the scope is narrowed"]'
+    assertion_rules_json: '[{"markers":["multiple","workflows"]},null,null]'
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: negative
+    expected_stop: stop_and_ask

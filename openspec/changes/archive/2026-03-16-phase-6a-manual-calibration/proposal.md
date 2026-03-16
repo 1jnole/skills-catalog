@@ -9,21 +9,21 @@ Without that loop:
 
 ## What Changes
 
-- Define a tracked manual-audit sample for `skill-forge` using the current canonical cases.
+- Define a tracked manual-audit sample for `skill-contract-forge` using the current canonical cases.
 - Record a Phase 6A audit note that compares contract, uplift `with_skill`, and uplift `without_skill`.
 - Summarize the first actionable error patterns found in the sample.
-- Update the local `skill-forge` eval docs so the audit artifacts are discoverable.
+- Update the local `skill-contract-forge` eval docs so the audit artifacts are discoverable.
 
 ## Capabilities
 
 ### New Capabilities
-- `skill-forge-manual-calibration`: maintain a small, explicit audit sample and a human-readable calibration note before broader dataset expansion.
+- `skill-contract-forge-manual-calibration`: maintain a small, explicit audit sample and a human-readable calibration note before broader dataset expansion.
 
 ### Modified Capabilities
 - None.
 
 ## Impact
 
-- Affected code: `evals/cases/skill-forge/*`, `openspec/changes/phase-6a-manual-calibration/*`
+- Affected code: `evals/cases/skill-contract-forge/*`, `openspec/changes/phase-6a-manual-calibration/*`
 - Affected systems: Promptfoo offline replay evidence, Phase 6 planning traceability
 - Dependencies: none

@@ -4,7 +4,7 @@
 TBD - created by archiving change laminar-phase-2-functional-verification. Update Purpose after archive.
 ## Requirements
 ### Requirement: Phase 2 closure SHALL include functional verification with a new iteration
-Phase 2 SHALL not be considered fully closed unless a new `skill-forge` iteration is executed after the phase 2 changes and its resulting artifacts are reviewed.
+Phase 2 SHALL not be considered fully closed unless a new `skill-contract-forge` iteration is executed after the phase 2 changes and its resulting artifacts are reviewed.
 
 #### Scenario: New iteration proves phase 2 behavior
 - **WHEN** phase 2 is reviewed for closure

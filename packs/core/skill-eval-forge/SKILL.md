@@ -17,7 +17,7 @@ Use this skill when the authoring boundary is already frozen and you need to:
 ## Do not use when
 Do not use this skill when:
 - the skill contract itself is still changing;
-- the task belongs to `skill-forge` or catalog governance;
+- the task belongs to `skill-contract-forge` or catalog governance;
 - the request is to build shared runner behavior, grader internals, or provider plumbing;
 - the request mixes multiple skills or multiple independent eval workflows.
 
@@ -30,7 +30,7 @@ Do not use this skill when:
 
 `evals.json` is not the same as run outputs under `packs/core/<skill-name>/evals/runs/`.
 
-The success contract is defined upstream in `skill-forge` before the skill is written or refactored. `skill-eval-forge` consumes that contract; it does not invent or renegotiate it.
+The success contract is defined upstream in `skill-contract-forge` before the skill is written or refactored. `skill-eval-forge` consumes that contract; it does not invent or renegotiate it.
 
 ## Required outputs
 - `packs/core/<skill-name>/evals/evals.json`

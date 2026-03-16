@@ -18,13 +18,13 @@ Keep the change structural and minimal:
 
 ### Decision 2 — Contractual suite gets its own explicit filename
 
-**Decision:** The active suite SHALL live at `evals/engines/promptfoo/tests/skill-forge.contract.yaml`.
+**Decision:** The active suite SHALL live at `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`.
 
 **Rationale:** The filename makes its semantics explicit and leaves room for later comparison-focused suites.
 
 ### Decision 3 — Remove the previous suite file
 
-**Decision:** `evals/engines/promptfoo/tests/skill-forge.yaml` SHALL be removed in this phase.
+**Decision:** `evals/engines/promptfoo/tests/skill-contract-forge.yaml` SHALL be removed in this phase.
 
 **Rationale:** Keeping two identical suites would create ambiguity about the canonical source of truth.
 

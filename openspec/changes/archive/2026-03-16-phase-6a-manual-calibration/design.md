@@ -1,6 +1,6 @@
 ## Context
 
-The repository currently has 11 canonical `skill-forge` contract cases and 7 uplift cases. The Phase 6 plan recommends a 12-20 case sample, but the current supported suite is smaller than that.
+The repository currently has 11 canonical `skill-contract-forge` contract cases and 7 uplift cases. The Phase 6 plan recommends a 12-20 case sample, but the current supported suite is smaller than that.
 
 ## Decision 1 - Audit the full canonical sample first
 

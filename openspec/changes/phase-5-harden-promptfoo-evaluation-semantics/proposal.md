@@ -1,6 +1,6 @@
 ## Why
 
-The current Promptfoo suites for `skill-forge` still depend too much on literal substring checks, which makes the gate fragile to harmless wording changes and makes uplift failures harder to interpret. This change hardens the evaluation semantics with native Promptfoo features so structural invariants and critical boundary checks carry more of the signal.
+The current Promptfoo suites for `skill-contract-forge` still depend too much on literal substring checks, which makes the gate fragile to harmless wording changes and makes uplift failures harder to interpret. This change hardens the evaluation semantics with native Promptfoo features so structural invariants and critical boundary checks carry more of the signal.
 
 ## What Changes
 
@@ -16,8 +16,8 @@ The current Promptfoo suites for `skill-forge` still depend too much on literal 
 - None.
 
 ### Modified Capabilities
-- `skill-forge-contract-gate`: strengthen the contractual gate so critical failures are structural and measurable.
-- `skill-forge-uplift-surface`: make uplift explicitly comparative with named routing and boundary metrics.
+- `skill-contract-forge-contract-gate`: strengthen the contractual gate so critical failures are structural and measurable.
+- `skill-contract-forge-uplift-surface`: make uplift explicitly comparative with named routing and boundary metrics.
 
 ## Impact
 

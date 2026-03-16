@@ -1,0 +1,108 @@
+{
+  "skill_name": "skill-contract-forge",
+  "eval_version": 1,
+  "purpose": "Phase 4 pilot suite for operating the new harness with minimal but representative skill-contract-forge coverage.",
+  "comparison_intent": {
+    "primary": "with_skill_vs_without_skill",
+    "hypothesis": "with_skill should classify skill authoring requests more reliably while keeping runtime and mixed-workflow requests out of scope."
+  },
+  "scoring": {
+    "strategy": "deterministic_assertions_first",
+    "judge_model": "out_of_scope_for_v1"
+  },
+  "gates": {
+    "golden_pass_rate": 1,
+    "negative_pass_rate": 1,
+    "case_score_threshold": 0.75
+  },
+  "golden": [
+    {
+      "id": "new-skill-one-clear-job",
+      "prompt": "Create a new reusable skill for spotting JavaScript array mutation mistakes. Start from the contract, keep one job only, and do not implement eval runtime behavior.",
+      "expected_output": "Treat the request as a new-skill authoring workflow, freeze the contract before writing instructions, and stop at Eval Brief ready.",
+      "should_trigger": true,
+      "stop_at": "Eval Brief ready",
+      "assertions": [
+        "must classify this as a new-skill workflow",
+        "must define the contract before final skill instructions",
+        "must stop before eval runtime implementation"
+      ],
+      "files": [],
+      "grading": {
+        "assertion_rules": [
+          {
+            "markers": [
+              "workflow: new-skill"
+            ]
+          },
+          {
+            "markers": [
+              "contract",
+              "before",
+              "instructions"
+            ]
+          },
+          null
+        ]
+      }
+    }
+  ],
+  "negative": [
+    {
+      "id": "runtime-harness-implementation",
+      "prompt": "Build the offline eval runner for skill-contract-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.",
+      "expected_output": "Do not trigger skill-contract-forge because the request is shared eval runtime implementation, not skill authoring.",
+      "should_trigger": false,
+      "stop_at": "do_not_trigger",
+      "assertions": [
+        "must classify runtime implementation as out of scope",
+        "must avoid proposing authoring-only output as if it satisfied the request",
+        "must avoid producing an Eval Brief"
+      ],
+      "files": [],
+      "grading": {
+        "assertion_rules": [
+          {
+            "markers": [
+              "out of scope",
+              "runtime",
+              "implementation"
+            ]
+          },
+          null,
+          {
+            "markers": [
+              "eval brief ready"
+            ],
+            "absent": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "ambiguous-multi-workflow-request",
+      "prompt": "Create a skill, reorganize the repo policies, and build the first runner in one pass so everything lands together.",
+      "expected_output": "Do not trigger skill-contract-forge as a clean fit because the request mixes multiple independent workflows and should stop for scope clarification.",
+      "should_trigger": false,
+      "stop_at": "stop_and_ask",
+      "assertions": [
+        "must detect multiple workflows in one request",
+        "must refuse to collapse policy, authoring, and runtime into one skill flow",
+        "must avoid producing an Eval Brief before the scope is narrowed"
+      ],
+      "files": [],
+      "grading": {
+        "assertion_rules": [
+          {
+            "markers": [
+              "multiple",
+              "workflows"
+            ]
+          },
+          null,
+          null
+        ]
+      }
+    }
+  ]
+}

@@ -10,7 +10,7 @@
 
 - [x] 0.1 Confirm Phase 1 is already closed and the contract gate exists.
 - [x] 0.2 Add minimal OpenSpec artifacts for this slug.
-- [x] 1.1 Create `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`.
+- [x] 1.1 Create `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`.
 - [x] 1.2 Create `evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`.
 - [x] 1.3 Create `evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`.
 - [x] 1.4 Update `evals/README.md` for separate contract and uplift surfaces.
@@ -22,13 +22,13 @@
 ### 0.1
 - **Command:** `Get-Content evals/engines/promptfoo/promptfooconfig.yaml`
 - **Result:** PASS.
-  `description: Canonical Promptfoo contract suite for skill-forge`
-  `tests: file://tests/skill-forge.contract.yaml`
+  `description: Canonical Promptfoo contract suite for skill-contract-forge`
+  `tests: file://tests/skill-contract-forge.contract.yaml`
 - **Date:** `2026-03-15`
 - **Note:** Phase 1 contract gate is present before uplift work starts.
 
 ### 1.1
-- **Command:** `Test-Path evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
+- **Command:** `Test-Path evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
 - **Result:** PASS.
   `True`
 - **Date:** `2026-03-15`
@@ -38,7 +38,7 @@
 - **Command:** `Get-Content evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`
 - **Result:** PASS.
   `- label: with_skill`
-  `tests: file://tests/skill-forge.uplift.yaml`
+  `tests: file://tests/skill-contract-forge.uplift.yaml`
 - **Date:** `2026-03-15`
 - **Note:** With-skill uplift config points to the comparative suite.
 
@@ -46,7 +46,7 @@
 - **Command:** `Get-Content evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`
 - **Result:** PASS.
   `- label: without_skill`
-  `tests: file://tests/skill-forge.uplift.yaml`
+  `tests: file://tests/skill-contract-forge.uplift.yaml`
 - **Date:** `2026-03-15`
 - **Note:** Without-skill uplift config points to the same comparative suite.
 
@@ -58,14 +58,14 @@
 - **Note:** Top-level docs describe the two eval questions separately.
 
 ### 1.5
-- **Command:** `rg -n "contract|uplift|with_skill|without_skill|skill-forge\\.uplift\\.yaml" evals/engines/promptfoo/README.md`
+- **Command:** `rg -n "contract|uplift|with_skill|without_skill|skill-contract-forge\\.uplift\\.yaml" evals/engines/promptfoo/README.md`
 - **Result:** PASS.
   `Engine README now names the contract and uplift entrypoints separately.`
 - **Date:** `2026-03-15`
 - **Note:** Engine docs align with the new Promptfoo surface area.
 
 ### 1.6
-- **Command:** `rg -n "skill-forge\\.uplift\\.yaml|promptfooconfig\\.uplift|skill-forge\\.contract\\.yaml" evals/README.md evals/engines/promptfoo/README.md evals/engines/promptfoo/*.yaml evals/engines/promptfoo/tests`
+- **Command:** `rg -n "skill-contract-forge\\.uplift\\.yaml|promptfooconfig\\.uplift|skill-contract-forge\\.contract\\.yaml" evals/README.md evals/engines/promptfoo/README.md evals/engines/promptfoo/*.yaml evals/engines/promptfoo/tests`
 - **Result:** PASS.
   `Contract and uplift files are distinct and consistently referenced.`
 - **Date:** `2026-03-15`

@@ -21,7 +21,7 @@ Each skill is a shallow folder centered on `SKILL.md`, with optional supporting 
 - `evals/` only when the skill owns eval definitions
 
 Current pack groups include:
-- `packs/core/` for repo bootstrap and core workflow skills such as `skill-forge`, `openspec-bootstrap`, and `agents-bootstrap`
+- `packs/core/` for repo bootstrap and core workflow skills such as `skill-contract-forge`, `openspec-bootstrap`, and `agents-bootstrap`
 - `packs/angular/skills/` for Angular-focused skills
 - `packs/react/` for React-focused skills
 - `packs/javascript/`, `packs/typescript/`, and `packs/zod/` for language and validation skills
