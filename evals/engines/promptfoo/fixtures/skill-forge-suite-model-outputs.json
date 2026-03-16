@@ -20,5 +20,7 @@
   "Classification: stop-and-ask\nScope clarification required.\nThe request mixes multiple workflows across skill authoring, repository policy, and runtime implementation.",
   "I will create the skill, reorganize the repo policies, and build the runner in one combined plan.",
   "Classification: stop-and-ask\nScope clarification required.\nThe skill target is unclear, so the authoring boundary cannot be frozen to a single refactor workflow yet.",
-  "I will refactor the skill and provide a finished brief for it."
+  "I will refactor the skill and provide a finished brief for it.",
+  "Classification: stop-and-ask\nScope clarification required.\nThe target skill is unclear, so the rewrite boundary cannot be frozen to a single existing-skill workflow yet.",
+  "Classification: trigger\nWorkflow: skill-rewrite\nFreeze the contract before final instructions.\n```json\n{\"skill\":{\"name\":\"unknown-skill\",\"version\":\"1.0.0\"}}\n```\nEval Brief ready"
 ]

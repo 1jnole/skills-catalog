@@ -437,3 +437,41 @@
         - type: not-icontains
           metric: terminal_absent
           value: "Eval Brief ready"
+
+- description: ambiguous-rewrite-missing-target
+  vars:
+    skill_prompt: file://../../../packs/core/skill-forge/SKILL.md
+    case_id: ambiguous-rewrite-missing-target
+    prompt: Rewrite the skill so it matches the current repo docs, freeze the contract first, and stop at Eval Brief ready.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: starts-with
+          metric: classification
+          value: "Classification: stop-and-ask"
+        - type: icontains
+          metric: stop_marker
+          value: "Scope clarification required."
+        - type: icontains-any
+          metric: ambiguity_reason
+          value:
+            - "skill target"
+            - "target skill"
+            - "unclear"
+        - type: not-icontains
+          metric: incompatible_trigger
+          value: "Classification: trigger"
+        - type: not-icontains
+          metric: incompatible_non_trigger
+          value: "Classification: non-trigger"
+        - type: not-icontains
+          metric: terminal_absent
+          value: "Eval Brief ready"
