@@ -39,6 +39,8 @@ pnpm-debug.log*
 Thumbs.db
 
 # Evals artifacts
+evals/artifacts/
+packs/core/*/evals/runs/
 evals/engines/promptfoo/generated/
 
 # Codex / agent runtime
