@@ -16,6 +16,15 @@ These files capture the first tracked manual calibration loop for Phase 6A:
 - the observed contract/uplift results
 - the human judgment and error patterns that should drive dataset expansion
 
+## Phase 6B expansion buckets
+
+The canonical suite now tracks a small set of explicit expansion buckets derived from the Phase 6A audit:
+- `boundary-mixed-request`
+- `near-miss-non-trigger`
+- `near-miss-stop-and-ask`
+
+These buckets are documented here, not embedded as new top-level contract fields in `suite.v1.json`, so the canonical case shape stays compatible with downstream consumers.
+
 ## Promptfoo execution suite
 - `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
 - `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
@@ -26,7 +35,7 @@ Trigger cases in the contract suite require schema-backed Eval Brief JSON via `e
 Coverage buckets represented in the suite:
 - `core`: `new-skill-one-clear-job`, `existing-skill-refactor-clear-target`
 - `edge`: `agents-policy-request`, `runtime-harness-implementation`, `eval-authoring-only-request`
-- `regression`: `skill-rewrite-clear-target`, `mixed-authoring-and-eval-request`, `trigger-with-benchmark-noise`, `eval-authoring-benchmark-suite-request`, `ambiguous-multi-workflow-request`, `ambiguous-refactor-missing-target`
+- `regression`: `skill-rewrite-clear-target`, `mixed-authoring-and-eval-request`, `trigger-with-benchmark-noise`, `eval-authoring-benchmark-suite-request`, `ambiguous-multi-workflow-request`, `ambiguous-refactor-missing-target`, `ambiguous-rewrite-missing-target`
 
 ## Historical pilot snapshot
 - `skill-forge`
