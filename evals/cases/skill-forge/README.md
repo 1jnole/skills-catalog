@@ -7,11 +7,21 @@ This folder contains the new-scaffold suites for `skill-forge`.
 
 This is the supported local `skill-forge` eval authoring contract. It is not the runtime pass/fail authority.
 
-## Promptfoo execution suite
-- `evals/engines/promptfoo/tests/skill-forge.yaml`
+## Manual calibration artifacts
+- `evals/cases/skill-forge/manual-audit.phase-6a.json`
+- `evals/cases/skill-forge/manual-audit.phase-6a.md`
 
-This is the supported execution entrypoint for Promptfoo.
-Trigger cases in that suite require schema-backed Eval Brief JSON via `evals/contracts/skill-forge/eval-brief-output.schema.json`.
+These files capture the first tracked manual calibration loop for Phase 6A:
+- the explicit audit sample
+- the observed contract/uplift results
+- the human judgment and error patterns that should drive dataset expansion
+
+## Promptfoo execution suite
+- `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
+- `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
+
+These are the supported Promptfoo-native suite files.
+Trigger cases in the contract suite require schema-backed Eval Brief JSON via `evals/contracts/skill-forge/eval-brief-output.schema.json`.
 
 Coverage buckets represented in the suite:
 - `core`: `new-skill-one-clear-job`, `existing-skill-refactor-clear-target`
