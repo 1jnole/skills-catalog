@@ -1,6 +1,6 @@
 ---
 name: skill-contract-forge
-description: "Builds or rewrites one skill through a contract-first workflow and stops at Eval Brief ready. Use when the request is one skill-authoring job with clear boundaries. Don't use when the task is repository policy, downstream eval authoring, or shared eval runtime implementation."
+description: "Use this skill when the task is to define or refactor the contract of one skill before implementation. Do not use it for final skill implementation, runtime eval infrastructure, or downstream eval authoring. Produces a boundary-only Eval Brief and stops at Eval Brief ready."
 ---
 
 # skill-contract-forge
@@ -50,7 +50,9 @@ If the request is mainly about downstream eval authoring or runtime implementati
 
 ## Expected outcomes
 
-When this skill applies, the outcome is a **contract-first handoff artifact** for a single skill.
+When this skill applies, the outcome is the **canonical contract-first handoff artifact** for a single skill.
+
+That handoff is intended for the next implementation step to materialize or refactor the final skill files and downstream evaluation assets **without re-deriving the contract from scratch**.
 
 The artifact must define:
 - the skill job
@@ -90,6 +92,10 @@ Useful supporting inputs may include:
 Produce a boundary-only **Eval Brief** as structured JSON.
 
 The brief should be implementation-ready for the next step, but must remain contract-only.
+
+Implementation-ready means the next step can materialize the final skill files and downstream evaluation assets from this brief **without reopening the skill boundary, activation rules, success model, or core evaluation intent**.
+
+The next step should consume this brief as the canonical handoff artifact rather than re-deriving the contract from the original request.
 
 The brief may include fields like:
 - `skill`
@@ -227,6 +233,8 @@ Define only the minimal evaluation intent needed by the next step:
 - which boundary cases matter
 - which negatives matter
 - what should be deferred
+
+The goal is to make downstream evaluation authoring possible **without re-deriving what should be tested from the original request**.
 
 ### Step 5 — Produce the Eval Brief
 Materialize the contract-first JSON brief.
