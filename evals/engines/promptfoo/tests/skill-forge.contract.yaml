@@ -9,7 +9,6 @@
     skill_name: skill-forge
     case_bucket: golden
     expected_stop: Eval Brief ready
-  threshold: 1
   assert:
     - type: assert-set
       metric: critical_contract
@@ -52,7 +51,6 @@
     skill_name: skill-forge
     case_bucket: golden
     expected_stop: Eval Brief ready
-  threshold: 1
   assert:
     - type: assert-set
       metric: critical_contract
@@ -97,7 +95,6 @@
     skill_name: skill-forge
     case_bucket: golden
     expected_stop: Eval Brief ready
-  threshold: 1
   assert:
     - type: assert-set
       metric: critical_contract
@@ -140,7 +137,6 @@
     skill_name: skill-forge
     case_bucket: golden
     expected_stop: Eval Brief ready
-  threshold: 1
   assert:
     - type: assert-set
       metric: critical_contract
@@ -186,7 +182,6 @@
     skill_name: skill-forge
     case_bucket: regression
     expected_stop: Eval Brief ready
-  threshold: 1
   assert:
     - type: assert-set
       metric: critical_contract
@@ -232,7 +227,6 @@
     skill_name: skill-forge
     case_bucket: negative
     expected_stop: do_not_trigger
-  threshold: 1
   assert:
     - type: assert-set
       metric: out_of_scope_behavior
@@ -270,7 +264,6 @@
     skill_name: skill-forge
     case_bucket: negative
     expected_stop: do_not_trigger
-  threshold: 1
   assert:
     - type: assert-set
       metric: out_of_scope_behavior
@@ -306,7 +299,6 @@
     skill_name: skill-forge
     case_bucket: negative
     expected_stop: do_not_trigger
-  threshold: 1
   assert:
     - type: assert-set
       metric: out_of_scope_behavior
@@ -342,7 +334,6 @@
     skill_name: skill-forge
     case_bucket: regression
     expected_stop: do_not_trigger
-  threshold: 1
   assert:
     - type: assert-set
       metric: out_of_scope_behavior
@@ -368,15 +359,6 @@
         - type: not-icontains
           metric: terminal_absent
           value: "Eval Brief ready"
-    - type: assert-set
-      metric: auxiliary_contract
-      threshold: 0
-      assert:
-        - type: icontains-any
-          metric: benchmark_marker
-          value:
-            - "benchmark"
-            - "golden"
 
 - description: ambiguous-multi-workflow-request
   vars:
@@ -389,7 +371,6 @@
     skill_name: skill-forge
     case_bucket: negative
     expected_stop: stop_and_ask
-  threshold: 1
   assert:
     - type: assert-set
       metric: stop_and_ask_behavior
@@ -430,7 +411,6 @@
     skill_name: skill-forge
     case_bucket: regression
     expected_stop: stop_and_ask
-  threshold: 1
   assert:
     - type: assert-set
       metric: stop_and_ask_behavior

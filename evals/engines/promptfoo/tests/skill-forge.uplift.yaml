@@ -9,7 +9,6 @@
     skill_name: skill-forge
     case_bucket: golden
     expected_stop: Eval Brief ready
-  threshold: 1
   assert:
     - type: assert-set
       metric: critical_uplift
@@ -30,13 +29,6 @@
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-    - type: assert-set
-      metric: auxiliary_uplift
-      threshold: 0
-      assert:
-        - type: icontains
-          metric: contract_guidance
-          value: "Freeze the contract before final instructions."
 
 - description: existing-skill-refactor-clear-target
   vars:
@@ -49,7 +41,6 @@
     skill_name: skill-forge
     case_bucket: golden
     expected_stop: Eval Brief ready
-  threshold: 1
   assert:
     - type: assert-set
       metric: critical_uplift
@@ -70,15 +61,6 @@
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-    - type: assert-set
-      metric: auxiliary_uplift
-      threshold: 0
-      assert:
-        - type: icontains-any
-          metric: contract_guidance
-          value:
-            - "Freeze the contract before final instructions."
-            - "contract-first"
 
 - description: skill-rewrite-clear-target
   vars:
@@ -91,7 +73,6 @@
     skill_name: skill-forge
     case_bucket: golden
     expected_stop: Eval Brief ready
-  threshold: 1
   assert:
     - type: assert-set
       metric: critical_uplift
@@ -112,13 +93,6 @@
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-    - type: assert-set
-      metric: auxiliary_uplift
-      threshold: 0
-      assert:
-        - type: icontains
-          metric: contract_guidance
-          value: "Freeze the contract before final instructions."
 
 - description: agents-policy-request
   vars:
@@ -131,7 +105,6 @@
     skill_name: skill-forge
     case_bucket: negative
     expected_stop: do_not_trigger
-  threshold: 1
   assert:
     - type: assert-set
       metric: out_of_scope_behavior
@@ -166,7 +139,6 @@
     skill_name: skill-forge
     case_bucket: negative
     expected_stop: do_not_trigger
-  threshold: 1
   assert:
     - type: assert-set
       metric: out_of_scope_behavior
@@ -199,7 +171,6 @@
     skill_name: skill-forge
     case_bucket: negative
     expected_stop: stop_and_ask
-  threshold: 1
   assert:
     - type: assert-set
       metric: stop_and_ask_behavior
@@ -237,7 +208,6 @@
     skill_name: skill-forge
     case_bucket: regression
     expected_stop: stop_and_ask
-  threshold: 1
   assert:
     - type: assert-set
       metric: stop_and_ask_behavior

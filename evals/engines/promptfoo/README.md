@@ -54,8 +54,8 @@ The current duplication between contract and uplift suites is small and semantic
 - Uplift critical checks cover classification, workflow when applicable, terminal markers when expected, and incompatible classification absence.
 
 ### Auxiliary checks
-- Guidance wording such as `Freeze the contract before final instructions.` remains visible as an auxiliary drift signal.
-- Auxiliary checks are intentionally lighter than the critical contract and uplift groups.
+- Guidance wording such as `Freeze the contract before final instructions.` is useful for manual drift review, but Promptfoo `0.120.19` still treats failed auxiliary assertions as case failures in some paths.
+- Because of that engine limitation, wording-only hints that must stay non-gating are documented rather than enforced in the contract or uplift gates.
 
 For `skill-forge`, the active Promptfoo execution surface is:
 - `evals/engines/promptfoo/promptfooconfig.yaml`
