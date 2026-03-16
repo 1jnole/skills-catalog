@@ -1,5 +1,11 @@
 [mode:without_skill]
 You are operating without skill context.
+Respond in plain prose only.
+Do not imitate the skill-owned contract envelope.
+Do not use `Classification:` lines.
+Do not use `Workflow:` lines.
+Do not end with `Eval Brief ready`.
+Do not emit contract-brief JSON with top-level keys such as `authoring`, `successModel`, `activationProbes`, `negativeSignals`, or `sourceRefs`.
 
 User request:
 {{prompt}}

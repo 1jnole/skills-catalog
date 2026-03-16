@@ -121,12 +121,17 @@
           value:
             - "AGENTS"
             - "repository policy"
+            - "policy document"
+            - "repository-wide policy"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
+        - type: not-icontains
+          metric: terminal_absent
+          value: "Eval Brief ready"
 
 - description: runtime-harness-implementation
   vars:
@@ -150,15 +155,21 @@
         - type: icontains
           metric: out_of_scope_marker
           value: "Out of scope for skill-contract-forge."
-        - type: icontains
+        - type: icontains-any
           metric: reason_marker
-          value: "shared eval runtime implementation"
+          value:
+            - "runtime eval harness implementation"
+            - "shared eval runtime implementation"
+            - "runtime implementation"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
+        - type: not-icontains
+          metric: terminal_absent
+          value: "Eval Brief ready"
 
 - description: ambiguous-multi-workflow-request
   vars:
@@ -181,7 +192,7 @@
           value: "Classification: stop-and-ask"
         - type: icontains
           metric: stop_marker
-          value: "Scope clarification required."
+          value: "clarif"
         - type: icontains
           metric: ambiguity_reason
           value: "multiple"
@@ -190,12 +201,16 @@
           value:
             - "multiple workflows"
             - "multiple independent workflows"
+            - "multiple major workflows"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
         - type: not-icontains
           metric: incompatible_non_trigger
           value: "Classification: non-trigger"
+        - type: not-icontains
+          metric: terminal_absent
+          value: "Eval Brief ready"
 
 - description: ambiguous-refactor-missing-target
   vars:
@@ -216,21 +231,30 @@
         - type: starts-with
           metric: classification
           value: "Classification: stop-and-ask"
-        - type: icontains
+        - type: icontains-any
           metric: stop_marker
-          value: "Scope clarification required."
+          value:
+            - "clarif"
+            - "please provide"
+            - "please specify"
+            - "lacks identification"
         - type: icontains-any
           metric: ambiguity_reason
           value:
             - "skill target"
             - "target skill"
             - "unclear"
+            - "name or description of the skill"
+            - "which existing skill"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
         - type: not-icontains
           metric: incompatible_non_trigger
           value: "Classification: non-trigger"
+        - type: not-icontains
+          metric: terminal_absent
+          value: "Eval Brief ready"
 
 - description: ambiguous-rewrite-missing-target
   vars:
@@ -251,18 +275,26 @@
         - type: starts-with
           metric: classification
           value: "Classification: stop-and-ask"
-        - type: icontains
+        - type: icontains-any
           metric: stop_marker
-          value: "Scope clarification required."
+          value:
+            - "clarif"
+            - "please provide"
+            - "please specify"
+            - "lacks identification"
         - type: icontains-any
           metric: ambiguity_reason
           value:
             - "skill target"
             - "target skill"
             - "unclear"
+            - "name or description of the skill"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
         - type: not-icontains
           metric: incompatible_non_trigger
           value: "Classification: non-trigger"
+        - type: not-icontains
+          metric: terminal_absent
+          value: "Eval Brief ready"

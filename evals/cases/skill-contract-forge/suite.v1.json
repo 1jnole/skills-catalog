@@ -19,12 +19,12 @@
     {
       "id": "new-skill-one-clear-job",
       "prompt": "Create a new reusable skill for spotting JavaScript array mutation mistakes. Start from the contract, keep one job only, and do not implement eval runtime behavior.",
-      "expected_output": "Treat the request as a new-skill authoring workflow, freeze the contract before writing instructions, and stop at Eval Brief ready.",
+      "expected_output": "Treat the request as a new-skill authoring workflow, keep the work contract-first before implementation-oriented detail, and stop at Eval Brief ready.",
       "should_trigger": true,
       "stop_at": "Eval Brief ready",
       "assertions": [
         "must classify this as a new-skill workflow",
-        "must define the contract before final skill instructions",
+        "must keep the work contract-first before implementation-oriented detail",
         "must stop before eval runtime implementation"
       ],
       "files": [],
@@ -37,9 +37,7 @@
           },
           {
             "markers": [
-              "contract",
-              "before",
-              "instructions"
+              "contract-first"
             ]
           },
           null
@@ -77,13 +75,13 @@
     },
     {
       "id": "skill-rewrite-clear-target",
-      "prompt": "Rewrite the existing skill `skill-eval-forge` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.",
-      "expected_output": "Treat the request as a skill-rewrite workflow, anchor the rewrite in source-backed contract work, and stop at Eval Brief ready.",
+      "prompt": "Rewrite the existing skill `skill-eval-forge` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you move into implementation-oriented detail.",
+      "expected_output": "Treat the request as a skill-rewrite workflow, anchor the rewrite in source-backed contract work, keep it contract-first, and stop at Eval Brief ready.",
       "should_trigger": true,
       "stop_at": "Eval Brief ready",
       "assertions": [
         "must classify this as a skill rewrite request",
-        "must freeze contract elements before final instructions",
+        "must freeze contract elements before implementation-oriented detail",
         "must stop at Eval Brief ready"
       ],
       "files": [],
@@ -96,10 +94,7 @@
           },
           {
             "markers": [
-              "freeze",
-              "contract",
-              "before",
-              "instructions"
+              "contract-first"
             ]
           },
           null
@@ -109,7 +104,7 @@
     {
       "id": "mixed-authoring-and-eval-request",
       "prompt": "Write a new skill for PR review routing and also set up the first eval scaffold for it. I want the skill contract first, but please leave the runtime for later.",
-      "expected_output": "Handle the authoring part, call out that eval work is downstream, and stop at Eval Brief ready instead of implementing the scaffold.",
+      "expected_output": "Handle the authoring part, keep downstream eval work out of scope for this step, and stop at Eval Brief ready instead of implementing the scaffold.",
       "should_trigger": true,
       "stop_at": "Eval Brief ready",
       "assertions": [
@@ -141,12 +136,12 @@
     {
       "id": "trigger-with-benchmark-noise",
       "prompt": "Create a new reusable skill for repo ownership routing. Freeze the contract first and stop at Eval Brief ready. We can design the benchmark suite and model comparison later.",
-      "expected_output": "Treat the request as a new-skill workflow, explicitly defer benchmark work, and stop at Eval Brief ready.",
+      "expected_output": "Treat the request as a new-skill workflow, keep benchmark work downstream from this contract step, and stop at Eval Brief ready.",
       "should_trigger": true,
       "stop_at": "Eval Brief ready",
       "assertions": [
         "must keep the request in the new-skill authoring boundary",
-        "must defer benchmark or comparison work downstream",
+        "must keep benchmark or comparison work downstream from this contract step",
         "must stop at Eval Brief ready"
       ],
       "files": [],
@@ -342,7 +337,7 @@
     },
     {
       "id": "ambiguous-refactor-missing-target",
-      "prompt": "Refactor this skill so the contract is clearer, keep it contract-first, and stop at Eval Brief ready.",
+      "prompt": "Refactor this skill so the contract is clearer, keep it contract-first, and stop before any implementation-oriented detail at Eval Brief ready.",
       "expected_output": "Do not trigger a clean refactor flow yet; stop and ask because the target skill is still unclear.",
       "should_trigger": false,
       "stop_at": "stop_and_ask",

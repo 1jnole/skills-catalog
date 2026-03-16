@@ -66,18 +66,24 @@ Current contractual behavior:
 - The repo does not ship a separate local eval runner.
 
 Current uplift behavior:
-- Promptfoo compares `skill-contract-forge` behavior through two separate executions that reuse the same comparative suite.
-- `promptfooconfig.uplift.with-skill.yaml` runs `tests/skill-contract-forge.uplift.yaml` with `with_skill`.
-- `promptfooconfig.uplift.without-skill.yaml` runs `tests/skill-contract-forge.uplift.yaml` with `without_skill`.
+- Promptfoo compares `skill-contract-forge` behavior through two separate executions with separate baseline/gate suites and separate offline replay fixtures.
+- `promptfooconfig.uplift.with-skill.yaml` runs `tests/skill-contract-forge.uplift.yaml` with `with_skill` as the semantic uplift gate.
+- `promptfooconfig.uplift.without-skill.yaml` runs `tests/skill-contract-forge.uplift.without-skill.yaml` with `without_skill` as an informational baseline surface.
 - both uplift configs read the active provider from the same default provider adapter.
-- the uplift suite measures comparative signals such as classification, workflow selection, and stop boundaries.
-- the uplift suite is not designed to prove full contractual conformance for the baseline path.
+- the uplift gate measures comparative signals such as classification, workflow selection, and stop boundaries.
+- the `without_skill` baseline is not designed to prove contractual conformance for the baseline path and is not a hard semantic gate.
+- the `without_skill` baseline still rejects outputs that accidentally imitate the skill-owned contract envelope, such as classification headers, workflow headers, `Eval Brief ready`, or contract-brief schema keys.
+- offline replay uses one fixture per surface so contract, uplift `with_skill`, and uplift `without_skill` each replay the correct prompt/case ordering.
 
 Current operational reference:
 - live:
   - `npm run promptfoo:run`
+  - `npm run promptfoo:run:uplift:with-skill`
+  - `npm run promptfoo:run:uplift:without-skill`
 - offline:
   - `npm run promptfoo:run:offline`
+  - `npm run promptfoo:run:offline:uplift:with-skill`
+  - `npm run promptfoo:run:offline:uplift:without-skill`
 - `pilot-suite.v1.json` remains as historical Phase 4 bootstrap context only
 
 ## What this means now

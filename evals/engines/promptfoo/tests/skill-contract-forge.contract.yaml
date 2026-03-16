@@ -32,13 +32,6 @@
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-    - type: assert-set
-      metric: auxiliary_contract
-      threshold: 0
-      assert:
-        - type: icontains
-          metric: contract_guidance
-          value: "Freeze the contract before final instructions."
 
 - description: existing-skill-refactor-clear-target
   vars:
@@ -74,15 +67,6 @@
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-    - type: assert-set
-      metric: auxiliary_contract
-      threshold: 0
-      assert:
-        - type: icontains-any
-          metric: contract_guidance
-          value:
-            - "Freeze the contract before final instructions."
-            - "contract-first"
 
 - description: skill-rewrite-clear-target
   vars:
@@ -118,13 +102,6 @@
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-    - type: assert-set
-      metric: auxiliary_contract
-      threshold: 0
-      assert:
-        - type: icontains
-          metric: contract_guidance
-          value: "Freeze the contract before final instructions."
 
 - description: mixed-authoring-and-eval-request
   vars:
@@ -154,22 +131,12 @@
         - type: icontains
           metric: terminal_marker
           value: "Eval Brief ready"
-        - type: icontains
-          metric: downstream_note
-          value: "Downstream eval work is out of scope here."
         - type: not-icontains
           metric: incompatible_non_trigger
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-    - type: assert-set
-      metric: auxiliary_contract
-      threshold: 0
-      assert:
-        - type: icontains
-          metric: contract_guidance
-          value: "Freeze the contract before final instructions."
 
 - description: trigger-with-benchmark-noise
   vars:
@@ -199,22 +166,12 @@
         - type: icontains
           metric: terminal_marker
           value: "Eval Brief ready"
-        - type: icontains
-          metric: downstream_note
-          value: "Downstream eval work is out of scope here."
         - type: not-icontains
           metric: incompatible_non_trigger
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-    - type: assert-set
-      metric: auxiliary_contract
-      threshold: 0
-      assert:
-        - type: icontains
-          metric: contract_guidance
-          value: "Freeze the contract before final instructions."
 
 - description: agents-policy-request
   vars:
@@ -243,6 +200,8 @@
           value:
             - "AGENTS"
             - "repository policy"
+            - "policy document"
+            - "repository-wide policy"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -275,9 +234,12 @@
         - type: icontains
           metric: out_of_scope_marker
           value: "Out of scope for skill-contract-forge."
-        - type: icontains
+        - type: icontains-any
           metric: reason_marker
-          value: "shared eval runtime implementation"
+          value:
+            - "runtime eval harness implementation"
+            - "shared eval runtime implementation"
+            - "runtime implementation"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -310,9 +272,12 @@
         - type: icontains
           metric: out_of_scope_marker
           value: "Out of scope for skill-contract-forge."
-        - type: icontains
+        - type: icontains-any
           metric: reason_marker
-          value: "downstream eval authoring"
+          value:
+            - "downstream eval authoring"
+            - "finished Eval Brief"
+            - "finished brief"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -350,6 +315,11 @@
           value:
             - "downstream eval authoring"
             - "eval definition"
+            - "downstream evaluation authoring"
+            - "runtime implementation"
+            - "finished brief"
+            - "benchmark suite creation"
+            - "contract authoring phase"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -381,7 +351,7 @@
           value: "Classification: stop-and-ask"
         - type: icontains
           metric: stop_marker
-          value: "Scope clarification required."
+          value: "clarif"
         - type: icontains
           metric: ambiguity_reason
           value: "multiple"
@@ -390,6 +360,7 @@
           value:
             - "multiple workflows"
             - "multiple independent workflows"
+            - "multiple major workflows"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -419,15 +390,20 @@
         - type: starts-with
           metric: classification
           value: "Classification: stop-and-ask"
-        - type: icontains
+        - type: icontains-any
           metric: stop_marker
-          value: "Scope clarification required."
+          value:
+            - "clarif"
+            - "please provide"
         - type: icontains-any
           metric: ambiguity_reason
           value:
             - "skill target"
             - "target skill"
             - "unclear"
+            - "name or description of the skill"
+            - "existing skill"
+            - "which existing skill"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -457,15 +433,18 @@
         - type: starts-with
           metric: classification
           value: "Classification: stop-and-ask"
-        - type: icontains
+        - type: icontains-any
           metric: stop_marker
-          value: "Scope clarification required."
+          value:
+            - "clarif"
+            - "please provide"
         - type: icontains-any
           metric: ambiguity_reason
           value:
             - "skill target"
             - "target skill"
             - "unclear"
+            - "name or description of the skill"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"

@@ -6,6 +6,7 @@ This folder contains the new-scaffold suites for `skill-contract-forge`.
 - `evals/cases/skill-contract-forge/suite.v1.json`
 
 This is the supported local `skill-contract-forge` eval authoring contract. It is not the runtime pass/fail authority.
+`packs/core/skill-contract-forge/SKILL.md` is the authority for observable output behavior. The local suite should mirror that contract wording and intent instead of preserving stale fixture phrasing.
 
 ## Manual calibration artifacts
 - `evals/cases/skill-contract-forge/manual-audit.phase-6a.json`
@@ -72,6 +73,7 @@ Treat the dataset as good enough for daily work when all of these hold:
 
 These are the supported Promptfoo-native suite files.
 Trigger cases in the contract suite require schema-backed Eval Brief JSON via `evals/contracts/skill-contract-forge/eval-brief-output.schema.json`.
+Offline fixtures remain replay snapshots only. They may be refreshed only after live Promptfoo behavior satisfies the current skill contract.
 
 Coverage buckets represented in the suite:
 - `core`: `new-skill-one-clear-job`, `existing-skill-refactor-clear-target`
@@ -91,6 +93,7 @@ This file preserves the smaller Fase 4 bootstrap evidence. It is no longer the m
 - Promptfoo runs it with both baseline modes
 - it produces the native Promptfoo eval artifact
 - it is the reference suite for the operational flow of `skill-contract-forge`
+- it stays aligned with the current observable contract in `packs/core/skill-contract-forge/SKILL.md`
 
 ## Reference command
 `npm run promptfoo:run:offline`
