@@ -3,7 +3,7 @@
 This note captures the canonical local result shape that separates engine output from core semantics.
 
 ## Current source of truth
-- `evals/engines/promptfoo/generated/skill-forge.eval.json`
+- `evals/engines/promptfoo/generated/skill-contract-forge.eval.json`
 
 ## Canonical normalized shape
 A normalized case result always contains:

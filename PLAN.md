@@ -13,7 +13,7 @@ La meta es comprobar que los casos actuales y los nuevos casos:
 - detectan errores reales
 - no premian wording superficial
 - reducen falsos positivos y falsos negativos
-- cubren mejor los bordes de `skill-forge`
+- cubren mejor los bordes de `skill-contract-forge`
 
 ---
 
@@ -91,8 +91,8 @@ Entre **12 y 20 casos**.
 
 ## Fuente sugerida
 Partir de:
-- `evals/cases/skill-forge/suite.v1.json`
-- `evals/cases/skill-forge/pilot-suite.v1.json`
+- `evals/cases/skill-contract-forge/suite.v1.json`
+- `evals/cases/skill-contract-forge/pilot-suite.v1.json`
 - y, si hace falta, crear un subconjunto de auditoría manual
 
 ## Guardrails
@@ -254,7 +254,7 @@ Añadir casos que estén cerca del límite entre clasificaciones.
 - no reescribir casos existentes si el problema es falta de borde
 
 ## Output esperado
-Un conjunto pequeño de casos que tensen de verdad la frontera de `skill-forge`.
+Un conjunto pequeño de casos que tensen de verdad la frontera de `skill-contract-forge`.
 
 ---
 
@@ -467,10 +467,10 @@ El slug está cerrado cuando:
 ```text
 evals/
   contracts/
-    skill-forge/
+    skill-contract-forge/
       eval-brief-output.schema.json
   cases/
-    skill-forge/
+    skill-contract-forge/
       suite.v1.json
       pilot-suite.v1.json
       # posibles ampliaciones justificadas o buckets adicionales
@@ -480,8 +480,8 @@ evals/
       promptfooconfig.uplift.with-skill.yaml
       promptfooconfig.uplift.without-skill.yaml
       tests/
-        skill-forge.contract.yaml
-        skill-forge.uplift.yaml
+        skill-contract-forge.contract.yaml
+        skill-contract-forge.uplift.yaml
 ```
 
 ## Resultado real esperado

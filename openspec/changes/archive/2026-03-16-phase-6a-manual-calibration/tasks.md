@@ -9,11 +9,11 @@
 ## Tasks
 
 - [x] 0.1 Create OpenSpec artifacts for Slug 6A.
-- [x] 1.1 Define a tracked manual audit sample for the current canonical `skill-forge` cases.
+- [x] 1.1 Define a tracked manual audit sample for the current canonical `skill-contract-forge` cases.
 - [x] 1.2 Run the audit sample across contract, uplift `with_skill`, and uplift `without_skill`.
 - [x] 1.3 Record a human-readable audit note with `correct`, `incorrect`, or `dudoso` judgments.
 - [x] 1.4 Extract a small set of actionable error patterns from the audit.
-- [x] 1.5 Update local `skill-forge` eval docs so the audit artifacts are discoverable.
+- [x] 1.5 Update local `skill-contract-forge` eval docs so the audit artifacts are discoverable.
 - [x] 1.6 Validate the OpenSpec change and record executable evidence.
 
 ## Evidence
@@ -26,29 +26,29 @@
 - **Note:** The Phase 6A slug now exists as an independent, reviewable change.
 
 ### 1.1
-- **Command:** `rg -c "^- description:" evals/engines/promptfoo/tests/skill-forge.contract.yaml evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
+- **Command:** `rg -c "^- description:" evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
 - **Result:** PASS.
-  `evals/engines/promptfoo/tests/skill-forge.contract.yaml:11`
-  `evals/engines/promptfoo/tests/skill-forge.uplift.yaml:7`
+  `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml:11`
+  `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml:7`
 - **Date:** `2026-03-16`
 - **Note:** The current canonical sample is small enough to audit in full, so Phase 6A uses the supported cases rather than synthetic padding.
 
 ### 1.2a
-- **Command:** `npx promptfoo eval -c evals/engines/promptfoo/promptfooconfig.yaml --model-outputs evals/engines/promptfoo/fixtures/skill-forge-suite-model-outputs.json -o evals/engines/promptfoo/generated/phase-6a.contract.eval.json --no-progress-bar --table-cell-max-length 80`
+- **Command:** `npx promptfoo eval -c evals/engines/promptfoo/promptfooconfig.yaml --model-outputs evals/engines/promptfoo/fixtures/skill-contract-forge-suite-model-outputs.json -o evals/engines/promptfoo/generated/phase-6a.contract.eval.json --no-progress-bar --table-cell-max-length 80`
 - **Result:** FAIL.
   `Results: ✓ 9 passed, ✗ 2 failed, 0 errors (81.82%)`
 - **Date:** `2026-03-16`
 - **Note:** The contract gate still fails on two semantically important cases and therefore remains audit-worthy.
 
 ### 1.2b
-- **Command:** `npx promptfoo eval -c evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml --model-outputs evals/engines/promptfoo/fixtures/skill-forge-suite-model-outputs.json -o evals/engines/promptfoo/generated/phase-6a.uplift.with-skill.eval.json --no-progress-bar --table-cell-max-length 80`
+- **Command:** `npx promptfoo eval -c evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml --model-outputs evals/engines/promptfoo/fixtures/skill-contract-forge-suite-model-outputs.json -o evals/engines/promptfoo/generated/phase-6a.uplift.with-skill.eval.json --no-progress-bar --table-cell-max-length 80`
 - **Result:** FAIL.
   `Results: ✓ 6 passed, ✗ 1 failed, 0 errors (85.71%)`
 - **Date:** `2026-03-16`
 - **Note:** `with_skill` uplift is directionally strong but still misses one stop-and-ask boundary.
 
 ### 1.2c
-- **Command:** `npx promptfoo eval -c evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml --model-outputs evals/engines/promptfoo/fixtures/skill-forge-suite-model-outputs.json -o evals/engines/promptfoo/generated/phase-6a.uplift.without-skill.eval.json --no-progress-bar --table-cell-max-length 80`
+- **Command:** `npx promptfoo eval -c evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml --model-outputs evals/engines/promptfoo/fixtures/skill-contract-forge-suite-model-outputs.json -o evals/engines/promptfoo/generated/phase-6a.uplift.without-skill.eval.json --no-progress-bar --table-cell-max-length 80`
 - **Result:** FAIL.
   `Results: 0 passed, ✗ 7 failed, 0 errors (0%)`
 - **Date:** `2026-03-16`
@@ -64,16 +64,16 @@
 - **Note:** The per-case matrix was captured and translated into the tracked audit note.
 
 ### 1.4
-- **Command:** `rg -n "schema pass|wrong classification|false stop-and-ask|near-miss|ambiguous workflow" evals/cases/skill-forge/manual-audit.phase-6a.md`
+- **Command:** `rg -n "schema pass|wrong classification|false stop-and-ask|near-miss|ambiguous workflow" evals/cases/skill-contract-forge/manual-audit.phase-6a.md`
 - **Result:** PASS.
   `The audit note records concrete error patterns tied to observed case behavior.`
 - **Date:** `2026-03-16`
 - **Note:** Phase 6B can now expand the dataset from observed failure patterns instead of guesswork.
 
 ### 1.5
-- **Command:** `rg -n "manual-audit.phase-6a" evals/cases/skill-forge/README.md`
+- **Command:** `rg -n "manual-audit.phase-6a" evals/cases/skill-contract-forge/README.md`
 - **Result:** PASS.
-  `The local skill-forge case docs now point to the Phase 6A audit artifacts.`
+  `The local skill-contract-forge case docs now point to the Phase 6A audit artifacts.`
 - **Date:** `2026-03-16`
 - **Note:** The audit sample and note are discoverable next to the canonical case contract.
 

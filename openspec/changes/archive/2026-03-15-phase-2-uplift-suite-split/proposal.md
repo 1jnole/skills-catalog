@@ -2,21 +2,21 @@
 
 ## Summary
 
-Add a dedicated Promptfoo uplift comparison surface for `skill-forge` without changing the canonical contract gate introduced in Phase 1.
+Add a dedicated Promptfoo uplift comparison surface for `skill-contract-forge` without changing the canonical contract gate introduced in Phase 1.
 
 ## Why
 
-After Phase 1, the repository has a clean contractual gate that answers whether `skill-forge` still satisfies its contract with the skill active.
+After Phase 1, the repository has a clean contractual gate that answers whether `skill-contract-forge` still satisfies its contract with the skill active.
 
 What is still missing is a separate way to answer a different question:
 
-> Does `skill-forge` improve behavior compared with the same request path without the skill?
+> Does `skill-contract-forge` improve behavior compared with the same request path without the skill?
 
 Mixing that comparison back into the canonical gate would recreate the ambiguity that Phase 1 removed.
 
 ## What Changes
 
-- add a dedicated comparative Promptfoo test suite for `skill-forge`;
+- add a dedicated comparative Promptfoo test suite for `skill-contract-forge`;
 - add one uplift config for `with_skill` and one uplift config for `without_skill`;
 - update eval docs so contract and uplift are described as separate surfaces.
 
@@ -24,7 +24,7 @@ Mixing that comparison back into the canonical gate would recreate the ambiguity
 
 ### In scope
 
-- `skill-forge.uplift.yaml`;
+- `skill-contract-forge.uplift.yaml`;
 - `promptfooconfig.uplift.with-skill.yaml`;
 - `promptfooconfig.uplift.without-skill.yaml`;
 - minimum documentation updates in eval READMEs.

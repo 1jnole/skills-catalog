@@ -69,7 +69,7 @@ Keep the root file short and discovery-safe. Detailed process belongs in:
 - Treat `evals/engines/promptfoo/` as the eval runtime boundary.
 - Rebuild the scaffold from `plans/` and current docs, not by restoring deleted runtime code.
 
-## When modifying `skill-forge`
+## When modifying `skill-contract-forge`
 
 - Keep the workflow spec-driven.
 - Keep the handoff aligned with the current source-of-truth docs.

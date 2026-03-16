@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Promptfoo provider selection is external to suite identity
-The supported Promptfoo suite configs for `skill-forge` MUST read provider selection from a dedicated provider adapter file instead of declaring vendor choice inline.
+The supported Promptfoo suite configs for `skill-contract-forge` MUST read provider selection from a dedicated provider adapter file instead of declaring vendor choice inline.
 
 #### Scenario: Canonical Promptfoo configs are reviewed
 - **WHEN** the contract and uplift Promptfoo configs are inspected

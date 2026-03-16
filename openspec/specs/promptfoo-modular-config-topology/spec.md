@@ -4,7 +4,7 @@
 Define a modular Promptfoo topology where entrypoints, prompts, tests, and providers have clear, separate responsibilities.
 ## Requirements
 ### Requirement: Promptfoo entrypoints have a single clear purpose
-The supported Promptfoo configs for `skill-forge` MUST each represent one explicit execution role.
+The supported Promptfoo configs for `skill-contract-forge` MUST each represent one explicit execution role.
 
 #### Scenario: Promptfoo configs are reviewed
 - **WHEN** the three supported Promptfoo config files are inspected

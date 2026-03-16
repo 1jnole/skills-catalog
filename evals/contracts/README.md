@@ -8,7 +8,7 @@ This directory marks the Phase 3 destination for the contracts that survive the 
 ## Surviving contracts
 
 ### Eval case
-- current source: `evals/cases/skill-forge/suite.v1.json`
+- current source: `evals/cases/skill-contract-forge/suite.v1.json`
 - responsibility:
   - case identity
   - prompt
@@ -17,7 +17,7 @@ This directory marks the Phase 3 destination for the contracts that survive the 
   - trigger vs non-trigger intent
 
 ### Eval definition
-- current source: `evals/cases/skill-forge/suite.v1.json`
+- current source: `evals/cases/skill-contract-forge/suite.v1.json`
 - responsibility:
   - skill-level eval contract
   - gates
@@ -25,7 +25,7 @@ This directory marks the Phase 3 destination for the contracts that survive the 
   - comparison intent
 
 ### Run result
-- current source: `evals/engines/promptfoo/generated/skill-forge.eval.json`
+- current source: `evals/engines/promptfoo/generated/skill-contract-forge.eval.json`
 - responsibility:
   - normalized per-mode result semantics
   - canonical run manifest semantics

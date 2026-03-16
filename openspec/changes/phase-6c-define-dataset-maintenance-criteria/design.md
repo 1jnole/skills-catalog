@@ -1,7 +1,7 @@
 ## Context
 
 The current repository already has:
-- a local `skill-forge` authoring contract in `evals/cases/skill-forge/suite.v1.json`
+- a local `skill-contract-forge` authoring contract in `evals/cases/skill-contract-forge/suite.v1.json`
 - a Phase 6A audit loop
 - a Phase 6B expansion pattern and bucket map
 
@@ -11,12 +11,12 @@ What is still missing is a clear answer to four maintenance questions:
 - what is the repeatable workflow to evolve the dataset?
 - when do maintainers stop expanding for its own sake?
 
-## Decision 1 - Put the policy in the local skill-forge case docs
+## Decision 1 - Put the policy in the local skill-contract-forge case docs
 
-**Decision:** Record the 6C maintenance rules in `evals/cases/skill-forge/README.md`.
+**Decision:** Record the 6C maintenance rules in `evals/cases/skill-contract-forge/README.md`.
 
 **Rationale:**
-- the policy is local to `skill-forge` rather than global engine topology
+- the policy is local to `skill-contract-forge` rather than global engine topology
 - maintainers reviewing or editing cases already land in this folder
 - the guidance stays close to the canonical suite without changing the suite JSON contract
 

@@ -34,31 +34,31 @@ Supported command surface:
 Supported runtime shape:
 - native Promptfoo config, prompt templates, tests, assertions, fixtures, and generated outputs live under `evals/engines/promptfoo/`
 - provider selection is externalized through Promptfoo provider adapter files under `evals/engines/promptfoo/providers/`
-- the canonical Promptfoo contract suite lives in `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
-- the comparative Promptfoo uplift suite lives in `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
+- the canonical Promptfoo contract suite lives in `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`
+- the comparative Promptfoo uplift suite lives in `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
 - Promptfoo entrypoints stay single-purpose: one contract gate config and two uplift comparison configs
-- trigger cases in the contract suite require schema-backed Eval Brief JSON using `evals/contracts/skill-forge/eval-brief-output.schema.json`
-- `evals/cases/skill-forge/suite.v1.json` remains a local authoring contract, not the runtime entrypoint
+- trigger cases in the contract suite require schema-backed Eval Brief JSON using `evals/contracts/skill-contract-forge/eval-brief-output.schema.json`
+- `evals/cases/skill-contract-forge/suite.v1.json` remains a local authoring contract, not the runtime entrypoint
 - the supported offline path uses Promptfoo `--model-outputs` fixtures under `evals/engines/promptfoo/fixtures/`
-- the canonical generated runtime artifact is `evals/engines/promptfoo/generated/skill-forge.eval.json`
+- the canonical generated runtime artifact is `evals/engines/promptfoo/generated/skill-contract-forge.eval.json`
 
-Current `skill-forge` supported artifacts:
+Current `skill-contract-forge` supported artifacts:
 - `evals/engines/promptfoo/promptfooconfig.yaml`
 - `evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`
 - `evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`
 - `evals/engines/promptfoo/providers/default.openai.yaml`
-- `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
-- `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
+- `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`
+- `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
 - `evals/engines/promptfoo/prompts/with-skill.txt`
 - `evals/engines/promptfoo/prompts/without-skill.txt`
-- `evals/cases/skill-forge/pilot-suite.v1.json`
-- `evals/cases/skill-forge/suite.v1.json`
-- `evals/cases/skill-forge/README.md`
-- `evals/fixtures/skill-forge/README.md`
+- `evals/cases/skill-contract-forge/pilot-suite.v1.json`
+- `evals/cases/skill-contract-forge/suite.v1.json`
+- `evals/cases/skill-contract-forge/README.md`
+- `evals/fixtures/skill-contract-forge/README.md`
 - `evals/final-supported-path.md`
 
 Current contractual behavior:
-- Promptfoo runs the canonical `skill-forge` contract suite with the `with_skill` prompt path only.
+- Promptfoo runs the canonical `skill-contract-forge` contract suite with the `with_skill` prompt path only.
 - the contract suite reads its provider from the default provider adapter rather than declaring a vendor inline.
 - Promptfoo executes the declarative YAML test suite directly and derives pass/fail from native per-case assertions.
 - trigger outputs are expected to include contract markers plus embedded JSON that satisfies the Eval Brief schema.
@@ -66,9 +66,9 @@ Current contractual behavior:
 - The repo does not ship a separate local eval runner.
 
 Current uplift behavior:
-- Promptfoo compares `skill-forge` behavior through two separate executions that reuse the same comparative suite.
-- `promptfooconfig.uplift.with-skill.yaml` runs `tests/skill-forge.uplift.yaml` with `with_skill`.
-- `promptfooconfig.uplift.without-skill.yaml` runs `tests/skill-forge.uplift.yaml` with `without_skill`.
+- Promptfoo compares `skill-contract-forge` behavior through two separate executions that reuse the same comparative suite.
+- `promptfooconfig.uplift.with-skill.yaml` runs `tests/skill-contract-forge.uplift.yaml` with `with_skill`.
+- `promptfooconfig.uplift.without-skill.yaml` runs `tests/skill-contract-forge.uplift.yaml` with `without_skill`.
 - both uplift configs read the active provider from the same default provider adapter.
 - the uplift suite measures comparative signals such as classification, workflow selection, and stop boundaries.
 - the uplift suite is not designed to prove full contractual conformance for the baseline path.

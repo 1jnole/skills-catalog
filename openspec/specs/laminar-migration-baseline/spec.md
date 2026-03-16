@@ -18,11 +18,11 @@ The phase 0 baseline SHALL classify current eval runner pieces into `source of t
 - **THEN** each documented runner piece MUST be assigned to one of the three classification groups with enough context to support later migration work
 
 ### Requirement: Phase 0 SHALL freeze the migration pilot and parity baseline
-The phase 0 baseline SHALL name `skill-forge` as the only migration pilot and SHALL document the accepted parity target as `overall_passed: true`, `with_skill` outperforming `without_skill`, and aligned trigger, non-trigger, and stop-and-ask decisions in the active repository planning artifacts.
+The phase 0 baseline SHALL name `skill-contract-forge` as the only migration pilot and SHALL document the accepted parity target as `overall_passed: true`, `with_skill` outperforming `without_skill`, and aligned trigger, non-trigger, and stop-and-ask decisions in the active repository planning artifacts.
 
 #### Scenario: Pilot and parity target are fixed
 - **WHEN** the migration baseline is consulted before later phases
-- **THEN** it MUST identify `skill-forge` as the only pilot and MUST state the accepted parity expectations and the artifact paths used as the baseline reference
+- **THEN** it MUST identify `skill-contract-forge` as the only pilot and MUST state the accepted parity expectations and the artifact paths used as the baseline reference
 
 ### Requirement: Phase 0 SHALL keep its canonical baseline in active planning artifacts
 The phase 0 migration baseline SHALL remain available in active planning artifacts so that inventory, classification, baseline expectations, legacy coupling, and documented drift stay centralized without requiring deleted roadmap folders.

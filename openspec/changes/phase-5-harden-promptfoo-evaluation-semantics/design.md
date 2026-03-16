@@ -32,7 +32,7 @@ Increase evaluation reliability without changing the engine, the skill source co
 
 ## Minimal-diff constraints
 
-- Do not modify `packs/core/skill-forge/SKILL.md`.
-- Do not change `evals/contracts/skill-forge/eval-brief-output.schema.json`.
+- Do not modify `packs/core/skill-contract-forge/SKILL.md`.
+- Do not change `evals/contracts/skill-contract-forge/eval-brief-output.schema.json`.
 - Do not introduce `tests/defaults.yaml` unless duplication becomes materially worse after hardening.
 - Do not add a new runtime layer or provider-specific logic.

@@ -28,7 +28,7 @@
 ### 1.1
 - **Command:** `Get-Content evals/engines/promptfoo/promptfooconfig.yaml`
 - **Result:** PASS.
-  `description: Promptfoo contract gate for skill-forge`
+  `description: Promptfoo contract gate for skill-contract-forge`
 - **Date:** `2026-03-15`
 - **Note:** Contract entrypoint wording is explicit.
 

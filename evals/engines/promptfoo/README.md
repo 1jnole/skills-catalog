@@ -57,19 +57,19 @@ The current duplication between contract and uplift suites is small and semantic
 - Guidance wording such as `Freeze the contract before final instructions.` is useful for manual drift review, but Promptfoo `0.120.19` still treats failed auxiliary assertions as case failures in some paths.
 - Because of that engine limitation, wording-only hints that must stay non-gating are documented rather than enforced in the contract or uplift gates.
 
-For `skill-forge`, the active Promptfoo execution surface is:
+For `skill-contract-forge`, the active Promptfoo execution surface is:
 - `evals/engines/promptfoo/promptfooconfig.yaml`
 - `evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`
 - `evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`
 - `evals/engines/promptfoo/providers/default.openai.yaml`
-- `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
-- `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
+- `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`
+- `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
 - `evals/engines/promptfoo/prompts/with-skill.txt`
 - `evals/engines/promptfoo/prompts/without-skill.txt`
-- `evals/contracts/skill-forge/eval-brief-output.schema.json`
+- `evals/contracts/skill-contract-forge/eval-brief-output.schema.json`
 
 The local case contract still lives at:
-- `evals/cases/skill-forge/suite.v1.json`
+- `evals/cases/skill-contract-forge/suite.v1.json`
 
 The smaller `pilot-suite.v1.json` file remains as historical Phase 4 bootstrap context only.
 
@@ -77,7 +77,7 @@ Canonical Promptfoo config is read from:
 - `evals/engines/promptfoo/promptfooconfig.yaml`
 
 Canonical contract suite is read from:
-- `evals/engines/promptfoo/tests/skill-forge.contract.yaml`
+- `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`
 
 Default provider adapter is read from:
 - `evals/engines/promptfoo/providers/default.openai.yaml`
@@ -87,10 +87,10 @@ Comparative uplift configs are read from:
 - `evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`
 
 Comparative uplift suite is read from:
-- `evals/engines/promptfoo/tests/skill-forge.uplift.yaml`
+- `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
 
 Promptfoo raw eval output is written to:
-- `evals/engines/promptfoo/generated/skill-forge.eval.json`
+- `evals/engines/promptfoo/generated/skill-contract-forge.eval.json`
 
 The canonical gate runs only:
 - `with_skill` prompt path (skill context injected from `SKILL.md`)
@@ -101,10 +101,10 @@ The uplift comparison surface runs in two separate executions:
 - `without_skill` via `promptfooconfig.uplift.without-skill.yaml`
 - provider selection via the same default provider adapter
 
-Repo-specific logic stays in native Promptfoo assertions authored per case in `tests/skill-forge.contract.yaml`.
+Repo-specific logic stays in native Promptfoo assertions authored per case in `tests/skill-contract-forge.contract.yaml`.
 Trigger cases use schema-backed `contains-json` checks against the Eval Brief contract file, and the critical contract checks are grouped separately from softer wording checks.
 
-Repo-specific uplift logic stays in native Promptfoo assertions authored per case in `tests/skill-forge.uplift.yaml`.
+Repo-specific uplift logic stays in native Promptfoo assertions authored per case in `tests/skill-contract-forge.uplift.yaml`.
 Those uplift assertions are comparative by design, expose named metrics for routing dimensions, and do not replace the contract gate.
 
 The repository currently ships `default.openai.yaml` as the operational default provider adapter.
