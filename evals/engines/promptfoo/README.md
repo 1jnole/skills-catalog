@@ -65,7 +65,7 @@ The current duplication between contract and uplift suites is small and semantic
 - The `without_skill` surface is informational and uses a lighter baseline suite that checks the baseline does not impersonate a contract-compliant skill output through classification headers, workflow headers, terminal markers, or contract-brief schema keys.
 
 ### Auxiliary checks
-- Promptfoo `0.120.19` still treats some auxiliary assertion shapes as real failures, so wording-only hints are documented rather than enforced in runtime gates.
+- Promptfoo `0.121.2` still treats some auxiliary assertion shapes as real failures, so wording-only hints are documented rather than enforced in runtime gates.
 - Wording guidance remains in `SKILL.md`, local authoring docs, and human review rather than inside the hard Promptfoo gate.
 
 For `skill-contract-forge`, the active Promptfoo execution surface is:
@@ -81,9 +81,6 @@ For `skill-contract-forge`, the active Promptfoo execution surface is:
 
 The canonical skill-local case contract lives at:
 - `packs/core/skill-contract-forge/evals/evals.json`
-
-The transitional reference copy remains at:
-- `evals/cases/skill-contract-forge/suite.v1.json`
 
 The smaller `evals/_phase_a_quarantine/cases/skill-contract-forge/pilot-suite.v1.json` file remains as historical Phase 4 bootstrap context only.
 
@@ -126,7 +123,7 @@ The `without_skill` baseline surface uses its own lighter suite so the repositor
 The repository currently ships `default.openai.yaml` as the operational default provider adapter.
 Changing provider choice is an adapter swap, not a suite or contract change.
 
-The repository does not maintain a second runner around Promptfoo.
+The repository does not maintain a second runner or local wrapper around Promptfoo.
 
 Offline smoke execution uses Promptfoo-native fixture replay:
 - `npm run promptfoo:run:offline`

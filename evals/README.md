@@ -39,7 +39,6 @@ Supported runtime shape:
 - Promptfoo entrypoints stay single-purpose: one contract gate config and two uplift comparison configs
 - trigger cases in the contract suite require schema-backed Eval Brief JSON using `evals/contracts/skill-contract-forge/eval-brief-output.schema.json`
 - `packs/core/skill-contract-forge/evals/evals.json` is the canonical skill-local authoring contract
-- `evals/cases/skill-contract-forge/suite.v1.json` remains a transitional reference copy, not the runtime entrypoint
 - the supported offline path uses Promptfoo `--model-outputs` fixtures under `evals/engines/promptfoo/fixtures/`
 - the canonical generated runtime artifact is `evals/engines/promptfoo/generated/skill-contract-forge.eval.json`
 
@@ -95,6 +94,7 @@ Current operational reference:
 - The Promptfoo layer is organized by responsibility across `prompts/`, `tests/`, and `providers/`.
 - the old wrapper runtime no longer participates in the supported flow.
 - `packs/core/<skill>/evals/` is the supported home for skill-local eval authoring when a skill owns that contract.
+- The repo does not ship a local runner around Promptfoo for `skill-contract-forge`.
 
 ## Ownership intent
 - `contracts/` will own eval contracts that survive engine changes.
