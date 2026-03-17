@@ -36,7 +36,7 @@
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
     case_id: existing-skill-refactor-clear-target
-    prompt: Refactor the existing skill `skill-eval-forge`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.
+    prompt: Refactor the existing skill `openspec-bootstrap`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.
     expected_stop: Eval Brief ready
     should_trigger: true
   metadata:
@@ -70,7 +70,7 @@
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
     case_id: skill-rewrite-clear-target
-    prompt: Rewrite the existing skill `skill-eval-forge` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.
+    prompt: Rewrite the existing skill `openspec-bootstrap` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.
     expected_stop: Eval Brief ready
     should_trigger: true
   metadata:

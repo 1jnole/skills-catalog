@@ -54,8 +54,7 @@ Promptfoo is the supported eval runtime for this repo. The active engine boundar
 
 High-level shape:
 - `evals/contracts/` for stable eval contracts
-- `evals/cases/` for authored case definitions
-- `evals/fixtures/` for reusable inputs and model outputs
+- `evals/engines/promptfoo/fixtures/` for reusable offline inputs and model outputs
 - `evals/engines/promptfoo/` for engine-specific config, prompts, assertions, and generated outputs
 
 See [evals/README.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/evals/README.md) for the current supported eval path.
@@ -90,8 +89,6 @@ skills-catalog/
     changes/
   evals/
     contracts/
-    cases/
-    fixtures/
     engines/
       promptfoo/
   scripts/

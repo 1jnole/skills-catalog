@@ -10,17 +10,17 @@ The stable shape is:
 ```text
 evals/
   contracts/
-  cases/
-  fixtures/
-  reports/
   engines/
     promptfoo/
+      fixtures/
+      generated/
+      prompts/
+      providers/
+      tests/
 ```
 
 The first visible contract boundary already exists at:
 - `evals/contracts/README.md`
-- `evals/cases/README.md`
-- `evals/fixtures/skill-contract-forge/README.md`
 
 ## Supported state
 
@@ -53,7 +53,6 @@ Current `skill-contract-forge` supported artifacts:
 - `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml`
 - `evals/engines/promptfoo/prompts/with-skill.txt`
 - `evals/engines/promptfoo/prompts/without-skill.txt`
-- `evals/fixtures/skill-contract-forge/README.md`
 
 Current contractual behavior:
 - Promptfoo runs the canonical `skill-contract-forge` contract suite with the `with_skill` prompt path only.
@@ -96,10 +95,10 @@ Current operational reference:
 
 ## Ownership intent
 - `contracts/` will own eval contracts that survive engine changes.
-- `cases/` will own case-oriented documentation and organization notes, not a second active source of truth for `skill-contract-forge`.
-- `fixtures/` will own reusable eval files and test inputs.
-- `reports/` will own generated outputs that do not define the domain.
 - `engines/` will own engine-specific execution assets, with `engines/promptfoo/` as the target native tool boundary.
+- `engines/promptfoo/tests/` will own active Promptfoo-native case definitions.
+- `engines/promptfoo/fixtures/` will own reusable offline replay inputs.
+- `engines/promptfoo/generated/` will own generated runtime outputs that do not define the domain.
 
 ## Closeout references
 
