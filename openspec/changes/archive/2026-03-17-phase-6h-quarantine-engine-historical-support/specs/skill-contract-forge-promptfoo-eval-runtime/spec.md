@@ -1,6 +1,6 @@
 # skill-contract-forge-promptfoo-eval-runtime Specification
 
-## MODIFIED Requirements
+## ADDED Requirements
 
 ### Requirement: Legacy engine support stays outside the active runtime surface
 The supported `skill-contract-forge` Promptfoo runtime MUST keep retired engine helpers and retired pilot replay artifacts outside the active engine support and fixture folders.

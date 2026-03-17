@@ -1,7 +1,7 @@
 # skill-contract-forge-brief-boundary-neutrality Specification
 
 ## Purpose
-TBD - created by archiving change decouple-skill-contract-forge-brief-from-engine-runtime. Update Purpose after archive.
+Keep the `skill-contract-forge` brief boundary engine-neutral so the skill stops at `Eval Brief ready` and downstream runtime choices stay outside the core contract.
 ## Requirements
 ### Requirement: Skill-contract-forge contract remains engine-neutral
 The `skill-contract-forge` core contract MUST describe a neutral `Eval Brief` authoring boundary and MUST NOT frame that brief as being produced for a specific eval engine.

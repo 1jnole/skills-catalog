@@ -13,7 +13,7 @@
 
 ## 2. Realign local docs
 
-- [x] 2.1 Update `evals/cases/skill-contract-forge/README.md` so manual-audit and pilot references point to quarantine and `suite.v1.json` remains the active authoring contract.
+- [x] 2.1 Update `evals/cases/skill-contract-forge/README.md` so manual-audit and pilot references point to quarantine and the then-active case-directory authoring contract remains clearly separated from historical files.
   - Verification command: `rg -n "_phase_a_quarantine/cases/skill-contract-forge|pilot-suite\\.v1\\.json|manual-audit\\.phase-6a" evals/cases/skill-contract-forge/README.md`
 - [x] 2.2 Update `evals/cases/README.md`, `evals/README.md`, `evals/engines/promptfoo/README.md`, and `evals/fixtures/skill-contract-forge/README.md` so historical case references point to quarantine and the pilot suite is no longer listed as a supported artifact.
   - Verification command: `rg -n "_phase_a_quarantine/cases/skill-contract-forge|pilot-suite\\.v1\\.json|manual-audit\\.phase-6a" evals/cases/README.md evals/README.md evals/engines/promptfoo/README.md evals/fixtures/skill-contract-forge/README.md`
@@ -47,7 +47,7 @@
 - **Command:** `rg -n "pilot-suite\.v1\.json|manual-audit\.phase-6a" evals/cases/skill-contract-forge`
 - **Result:** Only `evals/cases/skill-contract-forge/README.md` now references those files, and it points them to `_phase_a_quarantine`; the active case directory no longer contains the historical data files themselves.
 - **Date:** `2026-03-16`
-- **Note:** The active case surface now centers on `suite.v1.json` plus current maintenance guidance.
+- **Note:** The active case surface now centers on the current authoring contract plus current maintenance guidance.
 
 - **Command:** `rg -n "_phase_a_quarantine/cases/skill-contract-forge|pilot-suite\.v1\.json|manual-audit\.phase-6a" evals/cases/README.md evals/README.md evals/engines/promptfoo/README.md evals/fixtures/skill-contract-forge/README.md`
 - **Result:** The affected docs now point to `_phase_a_quarantine/cases/skill-contract-forge/...`; `evals/README.md` no longer lists `pilot-suite.v1.json` in the supported artifact inventory.

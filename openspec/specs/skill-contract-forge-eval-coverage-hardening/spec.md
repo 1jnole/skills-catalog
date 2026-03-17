@@ -1,7 +1,7 @@
 # skill-contract-forge-eval-coverage-hardening Specification
 
 ## Purpose
-TBD - created by archiving change harden-skill-contract-forge-eval-coverage. Update Purpose after archive.
+Harden `skill-contract-forge` evaluation coverage around the highest-signal routing and payload failures while keeping offline fixtures subordinate to live Promptfoo runtime truth.
 ## Requirements
 ### Requirement: Trigger cases require schema-backed Eval Brief payloads
 Trigger cases in the supported `skill-contract-forge` runtime MUST require embedded JSON that satisfies the supported Eval Brief schema.
@@ -41,20 +41,12 @@ The supported hardened suite MUST include explicit coverage for key routing boun
 - **THEN** the hardened suite SHALL verify that the case is treated as stop-and-ask
 
 ### Requirement: Offline fixtures align with hardened runtime behavior
-Offline fixture artifacts used by the preferred gate MUST reflect the hardened runtime expectations for each replayed surface.
+Offline fixtures used by the preferred Promptfoo replay gates MUST be refreshed only after the post-refactor live behavior is restored.
 
-#### Scenario: Live behavior does not satisfy the hard contract
-- **WHEN** live Promptfoo executions for `skill-contract-forge` fail the exact contractual output envelope
-- **THEN** the repository SHALL NOT refresh the offline fixture to encode those failures as accepted behavior
-- **AND** the mismatch SHALL be recorded as an active contract violation
-
-#### Scenario: Live behavior satisfies the hard contract
-- **WHEN** live Promptfoo executions satisfy the contractual output envelope
-- **THEN** the offline fixtures MAY be refreshed to snapshot that compliant behavior for the preferred replay gates
-
-#### Scenario: Runtime surfaces use different prompt or case ordering
-- **WHEN** contract and uplift replays do not share the same prompt surface or case ordering
-- **THEN** the repository SHALL keep separate offline fixture artifacts per surface rather than forcing one shared replay snapshot
+#### Scenario: Live recovery succeeds after package refactor
+- **WHEN** live `contract` and live `uplift with-skill` return to the intended green state
+- **THEN** the repository SHALL refresh the surface-specific offline fixtures to snapshot that recovered behavior
+- **AND** offline replay SHALL be re-run to confirm that the restored behavior is reproducible
 
 ### Requirement: Affected docs describe hardened runtime truth
 Affected runtime and local-authoring docs MUST identify the authoritative contract and the role of offline fixtures correctly.

@@ -1,7 +1,7 @@
 # skill-contract-forge-dataset-maintenance Specification
 
 ## Purpose
-TBD - created by archiving change phase-6c-define-dataset-maintenance-criteria. Update Purpose after archive.
+Define how the canonical `skill-contract-forge` dataset is maintained next to the skill-local authoring source, including admission, pruning, movement, and stopping rules without reviving retired legacy datasets.
 ## Requirements
 ### Requirement: skill-contract-forge case admission is explicit
 
@@ -14,14 +14,13 @@ The repository MUST document explicit admission criteria for new canonical `skil
 - **AND** they SHALL reject decorative or non-informative prompt growth
 
 ### Requirement: skill-contract-forge case pruning and movement is explicit
+The repository MUST distinguish the canonical `skill-contract-forge` authoring surface from historical pilot and manual-audit case materials.
 
-The repository MUST document when an existing canonical case should be removed, fused, moved between runtime surfaces, or downgraded out of the active authoring source.
-
-#### Scenario: A maintainer reviews low-signal or duplicate coverage
-
-- **WHEN** the active `skill-contract-forge` maintenance docs are reviewed
-- **THEN** they SHALL describe when to remove, fuse, move, or downgrade a case in `packs/core/skill-contract-forge/evals/evals.json`
-- **AND** they SHALL NOT present `evals/cases/skill-contract-forge/suite.v1.json` as an active canonical dataset
+#### Scenario: A maintainer reviews local case artifacts
+- **WHEN** the local `skill-contract-forge` case files and docs are reviewed
+- **THEN** the then-primary case-directory authoring contract SHALL remain the only active authoring file for that phase
+- **AND** historical pilot or manual-audit files SHALL live outside the active `evals/cases/skill-contract-forge/` surface
+- **AND** nearby docs SHALL label those historical files as quarantined context rather than active authoring inputs
 
 ### Requirement: skill-contract-forge dataset evolution follows a short operational workflow
 The repository MUST document a short workflow for evolving the `skill-contract-forge` dataset.

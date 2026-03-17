@@ -7,6 +7,6 @@ The repository MUST distinguish the canonical `skill-contract-forge` authoring s
 
 #### Scenario: A maintainer reviews local case artifacts
 - **WHEN** the local `skill-contract-forge` case files and docs are reviewed
-- **THEN** `evals/cases/skill-contract-forge/suite.v1.json` SHALL remain the active local authoring contract
+- **THEN** the then-primary case-directory authoring contract SHALL remain the only active authoring file for that phase
 - **AND** historical pilot or manual-audit files SHALL live outside the active `evals/cases/skill-contract-forge/` surface
 - **AND** nearby docs SHALL label those historical files as quarantined context rather than active authoring inputs

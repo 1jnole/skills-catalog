@@ -11,7 +11,7 @@
 - **AND** `packs/core/skill-contract-forge/evals/evals.json` SHALL be the canonical authoring source for this skill's eval definition
 - **AND** the package SHALL NOT add Promptfoo runtime configs, providers, fixtures, generated outputs, or a local eval runner
 
-### Requirement: Eval ownership remains outside the skill package
+### Requirement: Eval runtime remains outside the skill package
 
 The repository-wide Promptfoo runtime boundary for `skill-contract-forge` MUST remain under `evals/`.
 

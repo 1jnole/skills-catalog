@@ -12,15 +12,10 @@ The `skill-contract-forge` uplift comparison surface MUST be defined separately 
 - **AND** uplift execution SHALL be defined by separate config files for `with_skill` and `without_skill`
 
 ### Requirement: Uplift suite is comparative, not contractual
-The `skill-contract-forge` uplift suite MUST measure comparable behavioral signals without requiring the full contractual payload from the baseline path, and it MUST expose named metrics for those critical comparative dimensions.
+The `with_skill` uplift surface MUST recover green comparative routing behavior after packaging refactors without forcing the repository to collapse the `references/` split back into `SKILL.md`.
 
-#### Scenario: Uplift suite assertions are inspected
-- **WHEN** `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml` is reviewed
-- **THEN** it SHALL assert comparable markers such as classification, workflow, and stop boundaries
-- **AND** it SHALL NOT require the full Eval Brief JSON payload as the central uplift criterion
-
-#### Scenario: Uplift results are reviewed
-- **WHEN** Promptfoo reports on uplift evaluations
-- **THEN** the evaluation SHALL expose named metrics for dimensions such as classification, workflow, and terminal marker behavior
-- **AND** the baseline path SHALL be judged on comparative routing behavior rather than full contract conformance
+#### Scenario: Skill-enabled uplift regresses after packaging split
+- **WHEN** `uplift with-skill` fails after moving supportive material into `references/`
+- **THEN** the repository SHALL recover the intended comparative routing behavior through minimal normative guidance or suite recalibration
+- **AND** `without_skill` SHALL remain an informational baseline rather than becoming the semantic recovery target
 

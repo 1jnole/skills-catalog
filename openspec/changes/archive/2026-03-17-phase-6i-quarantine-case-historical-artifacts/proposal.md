@@ -1,6 +1,6 @@
 ## Why
 
-The active local authoring contract for `skill-contract-forge` is `suite.v1.json`, but the pilot suite and the Phase 6A manual audit files still live beside that active contract under `evals/cases/skill-contract-forge/`. Those historical files are useful context, yet keeping them in the active case directory makes the authoring surface look broader and more ambiguous than it really is.
+At the time this change was created, the active local case-directory authoring contract for `skill-contract-forge` still lived under `evals/cases/skill-contract-forge/`, and the pilot suite plus the Phase 6A manual audit files sat beside that active contract. Those historical files were useful context, yet keeping them in the active case directory made the authoring surface look broader and more ambiguous than it really was.
 
 ## What Changes
 

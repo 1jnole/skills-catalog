@@ -1,7 +1,7 @@
 # skill-contract-forge-promptfoo-eval-runtime Specification
 
 ## Purpose
-TBD - created by archiving change migrate-skill-contract-forge-to-promptfoo-native. Update Purpose after archive.
+Define the supported `skill-contract-forge` evaluation runtime as Promptfoo-native execution, with skill-local eval authoring kept separate from runtime pass/fail authority and no repo-owned runner layered on top.
 ## Requirements
 ### Requirement: Native Promptfoo pass/fail authority
 
@@ -16,14 +16,16 @@ The supported `skill-contract-forge` evaluation runtime MUST continue to derive 
 - **AND** it SHALL NOT introduce a repo-owned local runner, wrapper CLI, or grading override layer
 
 ### Requirement: Runtime suite authority is explicit
-The supported `skill-contract-forge` Promptfoo runtime MUST use the split `contract` and `uplift` suites as its explicit execution authority.
 
-#### Scenario: Supported runtime path is referenced
-- **WHEN** repository documentation names the active runtime suite for this slug
-- **THEN** it SHALL identify `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml` as the canonical contract gate
-- **AND** it SHALL identify `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml` and `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml` as the comparative uplift surfaces
-- **AND** it SHALL NOT describe `evals/cases/skill-contract-forge/suite.v1.json` as the runtime pass/fail authority
-- **AND** it SHALL NOT describe `evals/engines/promptfoo/tests/skill-contract-forge.yaml` as the supported runtime suite authority
+The supported `skill-contract-forge` Promptfoo runtime MUST use Promptfoo-native `contract` and `uplift` suites as its explicit execution authority, while the canonical authoring source SHALL live at `packs/core/skill-contract-forge/evals/evals.json`.
+
+#### Scenario: Supported runtime and authoring paths are referenced together
+
+- **WHEN** stable specs or active change artifacts describe the current evaluation architecture
+- **THEN** they SHALL identify `packs/core/skill-contract-forge/evals/evals.json` as the authoring source
+- **AND** they SHALL identify the split Promptfoo suites as the runtime authority
+- **AND** they SHALL NOT present `evals/cases/skill-contract-forge/suite.v1.json` as the active canonical source
+- **AND** they SHALL NOT describe any repo-owned local runner, wrapper CLI, or grading override as part of the supported runtime
 
 ### Requirement: Legacy central grader is retired from supported runtime
 The supported `skill-contract-forge` runtime MUST NOT depend on `evals/engines/promptfoo/support/assertions.cjs`.
@@ -52,4 +54,12 @@ Docs touched by this migration SHALL distinguish supported runtime truth from hi
 - **WHEN** an affected document mentions a legacy or historical eval path
 - **THEN** the document SHALL label it as historical or unsupported for the active runtime
 - **AND** it SHALL identify the supported runtime path for this slug
+
+### Requirement: Legacy engine support stays outside the active runtime surface
+The supported `skill-contract-forge` Promptfoo runtime MUST keep retired engine helpers and retired pilot replay artifacts outside the active engine support and fixture folders.
+
+#### Scenario: Historical engine support is retained for migration context
+- **WHEN** the repository keeps `assertions.cjs` or `pilot-model-outputs.json` for historical reference
+- **THEN** those files SHALL live outside `evals/engines/promptfoo/support/` and `evals/engines/promptfoo/fixtures/`
+- **AND** they SHALL NOT be presented as part of the supported runtime surface
 

@@ -13,6 +13,9 @@ The repo needs its stable OpenSpec layer and active change layer to describe the
 
 ### Modified Capabilities
 
+- `skill-contract-forge-brief-boundary-neutrality`
+- `skill-contract-forge-eval-coverage-hardening`
+- `skill-contract-forge-name-adoption`
 - `skill-contract-forge-promptfoo-eval-runtime`
 - `skill-contract-forge-packaging-alignment`
 - `skill-contract-forge-dataset-maintenance`

@@ -1,18 +1,18 @@
 ## Context
 
-Phase A has already isolated one inherited runtime suite and two engine-level historical artifacts. The next clean separation is inside `evals/cases/skill-contract-forge/`, where the active local authoring contract (`suite.v1.json`) still sits next to historical pilot and manual-audit files.
+Phase A has already isolated one inherited runtime suite and two engine-level historical artifacts. The next clean separation is inside `evals/cases/skill-contract-forge/`, where the then-active local case-directory authoring contract still sat next to historical pilot and manual-audit files.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Leave `suite.v1.json` as the only active local authoring contract in the case directory.
+- Leave the formerly primary authoring file as the only active authoring file in the case directory for that phase.
 - Preserve the pilot suite and manual Phase 6A audit as historical context in quarantine.
 - Update nearby docs so they distinguish active authoring from historical context.
 
 **Non-Goals:**
 
-- Change the canonical authoring contract in `suite.v1.json`.
+- Change the canonical authoring contract itself.
 - Change Promptfoo runtime configs or fixtures.
 - Archive or delete the historical content permanently.
 
@@ -41,4 +41,4 @@ The pilot suite may still be useful context, but once quarantined it should no l
 1. Copy the pilot suite and manual-audit files into `evals/_phase_a_quarantine/cases/skill-contract-forge/`.
 2. Remove the originals from `evals/cases/skill-contract-forge/`.
 3. Update case and eval docs so they reference the quarantine paths where needed.
-4. Verify that the active case directory keeps `suite.v1.json` and no longer contains the historical pilot/audit files.
+4. Verify that the active case directory keeps only the current authoring file and no longer contains the historical pilot/audit files.

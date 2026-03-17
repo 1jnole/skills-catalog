@@ -1,7 +1,7 @@
 # skill-contract-forge-name-adoption Specification
 
 ## Purpose
-TBD - created by archiving change adopt-skill-contract-forge-name. Update Purpose after archive.
+Keep `skill-contract-forge` as the canonical skill name across paths, docs, configs, and OpenSpec artifacts so the contract-first capability is referenced consistently.
 ## Requirements
 ### Requirement: The repository uses skill-contract-forge as the canonical skill name
 The repository MUST use `skill-contract-forge` as the canonical name for the contract-first skill.
@@ -24,4 +24,3 @@ The repository MUST keep renamed references and paths consistent after the namin
 #### Scenario: A maintainer checks the main renamed surfaces
 - **WHEN** the main skill, eval, and contract paths are inspected
 - **THEN** the files referenced by docs and configs SHALL exist under the `skill-contract-forge` name
-
