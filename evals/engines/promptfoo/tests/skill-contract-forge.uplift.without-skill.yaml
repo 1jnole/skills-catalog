@@ -25,23 +25,22 @@
           value: "Workflow:"
         - type: not-icontains
           metric: no_terminal_marker
-          value: "Eval Brief ready"
+          value: Eval Brief ready
         - type: not-icontains
           metric: no_contract_authoring_key
-          value: "\"authoring\""
+          value: '"authoring"'
         - type: not-icontains
           metric: no_contract_success_model_key
-          value: "\"successModel\""
+          value: '"successModel"'
         - type: not-icontains
           metric: no_contract_activation_probes_key
-          value: "\"activationProbes\""
+          value: '"activationProbes"'
         - type: not-icontains
           metric: no_contract_negative_signals_key
-          value: "\"negativeSignals\""
+          value: '"negativeSignals"'
         - type: not-icontains
           metric: no_contract_source_refs_key
-          value: "\"sourceRefs\""
-
+          value: '"sourceRefs"'
 - description: existing-skill-refactor-clear-target
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -69,28 +68,27 @@
           value: "Workflow:"
         - type: not-icontains
           metric: no_terminal_marker
-          value: "Eval Brief ready"
+          value: Eval Brief ready
         - type: not-icontains
           metric: no_contract_authoring_key
-          value: "\"authoring\""
+          value: '"authoring"'
         - type: not-icontains
           metric: no_contract_success_model_key
-          value: "\"successModel\""
+          value: '"successModel"'
         - type: not-icontains
           metric: no_contract_activation_probes_key
-          value: "\"activationProbes\""
+          value: '"activationProbes"'
         - type: not-icontains
           metric: no_contract_negative_signals_key
-          value: "\"negativeSignals\""
+          value: '"negativeSignals"'
         - type: not-icontains
           metric: no_contract_source_refs_key
-          value: "\"sourceRefs\""
-
+          value: '"sourceRefs"'
 - description: skill-rewrite-clear-target
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
     case_id: skill-rewrite-clear-target
-    prompt: Rewrite the existing skill `skill-eval-forge` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you move into implementation-oriented detail.
+    prompt: Rewrite the existing skill `skill-eval-forge` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
@@ -113,23 +111,22 @@
           value: "Workflow:"
         - type: not-icontains
           metric: no_terminal_marker
-          value: "Eval Brief ready"
+          value: Eval Brief ready
         - type: not-icontains
           metric: no_contract_authoring_key
-          value: "\"authoring\""
+          value: '"authoring"'
         - type: not-icontains
           metric: no_contract_success_model_key
-          value: "\"successModel\""
+          value: '"successModel"'
         - type: not-icontains
           metric: no_contract_activation_probes_key
-          value: "\"activationProbes\""
+          value: '"activationProbes"'
         - type: not-icontains
           metric: no_contract_negative_signals_key
-          value: "\"negativeSignals\""
+          value: '"negativeSignals"'
         - type: not-icontains
           metric: no_contract_source_refs_key
-          value: "\"sourceRefs\""
-
+          value: '"sourceRefs"'
 - description: agents-policy-request
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -157,23 +154,22 @@
           value: "Workflow:"
         - type: not-icontains
           metric: no_terminal_marker
-          value: "Eval Brief ready"
+          value: Eval Brief ready
         - type: not-icontains
           metric: no_contract_authoring_key
-          value: "\"authoring\""
+          value: '"authoring"'
         - type: not-icontains
           metric: no_contract_success_model_key
-          value: "\"successModel\""
+          value: '"successModel"'
         - type: not-icontains
           metric: no_contract_activation_probes_key
-          value: "\"activationProbes\""
+          value: '"activationProbes"'
         - type: not-icontains
           metric: no_contract_negative_signals_key
-          value: "\"negativeSignals\""
+          value: '"negativeSignals"'
         - type: not-icontains
           metric: no_contract_source_refs_key
-          value: "\"sourceRefs\""
-
+          value: '"sourceRefs"'
 - description: runtime-harness-implementation
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -201,23 +197,22 @@
           value: "Workflow:"
         - type: not-icontains
           metric: no_terminal_marker
-          value: "Eval Brief ready"
+          value: Eval Brief ready
         - type: not-icontains
           metric: no_contract_authoring_key
-          value: "\"authoring\""
+          value: '"authoring"'
         - type: not-icontains
           metric: no_contract_success_model_key
-          value: "\"successModel\""
+          value: '"successModel"'
         - type: not-icontains
           metric: no_contract_activation_probes_key
-          value: "\"activationProbes\""
+          value: '"activationProbes"'
         - type: not-icontains
           metric: no_contract_negative_signals_key
-          value: "\"negativeSignals\""
+          value: '"negativeSignals"'
         - type: not-icontains
           metric: no_contract_source_refs_key
-          value: "\"sourceRefs\""
-
+          value: '"sourceRefs"'
 - description: ambiguous-multi-workflow-request
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -245,28 +240,27 @@
           value: "Workflow:"
         - type: not-icontains
           metric: no_terminal_marker
-          value: "Eval Brief ready"
+          value: Eval Brief ready
         - type: not-icontains
           metric: no_contract_authoring_key
-          value: "\"authoring\""
+          value: '"authoring"'
         - type: not-icontains
           metric: no_contract_success_model_key
-          value: "\"successModel\""
+          value: '"successModel"'
         - type: not-icontains
           metric: no_contract_activation_probes_key
-          value: "\"activationProbes\""
+          value: '"activationProbes"'
         - type: not-icontains
           metric: no_contract_negative_signals_key
-          value: "\"negativeSignals\""
+          value: '"negativeSignals"'
         - type: not-icontains
           metric: no_contract_source_refs_key
-          value: "\"sourceRefs\""
-
+          value: '"sourceRefs"'
 - description: ambiguous-refactor-missing-target
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
     case_id: ambiguous-refactor-missing-target
-    prompt: Refactor this skill so the contract is clearer, keep it contract-first, and stop before any implementation-oriented detail at Eval Brief ready.
+    prompt: Refactor this skill so the contract is clearer, keep it contract-first, and stop at Eval Brief ready.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
@@ -289,23 +283,22 @@
           value: "Workflow:"
         - type: not-icontains
           metric: no_terminal_marker
-          value: "Eval Brief ready"
+          value: Eval Brief ready
         - type: not-icontains
           metric: no_contract_authoring_key
-          value: "\"authoring\""
+          value: '"authoring"'
         - type: not-icontains
           metric: no_contract_success_model_key
-          value: "\"successModel\""
+          value: '"successModel"'
         - type: not-icontains
           metric: no_contract_activation_probes_key
-          value: "\"activationProbes\""
+          value: '"activationProbes"'
         - type: not-icontains
           metric: no_contract_negative_signals_key
-          value: "\"negativeSignals\""
+          value: '"negativeSignals"'
         - type: not-icontains
           metric: no_contract_source_refs_key
-          value: "\"sourceRefs\""
-
+          value: '"sourceRefs"'
 - description: ambiguous-rewrite-missing-target
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -333,19 +326,19 @@
           value: "Workflow:"
         - type: not-icontains
           metric: no_terminal_marker
-          value: "Eval Brief ready"
+          value: Eval Brief ready
         - type: not-icontains
           metric: no_contract_authoring_key
-          value: "\"authoring\""
+          value: '"authoring"'
         - type: not-icontains
           metric: no_contract_success_model_key
-          value: "\"successModel\""
+          value: '"successModel"'
         - type: not-icontains
           metric: no_contract_activation_probes_key
-          value: "\"activationProbes\""
+          value: '"activationProbes"'
         - type: not-icontains
           metric: no_contract_negative_signals_key
-          value: "\"negativeSignals\""
+          value: '"negativeSignals"'
         - type: not-icontains
           metric: no_contract_source_refs_key
-          value: "\"sourceRefs\""
+          value: '"sourceRefs"'

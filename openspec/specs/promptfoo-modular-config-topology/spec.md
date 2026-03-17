@@ -4,17 +4,24 @@
 Define a modular Promptfoo topology where entrypoints, prompts, tests, and providers have clear, separate responsibilities.
 ## Requirements
 ### Requirement: Promptfoo entrypoints have a single clear purpose
-The supported Promptfoo configs for `skill-contract-forge` MUST each represent one explicit execution role.
 
-#### Scenario: Promptfoo configs are reviewed
-- **WHEN** the three supported Promptfoo config files are inspected
-- **THEN** `promptfooconfig.yaml` SHALL identify the canonical contract gate
-- **AND** the uplift configs SHALL identify comparative uplift execution for their respective prompt modes
+The supported Promptfoo configs for `skill-contract-forge` MUST each represent one explicit execution role, and their suite files SHALL be generated or verified from the canonical skill-local authoring source without adding a repo-owned runtime layer.
+
+#### Scenario: Promptfoo topology is reviewed after sync guardrails are added
+
+- **WHEN** the supported Promptfoo config files, test suites, and sync tooling are inspected
+- **THEN** `promptfooconfig.yaml` SHALL remain the canonical contract gate
+- **AND** the uplift configs SHALL remain separate comparative entrypoints
+- **AND** the repository MAY provide deterministic suite sync/check tooling
+- **AND** that tooling SHALL project authoring data only and SHALL NOT execute Promptfoo as a wrapper runtime
 
 ### Requirement: Promptfoo modular topology is documented without unnecessary indirection
-The Promptfoo engine documentation MUST describe prompts, tests, and providers as separate responsibility areas and MUST NOT add shared defaults files unless they provide clear value.
 
-#### Scenario: Engine README is reviewed
+The Promptfoo engine documentation MUST describe prompts, tests, and providers as separate responsibility areas and MUST NOT present sync tooling as a second runtime.
+
+#### Scenario: Engine README is reviewed after sync guardrails are added
+
 - **WHEN** `evals/engines/promptfoo/README.md` is read
-- **THEN** it SHALL describe the topology of `prompts/`, `tests/`, and `providers/`
-- **AND** it SHALL explain whether `tests/defaults.yaml` is intentionally absent or present
+- **THEN** it SHALL describe any sync/check command as authoring projection or drift protection only
+- **AND** it SHALL continue to identify Promptfoo itself as the only runtime execution boundary
+

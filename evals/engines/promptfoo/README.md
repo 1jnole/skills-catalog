@@ -23,12 +23,15 @@ What must not survive is a parallel repo-owned eval runtime around Promptfoo.
 
 ## Current status
 Supported commands:
+- `npm run promptfoo:sync`
+- `npm run promptfoo:sync:check`
 - `npm run promptfoo:validate`
 - `npm run promptfoo:run`
 - `npm run promptfoo:run:offline`
 
 Supported runtime:
 - native Promptfoo execution from `evals/engines/promptfoo/` with repo-owned wrappers removed
+- sync/check commands only project or verify authoring data for Promptfoo suite files; they do not execute Promptfoo and are not a second runtime
 
 ## Entrypoints
 - `promptfooconfig.yaml` is the canonical structural contract gate entrypoint.

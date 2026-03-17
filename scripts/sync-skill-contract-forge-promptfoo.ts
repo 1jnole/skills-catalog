@@ -15,6 +15,10 @@ const promptfooSurfaceSchema = z.object({
   assert: z.array(z.unknown()).min(1),
 });
 
+function normalizeLineEndings(value: string) {
+  return value.replace(/\r\n/g, '\n');
+}
+
 const evalCaseSchema = z
   .object({
     id: z.string().min(1),
@@ -32,6 +36,7 @@ const evalCaseSchema = z
         contract: promptfooSurfaceSchema.optional(),
         uplift_with_skill: promptfooSurfaceSchema.optional(),
       })
+      .strict()
       .default({}),
   })
   .superRefine((value, ctx) => {
@@ -339,7 +344,7 @@ export async function syncPromptfooSuites({
     for (const target of suiteTargets) {
       const currentContent = await readFile(target.path, 'utf8');
 
-      if (currentContent !== target.content) {
+      if (normalizeLineEndings(currentContent) !== normalizeLineEndings(target.content)) {
         driftedLabels.push(`${target.label}: ${target.path}`);
       }
     }

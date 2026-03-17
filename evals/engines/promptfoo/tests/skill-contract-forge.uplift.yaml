@@ -22,14 +22,13 @@
           value: "Workflow: new-skill"
         - type: icontains
           metric: terminal_marker
-          value: "Eval Brief ready"
+          value: Eval Brief ready
         - type: not-icontains
           metric: incompatible_non_trigger
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-
 - description: existing-skill-refactor-clear-target
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -54,14 +53,13 @@
           value: "Workflow: existing-skill-refactor"
         - type: icontains
           metric: terminal_marker
-          value: "Eval Brief ready"
+          value: Eval Brief ready
         - type: not-icontains
           metric: incompatible_non_trigger
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-
 - description: skill-rewrite-clear-target
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -86,14 +84,13 @@
           value: "Workflow: skill-rewrite"
         - type: icontains
           metric: terminal_marker
-          value: "Eval Brief ready"
+          value: Eval Brief ready
         - type: not-icontains
           metric: incompatible_non_trigger
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-
 - description: agents-policy-request
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -116,16 +113,16 @@
         - type: icontains-any
           metric: out_of_scope_marker
           value:
-            - "Out of scope for skill-contract-forge."
-            - "outside the scope"
-            - "out of scope"
+            - Out of scope for skill-contract-forge.
+            - outside the scope
+            - out of scope
         - type: icontains-any
           metric: reason_marker
           value:
-            - "AGENTS"
-            - "repository policy"
-            - "policy document"
-            - "repository-wide policy"
+            - AGENTS
+            - repository policy
+            - policy document
+            - repository-wide policy
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -134,8 +131,7 @@
           value: "Classification: stop-and-ask"
         - type: not-icontains
           metric: terminal_absent
-          value: "Eval Brief ready"
-
+          value: Eval Brief ready
 - description: runtime-harness-implementation
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -158,17 +154,17 @@
         - type: icontains-any
           metric: out_of_scope_marker
           value:
-            - "Out of scope for skill-contract-forge."
-            - "outside the scope"
-            - "out of scope"
+            - Out of scope for skill-contract-forge.
+            - outside the scope
+            - out of scope
         - type: icontains-any
           metric: reason_marker
           value:
-            - "runtime eval harness implementation"
-            - "shared eval runtime implementation"
-            - "runtime implementation"
-            - "offline evaluation runner"
-            - "evaluation harness"
+            - runtime eval harness implementation
+            - shared eval runtime implementation
+            - runtime implementation
+            - offline evaluation runner
+            - evaluation harness
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -177,8 +173,7 @@
           value: "Classification: stop-and-ask"
         - type: not-icontains
           metric: terminal_absent
-          value: "Eval Brief ready"
-
+          value: Eval Brief ready
 - description: ambiguous-multi-workflow-request
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -200,16 +195,16 @@
           value: "Classification: stop-and-ask"
         - type: icontains
           metric: stop_marker
-          value: "clarif"
+          value: clarif
         - type: icontains
           metric: ambiguity_reason
-          value: "multiple"
+          value: multiple
         - type: icontains-any
           metric: ambiguity_shape
           value:
-            - "multiple workflows"
-            - "multiple independent workflows"
-            - "multiple major workflows"
+            - multiple workflows
+            - multiple independent workflows
+            - multiple major workflows
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -218,8 +213,7 @@
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: terminal_absent
-          value: "Eval Brief ready"
-
+          value: Eval Brief ready
 - description: ambiguous-refactor-missing-target
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -242,20 +236,20 @@
         - type: icontains-any
           metric: stop_marker
           value:
-            - "clarif"
-            - "please provide"
-            - "please specify"
-            - "lacks identification"
-            - "specify the exact target"
-            - "specify the exact target"
+            - clarif
+            - please provide
+            - please specify
+            - lacks identification
+            - specify the exact target
+            - specify the exact target
         - type: icontains-any
           metric: ambiguity_reason
           value:
-            - "skill target"
-            - "target skill"
-            - "unclear"
-            - "name or description of the skill"
-            - "which existing skill"
+            - skill target
+            - target skill
+            - unclear
+            - name or description of the skill
+            - which existing skill
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -264,8 +258,7 @@
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: terminal_absent
-          value: "Eval Brief ready"
-
+          value: Eval Brief ready
 - description: ambiguous-rewrite-missing-target
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -288,17 +281,17 @@
         - type: icontains-any
           metric: stop_marker
           value:
-            - "clarif"
-            - "please provide"
-            - "please specify"
-            - "lacks identification"
+            - clarif
+            - please provide
+            - please specify
+            - lacks identification
         - type: icontains-any
           metric: ambiguity_reason
           value:
-            - "skill target"
-            - "target skill"
-            - "unclear"
-            - "name or description of the skill"
+            - skill target
+            - target skill
+            - unclear
+            - name or description of the skill
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -307,4 +300,4 @@
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: terminal_absent
-          value: "Eval Brief ready"
+          value: Eval Brief ready

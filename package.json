@@ -20,6 +20,8 @@
     "yaml": "^2.8.2"
   },
   "scripts": {
+    "promptfoo:sync": "tsx scripts/sync-skill-contract-forge-promptfoo.ts",
+    "promptfoo:sync:check": "tsx scripts/sync-skill-contract-forge-promptfoo.ts --check",
     "promptfoo:validate": "promptfoo validate -c evals/engines/promptfoo/promptfooconfig.yaml",
     "promptfoo:validate:uplift:with-skill": "promptfoo validate -c evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml",
     "promptfoo:validate:uplift:without-skill": "promptfoo validate -c evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml",

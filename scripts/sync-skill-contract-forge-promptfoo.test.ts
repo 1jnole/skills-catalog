@@ -22,6 +22,10 @@ const upliftWithoutSkillSuitePath = resolve(
   'evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml',
 );
 
+function normalizeLineEndings(value: string) {
+  return value.replace(/\r\n/g, '\n');
+}
+
 describe('parseSkillContractForgeEvalDefinition', () => {
   it('rejects duplicate case ids', () => {
     expect(() =>
@@ -69,7 +73,102 @@ describe('parseSkillContractForgeEvalDefinition', () => {
           },
         ],
       }),
-    ).toThrow(/Duplicate case id "duplicate"/);
+    ).toThrow(/Duplicate case id/);
+  });
+
+  it('rejects cases with missing surface-specific Promptfoo assertions', () => {
+    expect(() =>
+      parseSkillContractForgeEvalDefinition({
+        skill_name: 'skill-contract-forge',
+        eval_version: 2,
+        purpose: 'demo',
+        comparison_intent: {},
+        scoring: {},
+        gates: {},
+        golden: [
+          {
+            id: 'missing-contract-assertions',
+            case_bucket: 'golden',
+            surfaces: ['contract'],
+            prompt: 'one',
+            expected_output: 'one',
+            should_trigger: true,
+            stop_at: 'Eval Brief ready',
+            assertions: [],
+            files: [],
+            promptfoo: {},
+          },
+        ],
+        negative: [],
+      }),
+    ).toThrow(/must define promptfoo\.contract/);
+  });
+
+  it('rejects cases with surface-specific Promptfoo assertions that are not declared in surfaces', () => {
+    expect(() =>
+      parseSkillContractForgeEvalDefinition({
+        skill_name: 'skill-contract-forge',
+        eval_version: 2,
+        purpose: 'demo',
+        comparison_intent: {},
+        scoring: {},
+        gates: {},
+        golden: [],
+        negative: [
+          {
+            id: 'orphaned-uplift-assertions',
+            case_bucket: 'negative',
+            surfaces: ['contract'],
+            prompt: 'two',
+            expected_output: 'two',
+            should_trigger: false,
+            stop_at: 'do_not_trigger',
+            assertions: [],
+            files: [],
+            promptfoo: {
+              contract: {
+                assert: [{ type: 'starts-with', value: 'Classification: non-trigger' }],
+              },
+              uplift_with_skill: {
+                assert: [{ type: 'starts-with', value: 'Classification: non-trigger' }],
+              },
+            },
+          },
+        ],
+      }),
+    ).toThrow(/defines promptfoo\.uplift_with_skill without targeting the uplift\.with_skill surface/);
+  });
+
+  it('rejects unsupported promptfoo surface keys instead of ignoring them', () => {
+    expect(() =>
+      parseSkillContractForgeEvalDefinition({
+        skill_name: 'skill-contract-forge',
+        eval_version: 2,
+        purpose: 'demo',
+        comparison_intent: {},
+        scoring: {},
+        gates: {},
+        golden: [],
+        negative: [
+          {
+            id: 'unexpected-without-skill-assertions',
+            case_bucket: 'negative',
+            surfaces: ['uplift.without_skill'],
+            prompt: 'three',
+            expected_output: 'three',
+            should_trigger: false,
+            stop_at: 'do_not_trigger',
+            assertions: [],
+            files: [],
+            promptfoo: {
+              uplift_without_skill: {
+                assert: [{ type: 'starts-with', value: 'Classification: non-trigger' }],
+              },
+            },
+          },
+        ],
+      }),
+    ).toThrow(/unrecognized key/i);
   });
 });
 
@@ -78,9 +177,13 @@ describe('buildPromptfooSuites', () => {
     const definition = await loadSkillContractForgeEvalDefinition(repoRoot);
     const rendered = renderPromptfooSuites(definition);
 
-    await expect(readFile(contractSuitePath, 'utf8')).resolves.toEqual(rendered.contract);
-    await expect(readFile(upliftWithSkillSuitePath, 'utf8')).resolves.toEqual(rendered.upliftWithSkill);
-    await expect(readFile(upliftWithoutSkillSuitePath, 'utf8')).resolves.toEqual(rendered.upliftWithoutSkill);
+    await expect(readFile(contractSuitePath, 'utf8')).resolves.toEqual(normalizeLineEndings(rendered.contract));
+    await expect(readFile(upliftWithSkillSuitePath, 'utf8')).resolves.toEqual(
+      normalizeLineEndings(rendered.upliftWithSkill),
+    );
+    await expect(readFile(upliftWithoutSkillSuitePath, 'utf8')).resolves.toEqual(
+      normalizeLineEndings(rendered.upliftWithoutSkill),
+    );
   });
 
   it('keeps the expected case counts per surface', async () => {
@@ -133,5 +236,48 @@ describe('syncPromptfooSuites', () => {
         logger: () => {},
       }),
     ).rejects.toThrow(/Promptfoo suite drift detected/);
+  });
+
+  it('treats CRLF and LF suite files as in sync when the YAML content is the same', async () => {
+    const rootDir = await mkdtemp(resolve(tmpdir(), 'skill-contract-forge-sync-'));
+    const datasetContent = await readFile(datasetPath, 'utf8');
+
+    await mkdir(resolve(rootDir, 'packs/core/skill-contract-forge/evals'), { recursive: true });
+    await mkdir(resolve(rootDir, 'evals/engines/promptfoo/tests'), { recursive: true });
+
+    await writeFile(resolve(rootDir, 'packs/core/skill-contract-forge/evals/evals.json'), datasetContent, 'utf8');
+
+    await syncPromptfooSuites({
+      rootDir,
+      check: false,
+      logger: () => {},
+    });
+
+    const contractPath = resolve(rootDir, 'evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml');
+    const upliftWithSkillPath = resolve(rootDir, 'evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml');
+    const upliftWithoutSkillPath = resolve(
+      rootDir,
+      'evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml',
+    );
+
+    const [contractContent, upliftWithSkillContent, upliftWithoutSkillContent] = await Promise.all([
+      readFile(contractPath, 'utf8'),
+      readFile(upliftWithSkillPath, 'utf8'),
+      readFile(upliftWithoutSkillPath, 'utf8'),
+    ]);
+
+    await Promise.all([
+      writeFile(contractPath, contractContent.replace(/\n/g, '\r\n'), 'utf8'),
+      writeFile(upliftWithSkillPath, upliftWithSkillContent.replace(/\n/g, '\r\n'), 'utf8'),
+      writeFile(upliftWithoutSkillPath, upliftWithoutSkillContent.replace(/\n/g, '\r\n'), 'utf8'),
+    ]);
+
+    await expect(
+      syncPromptfooSuites({
+        rootDir,
+        check: true,
+        logger: () => {},
+      }),
+    ).resolves.toBeUndefined();
   });
 });
