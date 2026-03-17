@@ -113,9 +113,12 @@
         - type: starts-with
           metric: classification
           value: "Classification: non-trigger"
-        - type: icontains
+        - type: icontains-any
           metric: out_of_scope_marker
-          value: "Out of scope for skill-contract-forge."
+          value:
+            - "Out of scope for skill-contract-forge."
+            - "outside the scope"
+            - "out of scope"
         - type: icontains-any
           metric: reason_marker
           value:
@@ -152,15 +155,20 @@
         - type: starts-with
           metric: classification
           value: "Classification: non-trigger"
-        - type: icontains
+        - type: icontains-any
           metric: out_of_scope_marker
-          value: "Out of scope for skill-contract-forge."
+          value:
+            - "Out of scope for skill-contract-forge."
+            - "outside the scope"
+            - "out of scope"
         - type: icontains-any
           metric: reason_marker
           value:
             - "runtime eval harness implementation"
             - "shared eval runtime implementation"
             - "runtime implementation"
+            - "offline evaluation runner"
+            - "evaluation harness"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -238,6 +246,8 @@
             - "please provide"
             - "please specify"
             - "lacks identification"
+            - "specify the exact target"
+            - "specify the exact target"
         - type: icontains-any
           metric: ambiguity_reason
           value:

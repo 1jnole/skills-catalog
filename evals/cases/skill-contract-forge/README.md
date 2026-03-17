@@ -9,8 +9,8 @@ This is the supported local `skill-contract-forge` eval authoring contract. It i
 `packs/core/skill-contract-forge/SKILL.md` is the authority for observable output behavior. The local suite should mirror that contract wording and intent instead of preserving stale fixture phrasing.
 
 ## Manual calibration artifacts
-- `evals/cases/skill-contract-forge/manual-audit.phase-6a.json`
-- `evals/cases/skill-contract-forge/manual-audit.phase-6a.md`
+- `evals/_phase_a_quarantine/cases/skill-contract-forge/manual-audit.phase-6a.json`
+- `evals/_phase_a_quarantine/cases/skill-contract-forge/manual-audit.phase-6a.md`
 
 These files capture the first tracked manual calibration loop for Phase 6A:
 - the explicit audit sample
@@ -82,7 +82,7 @@ Coverage buckets represented in the suite:
 
 ## Historical pilot snapshot
 - `skill-contract-forge`
-- `evals/cases/skill-contract-forge/pilot-suite.v1.json`
+- `evals/_phase_a_quarantine/cases/skill-contract-forge/pilot-suite.v1.json`
 
 This file preserves the smaller Fase 4 bootstrap evidence. It is no longer the main suite for `skill-contract-forge`.
 

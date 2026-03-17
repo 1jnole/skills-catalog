@@ -1,262 +1,60 @@
-Ahora mismo, después del ajuste de `SKILL.md`, las mejoras que quedan son **pocas de core** y **más de cierre operativo**.
+# Fase A — Reencuadre controlado
 
-# Estado por fases
+## Objetivo
+Dejar `evals/` en un estado con menos ruido histórico, pero sin romper la superficie Promptfoo que hoy sí gobierna ejecución, contrato y replay offline.
 
-## Fase 0 — Desacoplar el core
+## Regla de decisión en Fase A
+- **Keep**: superficies activas que hoy ejecutan, validan o definen el contrato observable.
+- **Quarantine**: material histórico, huérfano o potencialmente reutilizable que ya no debe parecer activo.
+- **Delete**: solo outputs efímeros o artefactos reproducibles que no son fuente de verdad.
 
-**Prácticamente cerrada.**
+## Premisa operativa
+- `README` y notas históricas no son fuente de verdad durante esta migración.
+- La autoridad temporal sale del código ejecutable, del contrato del skill y del OpenSpec vigente.
+- Si una doc contradice lo que hoy ejecuta `package.json` o lo que consume `evals/engines/promptfoo/`, manda el runtime real y la doc se corrige después.
 
-Ya tienes:
+## Tareas tangibles
 
-* `skill-contract-forge` con nombre correcto
-* propósito de **step 1 of 2**
-* sin adapter OpenAI en el core
-* sin acoplar la skill al engine
+| ID | Tarea | Acción concreta | Ficheros / rutas completas | Corner cases / edge cases | Hecho cuando |
+|---|---|---|---|---|---|
+| A-01 | Congelar la fuente de verdad operativa | Declarar explícitamente que la autoridad temporal vive en el código ejecutable, el contrato del skill y OpenSpec vigente. | `package.json`  `packs/core/skill-contract-forge/SKILL.md`  `packs/core/skill-contract-forge/references/edge-cases.md`  `packs/core/skill-contract-forge/references/examples.md`  `packs/core/skill-contract-forge/references/routing.md`  `packs/core/skill-contract-forge/assets/contracts/eval-brief.template.json`  `openspec/changes/phase-6e-recalibrate-skill-contract-forge-evals/proposal.md`  `openspec/changes/phase-6e-recalibrate-skill-contract-forge-evals/design.md` | Si un `README`, un artefacto archivado o una ruta vieja contradice estas superficies, se registra como deriva; no gobierna Fase A. | Existe un inventario claro de qué superficies mandan hoy y cuáles quedan degradadas a documentación derivada. |
+| A-02 | Crear zona de cuarentena | Crear una carpeta temporal para mover material histórico o huérfano que ya no debe parecer runtime activo. | `evals/_phase_a_quarantine/` | No mover todavía archivos que sigan cableados a scripts, configs o slugs activos. | Todo lo histórico recuperable tiene un destino explícito fuera de la superficie principal. |
+| A-03 | Tratar `generated/` como output efímero | Confirmar que `evals/engines/promptfoo/generated/` es output reproducible y no input de diseño ni autoridad runtime. | `evals/engines/promptfoo/generated/`  `package.json` | Ahora mismo `generated/` puede estar vacío; el trabajo no es inventar archivos, sino fijar su estatus. | `generated/` queda clasificado como output efímero y no como fuente de verdad. |
+| A-04 | Reclasificar fixtures offline | Separar fixtures activas de snapshots históricos, sin borrar en bloque lo que hoy siguen usando los scripts. | **Activas mientras el runtime las use:** `evals/engines/promptfoo/fixtures/skill-contract-forge-suite-model-outputs.json`  `evals/engines/promptfoo/fixtures/skill-contract-forge.uplift.with-skill.model-outputs.json`  `evals/engines/promptfoo/fixtures/skill-contract-forge.uplift.without-skill.model-outputs.json`  **Histórica ya aislada:** `evals/_phase_a_quarantine/engines/promptfoo/fixtures/pilot-model-outputs.json` | No mover ni borrar fixtures conectadas a `promptfoo:run:offline*` hasta que el runtime real cambie. | Solo quedan activas las fixtures realmente usadas por el flujo actual y las históricas quedan marcadas como tales. |
+| A-05 | Separar authoring activo de históricos | Preservar el contrato local de authoring si sigue aportando señal y aislar material de bootstrap o auditoría histórica. | **Authoring activo provisional:** `evals/cases/skill-contract-forge/suite.v1.json`  **Históricos ya aislados:** `evals/_phase_a_quarantine/cases/skill-contract-forge/pilot-suite.v1.json`  `evals/_phase_a_quarantine/cases/skill-contract-forge/manual-audit.phase-6a.json`  `evals/_phase_a_quarantine/cases/skill-contract-forge/manual-audit.phase-6a.md` | Que el nombre contenga `v1` no implica que ya no sea útil; primero se reclasifica por función real. | `cases/skill-contract-forge/` deja de mezclar material activo e histórico sin marcar. |
+| A-06 | Distinguir entrypoints Promptfoo activos de legado | Mantener las configs y suites realmente usadas por el runtime actual y revisar como legado lo que quedó huérfano. | **Activos:** `evals/engines/promptfoo/promptfooconfig.yaml`  `evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`  `evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`  `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`  `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`  `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml`  **Legado ya aislado:** `evals/_phase_a_quarantine/engines/promptfoo/tests/skill-contract-forge.yaml` | Hay docs y OpenSpec antiguo que todavía nombran `skill-contract-forge.yaml`; primero se corrigen claims, luego se archiva o mueve. | Queda explícito cuál es el runtime real y cuál es un resto heredado. |
+| A-07 | Preservar primitives vigentes y aislar soporte dudoso | Mantener schema, prompts y provider adapter que sí encajan con la arquitectura actual y revisar helpers heredados no usados. | **Primitives activas:** `evals/contracts/skill-contract-forge/eval-brief-output.schema.json`  `evals/engines/promptfoo/providers/default.openai.yaml`  `evals/engines/promptfoo/prompts/with-skill.txt`  `evals/engines/promptfoo/prompts/without-skill.txt`  **Soporte heredado ya aislado:** `evals/_phase_a_quarantine/engines/promptfoo/support/assertions.cjs` | Un archivo sin referencias activas no se borra a ciegas; puede pasar antes a cuarentena. | Las primitives vigentes quedan distinguidas del soporte heredado no usado. |
+| A-08 | Barrido de claims obsoletos | Localizar y corregir afirmaciones que ya no deben gobernar el diseño aunque sigan existiendo por inercia documental. | `evals/README.md`  `evals/engines/promptfoo/README.md`  `evals/cases/README.md`  `evals/cases/skill-contract-forge/README.md`  `evals/fixtures/README.md`  `evals/fixtures/skill-contract-forge/README.md`  `openspec/specs/skill-contract-forge-promptfoo-eval-runtime/spec.md` | Claims a invalidar: que `README` define la realidad actual, que `skill-contract-forge.yaml` sigue siendo la autoridad runtime por defecto, o que pilotos y auditorías históricas siguen siendo base activa. | Existe una lista corta de claims prohibidos y una secuencia clara de realineación documental. |
+| A-09 | Definir el estado final permitido | Cerrar Fase A con una separación explícita entre activo, histórico y efímero. | **Debe seguir vivo como activo:** `package.json`  `packs/core/skill-contract-forge/SKILL.md` y sus refs  `evals/engines/promptfoo/promptfooconfig*.yaml`  suites `contract/uplift` activas  schema  prompts  provider  fixtures offline realmente usadas  `evals/cases/skill-contract-forge/suite.v1.json` si sigue siendo authoring contract  **Puede existir temporalmente:** `evals/_phase_a_quarantine/`  **Debe quedar como efímero:** `evals/engines/promptfoo/generated/` | Si un artefacto fuera de estas categorías sigue influyendo en diseño o ejecución, Fase A no está cerrada. | El árbol activo deja de mezclar runtime real, authoring local, históricos y outputs efímeros. |
 
-### Qué podría quedar
+## Orden recomendado de ejecución
 
-* nada imprescindible aquí
+### Paso 1
+Ejecutar **A-01** y **A-02**.
 
----
+### Paso 2
+Ejecutar **A-03** y **A-04**.
 
-## Fase 1 — Contract suite
+### Paso 3
+Ejecutar **A-05**, **A-06** y **A-07**.
 
-**Cerrada en lo esencial.**
+### Paso 4
+Ejecutar **A-08** y cerrar con **A-09**.
 
-Ya tienes:
+## Resultado esperado al cerrar Fase A
 
-* `promptfooconfig.yaml` como gate contractual
-* `skill-contract-forge.contract.yaml`
+Después de Fase A:
 
-### Qué podría quedar
+- el runtime activo se decide por código y OpenSpec vigente, no por README heredados
+- `generated/` queda tratado como output efímero
+- authoring local, runtime activo e históricos dejan de competir entre sí
+- lo reutilizable queda aislado para evaluación posterior
+- la limpieza deja de ser un borrado masivo y pasa a ser una reclasificación progresiva
 
-* confirmar que el archivo legacy `tests/skill-contract-forge.yaml` ya no pinta nada
-* si sigue vivo, **borrarlo o deprecarlo claramente**
+## Riesgos que Fase A evita
 
----
-
-## Fase 2 — Uplift suite
-
-**Cerrada en estructura.**
-
-Ya tienes:
-
-* `promptfooconfig.uplift.with-skill.yaml`
-* `promptfooconfig.uplift.without-skill.yaml`
-* `skill-contract-forge.uplift.yaml`
-
-### Qué podría quedar
-
-* revisar que la uplift suite no esté pidiendo al baseline más de lo que debe
-* esto ya es más de calibración que de arquitectura
-
----
-
-## Fase 3 — Providers desacoplados
-
-**Cerrada en diseño mínimo.**
-
-Ya tienes:
-
-* provider fuera de la config principal
-* estructura preparada para cambiar provider sin tocar la skill
-
-### Qué podría quedar
-
-* solo si quieres soporte real multi-provider
-* no es imprescindible para cerrar `skill-contract-forge`
-
----
-
-## Fase 4 — Modularización de Promptfoo
-
-**Parcial, pero suficiente.**
-
-Aquí no tienes un bloqueo fuerte, pero sí posibles limpiezas:
-
-### Posibles mejoras
-
-* extraer defaults compartidos solo si de verdad reducen complejidad
-* limpiar archivos heredados o redundantes
-* dejar más claro qué configs son canónicas y cuáles son históricas
-
-### Mi lectura
-
-No hace falta “cerrarla perfecta” antes de seguir.
-
----
-
-## Fase 5 — Endurecimiento de la evaluación
-
-**Muy avanzada, no completamente agotada.**
-
-Ya tienes:
-
-* métricas
-* assertions más serias
-* separación de critical vs auxiliary
-
-### Lo que queda
-
-* revisar si algún check todavía depende demasiado de phrasing
-* decidir si quieres añadir alguna señal auxiliar de “canonical handoff” en contract suite
-* esto es **opcional** de momento
-
----
-
-## Fase 6 — Calibración y expansión del dataset
-
-**Aquí está el trabajo más real que sigue abierto.**
-
-## 6A — Calibración manual
-
-**Hecha** o bastante avanzada.
-
-Ya había evidencia de auditoría manual.
-
-## 6B — Expansión controlada
-
-**Pendiente o parcial.**
-
-Aquí quedaría:
-
-* añadir near-misses buenos
-* añadir rewordings útiles
-* cubrir mejor fronteras reales:
-
-  * trigger vs non-trigger
-  * trigger vs stop-and-ask
-  * contract vs downstream eval authoring
-  * contract vs runtime implementation
-
-## 6C — Reglas de mantenimiento del dataset
-
-**Pendiente o parcial.**
-
-Aquí quedaría:
-
-* criterios de admisión de nuevos casos
-* criterios para borrar/fusionar casos
-* distinguir mejor entre piloto y estable
-
-### Mi lectura
-
-**Esta es una de las fases más útiles que aún queda.**
-
----
-
-## Fase 7 — Operacionalización
-
-**Pendiente.**
-
-Aquí todavía queda bastante valor, aunque no es rediseño técnico.
-
-### Lo que quedaría
-
-* comandos canónicos
-* entrypoint claro
-* convención de outputs
-* niveles de estabilidad:
-
-  * experimental
-  * supported
-  * canonical
-* criterios de promoción para:
-
-  * suites
-  * providers
-  * casos
-* reglas de poda / anti-deriva
-* alineación final de READMEs con la realidad
-
-### Mi lectura
-
-Esto no cambia el core, pero sí cambia mucho la **usabilidad real** del sistema.
-
----
-
-# Qué queda de verdad, resumido
-
-## Imprescindible
-
-Estas son las mejoras que yo sí haría aún:
-
-### 1. Cerrar deuda legacy en `evals`
-
-* borrar o deprecar claramente el archivo viejo de suite
-* quitar referencias documentales antiguas si quedan
-
-### 2. Completar Fase 6B
-
-* meter near-misses y reformulaciones con intención clara
-
-### 3. Completar Fase 6C
-
-* definir reglas de mantenimiento del dataset
-
-### 4. Hacer Fase 7
-
-* operacionalización
-* promoción
-* mantenimiento
-
----
-
-## Recomendable
-
-Estas mejoran calidad, pero no bloquean:
-
-### 5. Afinar Fase 4
-
-* modularización adicional si reduce complejidad real
-
-### 6. Afinar Fase 5
-
-* menos dependencia de phrasing
-* quizá una señal auxiliar de handoff canónico
-
----
-
-## Opcional
-
-Solo si te aporta valor real:
-
-### 7. Multi-provider real
-
-* Anthropic / Google / otro provider
-* solo si lo vas a usar de verdad
-
----
-
-# Orden que seguiría yo ahora
-
-## Siguiente orden lógico
-
-1. **limpieza legacy mínima en `evals`**
-2. **Fase 6B**
-3. **Fase 6C**
-4. **Fase 7**
-
-No me iría a inventar más estructura.
-
----
-
-# Conclusión
-
-Lo que queda ya **no es rehacer `skill-contract-forge`**.
-
-Lo que queda es:
-
-* **cerrar transición**
-* **mejorar dataset**
-* **definir operación y mantenimiento**
-
-## Frase corta
-
-> El core de `skill-contract-forge` ya está bastante bien; lo pendiente está sobre todo en `evals`, calibración y cierre operativo.
-
-Si quieres, te lo convierto ahora en una **checklist final de mejoras pendientes**, separada en:
-
-* bloqueantes
-* importantes
-* opcionales.
+- **falso ahorro**: reutilizar tests viejos solo porque “ya existen”
+- **path drift**: seguir evaluando contra rutas obsoletas
+- **fixture lock-in**: convertir outputs incorrectos en baseline
+- **dual source of truth**: runtime real, docs heredadas y artefactos históricos compitiendo
+- **arquitectura zombie**: claims viejos condicionando decisiones nuevas

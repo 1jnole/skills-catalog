@@ -49,13 +49,12 @@ Current `skill-contract-forge` supported artifacts:
 - `evals/engines/promptfoo/providers/default.openai.yaml`
 - `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`
 - `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
+- `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml`
 - `evals/engines/promptfoo/prompts/with-skill.txt`
 - `evals/engines/promptfoo/prompts/without-skill.txt`
-- `evals/cases/skill-contract-forge/pilot-suite.v1.json`
 - `evals/cases/skill-contract-forge/suite.v1.json`
 - `evals/cases/skill-contract-forge/README.md`
 - `evals/fixtures/skill-contract-forge/README.md`
-- `evals/final-supported-path.md`
 
 Current contractual behavior:
 - Promptfoo runs the canonical `skill-contract-forge` contract suite with the `with_skill` prompt path only.
@@ -84,7 +83,7 @@ Current operational reference:
   - `npm run promptfoo:run:offline`
   - `npm run promptfoo:run:offline:uplift:with-skill`
   - `npm run promptfoo:run:offline:uplift:without-skill`
-- `pilot-suite.v1.json` remains as historical Phase 4 bootstrap context only
+- `evals/_phase_a_quarantine/cases/skill-contract-forge/pilot-suite.v1.json` remains as historical Phase 4 bootstrap context only
 
 ## What this means now
 - The scaffold is explicit and visible at the repo root.
@@ -105,5 +104,7 @@ Current operational reference:
 
 ## Closeout references
 
-- final supported path:
-  - `evals/final-supported-path.md`
+- runtime boundary:
+  - `evals/engines/promptfoo/README.md`
+- local authoring boundary:
+  - `evals/cases/skill-contract-forge/README.md`

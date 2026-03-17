@@ -2,6 +2,9 @@
   "name": "skills-catalog",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "^20.20.0 || >=22.22.0"
+  },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.41",
     "@lmnr-ai/lmnr": "^0.8.14",
@@ -10,7 +13,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.6.0",
-    "promptfoo": "^0.120.19",
+    "promptfoo": "^0.121.2",
     "tsx": "^4.21.0",
     "typescript": "^5.8.3",
     "vitest": "^4.1.0",

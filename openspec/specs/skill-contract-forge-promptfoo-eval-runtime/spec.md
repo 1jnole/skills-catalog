@@ -4,20 +4,26 @@
 TBD - created by archiving change migrate-skill-contract-forge-to-promptfoo-native. Update Purpose after archive.
 ## Requirements
 ### Requirement: Native Promptfoo pass/fail authority
-The supported `skill-contract-forge` evaluation runtime MUST derive case pass/fail from Promptfoo-native assertions.
 
-#### Scenario: Semantic failure becomes visible Promptfoo failure
-- **WHEN** a `skill-contract-forge` test case output violates the assertions defined for that case
-- **THEN** Promptfoo SHALL mark the case as failed in runtime results
-- **AND** the supported runtime SHALL NOT override that failure through a central grading layer
+The supported `skill-contract-forge` evaluation runtime MUST continue to derive case pass/fail from Promptfoo-native assertions, and the supported repository Promptfoo baseline for this capability SHALL be `0.121.2` or newer.
+
+#### Scenario: Repository runtime baseline is reviewed
+
+- **WHEN** the repository Promptfoo dependency and active runtime commands are reviewed
+- **THEN** the supported baseline SHALL be `0.121.2` or newer
+- **AND** the repository manifest SHALL declare a supported Node.js range compatible with that Promptfoo baseline
+- **AND** the repository SHALL continue to execute Promptfoo directly
+- **AND** it SHALL NOT introduce a repo-owned local runner, wrapper CLI, or grading override layer
 
 ### Requirement: Runtime suite authority is explicit
-`evals/engines/promptfoo/tests/skill-contract-forge.yaml` SHALL be the supported runtime suite authority for this migration slug.
+The supported `skill-contract-forge` Promptfoo runtime MUST use the split `contract` and `uplift` suites as its explicit execution authority.
 
 #### Scenario: Supported runtime path is referenced
 - **WHEN** repository documentation names the active runtime suite for this slug
-- **THEN** it SHALL identify `evals/engines/promptfoo/tests/skill-contract-forge.yaml` as the supported runtime suite authority
+- **THEN** it SHALL identify `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml` as the canonical contract gate
+- **AND** it SHALL identify `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml` and `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml` as the comparative uplift surfaces
 - **AND** it SHALL NOT describe `evals/cases/skill-contract-forge/suite.v1.json` as the runtime pass/fail authority
+- **AND** it SHALL NOT describe `evals/engines/promptfoo/tests/skill-contract-forge.yaml` as the supported runtime suite authority
 
 ### Requirement: Legacy central grader is retired from supported runtime
 The supported `skill-contract-forge` runtime MUST NOT depend on `evals/engines/promptfoo/support/assertions.cjs`.
@@ -34,7 +40,7 @@ The supported `skill-contract-forge` runtime MUST NOT depend on `evals/engines/p
 Case assertions in this slug MUST use documented Promptfoo assertion types, with deterministic assertions preferred by default.
 
 #### Scenario: Case assertions are authored for migration closure
-- **WHEN** a case assertion is added or updated in `evals/engines/promptfoo/tests/skill-contract-forge.yaml`
+- **WHEN** a case assertion is added or updated in `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`, `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`, or `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml`
 - **THEN** it SHALL use documented Promptfoo assertion types
 - **AND** it SHOULD use deterministic assertions before any `javascript` assertion
 - **AND** any remaining `javascript` assertion SHALL be justified in the change artifacts

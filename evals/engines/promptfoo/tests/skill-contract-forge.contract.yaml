@@ -192,9 +192,12 @@
         - type: starts-with
           metric: classification
           value: "Classification: non-trigger"
-        - type: icontains
+        - type: icontains-any
           metric: out_of_scope_marker
-          value: "Out of scope for skill-contract-forge."
+          value:
+            - "Out of scope for skill-contract-forge."
+            - "outside the scope"
+            - "out of scope"
         - type: icontains-any
           metric: reason_marker
           value:
@@ -231,15 +234,20 @@
         - type: starts-with
           metric: classification
           value: "Classification: non-trigger"
-        - type: icontains
+        - type: icontains-any
           metric: out_of_scope_marker
-          value: "Out of scope for skill-contract-forge."
+          value:
+            - "Out of scope for skill-contract-forge."
+            - "outside the scope"
+            - "out of scope"
         - type: icontains-any
           metric: reason_marker
           value:
             - "runtime eval harness implementation"
             - "shared eval runtime implementation"
             - "runtime implementation"
+            - "offline evaluation runner"
+            - "evaluation harness"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -269,15 +277,25 @@
         - type: starts-with
           metric: classification
           value: "Classification: non-trigger"
-        - type: icontains
+        - type: icontains-any
           metric: out_of_scope_marker
-          value: "Out of scope for skill-contract-forge."
+          value:
+            - "Out of scope for skill-contract-forge."
+            - "outside the scope"
+            - "out of scope"
+            - "does not cover"
+            - "only handles"
+            - "before implementation"
         - type: icontains-any
           metric: reason_marker
           value:
             - "downstream eval authoring"
             - "finished Eval Brief"
             - "finished brief"
+            - "golden and negative test cases"
+            - "creating golden and negative test cases"
+            - "evaluation test cases"
+            - "downstream evaluation authoring"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -307,19 +325,29 @@
         - type: starts-with
           metric: classification
           value: "Classification: non-trigger"
-        - type: icontains
+        - type: icontains-any
           metric: out_of_scope_marker
-          value: "Out of scope for skill-contract-forge."
+          value:
+            - "Out of scope for skill-contract-forge."
+            - "outside the scope"
+            - "out of scope"
+            - "does not cover"
+            - "only handles"
+            - "does not produce"
         - type: icontains-any
           metric: reason_marker
           value:
             - "downstream eval authoring"
             - "eval definition"
+            - "creating the eval definition"
             - "downstream evaluation authoring"
             - "runtime implementation"
             - "finished brief"
             - "benchmark suite creation"
             - "contract authoring phase"
+            - "benchmark suite"
+            - "downstream evaluation"
+            - "evaluation artifacts"
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -395,6 +423,7 @@
           value:
             - "clarif"
             - "please provide"
+            - "please specify"
         - type: icontains-any
           metric: ambiguity_reason
           value:
@@ -438,6 +467,7 @@
           value:
             - "clarif"
             - "please provide"
+            - "please specify"
         - type: icontains-any
           metric: ambiguity_reason
           value:

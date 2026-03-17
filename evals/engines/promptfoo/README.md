@@ -79,7 +79,7 @@ For `skill-contract-forge`, the active Promptfoo execution surface is:
 The local case contract still lives at:
 - `evals/cases/skill-contract-forge/suite.v1.json`
 
-The smaller `pilot-suite.v1.json` file remains as historical Phase 4 bootstrap context only.
+The smaller `evals/_phase_a_quarantine/cases/skill-contract-forge/pilot-suite.v1.json` file remains as historical Phase 4 bootstrap context only.
 
 Canonical Promptfoo config is read from:
 - `evals/engines/promptfoo/promptfooconfig.yaml`
