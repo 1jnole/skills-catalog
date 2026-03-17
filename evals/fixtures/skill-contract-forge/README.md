@@ -8,8 +8,6 @@ Current state:
   - `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`
   - `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
   - `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml`
-- `evals/_phase_a_quarantine/engines/promptfoo/tests/skill-contract-forge.yaml` stores the inherited migration residue and is not the supported runtime suite
-- the historical `evals/_phase_a_quarantine/cases/skill-contract-forge/pilot-suite.v1.json` snapshot also uses inline case data only
 - the offline Promptfoo response fixture lives under `evals/engines/promptfoo/fixtures/` because it is engine input, not eval-case source data
 - the repo does not ship a local runner or wrapper around Promptfoo fixtures
 

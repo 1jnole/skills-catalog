@@ -20,7 +20,7 @@ evals/
 The first visible contract boundary already exists at:
 - `evals/contracts/README.md`
 - `evals/cases/README.md`
-- `evals/fixtures/README.md`
+- `evals/fixtures/skill-contract-forge/README.md`
 
 ## Supported state
 
@@ -53,7 +53,6 @@ Current `skill-contract-forge` supported artifacts:
 - `evals/engines/promptfoo/prompts/with-skill.txt`
 - `evals/engines/promptfoo/prompts/without-skill.txt`
 - `packs/core/skill-contract-forge/evals/evals.json`
-- `evals/cases/skill-contract-forge/README.md`
 - `evals/fixtures/skill-contract-forge/README.md`
 
 Current contractual behavior:
@@ -83,7 +82,6 @@ Current operational reference:
   - `npm run promptfoo:run:offline`
   - `npm run promptfoo:run:offline:uplift:with-skill`
   - `npm run promptfoo:run:offline:uplift:without-skill`
-- `evals/_phase_a_quarantine/cases/skill-contract-forge/pilot-suite.v1.json` remains as historical Phase 4 bootstrap context only
 
 ## What this means now
 - The scaffold is explicit and visible at the repo root.
@@ -108,4 +106,4 @@ Current operational reference:
 - runtime boundary:
   - `evals/engines/promptfoo/README.md`
 - local authoring boundary:
-  - `evals/cases/skill-contract-forge/README.md`
+  - `packs/core/skill-contract-forge/evals/README.md`

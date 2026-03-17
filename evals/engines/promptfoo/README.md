@@ -82,8 +82,6 @@ For `skill-contract-forge`, the active Promptfoo execution surface is:
 The canonical skill-local case contract lives at:
 - `packs/core/skill-contract-forge/evals/evals.json`
 
-The smaller `evals/_phase_a_quarantine/cases/skill-contract-forge/pilot-suite.v1.json` file remains as historical Phase 4 bootstrap context only.
-
 Canonical Promptfoo config is read from:
 - `evals/engines/promptfoo/promptfooconfig.yaml`
 
@@ -124,6 +122,7 @@ The repository currently ships `default.openai.yaml` as the operational default 
 Changing provider choice is an adapter swap, not a suite or contract change.
 
 The repository does not maintain a second runner or local wrapper around Promptfoo.
+Historical helper and pilot runtime residue are no longer kept inside the active `evals/` tree.
 
 Offline smoke execution uses Promptfoo-native fixture replay:
 - `npm run promptfoo:run:offline`

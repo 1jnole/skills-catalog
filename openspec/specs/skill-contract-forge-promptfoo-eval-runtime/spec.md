@@ -56,10 +56,13 @@ Docs touched by this migration SHALL distinguish supported runtime truth from hi
 - **AND** it SHALL identify the supported runtime path for this slug
 
 ### Requirement: Legacy engine support stays outside the active runtime surface
-The supported `skill-contract-forge` Promptfoo runtime MUST keep retired engine helpers and retired pilot replay artifacts outside the active engine support and fixture folders.
 
-#### Scenario: Historical engine support is retained for migration context
-- **WHEN** the repository keeps `assertions.cjs` or `pilot-model-outputs.json` for historical reference
-- **THEN** those files SHALL live outside `evals/engines/promptfoo/support/` and `evals/engines/promptfoo/fixtures/`
-- **AND** they SHALL NOT be presented as part of the supported runtime surface
+The supported `skill-contract-forge` Promptfoo runtime MUST keep retired engine helpers and retired pilot replay artifacts out of the active engine support and fixture folders, and the repository MAY remove those historical files from the active repo tree entirely.
+
+#### Scenario: Historical engine support is retained or purged
+
+- **WHEN** the repository reviews `assertions.cjs` or `pilot-model-outputs.json` after the Promptfoo-native migration
+- **THEN** those files SHALL NOT live under `evals/engines/promptfoo/support/` or `evals/engines/promptfoo/fixtures/`
+- **AND** they MAY be removed from the active repository tree instead of being kept in an in-repo quarantine location
+- **AND** active docs SHALL NOT treat them as part of the supported runtime surface
 

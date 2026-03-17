@@ -12,9 +12,6 @@ Current Promptfoo execution surfaces:
 
 Notes:
 - `packs/core/skill-contract-forge/evals/evals.json` is the local authoring contract and is not the runtime pass/fail authority.
-- `evals/cases/skill-contract-forge/README.md` is pointer and historical context only for this skill.
-- `evals/_phase_a_quarantine/engines/promptfoo/tests/skill-contract-forge.yaml` stores the inherited migration residue and should not be treated as the supported runtime suite.
+- `evals/cases/` no longer carries a second skill-local authoring copy for `skill-contract-forge`.
+- inherited migration residue is no longer kept in the active `evals/` tree; archived OpenSpec plus git history preserve that context.
 - The repo does not maintain a local runner around Promptfoo for case execution.
-
-Historical bootstrap snapshot:
-- `evals/_phase_a_quarantine/cases/skill-contract-forge/pilot-suite.v1.json`

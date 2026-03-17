@@ -14,13 +14,15 @@ The repository MUST document explicit admission criteria for new canonical `skil
 - **AND** they SHALL reject decorative or non-informative prompt growth
 
 ### Requirement: skill-contract-forge case pruning and movement is explicit
-The repository MUST distinguish the canonical `skill-contract-forge` authoring surface from historical pilot and manual-audit case materials.
 
-#### Scenario: A maintainer reviews local case artifacts
+The repository MUST distinguish the canonical `skill-contract-forge` authoring surface from historical pilot and manual-audit case materials, and those historical materials MAY be removed from the active repo tree entirely once they are no longer needed.
+
+#### Scenario: A maintainer reviews local case artifacts after cleanup
+
 - **WHEN** the local `skill-contract-forge` case files and docs are reviewed
-- **THEN** the then-primary case-directory authoring contract SHALL remain the only active authoring file for that phase
-- **AND** historical pilot or manual-audit files SHALL live outside the active `evals/cases/skill-contract-forge/` surface
-- **AND** nearby docs SHALL label those historical files as quarantined context rather than active authoring inputs
+- **THEN** only the active skill-local authoring contract SHALL remain in the supported repository tree
+- **AND** historical pilot or manual-audit files SHALL NOT appear under the active `evals/` tree
+- **AND** nearby docs SHALL NOT present removed historical files as active or required authoring inputs
 
 ### Requirement: skill-contract-forge dataset evolution follows a short operational workflow
 The repository MUST document a short workflow for evolving the `skill-contract-forge` dataset.
