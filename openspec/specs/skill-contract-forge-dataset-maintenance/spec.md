@@ -9,7 +9,7 @@ The repository MUST document explicit admission criteria for new canonical `skil
 
 #### Scenario: A maintainer considers adding a new case
 
-- **WHEN** the `skill-contract-forge` eval authoring docs are reviewed
+- **WHEN** the `skill-contract-forge` eval maintenance docs are reviewed
 - **THEN** they SHALL identify the three Promptfoo-native suites under `evals/engines/promptfoo/tests/` as the active case-definition authority
 - **AND** they SHALL reject decorative or non-informative prompt growth
 
@@ -23,12 +23,7 @@ The repository MUST distinguish the canonical `skill-contract-forge` authoring s
 - **THEN** only the active Promptfoo-native suites and nearby supporting docs SHALL remain in the supported repository tree
 - **AND** historical pilot or manual-audit files SHALL NOT appear under the active `evals/` tree
 - **AND** nearby docs SHALL NOT present removed historical files as active or required authoring inputs
-
-#### Scenario: A maintainer reviews the repo before the cleanup slug lands
-
-- **WHEN** a transitional obsolete `skill-contract-forge` eval file still exists on disk ahead of the cleanup slug
-- **THEN** that file SHALL be explicitly labeled as transitional or unsupported
-- **AND** nearby docs SHALL still identify the Promptfoo-native suites as the only active case-definition authority
+- **AND** obsolete `skill-contract-forge` eval-authoring files SHALL NOT remain under `packs/core/skill-contract-forge/`
 
 ### Requirement: skill-contract-forge dataset evolution follows a short operational workflow
 The repository MUST document a short workflow for evolving the `skill-contract-forge` dataset.
@@ -43,3 +38,4 @@ The repository MUST define when the canonical `skill-contract-forge` dataset is 
 #### Scenario: A maintainer evaluates whether to keep expanding coverage
 - **WHEN** the local `skill-contract-forge` maintenance rules are reviewed
 - **THEN** they SHALL define when additional cases have low enough marginal value to stop routine expansion
+

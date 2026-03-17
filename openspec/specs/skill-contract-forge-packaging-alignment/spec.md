@@ -7,18 +7,13 @@ Keep `skill-contract-forge` as one portable skill package whose contract lives i
 
 `skill-contract-forge` MUST remain one portable skill package with a normative `SKILL.md` and optional nearby support files, without owning an active eval-authoring source for the supported Promptfoo suites.
 
-#### Scenario: Skill package is reviewed after Promptfoo-native authority is fixed
+#### Scenario: Skill package is reviewed after the cleanup slug lands
 
 - **WHEN** `packs/core/skill-contract-forge/` is reviewed
 - **THEN** `SKILL.md` SHALL remain the always-loaded contract for the skill
+- **AND** the package SHALL NOT include an `evals/` subtree for `skill-contract-forge`
 - **AND** the package SHALL NOT be documented as the active source of truth for `skill-contract-forge` eval cases
 - **AND** the package SHALL NOT add Promptfoo runtime configs, providers, fixtures, generated outputs, sync tooling, or a local eval runner
-
-#### Scenario: Transitional obsolete eval files remain before cleanup
-
-- **WHEN** an obsolete eval file remains temporarily under `packs/core/skill-contract-forge/` before the cleanup slug removes it
-- **THEN** that file SHALL be labeled as transitional or unsupported
-- **AND** its presence SHALL NOT redefine the package as the active source of truth for `skill-contract-forge` eval cases
 
 ### Requirement: Supportive material is separated from the normative contract
 Examples, routing expansion, and edge-case walkthroughs MUST live outside the always-loaded `SKILL.md` when they are not required to state the contract itself.
@@ -38,3 +33,4 @@ The repository-wide Promptfoo runtime boundary for `skill-contract-forge` MUST r
 - **WHEN** the package structure is reviewed after Promptfoo-native authority is fixed
 - **THEN** Promptfoo suites, prompts, providers, fixtures, and generated outputs SHALL remain outside `packs/core/skill-contract-forge/`
 - **AND** the package SHALL NOT absorb runtime execution or suite-authoring responsibilities
+

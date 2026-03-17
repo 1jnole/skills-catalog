@@ -23,10 +23,9 @@ The supported `skill-contract-forge` Promptfoo runtime MUST use Promptfoo-native
 
 - **WHEN** stable specs or active change artifacts describe the current evaluation architecture
 - **THEN** they SHALL identify `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`, `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`, and `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml` as the supported case-definition authority
-- **AND** they SHALL NOT present `evals/cases/skill-contract-forge/suite.v1.json` as the active canonical source
 - **AND** they SHALL NOT identify `packs/core/skill-contract-forge/evals/evals.json` as an active authoring source for this skill
 - **AND** they SHALL NOT describe any repo-owned local runner, wrapper CLI, grading override, sync command, or projection command as part of the supported runtime
-- **AND** an obsolete file MAY remain on disk temporarily between slugs if it is clearly labeled as transitional and unsupported
+- **AND** they SHALL NOT keep obsolete `skill-contract-forge` eval-authoring shadow files in the active repository tree
 
 ### Requirement: Legacy central grader is retired from supported runtime
 The supported `skill-contract-forge` runtime MUST NOT depend on `evals/engines/promptfoo/support/assertions.cjs`.
@@ -66,3 +65,4 @@ The supported `skill-contract-forge` Promptfoo runtime MUST keep retired engine 
 - **THEN** those files SHALL NOT live under `evals/engines/promptfoo/support/` or `evals/engines/promptfoo/fixtures/`
 - **AND** they MAY be removed from the active repository tree instead of being kept in an in-repo quarantine location
 - **AND** active docs SHALL NOT treat them as part of the supported runtime surface
+
