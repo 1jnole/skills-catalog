@@ -39,7 +39,7 @@
     ],
     "nonGoals": [
       "Implement eval runtime behavior",
-      "Write evals.json cases directly"
+      "Write concrete downstream eval cases in this step"
     ]
   },
   "activationProbes": [

@@ -28,8 +28,14 @@ Promptfoo is the supported eval tool for this repository.
 
 Supported command surface:
 - `npm run promptfoo:validate`
+- `npm run promptfoo:validate:uplift:with-skill`
+- `npm run promptfoo:validate:uplift:without-skill`
 - `npm run promptfoo:run`
 - `npm run promptfoo:run:offline`
+- `npm run promptfoo:run:uplift:with-skill`
+- `npm run promptfoo:run:uplift:without-skill`
+- `npm run promptfoo:run:offline:uplift:with-skill`
+- `npm run promptfoo:run:offline:uplift:without-skill`
 
 Supported runtime shape:
 - native Promptfoo config, prompt templates, tests, assertions, fixtures, and generated outputs live under `evals/engines/promptfoo/`

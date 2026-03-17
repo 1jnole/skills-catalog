@@ -56,6 +56,7 @@ High-level shape:
 - `evals/contracts/` for stable eval contracts
 - `evals/engines/promptfoo/fixtures/` for reusable offline inputs and model outputs
 - `evals/engines/promptfoo/` for engine-specific config, prompts, assertions, and generated outputs
+- for `skill-contract-forge`, the active case-definition authority lives in the Promptfoo-native suites under `evals/engines/promptfoo/tests/`
 
 See [evals/README.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/evals/README.md) for the current supported eval path.
 
@@ -129,8 +130,14 @@ Core commands:
 
 Promptfoo commands:
 - `npm run promptfoo:validate`
+- `npm run promptfoo:validate:uplift:with-skill`
+- `npm run promptfoo:validate:uplift:without-skill`
 - `npm run promptfoo:run`
 - `npm run promptfoo:run:offline`
+- `npm run promptfoo:run:uplift:with-skill`
+- `npm run promptfoo:run:uplift:without-skill`
+- `npm run promptfoo:run:offline:uplift:with-skill`
+- `npm run promptfoo:run:offline:uplift:without-skill`
 
 ## What this repo optimizes for
 

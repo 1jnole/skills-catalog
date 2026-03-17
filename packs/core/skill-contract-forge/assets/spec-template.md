@@ -5,5 +5,5 @@
 - Use only target-skill or domain source refs that justify the contract.
 - Record seed eval intent without writing concrete eval cases.
 - Stop at `Eval Brief ready`.
-- Do not turn this artifact into `evals.json`.
+- Do not turn this artifact into downstream eval cases.
 - Do not design runtime, benchmark, or grader internals here.

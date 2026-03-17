@@ -20,8 +20,14 @@ What must not survive is a parallel repo-owned eval runtime or projection layer 
 ## Current status
 Supported commands:
 - `npm run promptfoo:validate`
+- `npm run promptfoo:validate:uplift:with-skill`
+- `npm run promptfoo:validate:uplift:without-skill`
 - `npm run promptfoo:run`
 - `npm run promptfoo:run:offline`
+- `npm run promptfoo:run:uplift:with-skill`
+- `npm run promptfoo:run:uplift:without-skill`
+- `npm run promptfoo:run:offline:uplift:with-skill`
+- `npm run promptfoo:run:offline:uplift:without-skill`
 
 Supported runtime:
 - native Promptfoo execution from `evals/engines/promptfoo/` with repo-owned wrappers removed
