@@ -1,7 +1,7 @@
 {
   "skill_name": "skill-contract-forge",
   "eval_version": 2,
-  "purpose": "Canonical skill-local eval authoring definition for skill-contract-forge. This file is the authoring source that syncs into native Promptfoo suites and does not define a local runner or runtime wrapper.",
+  "purpose": "Canonical skill-local eval authoring definition for skill-contract-forge. This file is the authoring source for this skill and does not define a local runner, wrapper, or Promptfoo runtime boundary.",
   "comparison_intent": {
     "primary": "with_skill_vs_without_skill",
     "hypothesis": "With the skill enabled, responses should handle new-skill authoring, existing-skill refactors, rewrites, and nearby authoring-boundary cases more reliably while keeping non-authoring work out of scope."

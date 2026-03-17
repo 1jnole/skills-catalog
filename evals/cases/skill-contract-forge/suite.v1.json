@@ -251,36 +251,6 @@
       }
     },
     {
-      "id": "eval-authoring-only-request",
-      "prompt": "Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.",
-      "expected_output": "Do not trigger skill-contract-forge because this is eval authoring work that belongs downstream.",
-      "should_trigger": false,
-      "stop_at": "do_not_trigger",
-      "assertions": [
-        "must classify eval definition work as out of scope for skill-contract-forge",
-        "must avoid redefining the task as skill authoring",
-        "must avoid producing an Eval Brief"
-      ],
-      "files": [],
-      "grading": {
-        "assertion_rules": [
-          {
-            "markers": [
-              "out of scope",
-              "downstream"
-            ]
-          },
-          null,
-          {
-            "markers": [
-              "eval brief ready"
-            ],
-            "absent": true
-          }
-        ]
-      }
-    },
-    {
       "id": "eval-authoring-benchmark-suite-request",
       "prompt": "The brief is already done. Create the eval definition, golden cases, and benchmark suite for this skill so we can wire the runtime today.",
       "expected_output": "Do not trigger skill-contract-forge because the request is downstream eval-definition and benchmark authoring work, not skill authoring.",

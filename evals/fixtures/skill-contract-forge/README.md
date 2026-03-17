@@ -3,7 +3,8 @@
 No dedicated external fixture files are required for the canonical `skill-contract-forge` suite at this stage.
 
 Current state:
-- `evals/cases/skill-contract-forge/suite.v1.json` carries inline prompts and deterministic assertion rules
+- `packs/core/skill-contract-forge/evals/evals.json` is the canonical inline case source for prompts, assertions, and surface membership
+- `evals/cases/skill-contract-forge/suite.v1.json` is a transitional reference copy only
 - the active Promptfoo runtime is split across:
   - `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`
   - `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`

@@ -3,10 +3,12 @@
 This folder contains the new-scaffold suites for `skill-contract-forge`.
 
 ## Local authoring contract
+- Canonical authoring source: `packs/core/skill-contract-forge/evals/evals.json`
 - `evals/cases/skill-contract-forge/suite.v1.json`
 
-This is the supported local `skill-contract-forge` eval authoring contract. It is not the runtime pass/fail authority.
-`packs/core/skill-contract-forge/SKILL.md` is the authority for observable output behavior. The local suite should mirror that contract wording and intent instead of preserving stale fixture phrasing.
+`packs/core/skill-contract-forge/evals/evals.json` is now the canonical `skill-contract-forge` eval authoring contract.
+`evals/cases/skill-contract-forge/suite.v1.json` remains a transitional reference copy until the dedicated Promptfoo sync/check slug lands. It is not the runtime pass/fail authority.
+`packs/core/skill-contract-forge/SKILL.md` remains the authority for observable output behavior. Transitional case copies should mirror that contract wording and intent instead of preserving stale fixture phrasing.
 
 ## Manual calibration artifacts
 - `evals/_phase_a_quarantine/cases/skill-contract-forge/manual-audit.phase-6a.json`
@@ -24,7 +26,7 @@ The canonical suite now tracks a small set of explicit expansion buckets derived
 - `near-miss-non-trigger`
 - `near-miss-stop-and-ask`
 
-These buckets are documented here, not embedded as new top-level contract fields in `suite.v1.json`, so the canonical case shape stays compatible with downstream consumers.
+These buckets are documented here, not embedded as new top-level contract fields in `suite.v1.json`, so the transitional case shape stays compatible with downstream consumers until sync/check guardrails land.
 
 ## Case admission criteria
 
@@ -86,13 +88,13 @@ Coverage buckets represented in the suite:
 
 This file preserves the smaller Fase 4 bootstrap evidence. It is no longer the main suite for `skill-contract-forge`.
 
-## Success definition for the canonical suite
-- the suite parses with the canonical eval-definition contract
+## Success definition for the transitional reference suite
+- the suite remains readable against the canonical eval-definition contract in `packs/core/skill-contract-forge/evals/evals.json`
 - it contains the useful migrated `golden` and `negative` cases from the inherited `evals.json`
 - it is serialized into the Promptfoo-native YAML suite
 - Promptfoo runs it with both baseline modes
 - it produces the native Promptfoo eval artifact
-- it is the reference suite for the operational flow of `skill-contract-forge`
+- it remains a transitional reference copy for the operational flow of `skill-contract-forge`
 - it stays aligned with the current observable contract in `packs/core/skill-contract-forge/SKILL.md`
 
 ## Reference command

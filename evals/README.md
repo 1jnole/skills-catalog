@@ -38,7 +38,8 @@ Supported runtime shape:
 - the comparative Promptfoo uplift suite lives in `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
 - Promptfoo entrypoints stay single-purpose: one contract gate config and two uplift comparison configs
 - trigger cases in the contract suite require schema-backed Eval Brief JSON using `evals/contracts/skill-contract-forge/eval-brief-output.schema.json`
-- `evals/cases/skill-contract-forge/suite.v1.json` remains a local authoring contract, not the runtime entrypoint
+- `packs/core/skill-contract-forge/evals/evals.json` is the canonical skill-local authoring contract
+- `evals/cases/skill-contract-forge/suite.v1.json` remains a transitional reference copy, not the runtime entrypoint
 - the supported offline path uses Promptfoo `--model-outputs` fixtures under `evals/engines/promptfoo/fixtures/`
 - the canonical generated runtime artifact is `evals/engines/promptfoo/generated/skill-contract-forge.eval.json`
 
@@ -52,7 +53,7 @@ Current `skill-contract-forge` supported artifacts:
 - `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml`
 - `evals/engines/promptfoo/prompts/with-skill.txt`
 - `evals/engines/promptfoo/prompts/without-skill.txt`
-- `evals/cases/skill-contract-forge/suite.v1.json`
+- `packs/core/skill-contract-forge/evals/evals.json`
 - `evals/cases/skill-contract-forge/README.md`
 - `evals/fixtures/skill-contract-forge/README.md`
 
@@ -93,7 +94,7 @@ Current operational reference:
 - Comparative uplift execution now exists as a separate surface and does not replace the gate.
 - The Promptfoo layer is organized by responsibility across `prompts/`, `tests/`, and `providers/`.
 - the old wrapper runtime no longer participates in the supported flow.
-- The inherited physical layout under `packs/core/<skill>/evals/` is historical compatibility only and not the supported path.
+- `packs/core/<skill>/evals/` is the supported home for skill-local eval authoring when a skill owns that contract.
 
 ## Ownership intent
 - `contracts/` will own eval contracts that survive engine changes.

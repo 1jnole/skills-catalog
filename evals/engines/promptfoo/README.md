@@ -76,7 +76,10 @@ For `skill-contract-forge`, the active Promptfoo execution surface is:
 - `evals/engines/promptfoo/prompts/without-skill.txt`
 - `evals/contracts/skill-contract-forge/eval-brief-output.schema.json`
 
-The local case contract still lives at:
+The canonical skill-local case contract lives at:
+- `packs/core/skill-contract-forge/evals/evals.json`
+
+The transitional reference copy remains at:
 - `evals/cases/skill-contract-forge/suite.v1.json`
 
 The smaller `evals/_phase_a_quarantine/cases/skill-contract-forge/pilot-suite.v1.json` file remains as historical Phase 4 bootstrap context only.
