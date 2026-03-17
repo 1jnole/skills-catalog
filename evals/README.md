@@ -36,9 +36,10 @@ Supported runtime shape:
 - provider selection is externalized through Promptfoo provider adapter files under `evals/engines/promptfoo/providers/`
 - the canonical Promptfoo contract suite lives in `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`
 - the comparative Promptfoo uplift suite lives in `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
+- the informational Promptfoo uplift baseline lives in `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml`
 - Promptfoo entrypoints stay single-purpose: one contract gate config and two uplift comparison configs
 - trigger cases in the contract suite require schema-backed Eval Brief JSON using `evals/contracts/skill-contract-forge/eval-brief-output.schema.json`
-- `packs/core/skill-contract-forge/evals/evals.json` is the canonical skill-local authoring contract
+- for `skill-contract-forge`, the three Promptfoo-native suites are also the only supported case-authoring source
 - the supported offline path uses Promptfoo `--model-outputs` fixtures under `evals/engines/promptfoo/fixtures/`
 - the canonical generated runtime artifact is `evals/engines/promptfoo/generated/skill-contract-forge.eval.json`
 
@@ -52,7 +53,6 @@ Current `skill-contract-forge` supported artifacts:
 - `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml`
 - `evals/engines/promptfoo/prompts/with-skill.txt`
 - `evals/engines/promptfoo/prompts/without-skill.txt`
-- `packs/core/skill-contract-forge/evals/evals.json`
 - `evals/fixtures/skill-contract-forge/README.md`
 
 Current contractual behavior:
@@ -91,12 +91,12 @@ Current operational reference:
 - Comparative uplift execution now exists as a separate surface and does not replace the gate.
 - The Promptfoo layer is organized by responsibility across `prompts/`, `tests/`, and `providers/`.
 - the old wrapper runtime no longer participates in the supported flow.
-- `packs/core/<skill>/evals/` is the supported home for skill-local eval authoring when a skill owns that contract.
+- `skill-contract-forge` cases are maintained directly in the Promptfoo-native suites under `evals/engines/promptfoo/tests/`.
 - The repo does not ship a local runner around Promptfoo for `skill-contract-forge`.
 
 ## Ownership intent
 - `contracts/` will own eval contracts that survive engine changes.
-- `cases/` will own case definitions and authoring-oriented organization.
+- `cases/` will own case-oriented documentation and organization notes, not a second active source of truth for `skill-contract-forge`.
 - `fixtures/` will own reusable eval files and test inputs.
 - `reports/` will own generated outputs that do not define the domain.
 - `engines/` will own engine-specific execution assets, with `engines/promptfoo/` as the target native tool boundary.
@@ -105,5 +105,3 @@ Current operational reference:
 
 - runtime boundary:
   - `evals/engines/promptfoo/README.md`
-- local authoring boundary:
-  - `packs/core/skill-contract-forge/evals/README.md`

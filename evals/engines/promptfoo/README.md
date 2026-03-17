@@ -13,25 +13,18 @@ This directory owns:
 - and engine run entrypoints.
 
 ## Boundary rule
-Promptfoo is the operational tool target, but the repo MAY still keep authoring artifacts outside this folder when they add real value, such as:
-- case authoring files,
-- reusable fixtures,
-- minimal contracts,
-- and migration notes.
+Promptfoo is the operational tool target and, for `skill-contract-forge`, the Promptfoo-native suite files in this folder are also the only supported case-authoring source.
 
-What must not survive is a parallel repo-owned eval runtime around Promptfoo.
+What must not survive is a parallel repo-owned eval runtime or projection layer around Promptfoo.
 
 ## Current status
 Supported commands:
-- `npm run promptfoo:sync`
-- `npm run promptfoo:sync:check`
 - `npm run promptfoo:validate`
 - `npm run promptfoo:run`
 - `npm run promptfoo:run:offline`
 
 Supported runtime:
 - native Promptfoo execution from `evals/engines/promptfoo/` with repo-owned wrappers removed
-- sync/check commands only project or verify authoring data for Promptfoo suite files; they do not execute Promptfoo and are not a second runtime
 
 ## Entrypoints
 - `promptfooconfig.yaml` is the canonical structural contract gate entrypoint.
@@ -66,7 +59,7 @@ The current duplication between contract and uplift suites is small and semantic
 
 ### Auxiliary checks
 - Promptfoo `0.121.2` still treats some auxiliary assertion shapes as real failures, so wording-only hints are documented rather than enforced in runtime gates.
-- Wording guidance remains in `SKILL.md`, local authoring docs, and human review rather than inside the hard Promptfoo gate.
+- Wording guidance remains in `SKILL.md`, active eval docs, and human review rather than inside the hard Promptfoo gate.
 
 For `skill-contract-forge`, the active Promptfoo execution surface is:
 - `evals/engines/promptfoo/promptfooconfig.yaml`
@@ -79,8 +72,10 @@ For `skill-contract-forge`, the active Promptfoo execution surface is:
 - `evals/engines/promptfoo/prompts/without-skill.txt`
 - `evals/contracts/skill-contract-forge/eval-brief-output.schema.json`
 
-The canonical skill-local case contract lives at:
-- `packs/core/skill-contract-forge/evals/evals.json`
+The canonical case-definition authority for `skill-contract-forge` lives at:
+- `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`
+- `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
+- `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml`
 
 Canonical Promptfoo config is read from:
 - `evals/engines/promptfoo/promptfooconfig.yaml`
@@ -121,7 +116,7 @@ The `without_skill` baseline surface uses its own lighter suite so the repositor
 The repository currently ships `default.openai.yaml` as the operational default provider adapter.
 Changing provider choice is an adapter swap, not a suite or contract change.
 
-The repository does not maintain a second runner or local wrapper around Promptfoo.
+The repository does not maintain a second runner, local wrapper, or sync/projection layer as part of the supported `skill-contract-forge` flow.
 Historical helper and pilot runtime residue are no longer kept inside the active `evals/` tree.
 
 Offline smoke execution uses Promptfoo-native fixture replay:

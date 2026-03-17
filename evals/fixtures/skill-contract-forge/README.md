@@ -3,7 +3,7 @@
 No dedicated external fixture files are required for the canonical `skill-contract-forge` suite at this stage.
 
 Current state:
-- `packs/core/skill-contract-forge/evals/evals.json` is the canonical inline case source for prompts, assertions, and surface membership
+- the canonical inline case source for `skill-contract-forge` lives directly in the Promptfoo-native suite files under `evals/engines/promptfoo/tests/`
 - the active Promptfoo runtime is split across:
   - `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`
   - `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`

@@ -63,8 +63,9 @@ Keep the root file short and discovery-safe. Detailed process belongs in:
 ## Eval defaults
 
 - The legacy eval runtime was intentionally removed and is not a source of truth.
-- Canonical skill-owned eval authoring contracts live under `packs/core/<skill-name>/evals/` when a skill owns them.
 - Promptfoo runtime suites live under `evals/engines/promptfoo/tests/`.
+- For `skill-contract-forge`, those Promptfoo-native suites are the active case-definition authority.
+- Skill-owned `evals/` folders are optional support material only and must not override active Promptfoo suites unless a future spec explicitly says so.
 - Offline fixture inputs live under `evals/engines/promptfoo/fixtures/`.
 - Treat `npm run promptfoo:run` and `npm run promptfoo:run:offline` as the supported public eval execution commands.
 - Treat `evals/engines/promptfoo/` as the eval runtime boundary.

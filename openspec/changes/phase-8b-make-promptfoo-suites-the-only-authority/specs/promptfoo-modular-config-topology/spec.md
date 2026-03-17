@@ -1,8 +1,5 @@
-# promptfoo-modular-config-topology Specification
+## MODIFIED Requirements
 
-## Purpose
-Define a modular Promptfoo topology where entrypoints, prompts, tests, and providers have clear, separate responsibilities.
-## Requirements
 ### Requirement: Promptfoo entrypoints have a single clear purpose
 
 The supported Promptfoo configs for `skill-contract-forge` MUST each represent one explicit execution role, and their suite files SHALL be authored directly in the Promptfoo-native suite files without repo-owned projection tooling.
@@ -22,5 +19,5 @@ The Promptfoo engine documentation MUST describe prompts, tests, and providers a
 #### Scenario: Engine README is reviewed after Promptfoo-native authority is fixed
 
 - **WHEN** `evals/engines/promptfoo/README.md` is read
-- **THEN** it SHALL continue to identify Promptfoo itself as the only runtime execution boundary
+- **THEN** it SHALL identify Promptfoo itself as the only runtime execution boundary
 - **AND** it SHALL NOT describe sync/check commands as part of the supported maintenance flow for `skill-contract-forge`

@@ -1,6 +1,6 @@
 # Run Results Normalization Contract
 
-This note captures the canonical local result shape that separates engine output from core semantics.
+This note captures the canonical normalized result shape that separates engine output from core semantics.
 
 ## Current source of truth
 - `evals/engines/promptfoo/generated/skill-contract-forge.eval.json`
@@ -30,4 +30,4 @@ Each mode keeps only canonical fields:
 ## Boundary rule
 Engine-specific raw reports do not define the long-term contract directly.
 
-`evals/contracts/` documents the canonical local shape that downstream tooling may rely on, while Promptfoo remains the active runtime boundary.
+`evals/contracts/` documents downstream result semantics that tooling may rely on, while the Promptfoo-native suites remain the active case-definition authority.

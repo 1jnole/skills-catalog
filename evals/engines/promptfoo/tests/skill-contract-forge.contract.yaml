@@ -255,7 +255,7 @@
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
     case_id: eval-authoring-only-request
-    prompt: Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.
+    prompt: Take this finished Eval Brief and turn it into golden and negative Promptfoo cases under evals/engines/promptfoo/tests/.
     expected_stop: do_not_trigger
     should_trigger: false
   metadata:

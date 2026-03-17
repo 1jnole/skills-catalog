@@ -3,12 +3,12 @@
 This directory marks the Phase 3 destination for the contracts that survive the migration.
 
 ## Intent
-`evals/contracts/` is the structural home of the canonical local eval contracts that survive the Promptfoo-first runtime.
+`evals/contracts/` is the structural home of reusable contracts that survive the Promptfoo-first runtime.
 
 ## Surviving contracts
 
 ### Eval case
-- current source: `packs/core/skill-contract-forge/evals/evals.json`
+- current source: `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`, `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`, and `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml`
 - responsibility:
   - case identity
   - prompt
@@ -17,12 +17,12 @@ This directory marks the Phase 3 destination for the contracts that survive the 
   - trigger vs non-trigger intent
 
 ### Eval definition
-- current source: `packs/core/skill-contract-forge/evals/evals.json`
+- current source: the Promptfoo-native suite files listed above
 - responsibility:
-  - skill-level eval contract
-  - gates
-  - baseline case groups
-  - comparison intent
+  - skill-level case inventory
+  - gate and comparison surface split
+  - per-case Promptfoo assertions
+  - supported suite-level maintenance semantics
 
 ### Run result
 - current source: `evals/engines/promptfoo/generated/skill-contract-forge.eval.json`
@@ -49,4 +49,4 @@ These concerns are not treated as canonical contracts for the future scaffold:
 - Promptfoo config and engine adapter shapes
 
 ## Boundary rule
-If a shape exists only to support local Promptfoo execution mechanics, it does not define the long-term contract set for `evals/contracts/`.
+If a shape exists only to support local Promptfoo execution mechanics, it does not define a second source of truth outside the Promptfoo-native suites.
