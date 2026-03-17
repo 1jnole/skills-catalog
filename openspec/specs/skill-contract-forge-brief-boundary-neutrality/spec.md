@@ -1,7 +1,7 @@
 # skill-contract-forge-brief-boundary-neutrality Specification
 
 ## Purpose
-TBD - created by archiving change decouple-skill-contract-forge-brief-from-engine-runtime. Update Purpose after archive.
+Keep the `skill-contract-forge` brief boundary engine-neutral so the skill stops at `Eval Brief ready` and downstream runtime choices stay outside the core contract.
 ## Requirements
 ### Requirement: Skill-contract-forge contract remains engine-neutral
 The `skill-contract-forge` core contract MUST describe a neutral `Eval Brief` authoring boundary and MUST NOT frame that brief as being produced for a specific eval engine.
@@ -19,11 +19,11 @@ The `skill-contract-forge` core contract MUST preserve the neutral structural gu
 - **THEN** it SHALL describe that structure as consumable by downstream structural validation
 - **AND** it SHALL NOT describe Promptfoo checks as the reason the structure must remain stable
 
-### Requirement: Agent description matches the contract-first boundary
-The engine-facing `skill-contract-forge` agent description MUST match the current contract-first workflow and stop at `Eval Brief ready`.
+### Requirement: Core skill metadata remains contract-first
+The maintained `skill-contract-forge` skill metadata MUST describe the current contract-first workflow and stop at `Eval Brief ready`.
 
-#### Scenario: Agent metadata is inspected
-- **WHEN** `packs/core/skill-contract-forge/agents/openai.yaml` is read
-- **THEN** its short description SHALL describe creating or refactoring one skill through a contract-first workflow
-- **AND** it SHALL identify `Eval Brief ready` as the stopping boundary
+#### Scenario: Maintained skill metadata is inspected
+- **WHEN** the maintained skill metadata surfaces for `skill-contract-forge` are read
+- **THEN** they SHALL describe creating or refactoring one skill through a contract-first workflow
+- **AND** they SHALL identify `Eval Brief ready` as the stopping boundary
 

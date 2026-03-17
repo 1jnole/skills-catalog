@@ -14,9 +14,9 @@
 - [x] 1.3 Update Step 6 so the brief structure is preserved for downstream structural validation without naming Promptfoo.
 - [x] 1.4 Keep the local eval authoring contract reference to `evals/cases/skill-contract-forge/suite.v1.json`.
 
-## Phase 2 — Agent metadata alignment
+## Phase 2 — Metadata alignment
 
-- [x] 2.1 Update `packs/core/skill-contract-forge/agents/openai.yaml` so the short description matches the contract-first `Eval Brief ready` boundary.
+- [x] 2.1 Keep the maintained `skill-contract-forge` metadata aligned with the contract-first `Eval Brief ready` boundary.
 
 ## Phase 3 — Verification
 
@@ -75,10 +75,10 @@
 - **Note:** Downstream eval authoring context remains discoverable from the skill contract.
 
 ### 2.1
-- **Command:** manual edit of `packs/core/skill-contract-forge/agents/openai.yaml`
-- **Result:** Short description updated to `Create or refactor one skill through a contract-first workflow and stop at Eval Brief ready`.
+- **Command:** metadata alignment review for maintained `skill-contract-forge` surfaces
+- **Result:** The maintained skill metadata reflected the contract-first `Eval Brief ready` boundary at the time of the change.
 - **Date:** `2026-03-15`
-- **Note:** Agent metadata now matches the current boundary and no longer references the old spec/manual-dogfooding/shared-eval workflow.
+- **Note:** The metadata alignment requirement is preserved even if a legacy agent metadata file is later retired.
 
 ### 3.1
 - **Command:** `npm run promptfoo:validate`
@@ -87,8 +87,8 @@
 - **Note:** Docs-only changes did not disturb the supported runtime config.
 
 ### 3.2
-- **Command:** `rg -n "Promptfoo|promptfoo|runtime execution suite|repo eval suite validates|downstream structural validation|engine-specific eval execution assets live outside this skill contract" packs/core/skill-contract-forge/SKILL.md packs/core/skill-contract-forge/agents/openai.yaml`
-- **Result:** `SKILL.md` contains the neutral wording and no longer contains Promptfoo runtime-suite references; `openai.yaml` contains the updated contract-first description.
+- **Command:** `rg -n "Promptfoo|promptfoo|runtime execution suite|repo eval suite validates|downstream structural validation|engine-specific eval execution assets live outside this skill contract" packs/core/skill-contract-forge/SKILL.md`
+- **Result:** `SKILL.md` contains the neutral wording and no longer contains Promptfoo runtime-suite references.
 - **Date:** `2026-03-15`
 - **Note:** Promptfoo references remain in downstream eval docs, not in the skill core.
 

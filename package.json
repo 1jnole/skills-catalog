@@ -2,6 +2,9 @@
   "name": "skills-catalog",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "^20.20.0 || >=22.22.0"
+  },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.41",
     "@lmnr-ai/lmnr": "^0.8.14",
@@ -10,7 +13,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.6.0",
-    "promptfoo": "^0.120.19",
+    "promptfoo": "^0.121.2",
     "tsx": "^4.21.0",
     "typescript": "^5.8.3",
     "vitest": "^4.1.0",
@@ -22,6 +25,10 @@
     "promptfoo:validate:uplift:without-skill": "promptfoo validate -c evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml",
     "promptfoo:run": "promptfoo eval -c evals/engines/promptfoo/promptfooconfig.yaml -o evals/engines/promptfoo/generated/skill-contract-forge.eval.json --no-progress-bar --table-cell-max-length 80",
     "promptfoo:run:offline": "promptfoo eval -c evals/engines/promptfoo/promptfooconfig.yaml --model-outputs evals/engines/promptfoo/fixtures/skill-contract-forge-suite-model-outputs.json -o evals/engines/promptfoo/generated/skill-contract-forge.eval.json --no-progress-bar --table-cell-max-length 80",
+    "promptfoo:run:uplift:with-skill": "promptfoo eval -c evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml -o evals/engines/promptfoo/generated/skill-contract-forge.uplift.with-skill.live.eval.json --no-progress-bar --table-cell-max-length 80",
+    "promptfoo:run:uplift:without-skill": "promptfoo eval -c evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml -o evals/engines/promptfoo/generated/skill-contract-forge.uplift.without-skill.live.eval.json --no-progress-bar --table-cell-max-length 80",
+    "promptfoo:run:offline:uplift:with-skill": "promptfoo eval -c evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml --model-outputs evals/engines/promptfoo/fixtures/skill-contract-forge.uplift.with-skill.model-outputs.json -o evals/engines/promptfoo/generated/skill-contract-forge.uplift.with-skill.offline.eval.json --no-progress-bar --table-cell-max-length 80",
+    "promptfoo:run:offline:uplift:without-skill": "promptfoo eval -c evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml --model-outputs evals/engines/promptfoo/fixtures/skill-contract-forge.uplift.without-skill.model-outputs.json -o evals/engines/promptfoo/generated/skill-contract-forge.uplift.without-skill.offline.eval.json --no-progress-bar --table-cell-max-length 80",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:run": "vitest run",

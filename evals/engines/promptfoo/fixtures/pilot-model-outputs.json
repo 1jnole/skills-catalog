@@ -1,8 +1,0 @@
-[
-  "workflow: new-skill\nfreeze contract before instructions\nEval Brief ready",
-  "This request appears to be about writing a reusable JavaScript mutation skill. I can draft a contract-first plan.",
-  "classification: non-trigger\nthis runtime implementation request is out of scope",
-  "I can build an offline runner with Node, TypeScript, and Zod. Here is an implementation plan.",
-  "classification: stop-and-ask\nscope clarification required because the request mixes multiple workflows",
-  "This request combines multiple independent goals. Please narrow scope before we proceed."
-]

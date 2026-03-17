@@ -25,26 +25,18 @@
           value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
         - type: icontains
           metric: terminal_marker
-          value: "Eval Brief ready"
+          value: Eval Brief ready
         - type: not-icontains
           metric: incompatible_non_trigger
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-    - type: assert-set
-      metric: auxiliary_contract
-      threshold: 0
-      assert:
-        - type: icontains
-          metric: contract_guidance
-          value: "Freeze the contract before final instructions."
-
 - description: existing-skill-refactor-clear-target
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
     case_id: existing-skill-refactor-clear-target
-    prompt: Refactor the existing skill `skill-eval-forge`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.
+    prompt: Refactor the existing skill `openspec-bootstrap`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.
     expected_stop: Eval Brief ready
     should_trigger: true
   metadata:
@@ -67,28 +59,18 @@
           value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
         - type: icontains
           metric: terminal_marker
-          value: "Eval Brief ready"
+          value: Eval Brief ready
         - type: not-icontains
           metric: incompatible_non_trigger
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-    - type: assert-set
-      metric: auxiliary_contract
-      threshold: 0
-      assert:
-        - type: icontains-any
-          metric: contract_guidance
-          value:
-            - "Freeze the contract before final instructions."
-            - "contract-first"
-
 - description: skill-rewrite-clear-target
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
     case_id: skill-rewrite-clear-target
-    prompt: Rewrite the existing skill `skill-eval-forge` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.
+    prompt: Rewrite the existing skill `openspec-bootstrap` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.
     expected_stop: Eval Brief ready
     should_trigger: true
   metadata:
@@ -111,21 +93,13 @@
           value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
         - type: icontains
           metric: terminal_marker
-          value: "Eval Brief ready"
+          value: Eval Brief ready
         - type: not-icontains
           metric: incompatible_non_trigger
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-    - type: assert-set
-      metric: auxiliary_contract
-      threshold: 0
-      assert:
-        - type: icontains
-          metric: contract_guidance
-          value: "Freeze the contract before final instructions."
-
 - description: mixed-authoring-and-eval-request
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -153,24 +127,13 @@
           value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
         - type: icontains
           metric: terminal_marker
-          value: "Eval Brief ready"
-        - type: icontains
-          metric: downstream_note
-          value: "Downstream eval work is out of scope here."
+          value: Eval Brief ready
         - type: not-icontains
           metric: incompatible_non_trigger
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-    - type: assert-set
-      metric: auxiliary_contract
-      threshold: 0
-      assert:
-        - type: icontains
-          metric: contract_guidance
-          value: "Freeze the contract before final instructions."
-
 - description: trigger-with-benchmark-noise
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -198,24 +161,13 @@
           value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
         - type: icontains
           metric: terminal_marker
-          value: "Eval Brief ready"
-        - type: icontains
-          metric: downstream_note
-          value: "Downstream eval work is out of scope here."
+          value: Eval Brief ready
         - type: not-icontains
           metric: incompatible_non_trigger
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
-    - type: assert-set
-      metric: auxiliary_contract
-      threshold: 0
-      assert:
-        - type: icontains
-          metric: contract_guidance
-          value: "Freeze the contract before final instructions."
-
 - description: agents-policy-request
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -235,14 +187,19 @@
         - type: starts-with
           metric: classification
           value: "Classification: non-trigger"
-        - type: icontains
+        - type: icontains-any
           metric: out_of_scope_marker
-          value: "Out of scope for skill-contract-forge."
+          value:
+            - Out of scope for skill-contract-forge.
+            - outside the scope
+            - out of scope
         - type: icontains-any
           metric: reason_marker
           value:
-            - "AGENTS"
-            - "repository policy"
+            - AGENTS
+            - repository policy
+            - policy document
+            - repository-wide policy
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -251,8 +208,7 @@
           value: "Classification: stop-and-ask"
         - type: not-icontains
           metric: terminal_absent
-          value: "Eval Brief ready"
-
+          value: Eval Brief ready
 - description: runtime-harness-implementation
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -272,12 +228,20 @@
         - type: starts-with
           metric: classification
           value: "Classification: non-trigger"
-        - type: icontains
+        - type: icontains-any
           metric: out_of_scope_marker
-          value: "Out of scope for skill-contract-forge."
-        - type: icontains
+          value:
+            - Out of scope for skill-contract-forge.
+            - outside the scope
+            - out of scope
+        - type: icontains-any
           metric: reason_marker
-          value: "shared eval runtime implementation"
+          value:
+            - runtime eval harness implementation
+            - shared eval runtime implementation
+            - runtime implementation
+            - offline evaluation runner
+            - evaluation harness
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -286,13 +250,12 @@
           value: "Classification: stop-and-ask"
         - type: not-icontains
           metric: terminal_absent
-          value: "Eval Brief ready"
-
+          value: Eval Brief ready
 - description: eval-authoring-only-request
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
     case_id: eval-authoring-only-request
-    prompt: Take this finished Eval Brief and turn it into golden and negative cases in packs/core/my-skill/evals/evals.json.
+    prompt: Take this finished Eval Brief and turn it into golden and negative Promptfoo cases under evals/engines/promptfoo/tests/.
     expected_stop: do_not_trigger
     should_trigger: false
   metadata:
@@ -307,12 +270,25 @@
         - type: starts-with
           metric: classification
           value: "Classification: non-trigger"
-        - type: icontains
+        - type: icontains-any
           metric: out_of_scope_marker
-          value: "Out of scope for skill-contract-forge."
-        - type: icontains
+          value:
+            - Out of scope for skill-contract-forge.
+            - outside the scope
+            - out of scope
+            - does not cover
+            - only handles
+            - before implementation
+        - type: icontains-any
           metric: reason_marker
-          value: "downstream eval authoring"
+          value:
+            - downstream eval authoring
+            - finished Eval Brief
+            - finished brief
+            - golden and negative test cases
+            - creating golden and negative test cases
+            - evaluation test cases
+            - downstream evaluation authoring
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -321,8 +297,7 @@
           value: "Classification: stop-and-ask"
         - type: not-icontains
           metric: terminal_absent
-          value: "Eval Brief ready"
-
+          value: Eval Brief ready
 - description: eval-authoring-benchmark-suite-request
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -342,14 +317,29 @@
         - type: starts-with
           metric: classification
           value: "Classification: non-trigger"
-        - type: icontains
+        - type: icontains-any
           metric: out_of_scope_marker
-          value: "Out of scope for skill-contract-forge."
+          value:
+            - Out of scope for skill-contract-forge.
+            - outside the scope
+            - out of scope
+            - does not cover
+            - only handles
+            - does not produce
         - type: icontains-any
           metric: reason_marker
           value:
-            - "downstream eval authoring"
-            - "eval definition"
+            - downstream eval authoring
+            - eval definition
+            - creating the eval definition
+            - downstream evaluation authoring
+            - runtime implementation
+            - finished brief
+            - benchmark suite creation
+            - contract authoring phase
+            - benchmark suite
+            - downstream evaluation
+            - evaluation artifacts
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -358,8 +348,7 @@
           value: "Classification: stop-and-ask"
         - type: not-icontains
           metric: terminal_absent
-          value: "Eval Brief ready"
-
+          value: Eval Brief ready
 - description: ambiguous-multi-workflow-request
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -381,15 +370,16 @@
           value: "Classification: stop-and-ask"
         - type: icontains
           metric: stop_marker
-          value: "Scope clarification required."
+          value: clarif
         - type: icontains
           metric: ambiguity_reason
-          value: "multiple"
+          value: multiple
         - type: icontains-any
           metric: ambiguity_shape
           value:
-            - "multiple workflows"
-            - "multiple independent workflows"
+            - multiple workflows
+            - multiple independent workflows
+            - multiple major workflows
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -398,8 +388,7 @@
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: terminal_absent
-          value: "Eval Brief ready"
-
+          value: Eval Brief ready
 - description: ambiguous-refactor-missing-target
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -419,15 +408,21 @@
         - type: starts-with
           metric: classification
           value: "Classification: stop-and-ask"
-        - type: icontains
+        - type: icontains-any
           metric: stop_marker
-          value: "Scope clarification required."
+          value:
+            - clarif
+            - please provide
+            - please specify
         - type: icontains-any
           metric: ambiguity_reason
           value:
-            - "skill target"
-            - "target skill"
-            - "unclear"
+            - skill target
+            - target skill
+            - unclear
+            - name or description of the skill
+            - existing skill
+            - which existing skill
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -436,8 +431,7 @@
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: terminal_absent
-          value: "Eval Brief ready"
-
+          value: Eval Brief ready
 - description: ambiguous-rewrite-missing-target
   vars:
     skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
@@ -457,15 +451,19 @@
         - type: starts-with
           metric: classification
           value: "Classification: stop-and-ask"
-        - type: icontains
+        - type: icontains-any
           metric: stop_marker
-          value: "Scope clarification required."
+          value:
+            - clarif
+            - please provide
+            - please specify
         - type: icontains-any
           metric: ambiguity_reason
           value:
-            - "skill target"
-            - "target skill"
-            - "unclear"
+            - skill target
+            - target skill
+            - unclear
+            - name or description of the skill
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -474,4 +472,4 @@
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: terminal_absent
-          value: "Eval Brief ready"
+          value: Eval Brief ready

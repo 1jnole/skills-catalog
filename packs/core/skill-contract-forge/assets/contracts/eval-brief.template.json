@@ -58,7 +58,7 @@
     ],
     "notes": [
       "This artifact carries authoring intent only",
-      "Downstream eval authoring turns this into packs/core/<skill-name>/evals/evals.json"
+      "Downstream eval authoring turns this into Promptfoo-native suite cases under evals/engines/promptfoo/tests/"
     ]
   },
   "negativeSignals": [

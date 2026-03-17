@@ -6,7 +6,7 @@
 
 - Remove direct Promptfoo runtime-suite references from `packs/core/skill-contract-forge/SKILL.md`.
 - Reword `skill-contract-forge` guidance so the skill produces a neutral Eval Brief that downstream structural validation can consume without naming an engine.
-- Update the `skill-contract-forge` OpenAI agent description so it matches the current contract-first workflow and stops at `Eval Brief ready`.
+- Keep the maintained `skill-contract-forge` metadata aligned with the current contract-first workflow and `Eval Brief ready` boundary.
 
 ## Capabilities
 
@@ -19,5 +19,5 @@
 ## Impact
 
 - Affected docs: `packs/core/skill-contract-forge/SKILL.md`
-- Affected agent metadata: `packs/core/skill-contract-forge/agents/openai.yaml`
+- Affected maintained metadata surfaces for `skill-contract-forge`
 - No runtime config, tests, or dependencies change

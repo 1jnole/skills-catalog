@@ -1,7 +1,7 @@
 # skill-contract-forge-eval-coverage-hardening Specification
 
 ## Purpose
-TBD - created by archiving change harden-skill-contract-forge-eval-coverage. Update Purpose after archive.
+Harden `skill-contract-forge` evaluation coverage around the highest-signal routing and payload failures while keeping offline fixtures subordinate to live Promptfoo runtime truth.
 ## Requirements
 ### Requirement: Trigger cases require schema-backed Eval Brief payloads
 Trigger cases in the supported `skill-contract-forge` runtime MUST require embedded JSON that satisfies the supported Eval Brief schema.
@@ -41,17 +41,18 @@ The supported hardened suite MUST include explicit coverage for key routing boun
 - **THEN** the hardened suite SHALL verify that the case is treated as stop-and-ask
 
 ### Requirement: Offline fixtures align with hardened runtime behavior
-Offline fixture artifacts used by the preferred gate MUST reflect the hardened runtime expectations.
+Offline fixtures used by the preferred Promptfoo replay gates MUST be refreshed only after the post-refactor live behavior is restored.
 
-#### Scenario: Offline gate is executed after hardening
-- **WHEN** `npm run promptfoo:run:offline` is executed after this change
-- **THEN** the fixture-backed run SHALL exercise the hardened assertions and expectations rather than pre-hardening semantics
+#### Scenario: Live recovery succeeds after package refactor
+- **WHEN** live `contract` and live `uplift with-skill` return to the intended green state
+- **THEN** the repository SHALL refresh the surface-specific offline fixtures to snapshot that recovered behavior
+- **AND** offline replay SHALL be re-run to confirm that the restored behavior is reproducible
 
 ### Requirement: Affected docs describe hardened runtime truth
-Affected runtime docs MUST describe the hardened `skill-contract-forge` contract without reintroducing deprecated grading layers.
+Affected runtime and local-authoring docs MUST identify the authoritative contract and the role of offline fixtures correctly.
 
-#### Scenario: Hardened runtime path is documented
-- **WHEN** an affected eval or skill-contract-forge document describes the supported runtime path after this change
-- **THEN** it SHALL identify the supported Promptfoo runtime path and hardened trigger expectations
-- **AND** it SHALL NOT describe a removed central grader as part of the supported runtime
+#### Scenario: Eval docs are reviewed after alignment
+- **WHEN** affected `skill-contract-forge` eval docs are reviewed
+- **THEN** they SHALL identify `packs/core/skill-contract-forge/SKILL.md` as the authority for output behavior
+- **AND** they SHALL describe offline fixtures as snapshots used for replay rather than the source of truth
 
