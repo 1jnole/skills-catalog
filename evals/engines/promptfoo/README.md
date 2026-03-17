@@ -51,8 +51,9 @@ The current duplication between contract and uplift suites is small and semantic
 - offline fixtures are replay snapshots only; they are not the source of truth and must not be refreshed to encode non-compliant live behavior.
 - offline replay now uses one fixture per runtime surface:
   - `fixtures/skill-contract-forge-suite-model-outputs.json` for the contract gate
-  - `fixtures/skill-contract-forge.uplift.with-skill.model-outputs.json` for uplift `with_skill`
+  - `fixtures/skill-contract-forge.uplift.with-skill.outputs-by-case.json` for uplift `with_skill`, generated into an offline replay suite from the canonical uplift cases
   - `fixtures/skill-contract-forge.uplift.without-skill.model-outputs.json` for uplift `without_skill`
+- the offline `with_skill` replay suite is generated from `tests/skill-contract-forge.uplift.yaml`, so the maintained uplift assertions stay single-source and the replay fixture must match by `case_id`
 - `contract` answers "does this output satisfy the skill boundary?"
 - `uplift with_skill` answers "does the skill improve routing and stop-boundary behavior compared to the baseline prompt?"
 - `uplift without_skill` answers "what does the baseline prompt do without the skill active?"

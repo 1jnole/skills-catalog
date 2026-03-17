@@ -7,6 +7,7 @@ The documentation closeout slug for `skill-contract-forge` exposed a pre-existin
 - Reproduce and isolate the source of the `with_skill` offline uplift replay drift.
 - Determine whether the mismatch comes from fixture ordering, `--model-outputs` replay semantics, Promptfoo configuration, or stale case/output alignment.
 - Repair the affected offline replay path so the `with_skill` uplift surface returns to the expected `8/8` pass state.
+- Keep the offline replay tied to the canonical uplift suite so the repair does not create a second hand-maintained case-definition authority.
 - Record verification evidence for the repaired replay behavior without widening scope into unrelated documentation cleanup.
 
 ## Capabilities
