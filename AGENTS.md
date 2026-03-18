@@ -77,3 +77,14 @@ When the task is to define or refactor the contract of a skill, use `skill-contr
 When a skill contract already exists and the task is to implement the skill itself, implement the skill from that contract and keep the work contract-driven.
 
 Do not combine contract definition, skill implementation, and Promptfoo eval authoring in one pass unless explicitly requested.
+
+## Model selection policy
+
+Default:
+- Use `gpt-5.4` for planning, architecture, ambiguity resolution, contract definition, and final review.
+
+Fast-path:
+- Use `gpt-5.4-mini` for exploration, read-heavy scans, large-file review, documentation processing, small refactors, and parallel worker tasks.
+
+Escalation:
+- If a task is ambiguous, multi-step, or requires important judgment, escalate from `gpt-5.4-mini` to `gpt-5.4`.

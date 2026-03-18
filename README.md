@@ -21,7 +21,7 @@ Each skill is a shallow folder centered on `SKILL.md`, with optional supporting 
 - `evals/` only when the skill owns eval definitions
 
 Current pack groups include:
-- `packs/core/` for repo bootstrap and core workflow skills such as `skill-contract-forge`, `openspec-bootstrap`, and `agents-bootstrap`
+- `packs/core/` for repo bootstrap and core workflow skills such as `skill-contract-forge`, `skill-implementation-forge`, `openspec-bootstrap`, and `agents-bootstrap`
 - `packs/angular/skills/` for Angular-focused skills
 - `packs/react/` for React-focused skills
 - `packs/javascript/`, `packs/typescript/`, and `packs/zod/` for language and validation skills
@@ -59,6 +59,28 @@ High-level shape:
 - for `skill-contract-forge`, the active case-definition authority lives in the Promptfoo-native suites under `evals/engines/promptfoo/tests/`
 
 See [evals/README.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/evals/README.md) for the current supported eval path.
+
+### Promptfoo eval flow
+```mermaid
+flowchart TD
+  A[Edit skill contract, prompts, tests, or fixtures] --> B[promptfoo validate*]
+  B --> C{Config and suites valid?}
+  C -- no --> D[Fix YAML, prompts, assertions, or wiring]
+  C -- yes --> E[promptfoo:run* live]
+  E --> F[Compare contract, uplift with-skill, and uplift without-skill]
+  F --> G[promptfoo:run:offline* replay]
+  G --> H{Offline matches live?}
+  H -- yes --> I[Keep fixtures and archive the change]
+  H -- no --> J[Live is the semantic authority]
+  J --> K[Refresh fixtures only after live is green]
+  K --> E
+```
+
+Operating rule:
+- `promptfoo validate*` checks config and suite wiring.
+- `promptfoo:run*` is the live semantic gate.
+- `promptfoo:run:offline*` is the low-cost replay and smoke path.
+- if live and offline disagree, live wins.
 
 ### 4. Repository tooling
 `scripts/` contains small repo-level utilities that support the catalog without becoming a separate framework.
