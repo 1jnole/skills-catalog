@@ -32,7 +32,6 @@ The supported offline `with_skill` uplift replay for `skill-contract-forge` MUST
 
 #### Scenario: Ambiguous refactor request is replayed offline on uplift with-skill
 
-- **WHEN** `npm run promptfoo:run:skill-contract-forge:offline:uplift:with-skill` replays `ambiguous-refactor-missing-target`
+- **WHEN** the repository replays `ambiguous-refactor-missing-target` through the maintained `skill-contract-forge` uplift `with_skill` offline surface, whether by supported npm entrypoint or direct Promptfoo config execution
 - **THEN** the replayed output SHALL classify the request as `stop-and-ask`
 - **AND** it SHALL NOT classify that request as `trigger`
-

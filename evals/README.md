@@ -29,29 +29,13 @@ Promptfoo is the supported eval tool for this repository.
 
 Supported command surface:
 - `npm run promptfoo:validate`
-- `npm run promptfoo:validate:uplift:with-skill`
-- `npm run promptfoo:validate:uplift:without-skill`
-- `npm run promptfoo:validate:skill-contract-forge`
-- `npm run promptfoo:validate:skill-contract-forge:uplift:with-skill`
-- `npm run promptfoo:validate:skill-contract-forge:uplift:without-skill`
-- `npm run promptfoo:validate:skill-implementation-forge`
-- `npm run promptfoo:validate:skill-implementation-forge:uplift:with-skill`
-- `npm run promptfoo:validate:skill-implementation-forge:uplift:without-skill`
 - `npm run promptfoo:run`
 - `npm run promptfoo:run:offline`
-- `npm run promptfoo:run:uplift:with-skill`
-- `npm run promptfoo:run:uplift:without-skill`
-- `npm run promptfoo:run:skill-contract-forge`
-- `npm run promptfoo:run:skill-contract-forge:offline`
-- `npm run promptfoo:run:skill-contract-forge:uplift:with-skill`
-- `npm run promptfoo:run:skill-contract-forge:uplift:without-skill`
-- `npm run promptfoo:run:skill-implementation-forge`
-- `npm run promptfoo:run:skill-implementation-forge:uplift:with-skill`
-- `npm run promptfoo:run:skill-implementation-forge:uplift:without-skill`
-- `npm run promptfoo:run:offline:uplift:with-skill`
-- `npm run promptfoo:run:offline:uplift:without-skill`
-- `npm run promptfoo:run:skill-contract-forge:offline:uplift:with-skill`
-- `npm run promptfoo:run:skill-contract-forge:offline:uplift:without-skill`
+
+Direct config entrypoints:
+- use `promptfoo validate -c <config>` for family-specific validation outside the public npm surface
+- use `promptfoo eval -c <config> ...` for family-specific live runs outside the public npm surface
+- keep new families scalable by adding configs under `evals/engines/promptfoo/<skill-name>/`, not new public npm aliases by default
 
 Supported runtime shape:
 - native Promptfoo config, prompt templates, tests, assertions, fixtures, and generated outputs live under `evals/engines/promptfoo/`
@@ -120,17 +104,20 @@ Current uplift behavior:
 Current operational reference:
 - live:
   - `npm run promptfoo:run`
-  - `npm run promptfoo:run:uplift:with-skill`
-  - `npm run promptfoo:run:uplift:without-skill`
 - offline:
   - `npm run promptfoo:run:offline`
-  - `npm run promptfoo:run:offline:uplift:with-skill`
-  - `npm run promptfoo:run:offline:uplift:without-skill`
+
+Family-specific examples outside the public npm surface:
+- `promptfoo validate -c evals/engines/promptfoo/skill-implementation-forge/promptfooconfig.yaml`
+- `promptfoo eval -c evals/engines/promptfoo/skill-implementation-forge/promptfooconfig.uplift.with-skill.yaml -o evals/engines/promptfoo/generated/skill-implementation-forge.uplift.with-skill.live.eval.json --no-progress-bar --table-cell-max-length 80`
+- `promptfoo validate -c evals/engines/promptfoo/skill-eval-forge/promptfooconfig.yaml`
+- `promptfoo eval -c evals/engines/promptfoo/skill-eval-forge/promptfooconfig.uplift.with-skill.yaml -o evals/engines/promptfoo/generated/skill-eval-forge.uplift.with-skill.live.eval.json --no-progress-bar --table-cell-max-length 80`
 
 Operational authority:
-- `npm run promptfoo:validate*` validates Promptfoo config shape and suite wiring.
-- `npm run promptfoo:run:offline*` is the preferred low-cost replay and smoke path.
-- `npm run promptfoo:run*` is the semantic authority when offline replay and live behavior disagree.
+- `npm run promptfoo:validate` is the canonical public contract-validate entrypoint.
+- `npm run promptfoo:run:offline` is the canonical low-cost public replay and smoke path.
+- `npm run promptfoo:run` is the canonical public semantic authority when offline replay and live behavior disagree.
+- direct `promptfoo -c <config>` execution is the standard path for family-specific validation and runs outside the small public npm surface.
 - `without_skill` remains an informational baseline and does not close contractual conformance.
 - `skill-eval-forge` currently ships direct config entrypoints only; its validation and live runs are not yet published as supported npm aliases.
 

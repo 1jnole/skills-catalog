@@ -170,12 +170,12 @@ Treat [AGENTS.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/AGENTS.md) as 
 
 ```mermaid
 flowchart TD
-  A[Edit skill contract, prompts, tests, or fixtures] --> B[promptfoo validate*]
+  A[Edit skill contract, prompts, tests, or fixtures] --> B["promptfoo:validate or promptfoo validate -c <config>"]
   B --> C{Config and suites valid?}
   C -- no --> D[Fix YAML, prompts, assertions, or wiring]
-  C -- yes --> E[promptfoo:run* live]
+  C -- yes --> E["promptfoo:run or promptfoo eval -c <config>"]
   E --> F[Compare contract, uplift with-skill, and uplift without-skill]
-  F --> G[promptfoo:run:offline* replay]
+  F --> G["promptfoo:run:offline or family-specific replay by config"]
   G --> H{Offline matches live?}
   H -- yes --> I[Keep fixtures and archive the change]
   H -- no --> J[Live is the semantic authority]
@@ -184,9 +184,10 @@ flowchart TD
 ```
 
 Operating rule:
-- `promptfoo validate*` checks config and suite wiring.
-- `promptfoo:run*` is the live semantic gate.
-- `promptfoo:run:offline*` is the low-cost replay and smoke path.
+- `npm run promptfoo:validate` is the canonical public contract-validate entrypoint.
+- `npm run promptfoo:run` is the canonical public live semantic gate.
+- `npm run promptfoo:run:offline` is the canonical public replay and smoke path.
+- direct `promptfoo -c <config>` execution is the standard path for family-specific validation and runs outside the small public npm surface.
 - if live and offline disagree, live wins.
 
 For the current supported Promptfoo command surface, see [evals/README.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/evals/README.md).

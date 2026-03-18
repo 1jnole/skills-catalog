@@ -20,29 +20,12 @@ What must not survive is a parallel repo-owned eval runtime or projection layer 
 ## Current status
 Supported commands:
 - `npm run promptfoo:validate`
-- `npm run promptfoo:validate:uplift:with-skill`
-- `npm run promptfoo:validate:uplift:without-skill`
-- `npm run promptfoo:validate:skill-contract-forge`
-- `npm run promptfoo:validate:skill-contract-forge:uplift:with-skill`
-- `npm run promptfoo:validate:skill-contract-forge:uplift:without-skill`
-- `npm run promptfoo:validate:skill-implementation-forge`
-- `npm run promptfoo:validate:skill-implementation-forge:uplift:with-skill`
-- `npm run promptfoo:validate:skill-implementation-forge:uplift:without-skill`
 - `npm run promptfoo:run`
 - `npm run promptfoo:run:offline`
-- `npm run promptfoo:run:uplift:with-skill`
-- `npm run promptfoo:run:uplift:without-skill`
-- `npm run promptfoo:run:skill-contract-forge`
-- `npm run promptfoo:run:skill-contract-forge:offline`
-- `npm run promptfoo:run:skill-contract-forge:uplift:with-skill`
-- `npm run promptfoo:run:skill-contract-forge:uplift:without-skill`
-- `npm run promptfoo:run:skill-implementation-forge`
-- `npm run promptfoo:run:skill-implementation-forge:uplift:with-skill`
-- `npm run promptfoo:run:skill-implementation-forge:uplift:without-skill`
-- `npm run promptfoo:run:offline:uplift:with-skill`
-- `npm run promptfoo:run:offline:uplift:without-skill`
-- `npm run promptfoo:run:skill-contract-forge:offline:uplift:with-skill`
-- `npm run promptfoo:run:skill-contract-forge:offline:uplift:without-skill`
+
+Standard non-public execution pattern:
+- `promptfoo validate -c evals/engines/promptfoo/<skill-name>/promptfooconfig*.yaml`
+- `promptfoo eval -c evals/engines/promptfoo/<skill-name>/promptfooconfig*.yaml ...`
 
 Supported runtime:
 - native Promptfoo execution from `evals/engines/promptfoo/` with repo-owned wrappers removed
@@ -79,9 +62,10 @@ The current duplication between contract and uplift suites is small and semantic
 - Both suites now use native Promptfoo `assert-set`, `threshold`, and `metric` fields so critical checks are explicit and metrics show which dimension failed.
 
 Operational authority:
-- `npm run promptfoo:validate*` validates config and suite structure.
-- `npm run promptfoo:run:offline*` is the preferred low-cost replay and smoke path.
-- `npm run promptfoo:run*` is the semantic authority when replay and live behavior disagree.
+- `npm run promptfoo:validate` is the canonical public contract-validate entrypoint.
+- `npm run promptfoo:run:offline` is the preferred public low-cost replay and smoke path.
+- `npm run promptfoo:run` is the public semantic authority when replay and live behavior disagree.
+- direct `promptfoo -c <config>` execution is the standard path for family-specific work outside the small public npm surface.
 - `without_skill` remains an informational baseline rather than a closure gate.
 - `skill-contract-forge` currently has the maintained offline replay surface; `skill-implementation-forge` currently has validate and live execution only.
 - `skill-eval-forge` currently has direct config entrypoints only; public npm aliases and offline replay remain deferred.
@@ -170,12 +154,12 @@ Historical helper and pilot runtime residue are no longer kept inside the active
 
 Offline smoke execution uses Promptfoo-native fixture replay:
 - `npm run promptfoo:run:offline`
-- direct uplift offline replays use the surface-specific fixture files under `evals/engines/promptfoo/fixtures/`
+- direct family-specific offline replays, when supported, use the surface-specific fixture files under `evals/engines/promptfoo/fixtures/`
 
 Those offline replays use Promptfoo-native captured outputs to rerun assertions cheaply. They are supported replay evidence, not a stronger authority surface than a conflicting live run.
 
-Supported uplift execution commands:
-- `npm run promptfoo:run:uplift:with-skill`
-- `npm run promptfoo:run:uplift:without-skill`
-- `npm run promptfoo:run:offline:uplift:with-skill`
-- `npm run promptfoo:run:offline:uplift:without-skill`
+Examples of direct family-specific execution:
+- `promptfoo validate -c evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.with-skill.yaml`
+- `promptfoo eval -c evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.without-skill.yaml -o evals/engines/promptfoo/generated/skill-contract-forge.uplift.without-skill.live.eval.json --no-progress-bar --table-cell-max-length 80`
+- `promptfoo validate -c evals/engines/promptfoo/skill-implementation-forge/promptfooconfig.uplift.with-skill.yaml`
+- `promptfoo validate -c evals/engines/promptfoo/skill-eval-forge/promptfooconfig.uplift.without-skill.yaml`
