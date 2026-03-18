@@ -41,8 +41,8 @@ Do not use this skill for:
 ## Inputs
 
 The request must provide:
-- one approved contract artifact for exactly one named target skill
-- an existing implementation of that same target skill
+- one approved contract artifact for exactly one named target skill, identified specifically enough to inspect as authority
+- an existing implementation of that same target skill, identified specifically enough to inspect as authority
 - enough repo-local eval context to author or refactor coverage without inventing runtime behavior or target behavior
 
 Useful supporting inputs may include:
@@ -68,8 +68,8 @@ The exact terminal marker is:
 ## Stop-and-ask conditions
 
 Stop and ask when:
-- the approved contract artifact is missing
-- the target skill implementation is missing
+- the approved contract artifact is missing or only vaguely described
+- the target skill implementation is missing or only vaguely described
 - the target skill is not clearly identified
 - the contract artifact and implementation describe materially conflicting behavior that cannot be resolved without redefining the contract
 - the request mixes eval authoring with contract authoring in one inseparable pass
@@ -132,6 +132,8 @@ Out of scope:
 - The existing implementation exists but the approved contract artifact does not: stop and ask rather than treating implementation drift as authority.
 - The contract and implementation mostly align but one behavior is materially inconsistent: stop and ask if resolving it would redefine the contract.
 - The request points to an exact contract file path instead of pasting the contract inline: this is valid if the file is authoritative and specific enough.
+- The request identifies exact repo-local paths for the approved contract artifact, existing implementation, and active eval context: treat those as sufficient operational authority and proceed without asking to reconfirm them.
+- The request says the contract or implementation exists "somewhere in the repo" without identifying it precisely enough to inspect: stop and ask rather than inventing where the authority lives.
 - Runtime work is mentioned but explicitly deferred: remain in eval-authoring scope and defer that later phase.
 - A request asks for eval authoring plus provider, fixture, generated-output, or shared-runner changes in the same pass: stop and ask unless that runtime work is clearly deferred.
 - A baseline comparison surface is being authored: keep it informative, but do not let it imitate the active skill-owned boundary.

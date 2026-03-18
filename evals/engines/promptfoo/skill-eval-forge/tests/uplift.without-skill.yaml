@@ -2,7 +2,13 @@
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
     case_id: author-evals-from-approved-contract-and-implementation
-    prompt: Author Promptfoo-native eval coverage for `skill-implementation-forge` from its approved contract artifact and existing implementation, then stop at `Skill eval ready`.
+    prompt: >-
+      Author Promptfoo-native eval coverage for `skill-implementation-forge`.
+      Use the approved contract artifact at `openspec/specs/skill-implementation-forge/spec.md`,
+      the existing implementation at `packs/core/skill-implementation-forge/SKILL.md`,
+      and the active Promptfoo eval context under `evals/engines/promptfoo/skill-implementation-forge/`.
+      Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
+      Proceed from those authoritative inputs and stop at `Skill eval ready`.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
@@ -14,20 +20,31 @@
       metric: baseline_surface
       threshold: 1
       assert:
-        - type: not-icontains
-          metric: no_terminal_marker
-          value: Skill eval ready
         - type: not-icontains-any
-          metric: no_repo_boundary_markers
+          metric: no_skill_owned_terminal_or_boundary
           value:
-            - evals/engines/promptfoo/
-            - shared runner
+            - Skill eval ready
+            - eval ready
+            - evaluation ready
+            - coverage ready
+            - ready for use
+            - ready for execution
+            - prepared and integrated for execution
             - active repo eval boundary
+            - follow the skill contract
+            - per the skill-eval-forge contract
+            - stop and ask
 - description: refactor-existing-eval-coverage
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
     case_id: refactor-existing-eval-coverage
-    prompt: Refactor Promptfoo-native eval coverage for `skill-contract-forge` from its approved contract artifact and existing implementation without redesigning the runtime.
+    prompt: >-
+      Refactor Promptfoo-native eval coverage for `skill-eval-forge`.
+      Use the approved contract artifact at `openspec/specs/skill-eval-forge/spec.md`,
+      the existing implementation at `packs/core/skill-eval-forge/SKILL.md`,
+      and the active Promptfoo eval context under `evals/engines/promptfoo/skill-eval-forge/`.
+      Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
+      Keep the shared runtime unchanged, proceed from those authoritative inputs, and stop at `Skill eval ready`.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
@@ -39,15 +56,20 @@
       metric: baseline_surface
       threshold: 1
       assert:
-        - type: not-icontains
-          metric: no_terminal_marker
-          value: Skill eval ready
         - type: not-icontains-any
-          metric: no_repo_boundary_markers
+          metric: no_skill_owned_terminal_or_boundary
           value:
-            - evals/engines/promptfoo/
-            - shared runner
+            - Skill eval ready
+            - eval ready
+            - evaluation ready
+            - coverage ready
+            - ready for use
+            - ready for execution
+            - prepared and integrated for execution
             - active repo eval boundary
+            - follow the skill contract
+            - per the skill-eval-forge contract
+            - stop and ask
 - description: contract-authoring-request
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
@@ -65,11 +87,16 @@
       threshold: 1
       assert:
         - type: not-icontains
-          metric: no_terminal_marker
-          value: Skill eval ready
-        - type: not-icontains
           metric: no_stop_and_ask_label
           value: stop and ask
+        - type: not-icontains-any
+          metric: no_skill_owned_authority
+          value:
+            - Skill eval ready
+            - eval ready
+            - evaluation ready
+            - follow the skill contract
+            - per the skill-eval-forge contract
 - description: missing-contract-artifact
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
@@ -86,15 +113,16 @@
       metric: baseline_surface
       threshold: 1
       assert:
-        - type: not-icontains
-          metric: no_terminal_marker
-          value: Skill eval ready
         - type: not-icontains-any
           metric: no_repo_boundary_markers
           value:
+            - Skill eval ready
+            - eval ready
+            - evaluation ready
             - target skill
             - evals/engines/promptfoo/
             - active repo eval boundary
+            - per the skill-eval-forge contract
 - description: deictic-target
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
@@ -111,15 +139,16 @@
       metric: baseline_surface
       threshold: 1
       assert:
-        - type: not-icontains
-          metric: no_terminal_marker
-          value: Skill eval ready
         - type: not-icontains-any
           metric: no_repo_boundary_markers
           value:
+            - Skill eval ready
+            - eval ready
+            - evaluation ready
             - target skill
             - evals/engines/promptfoo/
             - active repo eval boundary
+            - per the skill-eval-forge contract
 - description: baseline-should-not-impersonate-skill-boundary
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
@@ -136,14 +165,20 @@
       metric: baseline_surface
       threshold: 1
       assert:
-        - type: not-icontains
-          metric: no_terminal_marker
-          value: Skill eval ready
         - type: not-icontains-any
           metric: no_boundary_impersonation
           value:
+            - Skill eval ready
+            - eval ready
+            - evaluation ready
+            - coverage ready
+            - ready for use
+            - ready for execution
+            - prepared and integrated for execution
             - evals/engines/promptfoo/
             - target skill
             - approved contract artifact
             - existing implementation
+            - follow the skill contract
+            - per the skill-eval-forge contract
             - stop and ask
