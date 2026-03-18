@@ -28,6 +28,11 @@ It does two things:
 
 This should stay semantic and lightweight. It should not become a second contract gate.
 
+Where deterministic checks are insufficient, the comparative baseline may add a
+small Promptfoo model-graded assertion with an explicitly pinned grader
+provider so the suite can judge non-impersonation semantically without moving
+that policy back into the `without_skill` wrapper prompt.
+
 ## Non-goals
 
 - Rebuilding the whole family

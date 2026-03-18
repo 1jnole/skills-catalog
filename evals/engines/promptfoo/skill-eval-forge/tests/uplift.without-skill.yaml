@@ -8,7 +8,7 @@
       the existing implementation at `packs/core/skill-implementation-forge/SKILL.md`,
       and the active Promptfoo eval context under `evals/engines/promptfoo/skill-implementation-forge/`.
       Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
-      Proceed from those authoritative inputs and stop at `Skill eval ready`.
+      Proceed from those authoritative inputs and stop at the normal completion marker for this phase.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
@@ -34,6 +34,29 @@
             - follow the skill contract
             - per the skill-eval-forge contract
             - stop and ask
+        - type: llm-rubric
+          metric: semantic_non_impersonation
+          provider: openai:gpt-4.1-mini
+          value: >-
+            Grade whether the assistant stayed an informational baseline rather
+            than impersonating an active repo-local skill. Pass only if the
+            response stays generic and does not present itself as following a
+            local skill boundary, local stop rules, or a skill-owned phase
+            completion. Fail if it adopts a skill-owned completion marker, ends
+            with a phase-completion formula like "ready" or "complete", or
+            treats repo-local artifacts, eval context, or implementation inputs
+            as an active authority it is following right now.
+          rubricPrompt: |
+            [
+              {
+                "role": "system",
+                "content": "You are grading whether a baseline assistant response impersonates an active repo-local skill. Return JSON with keys pass, score, and reason. Pass only if the response stays informational and generic. Fail if it adopts a skill-owned completion marker, uses a phase-completion formula as a terminal marker, presents repo-local boundary framing as active authority, or treats repo-local artifacts and implementation inputs as a local workflow it is currently following."
+              },
+              {
+                "role": "user",
+                "content": "User request:\n{{prompt}}\n\nAssistant response:\n{{output}}\n\nRubric:\n{{rubric}}"
+              }
+            ]
 - description: refactor-existing-eval-coverage
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
@@ -44,7 +67,7 @@
       the existing implementation at `packs/core/skill-eval-forge/SKILL.md`,
       and the active Promptfoo eval context under `evals/engines/promptfoo/skill-eval-forge/`.
       Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
-      Keep the shared runtime unchanged, proceed from those authoritative inputs, and stop at `Skill eval ready`.
+      Keep the shared runtime unchanged, proceed from those authoritative inputs, and stop at the normal completion marker for this phase.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
@@ -70,6 +93,29 @@
             - follow the skill contract
             - per the skill-eval-forge contract
             - stop and ask
+        - type: llm-rubric
+          metric: semantic_non_impersonation
+          provider: openai:gpt-4.1-mini
+          value: >-
+            Grade whether the assistant stayed an informational baseline rather
+            than impersonating an active repo-local skill. Pass only if the
+            response stays generic and does not present itself as following a
+            local skill boundary, local stop rules, or a skill-owned phase
+            completion. Fail if it adopts a skill-owned completion marker, ends
+            with a phase-completion formula like "ready" or "complete", or
+            treats repo-local artifacts, eval context, or implementation inputs
+            as an active authority it is following right now.
+          rubricPrompt: |
+            [
+              {
+                "role": "system",
+                "content": "You are grading whether a baseline assistant response impersonates an active repo-local skill. Return JSON with keys pass, score, and reason. Pass only if the response stays informational and generic. Fail if it adopts a skill-owned completion marker, uses a phase-completion formula as a terminal marker, presents repo-local boundary framing as active authority, or treats repo-local artifacts and implementation inputs as a local workflow it is currently following."
+              },
+              {
+                "role": "user",
+                "content": "User request:\n{{prompt}}\n\nAssistant response:\n{{output}}\n\nRubric:\n{{rubric}}"
+              }
+            ]
 - description: contract-authoring-request
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
