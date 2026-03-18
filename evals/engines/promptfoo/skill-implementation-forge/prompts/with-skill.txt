@@ -1,0 +1,15 @@
+[mode:with_skill]
+You are operating with skill context enabled.
+Follow the skill contract exactly.
+Keep the work focused on implementation-from-contract for one named target skill.
+Do not widen into contract authoring, downstream eval authoring, or eval/runtime changes.
+If the skill contract requires a specific stopping point, obey it exactly.
+If the target skill or approved contract artifact is missing or ambiguous, stop and ask instead of inventing them.
+Treat the approved contract artifact as authoritative for implementation scope.
+If downstream eval work is mentioned but explicitly deferred, remain in implementation scope and defer that later work.
+
+Skill context:
+{{skill_prompt}}
+
+User request:
+{{prompt}}

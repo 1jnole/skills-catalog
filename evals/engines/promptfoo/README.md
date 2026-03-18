@@ -22,26 +22,45 @@ Supported commands:
 - `npm run promptfoo:validate`
 - `npm run promptfoo:validate:uplift:with-skill`
 - `npm run promptfoo:validate:uplift:without-skill`
+- `npm run promptfoo:validate:skill-contract-forge`
+- `npm run promptfoo:validate:skill-contract-forge:uplift:with-skill`
+- `npm run promptfoo:validate:skill-contract-forge:uplift:without-skill`
+- `npm run promptfoo:validate:skill-implementation-forge`
+- `npm run promptfoo:validate:skill-implementation-forge:uplift:with-skill`
+- `npm run promptfoo:validate:skill-implementation-forge:uplift:without-skill`
 - `npm run promptfoo:run`
 - `npm run promptfoo:run:offline`
 - `npm run promptfoo:run:uplift:with-skill`
 - `npm run promptfoo:run:uplift:without-skill`
+- `npm run promptfoo:run:skill-contract-forge`
+- `npm run promptfoo:run:skill-contract-forge:offline`
+- `npm run promptfoo:run:skill-contract-forge:uplift:with-skill`
+- `npm run promptfoo:run:skill-contract-forge:uplift:without-skill`
+- `npm run promptfoo:run:skill-implementation-forge`
+- `npm run promptfoo:run:skill-implementation-forge:uplift:with-skill`
+- `npm run promptfoo:run:skill-implementation-forge:uplift:without-skill`
 - `npm run promptfoo:run:offline:uplift:with-skill`
 - `npm run promptfoo:run:offline:uplift:without-skill`
+- `npm run promptfoo:run:skill-contract-forge:offline:uplift:with-skill`
+- `npm run promptfoo:run:skill-contract-forge:offline:uplift:without-skill`
 
 Supported runtime:
 - native Promptfoo execution from `evals/engines/promptfoo/` with repo-owned wrappers removed
 
 ## Entrypoints
-- `promptfooconfig.yaml` is the canonical structural contract gate entrypoint.
-- `promptfooconfig.uplift.with-skill.yaml` is the comparative uplift gate entrypoint for `with_skill`.
-- `promptfooconfig.uplift.without-skill.yaml` is the informational baseline entrypoint for `without_skill`.
+Each evaluated skill owns its own Promptfoo family under `evals/engines/promptfoo/<skill-name>/`.
+
+Every maintained family exposes:
+- `promptfooconfig.yaml` as the canonical structural contract gate entrypoint
+- `promptfooconfig.uplift.with-skill.yaml` as the comparative uplift gate entrypoint for `with_skill`
+- `promptfooconfig.uplift.without-skill.yaml` as the informational baseline entrypoint for `without_skill`
 
 ## Shared Assets
-- `prompts/` holds prompt templates only.
-- `tests/` holds Promptfoo test suites only.
 - `providers/` holds provider adapter files only.
 - `fixtures/` and `generated/` remain runtime support/output areas and are not suite-definition entrypoints.
+- `<skill-name>/prompts/` holds prompt templates for that skill family only.
+- `<skill-name>/tests/` holds Promptfoo test suites for that skill family only.
+- direct per-skill families such as `skill-contract-forge/` and `skill-implementation-forge/` are the supported way to add more skill eval surfaces.
 
 No `tests/defaults.yaml` is shipped in this phase.
 The current duplication between contract and uplift suites is small and semantically meaningful, so a shared defaults layer would add indirection without enough payoff yet.
@@ -63,6 +82,7 @@ Operational authority:
 - `npm run promptfoo:run:offline*` is the preferred low-cost replay and smoke path.
 - `npm run promptfoo:run*` is the semantic authority when replay and live behavior disagree.
 - `without_skill` remains an informational baseline rather than a closure gate.
+- `skill-contract-forge` currently has the maintained offline replay surface; `skill-implementation-forge` currently has validate and live execution only.
 
 ### Critical checks
 - Contract critical checks cover the exact routing envelope from `SKILL.md`: classification, workflow when applicable, embedded Eval Brief schema validity on trigger paths, terminal markers, and incompatible classification absence.
@@ -74,37 +94,37 @@ Operational authority:
 - Wording guidance remains in `SKILL.md`, active eval docs, and human review rather than inside the hard Promptfoo gate.
 
 For `skill-contract-forge`, the active Promptfoo execution surface is:
-- `evals/engines/promptfoo/promptfooconfig.yaml`
-- `evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`
-- `evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.with-skill.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.without-skill.yaml`
 - `evals/engines/promptfoo/providers/default.openai.yaml`
-- `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`
-- `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
-- `evals/engines/promptfoo/prompts/with-skill.txt`
-- `evals/engines/promptfoo/prompts/without-skill.txt`
+- `evals/engines/promptfoo/skill-contract-forge/tests/contract.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/tests/uplift.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/prompts/with-skill.txt`
+- `evals/engines/promptfoo/skill-contract-forge/prompts/without-skill.txt`
 - `evals/contracts/skill-contract-forge/eval-brief-output.schema.json`
 
 The canonical case-definition authority for `skill-contract-forge` lives at:
-- `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`
-- `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
-- `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/tests/contract.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/tests/uplift.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/tests/uplift.without-skill.yaml`
 
 Canonical Promptfoo config is read from:
-- `evals/engines/promptfoo/promptfooconfig.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml`
 
 Canonical contract suite is read from:
-- `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/tests/contract.yaml`
 
 Default provider adapter is read from:
 - `evals/engines/promptfoo/providers/default.openai.yaml`
 
 Comparative uplift configs are read from:
-- `evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`
-- `evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.with-skill.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.without-skill.yaml`
 
 Comparative uplift suite is read from:
-- `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
-- `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/tests/uplift.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/tests/uplift.without-skill.yaml`
 
 Promptfoo raw eval output is written to:
 - `evals/engines/promptfoo/generated/skill-contract-forge.eval.json`
@@ -114,14 +134,14 @@ The canonical gate runs only:
 - provider selection via the default provider adapter in `providers/default.openai.yaml`
 
 The uplift comparison surface runs in two separate executions:
-- `with_skill` via `promptfooconfig.uplift.with-skill.yaml` as the semantic uplift gate
-- `without_skill` via `promptfooconfig.uplift.without-skill.yaml` as the informational baseline surface
+- `with_skill` via `skill-contract-forge/promptfooconfig.uplift.with-skill.yaml` as the semantic uplift gate
+- `without_skill` via `skill-contract-forge/promptfooconfig.uplift.without-skill.yaml` as the informational baseline surface
 - provider selection via the same default provider adapter
 
-Repo-specific logic stays in native Promptfoo assertions authored per case in `tests/skill-contract-forge.contract.yaml`.
+Repo-specific logic stays in native Promptfoo assertions authored per case in `skill-contract-forge/tests/contract.yaml`.
 Trigger cases use schema-backed `contains-json` checks against the Eval Brief contract file.
 
-Repo-specific uplift logic stays in native Promptfoo assertions authored per case in `tests/skill-contract-forge.uplift.yaml`.
+Repo-specific uplift logic stays in native Promptfoo assertions authored per case in `skill-contract-forge/tests/uplift.yaml`.
 Those uplift assertions are comparative by design, expose named metrics for routing dimensions, and do not replace the contract gate.
 The `without_skill` baseline surface uses its own lighter suite so the repository can compare behavior without forcing the baseline path to satisfy the skill-owned output envelope.
 

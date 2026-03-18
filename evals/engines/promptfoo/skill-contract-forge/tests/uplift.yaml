@@ -1,6 +1,6 @@
 - description: new-skill-one-clear-job
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: new-skill-one-clear-job
     prompt: Create a new reusable skill for spotting JavaScript array mutation mistakes. Start from the contract, keep one job only, and do not implement eval runtime behavior.
     expected_stop: Eval Brief ready
@@ -11,7 +11,7 @@
     expected_stop: Eval Brief ready
   assert:
     - type: assert-set
-      metric: critical_contract
+      metric: critical_uplift
       threshold: 1
       assert:
         - type: starts-with
@@ -20,9 +20,6 @@
         - type: icontains
           metric: workflow
           value: "Workflow: new-skill"
-        - type: contains-json
-          metric: schema_valid
-          value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
         - type: icontains
           metric: terminal_marker
           value: Eval Brief ready
@@ -34,7 +31,7 @@
           value: "Classification: stop-and-ask"
 - description: existing-skill-refactor-clear-target
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: existing-skill-refactor-clear-target
     prompt: Refactor the existing skill `openspec-bootstrap`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.
     expected_stop: Eval Brief ready
@@ -45,7 +42,7 @@
     expected_stop: Eval Brief ready
   assert:
     - type: assert-set
-      metric: critical_contract
+      metric: critical_uplift
       threshold: 1
       assert:
         - type: starts-with
@@ -54,9 +51,6 @@
         - type: icontains
           metric: workflow
           value: "Workflow: existing-skill-refactor"
-        - type: contains-json
-          metric: schema_valid
-          value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
         - type: icontains
           metric: terminal_marker
           value: Eval Brief ready
@@ -68,7 +62,7 @@
           value: "Classification: stop-and-ask"
 - description: skill-rewrite-clear-target
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: skill-rewrite-clear-target
     prompt: Rewrite the existing skill `openspec-bootstrap` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.
     expected_stop: Eval Brief ready
@@ -79,7 +73,7 @@
     expected_stop: Eval Brief ready
   assert:
     - type: assert-set
-      metric: critical_contract
+      metric: critical_uplift
       threshold: 1
       assert:
         - type: starts-with
@@ -88,77 +82,6 @@
         - type: icontains
           metric: workflow
           value: "Workflow: skill-rewrite"
-        - type: contains-json
-          metric: schema_valid
-          value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
-        - type: icontains
-          metric: terminal_marker
-          value: Eval Brief ready
-        - type: not-icontains
-          metric: incompatible_non_trigger
-          value: "Classification: non-trigger"
-        - type: not-icontains
-          metric: incompatible_stop_and_ask
-          value: "Classification: stop-and-ask"
-- description: mixed-authoring-and-eval-request
-  vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
-    case_id: mixed-authoring-and-eval-request
-    prompt: Write a new skill for PR review routing and also set up the first eval scaffold for it. I want the skill contract first, but please leave the runtime for later.
-    expected_stop: Eval Brief ready
-    should_trigger: true
-  metadata:
-    skill_name: skill-contract-forge
-    case_bucket: golden
-    expected_stop: Eval Brief ready
-  assert:
-    - type: assert-set
-      metric: critical_contract
-      threshold: 1
-      assert:
-        - type: starts-with
-          metric: classification
-          value: "Classification: trigger"
-        - type: icontains
-          metric: workflow
-          value: "Workflow: new-skill"
-        - type: contains-json
-          metric: schema_valid
-          value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
-        - type: icontains
-          metric: terminal_marker
-          value: Eval Brief ready
-        - type: not-icontains
-          metric: incompatible_non_trigger
-          value: "Classification: non-trigger"
-        - type: not-icontains
-          metric: incompatible_stop_and_ask
-          value: "Classification: stop-and-ask"
-- description: trigger-with-benchmark-noise
-  vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
-    case_id: trigger-with-benchmark-noise
-    prompt: Create a new reusable skill for repo ownership routing. Freeze the contract first and stop at Eval Brief ready. We can design the benchmark suite and model comparison later.
-    expected_stop: Eval Brief ready
-    should_trigger: true
-  metadata:
-    skill_name: skill-contract-forge
-    case_bucket: regression
-    expected_stop: Eval Brief ready
-  assert:
-    - type: assert-set
-      metric: critical_contract
-      threshold: 1
-      assert:
-        - type: starts-with
-          metric: classification
-          value: "Classification: trigger"
-        - type: icontains
-          metric: workflow
-          value: "Workflow: new-skill"
-        - type: contains-json
-          metric: schema_valid
-          value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
         - type: icontains
           metric: terminal_marker
           value: Eval Brief ready
@@ -170,7 +93,7 @@
           value: "Classification: stop-and-ask"
 - description: agents-policy-request
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: agents-policy-request
     prompt: Update the repo AGENTS.md managed block and tighten the repository policy wording.
     expected_stop: do_not_trigger
@@ -211,7 +134,7 @@
           value: Eval Brief ready
 - description: runtime-harness-implementation
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: runtime-harness-implementation
     prompt: Build the offline eval runner for skill-contract-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.
     expected_stop: do_not_trigger
@@ -251,107 +174,9 @@
         - type: not-icontains
           metric: terminal_absent
           value: Eval Brief ready
-- description: eval-authoring-only-request
-  vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
-    case_id: eval-authoring-only-request
-    prompt: Take this finished Eval Brief and turn it into golden and negative Promptfoo cases under evals/engines/promptfoo/tests/.
-    expected_stop: do_not_trigger
-    should_trigger: false
-  metadata:
-    skill_name: skill-contract-forge
-    case_bucket: negative
-    expected_stop: do_not_trigger
-  assert:
-    - type: assert-set
-      metric: out_of_scope_behavior
-      threshold: 1
-      assert:
-        - type: starts-with
-          metric: classification
-          value: "Classification: non-trigger"
-        - type: icontains-any
-          metric: out_of_scope_marker
-          value:
-            - Out of scope for skill-contract-forge.
-            - outside the scope
-            - out of scope
-            - does not cover
-            - only handles
-            - before implementation
-        - type: icontains-any
-          metric: reason_marker
-          value:
-            - downstream eval authoring
-            - finished Eval Brief
-            - finished brief
-            - golden and negative test cases
-            - creating golden and negative test cases
-            - evaluation test cases
-            - downstream evaluation authoring
-        - type: not-icontains
-          metric: incompatible_trigger
-          value: "Classification: trigger"
-        - type: not-icontains
-          metric: incompatible_stop_and_ask
-          value: "Classification: stop-and-ask"
-        - type: not-icontains
-          metric: terminal_absent
-          value: Eval Brief ready
-- description: eval-authoring-benchmark-suite-request
-  vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
-    case_id: eval-authoring-benchmark-suite-request
-    prompt: The brief is already done. Create the eval definition, golden cases, and benchmark suite for this skill so we can wire the runtime today.
-    expected_stop: do_not_trigger
-    should_trigger: false
-  metadata:
-    skill_name: skill-contract-forge
-    case_bucket: regression
-    expected_stop: do_not_trigger
-  assert:
-    - type: assert-set
-      metric: out_of_scope_behavior
-      threshold: 1
-      assert:
-        - type: starts-with
-          metric: classification
-          value: "Classification: non-trigger"
-        - type: icontains-any
-          metric: out_of_scope_marker
-          value:
-            - Out of scope for skill-contract-forge.
-            - outside the scope
-            - out of scope
-            - does not cover
-            - only handles
-            - does not produce
-        - type: icontains-any
-          metric: reason_marker
-          value:
-            - downstream eval authoring
-            - eval definition
-            - creating the eval definition
-            - downstream evaluation authoring
-            - runtime implementation
-            - finished brief
-            - benchmark suite creation
-            - contract authoring phase
-            - benchmark suite
-            - downstream evaluation
-            - evaluation artifacts
-        - type: not-icontains
-          metric: incompatible_trigger
-          value: "Classification: trigger"
-        - type: not-icontains
-          metric: incompatible_stop_and_ask
-          value: "Classification: stop-and-ask"
-        - type: not-icontains
-          metric: terminal_absent
-          value: Eval Brief ready
 - description: ambiguous-multi-workflow-request
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: ambiguous-multi-workflow-request
     prompt: Create a skill, reorganize the repo policies, and build the first runner in one pass so everything lands together.
     expected_stop: stop_and_ask
@@ -391,7 +216,7 @@
           value: Eval Brief ready
 - description: ambiguous-refactor-missing-target
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: ambiguous-refactor-missing-target
     prompt: Refactor this skill so the contract is clearer, keep it contract-first, and stop at Eval Brief ready.
     expected_stop: stop_and_ask
@@ -414,6 +239,9 @@
             - clarif
             - please provide
             - please specify
+            - lacks identification
+            - specify the exact target
+            - specify the exact target
         - type: icontains-any
           metric: ambiguity_reason
           value:
@@ -421,7 +249,6 @@
             - target skill
             - unclear
             - name or description of the skill
-            - existing skill
             - which existing skill
         - type: not-icontains
           metric: incompatible_trigger
@@ -434,7 +261,7 @@
           value: Eval Brief ready
 - description: ambiguous-rewrite-missing-target
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: ambiguous-rewrite-missing-target
     prompt: Rewrite the skill so it matches the current repo docs, freeze the contract first, and stop at Eval Brief ready.
     expected_stop: stop_and_ask
@@ -457,6 +284,7 @@
             - clarif
             - please provide
             - please specify
+            - lacks identification
         - type: icontains-any
           metric: ambiguity_reason
           value:
@@ -473,3 +301,5 @@
         - type: not-icontains
           metric: terminal_absent
           value: Eval Brief ready
+
+

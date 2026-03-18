@@ -215,6 +215,7 @@ Engine-specific execution assets live outside this skill contract.
 4. Capture only the minimal downstream evaluation intent needed by the next step.
 5. Produce the boundary-only Eval Brief JSON.
 6. End trigger-path responses with the exact line `Eval Brief ready`.
+7. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, and nearby negative cases without silently widening scope.
 
 ## Quality bar
 

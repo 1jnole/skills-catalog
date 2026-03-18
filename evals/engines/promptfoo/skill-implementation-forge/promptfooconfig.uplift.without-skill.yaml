@@ -1,0 +1,7 @@
+description: Promptfoo informational baseline surface for skill-implementation-forge (without_skill)
+prompts:
+  - label: without_skill
+    raw: file://prompts/without-skill.txt
+providers:
+  - file://../providers/default.openai.yaml
+tests: file://tests/uplift.without-skill.yaml

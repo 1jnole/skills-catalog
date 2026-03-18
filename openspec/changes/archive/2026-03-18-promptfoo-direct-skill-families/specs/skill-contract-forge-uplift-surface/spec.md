@@ -1,8 +1,5 @@
-# skill-contract-forge-uplift-surface Specification
+## MODIFIED Requirements
 
-## Purpose
-Define a comparative Promptfoo uplift surface for `skill-contract-forge` that stays separate from the canonical contract gate.
-## Requirements
 ### Requirement: Uplift execution is separate from the contract gate
 
 The `skill-contract-forge` uplift comparison surface MUST be defined separately from the canonical Promptfoo contract gate and MUST preserve its comparative purpose.
@@ -13,19 +10,6 @@ The `skill-contract-forge` uplift comparison surface MUST be defined separately 
 - **THEN** `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml` SHALL remain the contract gate
 - **AND** uplift execution SHALL be defined by `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.with-skill.yaml` and `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.without-skill.yaml`
 
-### Requirement: Uplift suite is comparative, not contractual
-The `with_skill` uplift surface MUST recover green comparative routing behavior after packaging refactors without forcing the repository to collapse the `references/` split back into `SKILL.md`.
-
-#### Scenario: Skill-enabled uplift regresses after packaging split
-- **WHEN** `uplift with-skill` fails after moving supportive material into `references/`
-- **THEN** the repository SHALL recover the intended comparative routing behavior through minimal normative guidance or suite recalibration
-- **AND** `without_skill` SHALL remain an informational baseline rather than becoming the semantic recovery target
-
-#### Scenario: Comparative recovery uses contract wording and supportive references
-- **WHEN** the repository repairs the missing-target refactor boundary for `with_skill`
-- **THEN** it MAY recover that behavior by tightening `SKILL.md` and its supportive routing references
-- **AND** it SHALL NOT need to collapse the supportive `references/` split back into `SKILL.md`
-
 ### Requirement: Offline uplift with-skill replay preserves stop-and-ask boundaries
 
 The supported offline `with_skill` uplift replay for `skill-contract-forge` MUST preserve the maintained stop-and-ask routing boundary for ambiguous refactor requests.
@@ -35,4 +19,3 @@ The supported offline `with_skill` uplift replay for `skill-contract-forge` MUST
 - **WHEN** `npm run promptfoo:run:skill-contract-forge:offline:uplift:with-skill` replays `ambiguous-refactor-missing-target`
 - **THEN** the replayed output SHALL classify the request as `stop-and-ask`
 - **AND** it SHALL NOT classify that request as `trigger`
-

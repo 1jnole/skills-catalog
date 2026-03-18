@@ -85,7 +85,8 @@ If the artifact does not freeze the single job, target skill, outputs, or stop c
 3. Create or refactor `SKILL.md`.
 4. Add nearby support files only when the approved contract artifact explicitly requires them.
 5. Keep the implementation aligned with the approved contract artifact.
-6. Stop at the exact terminal marker `Skill implementation ready`.
+6. Before finalizing, check that the resulting skill still has one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative examples, and relevant edge cases.
+7. Stop at the exact terminal marker `Skill implementation ready`.
 
 ## Guardrails
 

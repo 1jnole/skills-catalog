@@ -1,8 +1,5 @@
-# promptfoo-modular-config-topology Specification
+## MODIFIED Requirements
 
-## Purpose
-Define a modular Promptfoo topology where entrypoints, prompts, tests, and providers have clear, separate responsibilities.
-## Requirements
 ### Requirement: Promptfoo entrypoints have a single clear purpose
 
 The supported Promptfoo configs for each evaluated skill MUST each represent one explicit execution role, and their suite files SHALL be authored directly in the Promptfoo-native suite files without repo-owned projection tooling.
@@ -36,4 +33,3 @@ The maintained Promptfoo-facing docs MUST describe one consistent supported comm
 - **THEN** they SHALL list the supported validate and run commands for the maintained Promptfoo families
 - **AND** they SHALL describe direct per-skill families under `evals/engines/promptfoo/<skill-name>/`
 - **AND** they SHALL NOT present `promptfoo:sync`, `promptfoo:sync:check`, or the rejected `evals/engines/promptfoo/skills/<skill-name>/` topology as part of the supported flow
-

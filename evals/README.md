@@ -12,11 +12,11 @@ evals/
   contracts/
   engines/
     promptfoo/
+      skill-contract-forge/
+      skill-implementation-forge/
       fixtures/
       generated/
-      prompts/
       providers/
-      tests/
 ```
 
 The first visible contract boundary already exists at:
@@ -30,35 +30,62 @@ Supported command surface:
 - `npm run promptfoo:validate`
 - `npm run promptfoo:validate:uplift:with-skill`
 - `npm run promptfoo:validate:uplift:without-skill`
+- `npm run promptfoo:validate:skill-contract-forge`
+- `npm run promptfoo:validate:skill-contract-forge:uplift:with-skill`
+- `npm run promptfoo:validate:skill-contract-forge:uplift:without-skill`
+- `npm run promptfoo:validate:skill-implementation-forge`
+- `npm run promptfoo:validate:skill-implementation-forge:uplift:with-skill`
+- `npm run promptfoo:validate:skill-implementation-forge:uplift:without-skill`
 - `npm run promptfoo:run`
 - `npm run promptfoo:run:offline`
 - `npm run promptfoo:run:uplift:with-skill`
 - `npm run promptfoo:run:uplift:without-skill`
+- `npm run promptfoo:run:skill-contract-forge`
+- `npm run promptfoo:run:skill-contract-forge:offline`
+- `npm run promptfoo:run:skill-contract-forge:uplift:with-skill`
+- `npm run promptfoo:run:skill-contract-forge:uplift:without-skill`
+- `npm run promptfoo:run:skill-implementation-forge`
+- `npm run promptfoo:run:skill-implementation-forge:uplift:with-skill`
+- `npm run promptfoo:run:skill-implementation-forge:uplift:without-skill`
 - `npm run promptfoo:run:offline:uplift:with-skill`
 - `npm run promptfoo:run:offline:uplift:without-skill`
+- `npm run promptfoo:run:skill-contract-forge:offline:uplift:with-skill`
+- `npm run promptfoo:run:skill-contract-forge:offline:uplift:without-skill`
 
 Supported runtime shape:
 - native Promptfoo config, prompt templates, tests, assertions, fixtures, and generated outputs live under `evals/engines/promptfoo/`
 - provider selection is externalized through Promptfoo provider adapter files under `evals/engines/promptfoo/providers/`
-- the canonical Promptfoo contract suite lives in `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`
-- the comparative Promptfoo uplift suite lives in `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
-- the informational Promptfoo uplift baseline lives in `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml`
-- Promptfoo entrypoints stay single-purpose: one contract gate config and two uplift comparison configs
+- Promptfoo families live under `evals/engines/promptfoo/<skill-name>/`
+- each maintained family keeps three single-purpose entrypoints: one contract gate config and two uplift comparison configs
+- the canonical `skill-contract-forge` contract suite lives in `evals/engines/promptfoo/skill-contract-forge/tests/contract.yaml`
+- the comparative `skill-contract-forge` uplift suite lives in `evals/engines/promptfoo/skill-contract-forge/tests/uplift.yaml`
+- the informational `skill-contract-forge` uplift baseline lives in `evals/engines/promptfoo/skill-contract-forge/tests/uplift.without-skill.yaml`
 - trigger cases in the contract suite require schema-backed Eval Brief JSON using `evals/contracts/skill-contract-forge/eval-brief-output.schema.json`
 - for `skill-contract-forge`, the three Promptfoo-native suites are also the only supported case-authoring source
 - the supported offline path uses Promptfoo `--model-outputs` fixtures under `evals/engines/promptfoo/fixtures/`
 - the canonical generated runtime artifact is `evals/engines/promptfoo/generated/skill-contract-forge.eval.json`
+- `skill-contract-forge` currently exposes the maintained offline replay surface; `skill-implementation-forge` currently exposes validate and live runs only
 
 Current `skill-contract-forge` supported artifacts:
-- `evals/engines/promptfoo/promptfooconfig.yaml`
-- `evals/engines/promptfoo/promptfooconfig.uplift.with-skill.yaml`
-- `evals/engines/promptfoo/promptfooconfig.uplift.without-skill.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.with-skill.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.without-skill.yaml`
 - `evals/engines/promptfoo/providers/default.openai.yaml`
-- `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`
-- `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`
-- `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml`
-- `evals/engines/promptfoo/prompts/with-skill.txt`
-- `evals/engines/promptfoo/prompts/without-skill.txt`
+- `evals/engines/promptfoo/skill-contract-forge/tests/contract.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/tests/uplift.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/tests/uplift.without-skill.yaml`
+- `evals/engines/promptfoo/skill-contract-forge/prompts/with-skill.txt`
+- `evals/engines/promptfoo/skill-contract-forge/prompts/without-skill.txt`
+
+Current `skill-implementation-forge` eval artifacts:
+- `evals/engines/promptfoo/skill-implementation-forge/promptfooconfig.yaml`
+- `evals/engines/promptfoo/skill-implementation-forge/promptfooconfig.uplift.with-skill.yaml`
+- `evals/engines/promptfoo/skill-implementation-forge/promptfooconfig.uplift.without-skill.yaml`
+- `evals/engines/promptfoo/skill-implementation-forge/prompts/with-skill.txt`
+- `evals/engines/promptfoo/skill-implementation-forge/prompts/without-skill.txt`
+- `evals/engines/promptfoo/skill-implementation-forge/tests/contract.yaml`
+- `evals/engines/promptfoo/skill-implementation-forge/tests/uplift.yaml`
+- `evals/engines/promptfoo/skill-implementation-forge/tests/uplift.without-skill.yaml`
 
 Current contractual behavior:
 - Promptfoo runs the canonical `skill-contract-forge` contract suite with the `with_skill` prompt path only.
@@ -70,8 +97,8 @@ Current contractual behavior:
 
 Current uplift behavior:
 - Promptfoo compares `skill-contract-forge` behavior through two separate executions with separate baseline/gate suites and separate offline replay fixtures.
-- `promptfooconfig.uplift.with-skill.yaml` runs `tests/skill-contract-forge.uplift.yaml` with `with_skill` as the semantic uplift gate.
-- `promptfooconfig.uplift.without-skill.yaml` runs `tests/skill-contract-forge.uplift.without-skill.yaml` with `without_skill` as an informational baseline surface.
+- `skill-contract-forge/promptfooconfig.uplift.with-skill.yaml` runs `skill-contract-forge/tests/uplift.yaml` with `with_skill` as the semantic uplift gate.
+- `skill-contract-forge/promptfooconfig.uplift.without-skill.yaml` runs `skill-contract-forge/tests/uplift.without-skill.yaml` with `without_skill` as an informational baseline surface.
 - both uplift configs read the active provider from the same default provider adapter.
 - the uplift gate measures comparative signals such as classification, workflow selection, and stop boundaries.
 - the `without_skill` baseline is not designed to prove contractual conformance for the baseline path and is not a hard semantic gate.
@@ -101,15 +128,15 @@ Operational authority:
 - The canonical Promptfoo run is contract-first and remains the only contract gate.
 - Comparative uplift execution now exists as a separate surface and does not replace the gate.
 - Offline replay is the preferred cheap health check, but it does not overrule current live behavior.
-- The Promptfoo layer is organized by responsibility across `prompts/`, `tests/`, and `providers/`.
+- The Promptfoo layer is organized as shared engine assets plus direct per-skill families.
 - the old wrapper runtime no longer participates in the supported flow.
-- `skill-contract-forge` cases are maintained directly in the Promptfoo-native suites under `evals/engines/promptfoo/tests/`.
+- `skill-contract-forge` cases are maintained directly in the Promptfoo-native suites under `evals/engines/promptfoo/skill-contract-forge/tests/`.
 - The repo does not ship a local runner around Promptfoo for `skill-contract-forge`.
 
 ## Ownership intent
 - `contracts/` will own eval contracts that survive engine changes.
 - `engines/` will own engine-specific execution assets, with `engines/promptfoo/` as the target native tool boundary.
-- `engines/promptfoo/tests/` will own active Promptfoo-native case definitions.
+- `engines/promptfoo/<skill-name>/tests/` will own active Promptfoo-native case definitions for each evaluated skill.
 - `engines/promptfoo/fixtures/` will own reusable offline replay inputs.
 - `engines/promptfoo/generated/` will own generated runtime outputs that do not define the domain.
 

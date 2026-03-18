@@ -1,0 +1,300 @@
+- description: new-skill-from-frozen-brief
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: new-skill-from-frozen-brief
+    prompt: Implement the new skill `skill-eval-forge` from this frozen Eval Brief and stop at `Skill implementation ready`. Do not author downstream evals or change runtime architecture.
+    expected_stop: Skill implementation ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: golden
+    expected_stop: Skill implementation ready
+  assert:
+    - type: assert-set
+      metric: critical_contract
+      threshold: 1
+      assert:
+        - type: icontains
+          metric: target_skill
+          value: skill-eval-forge
+        - type: icontains-any
+          metric: contract_authority
+          value:
+            - frozen Eval Brief
+            - approved contract artifact
+            - approved contract
+        - type: icontains
+          metric: implementation_surface
+          value: SKILL.md
+        - type: icontains
+          metric: terminal_marker
+          value: Skill implementation ready
+- description: existing-skill-refactor-from-approved-contract
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: existing-skill-refactor-from-approved-contract
+    prompt: Refactor `openspec-bootstrap` from its approved contract artifact without touching downstream evals or runtime architecture.
+    expected_stop: Skill implementation ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: golden
+    expected_stop: Skill implementation ready
+  assert:
+    - type: assert-set
+      metric: critical_contract
+      threshold: 1
+      assert:
+        - type: icontains
+          metric: target_skill
+          value: openspec-bootstrap
+        - type: icontains
+          metric: contract_authority
+          value: approved contract artifact
+        - type: icontains
+          metric: terminal_marker
+          value: Skill implementation ready
+- description: downstream-eval-explicitly-deferred
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: downstream-eval-explicitly-deferred
+    prompt: Implement `example-skill` from this approved contract artifact. We will author Promptfoo-native eval suites later.
+    expected_stop: Skill implementation ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: regression
+    expected_stop: Skill implementation ready
+  assert:
+    - type: assert-set
+      metric: critical_contract
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: defer_eval_work
+          value:
+            - defer
+            - later
+            - downstream eval
+        - type: icontains
+          metric: terminal_marker
+          value: Skill implementation ready
+- description: contract-authoring-request
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: contract-authoring-request
+    prompt: Define the contract for a new skill.
+    expected_stop: do_not_trigger
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: negative
+    expected_stop: do_not_trigger
+  assert:
+    - type: assert-set
+      metric: out_of_scope_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: out_of_scope_marker
+          value:
+            - out of scope
+            - outside the scope
+            - does not cover
+        - type: icontains-any
+          metric: reason_marker
+          value:
+            - contract
+            - define
+            - rewrite
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill implementation ready
+- description: eval-authoring-request
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: eval-authoring-request
+    prompt: Author Promptfoo-native eval suites from this finished brief.
+    expected_stop: do_not_trigger
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: negative
+    expected_stop: do_not_trigger
+  assert:
+    - type: assert-set
+      metric: out_of_scope_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: out_of_scope_marker
+          value:
+            - out of scope
+            - outside the scope
+            - does not cover
+        - type: icontains-any
+          metric: reason_marker
+          value:
+            - downstream eval authoring
+            - Promptfoo-native eval suites
+            - eval authoring
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill implementation ready
+- description: runtime-redesign-request
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: runtime-redesign-request
+    prompt: Redesign the eval/runtime architecture while implementing the skill.
+    expected_stop: do_not_trigger
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: negative
+    expected_stop: do_not_trigger
+  assert:
+    - type: assert-set
+      metric: out_of_scope_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: out_of_scope_marker
+          value:
+            - out of scope
+            - outside the scope
+            - does not cover
+        - type: icontains-any
+          metric: reason_marker
+          value:
+            - runtime architecture
+            - eval/runtime
+            - shared eval infrastructure
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill implementation ready
+- description: missing-contract
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: missing-contract
+    prompt: Implement `example-skill`.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: negative
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please specify
+        - type: icontains-any
+          metric: ambiguity_reason
+          value:
+            - approved contract artifact
+            - contract artifact
+            - missing contract
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill implementation ready
+- description: deictic-target
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: deictic-target
+    prompt: Implement this skill from the approved brief.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please specify
+        - type: icontains-any
+          metric: ambiguity_reason
+          value:
+            - target skill
+            - clearly identified
+            - this skill
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill implementation ready
+- description: mixed-contract-and-implementation
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: mixed-contract-and-implementation
+    prompt: Implement the skill and also rewrite its contract.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: negative
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please specify
+        - type: icontains-any
+          metric: ambiguity_reason
+          value:
+            - contract
+            - inseparable
+            - mixed
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill implementation ready
+- description: vague-contract
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: vague-contract
+    prompt: Implement `example-skill` from this approved brief, but the brief does not say which files the skill should produce or when the implementation should stop.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - not specific enough
+        - type: icontains-any
+          metric: ambiguity_reason
+          value:
+            - outputs
+            - stop conditions
+            - specific enough
+            - approved brief
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill implementation ready
+

@@ -21,7 +21,7 @@ Each skill is a shallow folder centered on `SKILL.md`, with optional supporting 
 - `evals/` only when the skill owns eval definitions
 
 Current pack groups include:
-- `packs/core/` for repo bootstrap and core workflow skills such as `skill-contract-forge`, `skill-implementation-forge`, `openspec-bootstrap`, and `agents-bootstrap`
+- `packs/core/` for repo bootstrap and core workflow skills such as `skill-contract-forge`, `skill-implementation-forge`, `skill-eval-forge`, `openspec-bootstrap`, and `agents-bootstrap`
 - `packs/angular/skills/` for Angular-focused skills
 - `packs/react/` for React-focused skills
 - `packs/javascript/`, `packs/typescript/`, and `packs/zod/` for language and validation skills
@@ -192,6 +192,6 @@ The default skill-forge workflow is:
 
 3. `skill-eval-forge`
     - authors or refactors Promptfoo-native eval suites
-    - stops at `Eval suites ready`
+    - stops at `Skill eval ready`
 
 These phases are intentionally separated. Do not merge contract definition, skill implementation, and eval authoring into one inseparable step unless explicitly required.

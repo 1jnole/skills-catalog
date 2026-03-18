@@ -1,0 +1,145 @@
+- description: new-skill-from-frozen-brief
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: new-skill-from-frozen-brief
+    prompt: Implement the new skill `skill-eval-forge` from this frozen Eval Brief and stop at `Skill implementation ready`.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: golden
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains
+          metric: no_terminal_marker
+          value: Skill implementation ready
+        - type: not-icontains
+          metric: no_implementation_surface
+          value: SKILL.md
+        - type: not-icontains
+          metric: no_contract_authority_phrase
+          value: approved contract artifact
+- description: existing-skill-refactor-from-approved-contract
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: existing-skill-refactor-from-approved-contract
+    prompt: Refactor `openspec-bootstrap` from its approved contract artifact without touching downstream evals.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: golden
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains
+          metric: no_terminal_marker
+          value: Skill implementation ready
+        - type: not-icontains
+          metric: no_implementation_surface
+          value: SKILL.md
+- description: contract-authoring-request
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: contract-authoring-request
+    prompt: Define the contract for a new skill.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: negative
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains
+          metric: no_terminal_marker
+          value: Skill implementation ready
+        - type: not-icontains
+          metric: no_implementation_surface
+          value: SKILL.md
+        - type: not-icontains
+          metric: no_contract_authority_phrase
+          value: approved contract artifact
+- description: eval-authoring-request
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: eval-authoring-request
+    prompt: Author Promptfoo-native eval suites from this finished brief.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: negative
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains
+          metric: no_terminal_marker
+          value: Skill implementation ready
+        - type: not-icontains
+          metric: no_implementation_surface
+          value: SKILL.md
+- description: missing-contract
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: missing-contract
+    prompt: Implement `example-skill`.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: negative
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains
+          metric: no_terminal_marker
+          value: Skill implementation ready
+        - type: not-icontains
+          metric: no_implementation_surface
+          value: SKILL.md
+        - type: not-icontains
+          metric: no_contract_authority_phrase
+          value: approved contract artifact
+- description: deictic-target
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: deictic-target
+    prompt: Implement this skill from the approved brief.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: regression
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains
+          metric: no_terminal_marker
+          value: Skill implementation ready
+        - type: not-icontains
+          metric: no_implementation_surface
+          value: SKILL.md
+        - type: not-icontains
+          metric: no_contract_authority_phrase
+          value: approved contract artifact
+

@@ -1,6 +1,6 @@
 - description: new-skill-one-clear-job
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: new-skill-one-clear-job
     prompt: Create a new reusable skill for spotting JavaScript array mutation mistakes. Start from the contract, keep one job only, and do not implement eval runtime behavior.
     expected_stop: baseline_only
@@ -43,7 +43,7 @@
           value: '"sourceRefs"'
 - description: existing-skill-refactor-clear-target
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: existing-skill-refactor-clear-target
     prompt: Refactor the existing skill `openspec-bootstrap`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.
     expected_stop: baseline_only
@@ -86,7 +86,7 @@
           value: '"sourceRefs"'
 - description: skill-rewrite-clear-target
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: skill-rewrite-clear-target
     prompt: Rewrite the existing skill `openspec-bootstrap` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.
     expected_stop: baseline_only
@@ -129,7 +129,7 @@
           value: '"sourceRefs"'
 - description: agents-policy-request
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: agents-policy-request
     prompt: Update the repo AGENTS.md managed block and tighten the repository policy wording.
     expected_stop: baseline_only
@@ -172,7 +172,7 @@
           value: '"sourceRefs"'
 - description: runtime-harness-implementation
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: runtime-harness-implementation
     prompt: Build the offline eval runner for skill-contract-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.
     expected_stop: baseline_only
@@ -215,7 +215,7 @@
           value: '"sourceRefs"'
 - description: ambiguous-multi-workflow-request
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: ambiguous-multi-workflow-request
     prompt: Create a skill, reorganize the repo policies, and build the first runner in one pass so everything lands together.
     expected_stop: baseline_only
@@ -258,7 +258,7 @@
           value: '"sourceRefs"'
 - description: ambiguous-refactor-missing-target
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: ambiguous-refactor-missing-target
     prompt: Refactor this skill so the contract is clearer, keep it contract-first, and stop at Eval Brief ready.
     expected_stop: baseline_only
@@ -301,7 +301,7 @@
           value: '"sourceRefs"'
 - description: ambiguous-rewrite-missing-target
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: ambiguous-rewrite-missing-target
     prompt: Rewrite the skill so it matches the current repo docs, freeze the contract first, and stop at Eval Brief ready.
     expected_stop: baseline_only
@@ -342,3 +342,5 @@
         - type: not-icontains
           metric: no_contract_source_refs_key
           value: '"sourceRefs"'
+
+
