@@ -16,6 +16,10 @@ Use this skill to implement or refactor one named skill from an approved contrac
 
 This skill owns the implementation phase only. It does not define the contract, does not author downstream eval suites, and does not change eval/runtime architecture.
 
+## Phase objective
+
+The objective of this phase is to materialize one named skill from an approved contract artifact without renegotiating the contract.
+
 ## Use this skill when
 
 Use this skill when:

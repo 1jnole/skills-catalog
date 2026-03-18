@@ -18,7 +18,7 @@ Each skill is a shallow folder centered on `SKILL.md`, with optional supporting 
 - `assets/`
 - `agents/`
 - `scripts/`
-- `evals/` only when the skill owns eval definitions
+- `evals/` only when a skill explicitly owns eval definitions
 
 Current pack groups include:
 - `packs/core/` for repo bootstrap and core workflow skills such as `skill-contract-forge`, `skill-implementation-forge`, `skill-eval-forge`, `openspec-bootstrap`, and `agents-bootstrap`
@@ -42,10 +42,6 @@ Important pieces:
 - `openspec/specs/`: stable repository capabilities
 - `openspec/changes/archive/`: completed change history
 
-Current stable specs include:
-- `openspec-change-workspace-readiness`
-- `skill-metadata-validation`
-
 ### 3. Evaluation runtime boundary
 `evals/` is the stable home of the repository evaluation scaffold.
 
@@ -55,32 +51,9 @@ Promptfoo is the supported eval runtime for this repo. The active engine boundar
 High-level shape:
 - `evals/contracts/` for stable eval contracts
 - `evals/engines/promptfoo/fixtures/` for reusable offline inputs and model outputs
-- `evals/engines/promptfoo/` for engine-specific config, prompts, assertions, and generated outputs
-- for `skill-contract-forge`, the active case-definition authority lives in the Promptfoo-native suites under `evals/engines/promptfoo/tests/`
+- `evals/engines/promptfoo/` for engine-specific families, prompts, assertions, and generated outputs
 
-See [evals/README.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/evals/README.md) for the current supported eval path.
-
-### Promptfoo eval flow
-```mermaid
-flowchart TD
-  A[Edit skill contract, prompts, tests, or fixtures] --> B[promptfoo validate*]
-  B --> C{Config and suites valid?}
-  C -- no --> D[Fix YAML, prompts, assertions, or wiring]
-  C -- yes --> E[promptfoo:run* live]
-  E --> F[Compare contract, uplift with-skill, and uplift without-skill]
-  F --> G[promptfoo:run:offline* replay]
-  G --> H{Offline matches live?}
-  H -- yes --> I[Keep fixtures and archive the change]
-  H -- no --> J[Live is the semantic authority]
-  J --> K[Refresh fixtures only after live is green]
-  K --> E
-```
-
-Operating rule:
-- `promptfoo validate*` checks config and suite wiring.
-- `promptfoo:run*` is the live semantic gate.
-- `promptfoo:run:offline*` is the low-cost replay and smoke path.
-- if live and offline disagree, live wins.
+For active runtime details, treat [evals/README.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/evals/README.md) as the source of truth.
 
 ### 4. Repository tooling
 `scripts/` contains small repo-level utilities that support the catalog without becoming a separate framework.
@@ -143,6 +116,81 @@ The repo-specific operating rules live in:
 - [AGENTS.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/AGENTS.md)
 - [openspec/AGENTS.override.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/openspec/AGENTS.override.md)
 
+## Skill-forge workflow
+
+This repo uses the forge workflow as its default authoring pipeline:
+
+1. `skill-contract-forge`
+   - objective: freeze the boundary of one skill before implementation
+   - stops at `Eval Brief ready`
+
+2. `skill-implementation-forge`
+   - objective: implement or refactor one named skill from an approved contract artifact
+   - stops at `Skill implementation ready`
+
+3. `skill-eval-forge`
+   - objective: author or refactor eval coverage for one named implemented skill
+   - stops at `Skill eval ready`
+
+These phases are intentionally separated. Do not merge contract definition, skill implementation, and eval authoring into one inseparable step unless explicitly required.
+
+### Workflow at a glance
+
+```mermaid
+flowchart TD
+  A["Need or request"] --> B{"Contract frozen?"}
+  B -- "No" --> C["skill-contract-forge"]
+  C --> C1["Eval Brief ready"]
+  B -- "Yes" --> D{"Skill implemented?"}
+  D -- "No" --> E["skill-implementation-forge"]
+  E --> E1["Skill implementation ready"]
+  D -- "Yes" --> F{"Eval coverage needed?"}
+  F -- "Yes" --> G["skill-eval-forge"]
+  G --> G1["Skill eval ready"]
+  F -- "No" --> H["No new forge phase"]
+  C1 --> E
+  E1 --> G
+```
+
+### Policy source
+Treat [AGENTS.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/AGENTS.md) as the normative workflow policy for:
+- phase preconditions
+- terminal markers
+- built-ins vs forge behavior
+- global forge guardrails
+
+`README.md` is the human-facing summary, not the canonical policy source.
+
+### Built-in Codex support
+- Built-in planning is support for exploration and decomposition before entering a forge phase.
+- `skill-creator` is a general baseline and fallback reference, not the normative repo workflow.
+- `skill-installer` is operational support outside the functional `contract -> implementation -> eval` pipeline.
+
+## Promptfoo eval flow
+
+```mermaid
+flowchart TD
+  A[Edit skill contract, prompts, tests, or fixtures] --> B[promptfoo validate*]
+  B --> C{Config and suites valid?}
+  C -- no --> D[Fix YAML, prompts, assertions, or wiring]
+  C -- yes --> E[promptfoo:run* live]
+  E --> F[Compare contract, uplift with-skill, and uplift without-skill]
+  F --> G[promptfoo:run:offline* replay]
+  G --> H{Offline matches live?}
+  H -- yes --> I[Keep fixtures and archive the change]
+  H -- no --> J[Live is the semantic authority]
+  J --> K[Refresh fixtures only after live is green]
+  K --> E
+```
+
+Operating rule:
+- `promptfoo validate*` checks config and suite wiring.
+- `promptfoo:run*` is the live semantic gate.
+- `promptfoo:run:offline*` is the low-cost replay and smoke path.
+- if live and offline disagree, live wins.
+
+For the current supported Promptfoo command surface, see [evals/README.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/evals/README.md).
+
 ## Commands
 
 Core commands:
@@ -150,16 +198,7 @@ Core commands:
 - `npm run test:run`
 - `npm run validate:skill-metadata`
 
-Promptfoo commands:
-- `npm run promptfoo:validate`
-- `npm run promptfoo:validate:uplift:with-skill`
-- `npm run promptfoo:validate:uplift:without-skill`
-- `npm run promptfoo:run`
-- `npm run promptfoo:run:offline`
-- `npm run promptfoo:run:uplift:with-skill`
-- `npm run promptfoo:run:uplift:without-skill`
-- `npm run promptfoo:run:offline:uplift:with-skill`
-- `npm run promptfoo:run:offline:uplift:without-skill`
+For eval commands, see [evals/README.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/evals/README.md).
 
 ## What this repo optimizes for
 
@@ -167,6 +206,7 @@ Promptfoo commands:
 - portable skill artifacts
 - explicit validation boundaries
 - low drift between implementation, specs, and eval scaffolding
+- phase-separated skill authoring with explicit handoffs
 
 ## References
 
@@ -176,22 +216,3 @@ Promptfoo commands:
 - [OpenAI Codex: AGENTS.md guide](https://developers.openai.com/codex/guides/agents-md/)
 - [OpenAI Codex: Agent skills](https://developers.openai.com/codex/skills/)
 - [OpenAI: Unrolling the Codex agent loop](https://openai.com/index/unrolling-the-codex-agent-loop/)
-
-
-## Skill-forge workflow
-
-The default skill-forge workflow is:
-
-1. `skill-contract-forge`
-    - defines or refactors the contract
-    - stops at `Eval Brief ready`
-
-2. `skill-implementation-forge`
-    - implements or refactors the skill from the contract
-    - stops at `Skill implementation ready`
-
-3. `skill-eval-forge`
-    - authors or refactors Promptfoo-native eval suites
-    - stops at `Skill eval ready`
-
-These phases are intentionally separated. Do not merge contract definition, skill implementation, and eval authoring into one inseparable step unless explicitly required.

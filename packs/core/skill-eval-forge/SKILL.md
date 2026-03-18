@@ -16,6 +16,10 @@ Use this skill to author or refactor eval coverage for one named skill from its 
 
 This skill owns the eval-authoring phase only. It does not define or rewrite the contract, does not implement the target skill, and does not change eval/runtime architecture.
 
+## Phase objective
+
+The objective of this phase is to author or refactor Promptfoo-native eval coverage for one named implemented skill without redefining the contract or the implementation phase.
+
 ## Use this skill when
 
 Use this skill when:

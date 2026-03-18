@@ -11,6 +11,10 @@ Use this skill to define or refactor the **contract** of a single skill before i
 
 This skill only performs the contract step. It does **not** implement the final skill bundle, runtime evaluation harness, provider wiring, or benchmark execution.
 
+## Phase objective
+
+The objective of this phase is to freeze the skill boundary so the next phase can implement from an explicit contract instead of inventing it.
+
 ## Use this skill when
 
 Use this skill when the request is about defining or clarifying what one skill should be before implementation.
