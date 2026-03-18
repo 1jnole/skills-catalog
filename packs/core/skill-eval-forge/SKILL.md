@@ -59,6 +59,7 @@ Produce:
 - Promptfoo-native eval suite additions or edits for exactly one named skill
 - only the files required to author or refactor that eval coverage within the active repo eval boundary under `evals/engines/promptfoo/`
 - nearby support files only when they are materially necessary to explain the eval-authoring workflow
+- when authoring informational baseline surfaces, keep them clearly baseline-only and do not let them impersonate the skill-owned eval boundary
 
 The exact terminal marker is:
 
@@ -73,7 +74,7 @@ Stop and ask when:
 - the contract artifact and implementation describe materially conflicting behavior that cannot be resolved without redefining the contract
 - the request mixes eval authoring with contract authoring in one inseparable pass
 - the request mixes eval authoring with skill implementation in one inseparable pass
-- the request widens into eval/runtime redesign or shared infrastructure work
+- the request widens into eval/runtime redesign or shared infrastructure work, including providers, fixtures, generated outputs, or shared runner structure
 - the available eval context is too incomplete to author coverage safely without inventing behavior
 
 These prompts are insufficient on their own:
@@ -101,6 +102,8 @@ These prompts are insufficient on their own:
 - Do not infer a missing target skill from deictic phrases such as `this skill`, `the current skill`, `the next skill`, or `this suite`.
 - If runtime work is mentioned but explicitly deferred, remain in eval-authoring scope and defer that later work.
 - If the approved contract artifact conflicts materially with the existing implementation, stop and ask instead of silently choosing one and inventing expected behavior.
+- If the request asks for eval authoring plus contract rewriting or skill implementation in one inseparable pass, stop and ask rather than silently choosing one phase.
+- When authoring an informational `without_skill` baseline, keep it baseline-shaped: it must not impersonate the skill-owned boundary by reproducing terminal markers, invented preconditions, or repo-local stop rules as if the skill were active.
 - Keep the package shallow and self-contained by default.
 - Treat the active Promptfoo-native repo eval boundary under `evals/engines/promptfoo/` as authoritative. Do not recreate removed legacy per-skill eval harness patterns.
 
@@ -114,6 +117,8 @@ In scope:
 Stop and ask:
 - “Write evals for this skill.”
 - “Author evals and also rewrite the contract.”
+- “Rewrite the contract and add evals in one pass.”
+- “Add evals and also update providers, fixtures, generated outputs, or the shared runner.”
 - “Add coverage for `example-skill`,” where the contract and implementation disagree about expected behavior.
 
 Out of scope:
@@ -128,4 +133,6 @@ Out of scope:
 - The contract and implementation mostly align but one behavior is materially inconsistent: stop and ask if resolving it would redefine the contract.
 - The request points to an exact contract file path instead of pasting the contract inline: this is valid if the file is authoritative and specific enough.
 - Runtime work is mentioned but explicitly deferred: remain in eval-authoring scope and defer that later phase.
+- A request asks for eval authoring plus provider, fixture, generated-output, or shared-runner changes in the same pass: stop and ask unless that runtime work is clearly deferred.
+- A baseline comparison surface is being authored: keep it informative, but do not let it imitate the active skill-owned boundary.
 - The skill needs no nearby support files: keep the eval skill self-contained in `SKILL.md`.

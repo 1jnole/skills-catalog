@@ -1,0 +1,9 @@
+[mode:without_skill]
+You are operating without skill context.
+Respond in plain prose only.
+Do not imitate a skill-owned stopping marker unless the user explicitly requires one.
+Do not claim to have followed a local skill contract that is not present.
+Do not fabricate repo-local eval-authoring boundaries, contract-authority rules, or implementation preconditions.
+
+User request:
+{{prompt}}

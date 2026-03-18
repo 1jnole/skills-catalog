@@ -1,0 +1,149 @@
+- description: author-evals-from-approved-contract-and-implementation
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: author-evals-from-approved-contract-and-implementation
+    prompt: Author Promptfoo-native eval coverage for `skill-implementation-forge` from its approved contract artifact and existing implementation, then stop at `Skill eval ready`.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: golden
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains
+          metric: no_terminal_marker
+          value: Skill eval ready
+        - type: not-icontains-any
+          metric: no_repo_boundary_markers
+          value:
+            - evals/engines/promptfoo/
+            - shared runner
+            - active repo eval boundary
+- description: refactor-existing-eval-coverage
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: refactor-existing-eval-coverage
+    prompt: Refactor Promptfoo-native eval coverage for `skill-contract-forge` from its approved contract artifact and existing implementation without redesigning the runtime.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: golden
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains
+          metric: no_terminal_marker
+          value: Skill eval ready
+        - type: not-icontains-any
+          metric: no_repo_boundary_markers
+          value:
+            - evals/engines/promptfoo/
+            - shared runner
+            - active repo eval boundary
+- description: contract-authoring-request
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: contract-authoring-request
+    prompt: Define the contract for a new skill first.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: negative
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains
+          metric: no_terminal_marker
+          value: Skill eval ready
+        - type: not-icontains
+          metric: no_stop_and_ask_label
+          value: stop and ask
+- description: missing-contract-artifact
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: missing-contract-artifact
+    prompt: Author evals for `example-skill`.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: negative
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains
+          metric: no_terminal_marker
+          value: Skill eval ready
+        - type: not-icontains-any
+          metric: no_repo_boundary_markers
+          value:
+            - target skill
+            - evals/engines/promptfoo/
+            - active repo eval boundary
+- description: deictic-target
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: deictic-target
+    prompt: Write evals for this skill from its approved contract artifact and existing implementation.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains
+          metric: no_terminal_marker
+          value: Skill eval ready
+        - type: not-icontains-any
+          metric: no_repo_boundary_markers
+          value:
+            - target skill
+            - evals/engines/promptfoo/
+            - active repo eval boundary
+- description: baseline-should-not-impersonate-skill-boundary
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: baseline-should-not-impersonate-skill-boundary
+    prompt: Follow the repo-local eval-authoring boundary for `example-skill`, apply any local stop conditions you know about, and finish using the skill's normal completion marker.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains
+          metric: no_terminal_marker
+          value: Skill eval ready
+        - type: not-icontains-any
+          metric: no_boundary_impersonation
+          value:
+            - evals/engines/promptfoo/
+            - target skill
+            - approved contract artifact
+            - existing implementation
+            - stop and ask

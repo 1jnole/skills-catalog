@@ -14,6 +14,7 @@ evals/
     promptfoo/
       skill-contract-forge/
       skill-implementation-forge/
+      skill-eval-forge/
       fixtures/
       generated/
       providers/
@@ -65,6 +66,7 @@ Supported runtime shape:
 - the supported offline path uses Promptfoo `--model-outputs` fixtures under `evals/engines/promptfoo/fixtures/`
 - the canonical generated runtime artifact is `evals/engines/promptfoo/generated/skill-contract-forge.eval.json`
 - `skill-contract-forge` currently exposes the maintained offline replay surface; `skill-implementation-forge` currently exposes validate and live runs only
+- `skill-eval-forge` currently exposes direct Promptfoo config entrypoints only and is not yet part of the supported public npm command surface
 
 Current `skill-contract-forge` supported artifacts:
 - `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml`
@@ -86,6 +88,16 @@ Current `skill-implementation-forge` eval artifacts:
 - `evals/engines/promptfoo/skill-implementation-forge/tests/contract.yaml`
 - `evals/engines/promptfoo/skill-implementation-forge/tests/uplift.yaml`
 - `evals/engines/promptfoo/skill-implementation-forge/tests/uplift.without-skill.yaml`
+
+Current `skill-eval-forge` eval artifacts:
+- `evals/engines/promptfoo/skill-eval-forge/promptfooconfig.yaml`
+- `evals/engines/promptfoo/skill-eval-forge/promptfooconfig.uplift.with-skill.yaml`
+- `evals/engines/promptfoo/skill-eval-forge/promptfooconfig.uplift.without-skill.yaml`
+- `evals/engines/promptfoo/skill-eval-forge/prompts/with-skill.txt`
+- `evals/engines/promptfoo/skill-eval-forge/prompts/without-skill.txt`
+- `evals/engines/promptfoo/skill-eval-forge/tests/contract.yaml`
+- `evals/engines/promptfoo/skill-eval-forge/tests/uplift.yaml`
+- `evals/engines/promptfoo/skill-eval-forge/tests/uplift.without-skill.yaml`
 
 Current contractual behavior:
 - Promptfoo runs the canonical `skill-contract-forge` contract suite with the `with_skill` prompt path only.
@@ -120,6 +132,7 @@ Operational authority:
 - `npm run promptfoo:run:offline*` is the preferred low-cost replay and smoke path.
 - `npm run promptfoo:run*` is the semantic authority when offline replay and live behavior disagree.
 - `without_skill` remains an informational baseline and does not close contractual conformance.
+- `skill-eval-forge` currently ships direct config entrypoints only; its validation and live runs are not yet published as supported npm aliases.
 
 ## What this means now
 - The scaffold is explicit and visible at the repo root.
@@ -129,6 +142,7 @@ Operational authority:
 - Comparative uplift execution now exists as a separate surface and does not replace the gate.
 - Offline replay is the preferred cheap health check, but it does not overrule current live behavior.
 - The Promptfoo layer is organized as shared engine assets plus direct per-skill families.
+- `skill-eval-forge` now participates in the direct per-skill topology through config-local entrypoints.
 - the old wrapper runtime no longer participates in the supported flow.
 - `skill-contract-forge` cases are maintained directly in the Promptfoo-native suites under `evals/engines/promptfoo/skill-contract-forge/tests/`.
 - The repo does not ship a local runner around Promptfoo for `skill-contract-forge`.

@@ -61,6 +61,7 @@ Every maintained family exposes:
 - `<skill-name>/prompts/` holds prompt templates for that skill family only.
 - `<skill-name>/tests/` holds Promptfoo test suites for that skill family only.
 - direct per-skill families such as `skill-contract-forge/` and `skill-implementation-forge/` are the supported way to add more skill eval surfaces.
+- `skill-eval-forge/` follows the same direct per-skill topology, but its v1 surface is config-local rather than published through npm aliases.
 
 No `tests/defaults.yaml` is shipped in this phase.
 The current duplication between contract and uplift suites is small and semantically meaningful, so a shared defaults layer would add indirection without enough payoff yet.
@@ -83,6 +84,22 @@ Operational authority:
 - `npm run promptfoo:run*` is the semantic authority when replay and live behavior disagree.
 - `without_skill` remains an informational baseline rather than a closure gate.
 - `skill-contract-forge` currently has the maintained offline replay surface; `skill-implementation-forge` currently has validate and live execution only.
+- `skill-eval-forge` currently has direct config entrypoints only; public npm aliases and offline replay remain deferred.
+
+For `skill-eval-forge`, the active Promptfoo execution surface is:
+- `evals/engines/promptfoo/skill-eval-forge/promptfooconfig.yaml`
+- `evals/engines/promptfoo/skill-eval-forge/promptfooconfig.uplift.with-skill.yaml`
+- `evals/engines/promptfoo/skill-eval-forge/promptfooconfig.uplift.without-skill.yaml`
+- `evals/engines/promptfoo/skill-eval-forge/tests/contract.yaml`
+- `evals/engines/promptfoo/skill-eval-forge/tests/uplift.yaml`
+- `evals/engines/promptfoo/skill-eval-forge/tests/uplift.without-skill.yaml`
+- `evals/engines/promptfoo/skill-eval-forge/prompts/with-skill.txt`
+- `evals/engines/promptfoo/skill-eval-forge/prompts/without-skill.txt`
+
+The canonical case-definition authority for `skill-eval-forge` lives at:
+- `evals/engines/promptfoo/skill-eval-forge/tests/contract.yaml`
+- `evals/engines/promptfoo/skill-eval-forge/tests/uplift.yaml`
+- `evals/engines/promptfoo/skill-eval-forge/tests/uplift.without-skill.yaml`
 
 ### Critical checks
 - Contract critical checks cover the exact routing envelope from `SKILL.md`: classification, workflow when applicable, embedded Eval Brief schema validity on trigger paths, terminal markers, and incompatible classification absence.

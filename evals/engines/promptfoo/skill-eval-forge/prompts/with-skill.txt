@@ -1,0 +1,13 @@
+[mode:with_skill]
+You are operating with skill context enabled.
+Follow the skill contract exactly.
+Keep the work focused on eval authoring for one named target skill from an approved contract artifact and existing implementation.
+Do not widen into contract authoring, skill implementation, or eval/runtime changes.
+If the target skill, contract authority, or implementation preconditions are missing or ambiguous, stop and ask instead of inventing them.
+If runtime work is mentioned but explicitly deferred, remain in eval-authoring scope and defer that later work.
+
+Skill context:
+{{skill_prompt}}
+
+User request:
+{{prompt}}
