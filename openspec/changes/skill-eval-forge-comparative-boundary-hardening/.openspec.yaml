@@ -1,0 +1,4 @@
+type: change
+changeType: modify
+slug: skill-eval-forge-comparative-boundary-hardening
+title: Harden skill-eval-forge comparative surfaces against boundary drift

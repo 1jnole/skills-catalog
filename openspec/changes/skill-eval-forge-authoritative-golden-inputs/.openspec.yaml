@@ -1,0 +1,4 @@
+type: change
+changeType: modify
+slug: skill-eval-forge-authoritative-golden-inputs
+title: Bind skill-eval-forge goldens to authoritative repo-local inputs
