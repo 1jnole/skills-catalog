@@ -20,10 +20,29 @@ For `existing-skill-refactor` and `skill-rewrite`, the target skill must be clea
 
 Return `Classification: stop-and-ask` when:
 - the user asks for "a refactor" without naming the skill
+- the user says "refactor this skill", "rewrite this", or "tighten the contract" without naming which existing skill should change
 - the request implies several possible target skills
 - the request mixes rewrite and refactor language without a stable target
 
 Do not infer the target from weak context if a direct clarification is needed to freeze the contract safely.
+
+Example:
+- Prompt: `Refactor this skill so the contract is clearer, keep it contract-first, and stop at Eval Brief ready.`
+- Expected result: `Classification: stop-and-ask`
+- Expected clarification: ask which existing skill should be refactored, ideally by name or description
+- Expected absence: no `Workflow: ...`, no Eval Brief JSON, no `Eval Brief ready`
+
+Rewrite variant:
+- Prompt: `Rewrite the skill so it matches the current repo docs, freeze the contract first, and stop at Eval Brief ready.`
+- Expected result: `Classification: stop-and-ask`
+- Expected clarification: ask which existing skill should be rewritten, ideally by name or description of the skill
+- Expected absence: no `Workflow: ...`, no Eval Brief JSON, no `Eval Brief ready`
+
+Anti-example:
+- Do not answer with `Classification: trigger`
+- Do not pick `Workflow: existing-skill-refactor`
+- Do not pick `Workflow: skill-rewrite`
+- Do not assume the target is `skill-contract-forge` just because the prompt is evaluated inside this repo or skill folder
 
 ## Downstream eval noise
 

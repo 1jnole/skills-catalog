@@ -69,14 +69,11 @@ Keep the root file short and discovery-safe. Detailed process belongs in:
 - Offline fixture inputs live under `evals/engines/promptfoo/fixtures/`.
 - Treat `npm run promptfoo:run` and `npm run promptfoo:run:offline` as the supported public eval execution commands.
 - Treat `evals/engines/promptfoo/` as the eval runtime boundary.
-- Rebuild the scaffold from `plans/` and current docs, not by restoring deleted runtime code.
 
-## When modifying `skill-contract-forge`
+## Skill-forge workflow
 
-- Keep the workflow spec-driven.
-- Keep the handoff aligned with the current source-of-truth docs.
-- Do not reintroduce per-skill harness duplication.
-- Keep provider-specific files isolated under `agents/`.
+When the task is to define or refactor the contract of a skill, use `skill-contract-forge`.
 
+When a skill contract already exists and the task is to implement the skill itself, implement the skill from that contract and keep the work contract-driven.
 
-
+Do not combine contract definition, skill implementation, and Promptfoo eval authoring in one pass unless explicitly requested.

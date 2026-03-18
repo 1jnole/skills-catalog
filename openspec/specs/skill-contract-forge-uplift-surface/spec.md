@@ -19,6 +19,11 @@ The `with_skill` uplift surface MUST recover green comparative routing behavior 
 - **THEN** the repository SHALL recover the intended comparative routing behavior through minimal normative guidance or suite recalibration
 - **AND** `without_skill` SHALL remain an informational baseline rather than becoming the semantic recovery target
 
+#### Scenario: Comparative recovery uses contract wording and supportive references
+- **WHEN** the repository repairs the missing-target refactor boundary for `with_skill`
+- **THEN** it MAY recover that behavior by tightening `SKILL.md` and its supportive routing references
+- **AND** it SHALL NOT need to collapse the supportive `references/` split back into `SKILL.md`
+
 ### Requirement: Offline uplift with-skill replay preserves stop-and-ask boundaries
 The supported offline `with_skill` uplift replay for `skill-contract-forge` MUST preserve the maintained stop-and-ask routing boundary for ambiguous refactor requests.
 
@@ -26,3 +31,4 @@ The supported offline `with_skill` uplift replay for `skill-contract-forge` MUST
 - **WHEN** `npm run promptfoo:run:offline:uplift:with-skill` replays `ambiguous-refactor-missing-target`
 - **THEN** the replayed output SHALL classify the request as `stop-and-ask`
 - **AND** it SHALL NOT classify that request as `trigger`
+

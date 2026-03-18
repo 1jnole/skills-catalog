@@ -59,6 +59,8 @@ The request should make it possible to identify:
 - the intended single job
 - enough context to define boundaries without inventing missing facts
 
+For `existing-skill-refactor` and `skill-rewrite`, the target skill must be identified explicitly. Deictic phrases such as `this skill`, `the current skill`, `rewrite this`, or similar shorthand do not identify a valid target skill on their own.
+
 Useful supporting inputs may include existing skill files, repository docs, templates, examples, and prior notes about the skill boundary.
 
 ## Output contract
@@ -151,6 +153,7 @@ If the request explicitly says to do the contract first and defer downstream eva
 Return `Classification: trigger` only when:
 - the request is clearly about defining or refining the contract of a single skill
 - the request has enough specificity to identify one target workflow
+- for `existing-skill-refactor` and `skill-rewrite`, the request explicitly identifies which existing skill should be changed
 - the work belongs to the contract phase, not downstream implementation
 - downstream eval or runtime work, if mentioned, is explicitly deferred rather than required in the same step
 
@@ -164,6 +167,7 @@ Return `Classification: non-trigger` when the request is primarily about:
 Return `Classification: stop-and-ask` when:
 - the request combines multiple major workflows
 - the target skill is missing or ambiguous
+- the request uses deictic target references such as `this skill`, `the current skill`, or `rewrite this` instead of naming the existing skill to change
 - the user asks for contract and implementation in one inseparable step
 - the scope is too unclear to freeze a single-skill contract safely
 - a refactor or rewrite request does not identify which existing skill should be changed
@@ -184,6 +188,7 @@ Do not silently widen the job from contract authoring into final skill implement
 
 ### 5. No invention
 If required facts are missing, stop and ask rather than invent them.
+Do not infer the target skill from the current repository, folder, or active skill context when the prompt itself does not name that skill.
 
 ### 6. Minimal downstream intent
 Include enough evaluation intent to make downstream authoring easier, but stop before runtime or full eval implementation.

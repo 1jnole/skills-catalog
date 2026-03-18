@@ -58,6 +58,12 @@ The current duplication between contract and uplift suites is small and semantic
 - `uplift without_skill` answers "what does the baseline prompt do without the skill active?"
 - Both suites now use native Promptfoo `assert-set`, `threshold`, and `metric` fields so critical checks are explicit and metrics show which dimension failed.
 
+Operational authority:
+- `npm run promptfoo:validate*` validates config and suite structure.
+- `npm run promptfoo:run:offline*` is the preferred low-cost replay and smoke path.
+- `npm run promptfoo:run*` is the semantic authority when replay and live behavior disagree.
+- `without_skill` remains an informational baseline rather than a closure gate.
+
 ### Critical checks
 - Contract critical checks cover the exact routing envelope from `SKILL.md`: classification, workflow when applicable, embedded Eval Brief schema validity on trigger paths, terminal markers, and incompatible classification absence.
 - Uplift `with_skill` critical checks cover the same routing envelope boundaries for comparative purposes, without promoting full Eval Brief schema validity to the central uplift criterion.
@@ -128,6 +134,8 @@ Historical helper and pilot runtime residue are no longer kept inside the active
 Offline smoke execution uses Promptfoo-native fixture replay:
 - `npm run promptfoo:run:offline`
 - direct uplift offline replays use the surface-specific fixture files under `evals/engines/promptfoo/fixtures/`
+
+Those offline replays use Promptfoo-native captured outputs to rerun assertions cheaply. They are supported replay evidence, not a stronger authority surface than a conflicting live run.
 
 Supported uplift execution commands:
 - `npm run promptfoo:run:uplift:with-skill`

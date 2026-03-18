@@ -25,22 +25,24 @@ Signals:
 Choose `existing-skill-refactor` when the request is keeping the same skill identity but tightening, reorganizing, or clarifying its current contract.
 
 Signals:
-- "refactor this skill"
-- "clarify the contract"
-- "make the boundaries cleaner"
+- "refactor `openspec-bootstrap`"
+- "clarify the contract of `openspec-bootstrap`"
+- "make the boundaries of `openspec-bootstrap` cleaner"
 
 This path requires a clear existing target skill. If the user does not identify which skill should be refactored, return `Classification: stop-and-ask`.
+Phrases like "refactor this skill", "refactor the current skill", or "make the contract cleaner" do not identify a valid target by themselves.
 
 ### `skill-rewrite`
 
 Choose `skill-rewrite` when the user wants to replace the current contract substantially while still targeting one known existing skill.
 
 Signals:
-- "rewrite the skill"
-- "replace the current contract"
-- "reframe the skill around a different single job"
+- "rewrite `openspec-bootstrap`"
+- "replace the current contract for `openspec-bootstrap`"
+- "reframe `openspec-bootstrap` around a different single job"
 
 This path also requires a clear existing target skill. If the target is missing, return `Classification: stop-and-ask`.
+Phrases like "rewrite the skill", "rewrite this", or "replace the current contract" are still ambiguous unless they name the existing skill.
 
 ## Deferred downstream work
 
@@ -59,10 +61,12 @@ For `existing-skill-refactor` and `skill-rewrite`, the target skill must be iden
 
 Return `Classification: stop-and-ask` when:
 - the request says "refactor the skill" but names no skill
+- the request says "refactor this skill", "rewrite this", or "the current skill" without naming the actual existing skill
 - the request mentions several possible target skills
 - the request mixes multiple candidate skills without a primary target
 
 Do not invent the target skill from weak hints when the request is ambiguous.
+Do not infer the target from the current repository, current folder, or active skill context alone.
 
 ## Non-trigger reminders
 

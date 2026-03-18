@@ -154,3 +154,22 @@ Promptfoo commands:
 - [OpenAI Codex: AGENTS.md guide](https://developers.openai.com/codex/guides/agents-md/)
 - [OpenAI Codex: Agent skills](https://developers.openai.com/codex/skills/)
 - [OpenAI: Unrolling the Codex agent loop](https://openai.com/index/unrolling-the-codex-agent-loop/)
+
+
+## Skill-forge workflow
+
+The default skill-forge workflow is:
+
+1. `skill-contract-forge`
+    - defines or refactors the contract
+    - stops at `Eval Brief ready`
+
+2. `skill-implementation-forge`
+    - implements or refactors the skill from the contract
+    - stops at `Skill implementation ready`
+
+3. `skill-eval-forge`
+    - authors or refactors Promptfoo-native eval suites
+    - stops at `Eval suites ready`
+
+These phases are intentionally separated. Do not merge contract definition, skill implementation, and eval authoring into one inseparable step unless explicitly required.

@@ -156,6 +156,11 @@ Stop conditions (during apply):
 Preferred repo gate:
 - `npm run promptfoo:run:offline`
 
+Authority rule:
+- `npm run promptfoo:run:offline*` is the preferred low-cost smoke gate.
+- `npm run promptfoo:run*` is the semantic authority when replay and live behavior disagree.
+- `without_skill` remains an informational baseline rather than a closure gate.
+
 For non-critical changes:
 - Run `/review` before completion.
 

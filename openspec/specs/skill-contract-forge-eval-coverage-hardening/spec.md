@@ -28,17 +28,14 @@ The supported `skill-contract-forge` runtime SHALL reject outputs that mix incom
 ### Requirement: High-signal routing boundaries are covered
 The supported hardened suite MUST include explicit coverage for key routing boundaries that are known regression risks.
 
-#### Scenario: Valid authoring request includes unrelated downstream noise
-- **WHEN** a request is clearly a valid authoring trigger but also mentions downstream eval or benchmark work for later
-- **THEN** the hardened suite SHALL verify that the case remains a trigger rather than degrading to stop-and-ask or non-trigger
-
-#### Scenario: Runtime-only request is evaluated
-- **WHEN** a request is for shared eval runtime implementation rather than skill authoring
-- **THEN** the hardened suite SHALL verify that the case is treated as non-trigger
-
 #### Scenario: Ambiguous skill-refactor request is evaluated
 - **WHEN** a request does not identify a clear skill target or clear authoring boundary
 - **THEN** the hardened suite SHALL verify that the case is treated as stop-and-ask
+
+#### Scenario: Deictic refactor or rewrite wording does not identify a target skill
+- **WHEN** a refactor or rewrite request uses phrases such as `this skill`, `the current skill`, `rewrite this`, or similar deictic wording without naming the existing target skill
+- **THEN** the supported `skill-contract-forge` contract SHALL treat that request as `Classification: stop-and-ask`
+- **AND** it SHALL NOT infer the target skill from repository, folder, or active-skill context alone
 
 ### Requirement: Offline fixtures align with hardened runtime behavior
 Offline fixtures used by the preferred Promptfoo replay gates MUST be refreshed only after the post-refactor live behavior is restored.
@@ -63,3 +60,4 @@ Maintained offline replay evidence for `skill-contract-forge` MUST stay aligned 
 - **WHEN** maintained replay fixtures, suites, or replay outputs are reviewed for the `with_skill` uplift surface
 - **THEN** anchor regression cases SHALL reflect the same routing expectation enforced by the supported suite assertions
 - **AND** the repository SHALL NOT keep a known mismatched replay output as the maintained offline baseline
+

@@ -88,12 +88,19 @@ Current operational reference:
   - `npm run promptfoo:run:offline:uplift:with-skill`
   - `npm run promptfoo:run:offline:uplift:without-skill`
 
+Operational authority:
+- `npm run promptfoo:validate*` validates Promptfoo config shape and suite wiring.
+- `npm run promptfoo:run:offline*` is the preferred low-cost replay and smoke path.
+- `npm run promptfoo:run*` is the semantic authority when offline replay and live behavior disagree.
+- `without_skill` remains an informational baseline and does not close contractual conformance.
+
 ## What this means now
 - The scaffold is explicit and visible at the repo root.
 - Promptfoo is the active eval tool and the supported runtime boundary.
 - The repo currently ships a default provider adapter, but provider choice is external to the suite contract.
 - The canonical Promptfoo run is contract-first and remains the only contract gate.
 - Comparative uplift execution now exists as a separate surface and does not replace the gate.
+- Offline replay is the preferred cheap health check, but it does not overrule current live behavior.
 - The Promptfoo layer is organized by responsibility across `prompts/`, `tests/`, and `providers/`.
 - the old wrapper runtime no longer participates in the supported flow.
 - `skill-contract-forge` cases are maintained directly in the Promptfoo-native suites under `evals/engines/promptfoo/tests/`.
