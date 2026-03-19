@@ -1,13 +1,13 @@
-- description: new-skill-from-frozen-brief
+- description: new-skill-artifact-mentioned-only
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
-    case_id: new-skill-from-frozen-brief
-    prompt: Implement the new skill `skill-eval-forge` from this frozen Eval Brief and stop at `Skill implementation ready`.
+    case_id: new-skill-artifact-mentioned-only
+    prompt: Implement the new skill `skill-eval-forge` from the frozen Eval Brief I mentioned, but I am not including that brief or a repo-local path here.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
     skill_name: skill-implementation-forge
-    case_bucket: golden
+    case_bucket: regression
     expected_stop: baseline_only
   assert:
     - type: assert-set
@@ -23,16 +23,19 @@
         - type: not-icontains
           metric: no_contract_authority_phrase
           value: approved contract artifact
-- description: existing-skill-refactor-from-approved-contract
+        - type: not-icontains
+          metric: no_contract_authority_phrase
+          value: approved contract artifact
+- description: existing-skill-refactor-artifact-mentioned-only
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
-    case_id: existing-skill-refactor-from-approved-contract
-    prompt: Refactor `openspec-bootstrap` from its approved contract artifact without touching downstream evals.
+    case_id: existing-skill-refactor-artifact-mentioned-only
+    prompt: Refactor `openspec-bootstrap` from its approved contract artifact, but I have only mentioned that artifact and have not provided it or an exact repo-local path. Do not touch downstream evals.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
     skill_name: skill-implementation-forge
-    case_bucket: golden
+    case_bucket: regression
     expected_stop: baseline_only
   assert:
     - type: assert-set
@@ -45,6 +48,31 @@
         - type: not-icontains
           metric: no_implementation_surface
           value: SKILL.md
+- description: downstream-eval-deferred-artifact-mentioned-only
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: downstream-eval-deferred-artifact-mentioned-only
+    prompt: Implement `example-skill` from the approved contract artifact I mentioned, but I am not actually providing that artifact or an exact path here. We will author Promptfoo-native eval suites later.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: regression
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains
+          metric: no_terminal_marker
+          value: Skill implementation ready
+        - type: not-icontains
+          metric: no_implementation_surface
+          value: SKILL.md
+        - type: not-icontains
+          metric: no_contract_authority_phrase
+          value: approved contract artifact
 - description: contract-authoring-request
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md

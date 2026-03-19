@@ -33,15 +33,10 @@ The repository SHALL provide `skill-implementation-forge` as a portable core ski
 
 `skill-implementation-forge` SHALL require both an authoritative contract artifact and a clearly identified target skill before implementation begins.
 
-#### Scenario: Missing or ambiguous contract
+#### Scenario: Mentioned contract artifact is not actually provided
 
-- **WHEN** the request does not provide a frozen contract, or the contract is ambiguous or not specific enough to implement safely
-- **THEN** the skill SHALL stop and ask for clarification instead of inventing missing boundaries
-
-#### Scenario: Deictic target reference without stable identification
-
-- **WHEN** the request uses phrases such as `implement this skill`, `refactor this skill`, `rewrite the current skill`, or `build the next skill` without clearly identifying the target skill
-- **THEN** the skill SHALL stop and ask rather than infer the target from weak context
+- **WHEN** a request says there is an approved contract artifact or frozen brief but does not actually provide the artifact or a concrete authoritative path
+- **THEN** the skill SHALL stop and ask for the real artifact instead of treating the mention alone as sufficient authority
 
 ### Requirement: The skill package does not own Promptfoo runtime assets
 

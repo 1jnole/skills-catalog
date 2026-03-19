@@ -1,76 +1,105 @@
-- description: new-skill-from-frozen-brief
+- description: new-skill-artifact-mentioned-only
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
-    case_id: new-skill-from-frozen-brief
-    prompt: Implement the new skill `skill-eval-forge` from this frozen Eval Brief and stop at `Skill implementation ready`.
-    expected_stop: Skill implementation ready
-    should_trigger: true
+    case_id: new-skill-artifact-mentioned-only
+    prompt: Implement the new skill `skill-eval-forge` from the frozen Eval Brief I mentioned, but I am not including that brief or a repo-local path here.
+    expected_stop: stop_and_ask
+    should_trigger: false
   metadata:
     skill_name: skill-implementation-forge
-    case_bucket: golden
-    expected_stop: Skill implementation ready
+    case_bucket: regression
+    expected_stop: stop_and_ask
   assert:
     - type: assert-set
-      metric: critical_uplift
+      metric: stop_and_ask_behavior
       threshold: 1
       assert:
-        - type: icontains
-          metric: terminal_marker
-          value: Skill implementation ready
         - type: icontains-any
-          metric: contract_authority
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please share
+            - please specify
+        - type: icontains-any
+          metric: ambiguity_reason
           value:
             - frozen Eval Brief
             - approved contract artifact
-            - approved contract
-        - type: icontains
-          metric: implementation_surface
-          value: SKILL.md
-- description: existing-skill-refactor-from-approved-contract
+            - not included
+            - not provided
+            - repo-local path
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill implementation ready
+- description: existing-skill-refactor-artifact-mentioned-only
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
-    case_id: existing-skill-refactor-from-approved-contract
-    prompt: Refactor `openspec-bootstrap` from its approved contract artifact without touching downstream evals.
-    expected_stop: Skill implementation ready
-    should_trigger: true
+    case_id: existing-skill-refactor-artifact-mentioned-only
+    prompt: Refactor `openspec-bootstrap` from its approved contract artifact, but I have only mentioned that artifact and have not provided it or an exact repo-local path. Do not touch downstream evals.
+    expected_stop: stop_and_ask
+    should_trigger: false
   metadata:
     skill_name: skill-implementation-forge
-    case_bucket: golden
-    expected_stop: Skill implementation ready
+    case_bucket: regression
+    expected_stop: stop_and_ask
   assert:
     - type: assert-set
-      metric: critical_uplift
+      metric: stop_and_ask_behavior
       threshold: 1
       assert:
         - type: icontains
           metric: target_skill
           value: openspec-bootstrap
-        - type: icontains
-          metric: terminal_marker
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please share
+            - please specify
+        - type: icontains-any
+          metric: ambiguity_reason
+          value:
+            - approved contract artifact
+            - not provided
+            - not included
+            - repo-local path
+        - type: not-icontains
+          metric: terminal_absent
           value: Skill implementation ready
-- description: downstream-eval-explicitly-deferred
+- description: downstream-eval-deferred-artifact-mentioned-only
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
-    case_id: downstream-eval-explicitly-deferred
-    prompt: Implement `example-skill` from this approved contract artifact. We will author Promptfoo-native eval suites later.
-    expected_stop: Skill implementation ready
-    should_trigger: true
+    case_id: downstream-eval-deferred-artifact-mentioned-only
+    prompt: Implement `example-skill` from the approved contract artifact I mentioned, but I am not actually providing that artifact or an exact path here. We will author Promptfoo-native eval suites later.
+    expected_stop: stop_and_ask
+    should_trigger: false
   metadata:
     skill_name: skill-implementation-forge
     case_bucket: regression
-    expected_stop: Skill implementation ready
+    expected_stop: stop_and_ask
   assert:
     - type: assert-set
-      metric: critical_uplift
+      metric: stop_and_ask_behavior
       threshold: 1
       assert:
         - type: icontains-any
-          metric: defer_eval_work
+          metric: stop_marker
           value:
-            - defer
-            - later
-        - type: icontains
-          metric: terminal_marker
+            - clarify
+            - please provide
+            - please share
+            - please specify
+        - type: icontains-any
+          metric: ambiguity_reason
+          value:
+            - approved contract artifact
+            - not provided
+            - not included
+            - exact path
+        - type: not-icontains
+          metric: terminal_absent
           value: Skill implementation ready
 - description: contract-authoring-request
   vars:
