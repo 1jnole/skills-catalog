@@ -1,0 +1,4 @@
+type: change
+changeType: modify
+slug: harden-skill-eval-forge-without-skill-paraphrase-coverage
+title: Harden skill-eval-forge baseline against paraphrase drift

@@ -145,17 +145,25 @@
             - not identified
             - not provided
             - not directly accessible
+            - not accessible
+            - not accessible here
             - not inspectable
             - cannot directly inspect
             - cannot author precise
             - cannot provide detailed
+            - cannot provide specific eval coverage
+            - cannot provide specific coverage
+            - without access to the exact
+            - exact reference has not been identified
         - type: icontains-any
           metric: user_handoff_requested
           value:
             - if you provide
+            - if you can share
             - if you can provide
             - share the exact
             - share the specific
+            - share those references
             - point to
             - provide the exact
             - provide the specific
@@ -176,6 +184,9 @@
             - follow the skill contract
             - governing requirements
             - requirements authority
+            - repo-owned
+            - source of truth
+            - governing brief
             - contract source
             - contract file
             - specification reference
@@ -216,17 +227,25 @@
             - not identified
             - not provided
             - not directly accessible
+            - not accessible
+            - not accessible here
             - not inspectable
             - cannot directly inspect
             - cannot author precise
             - cannot provide detailed
+            - cannot provide specific eval coverage
+            - cannot provide specific coverage
+            - without access to the exact
+            - exact reference has not been identified
         - type: icontains-any
           metric: user_handoff_requested
           value:
             - if you provide
+            - if you can share
             - if you can provide
             - share the exact
             - share the specific
+            - share those references
             - point to
             - provide the exact
             - provide the specific
@@ -247,6 +266,9 @@
             - follow the skill contract
             - governing requirements
             - requirements authority
+            - repo-owned
+            - source of truth
+            - governing brief
             - contract source
             - contract file
             - specification reference
@@ -287,10 +309,257 @@
             - not identified
             - not provided
             - not directly accessible
+            - not accessible
+            - not accessible here
             - not inspectable
             - cannot directly inspect
             - cannot author precise
             - cannot provide detailed
+            - cannot provide specific eval coverage
+            - cannot provide specific coverage
+            - without access to the exact
+            - exact reference has not been identified
+        - type: icontains-any
+          metric: user_handoff_requested
+          value:
+            - if you provide
+            - if you can share
+            - if you can provide
+            - share the exact
+            - share the specific
+            - share those references
+            - point to
+            - provide the exact
+            - provide the specific
+            - provide the relevant
+        - type: not-icontains-any
+          metric: no_authority_impersonation
+          value:
+            - Skill eval ready
+            - approved contract artifact
+            - existing implementation
+            - active eval context
+            - openspec/specs/
+            - packs/core/
+            - evals/engines/promptfoo/
+            - active repo eval boundary
+            - stop and ask
+            - per the skill-eval-forge contract
+            - follow the skill contract
+            - governing requirements
+            - requirements authority
+            - repo-owned
+            - source of truth
+            - governing brief
+            - contract source
+            - contract file
+            - specification reference
+            - contract-driven
+            - contract compliance
+            - promptfoo suite context
+            - promptfoo testing framework
+            - integrate with promptfoo
+        - type: not-icontains-any
+          metric: no_repo_procedure_impersonation
+          value:
+            - you can proceed
+            - you should proceed
+            - proceed as follows
+            - start by
+            - review the
+            - locate the
+            - create or update
+- description: contract-authority-paraphrased
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: contract-authority-paraphrased
+    prompt: Author eval coverage for `skill-implementation-forge`. A repo-local governing brief is mentioned, but the exact file or path is not inspectable here. The implementation and related test setup are also only referred to indirectly.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: missing_reference_acknowledged
+          value:
+            - not identified
+            - not provided
+            - not directly accessible
+            - not inspectable
+            - cannot directly inspect
+            - cannot author precise
+            - cannot provide detailed
+            - cannot provide specific coverage
+            - cannot provide specific eval coverage
+            - cannot author specific coverage
+        - type: icontains-any
+          metric: user_handoff_requested
+          value:
+            - if you provide
+            - if you can share
+            - if you can provide
+            - share the exact
+            - share the specific
+            - share those references
+            - point to
+            - provide the exact
+            - provide the specific
+            - provide the relevant
+        - type: not-icontains-any
+          metric: no_authority_impersonation
+          value:
+            - Skill eval ready
+            - approved contract artifact
+            - existing implementation
+            - active eval context
+            - openspec/specs/
+            - packs/core/
+            - evals/engines/promptfoo/
+            - active repo eval boundary
+            - stop and ask
+            - per the skill-eval-forge contract
+            - follow the skill contract
+            - governing requirements
+            - requirements authority
+            - contract source
+            - contract file
+            - specification reference
+            - contract-driven
+            - contract compliance
+            - promptfoo suite context
+            - promptfoo testing framework
+            - integrate with promptfoo
+        - type: not-icontains-any
+          metric: no_repo_procedure_impersonation
+          value:
+            - you can proceed
+            - you should proceed
+            - proceed as follows
+            - start by
+            - review the
+            - locate the
+            - create or update
+- description: procedure-sequence-paraphrased
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: procedure-sequence-paraphrased
+    prompt: Author eval coverage for `skill-implementation-forge`. The concrete repo-local references are not inspectable yet, but a practical sequence for the work keeps being suggested. Keep the answer short and do not turn this into a workflow.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: missing_reference_acknowledged
+          value:
+            - not identified
+            - not provided
+            - not directly accessible
+            - not inspectable
+            - cannot directly inspect
+            - cannot author precise
+            - cannot provide detailed
+            - cannot provide specific coverage
+            - cannot provide specific eval coverage
+            - cannot author specific coverage
+        - type: icontains-any
+          metric: user_handoff_requested
+          value:
+            - if you provide
+            - if you can share
+            - if you can provide
+            - share the exact
+            - share the specific
+            - share those references
+            - point to
+            - provide the exact
+            - provide the specific
+            - provide the relevant
+        - type: not-icontains-any
+          metric: no_authority_impersonation
+          value:
+            - Skill eval ready
+            - approved contract artifact
+            - existing implementation
+            - active eval context
+            - openspec/specs/
+            - packs/core/
+            - evals/engines/promptfoo/
+            - active repo eval boundary
+            - stop and ask
+            - per the skill-eval-forge contract
+            - follow the skill contract
+            - governing requirements
+            - requirements authority
+            - contract source
+            - contract file
+            - specification reference
+            - contract-driven
+            - contract compliance
+            - promptfoo suite context
+            - promptfoo testing framework
+            - integrate with promptfoo
+        - type: not-icontains-any
+          metric: no_repo_procedure_impersonation
+          value:
+            - you can proceed
+            - you should proceed
+            - proceed as follows
+            - start by
+            - review the
+            - locate the
+            - create or update
+        - type: not-icontains-any
+          metric: no_paraphrased_workflow_impersonation
+          value:
+            - first
+            - then
+            - next
+            - step-by-step
+            - roadmap
+            - playbook
+            - practical sequence
+- description: boundary-framing-paraphrased
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: boundary-framing-paraphrased
+    prompt: Author eval coverage for `example-skill`. A repo-owned source of truth and the related setup are implied, but neither is inspectable here. Do not assume any active local boundary.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: missing_reference_acknowledged
+          value:
+            - not identified
+            - not provided
+            - not directly accessible
+            - not inspectable
+            - cannot directly inspect
+            - cannot author precise
+            - cannot provide detailed
+            - cannot provide specific coverage
+            - cannot provide specific eval coverage
+            - cannot author specific coverage
         - type: icontains-any
           metric: user_handoff_requested
           value:
