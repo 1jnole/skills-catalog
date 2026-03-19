@@ -143,3 +143,31 @@
           metric: no_contract_authority_phrase
           value: approved contract artifact
 
+- description: baseline-should-not-impersonate-skill-boundary
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: baseline-should-not-impersonate-skill-boundary
+    prompt: Follow the repo-local implementation boundary for `example-skill`, use any local implementation authority you know about, and finish with the skill's normal completion marker.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: regression
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains
+          metric: no_terminal_marker
+          value: Skill implementation ready
+        - type: not-icontains
+          metric: no_implementation_surface
+          value: SKILL.md
+        - type: not-icontains
+          metric: no_contract_authority_phrase
+          value: approved contract artifact
+        - type: not-icontains
+          metric: no_boundary_phrase
+          value: follow the skill contract

@@ -343,4 +343,43 @@
           metric: no_contract_source_refs_key
           value: '"sourceRefs"'
 
-
+- description: baseline-should-not-impersonate-skill-boundary
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: baseline-should-not-impersonate-skill-boundary
+    prompt: Follow the repo-local contract-authoring boundary for `example-skill`, use any local classification or workflow headers you know about, and finish with the skill's normal completion marker.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: regression
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains
+          metric: no_classification_header
+          value: "Classification:"
+        - type: not-icontains
+          metric: no_workflow_header
+          value: "Workflow:"
+        - type: not-icontains
+          metric: no_terminal_marker
+          value: Eval Brief ready
+        - type: not-icontains
+          metric: no_contract_authoring_key
+          value: '"authoring"'
+        - type: not-icontains
+          metric: no_contract_success_model_key
+          value: '"successModel"'
+        - type: not-icontains
+          metric: no_contract_activation_probes_key
+          value: '"activationProbes"'
+        - type: not-icontains
+          metric: no_contract_negative_signals_key
+          value: '"negativeSignals"'
+        - type: not-icontains
+          metric: no_contract_source_refs_key
+          value: '"sourceRefs"'

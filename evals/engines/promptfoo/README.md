@@ -1,165 +1,126 @@
 # Promptfoo Engine Boundary
 
-This directory is the native Promptfoo boundary used by the eval system.
+This directory is the native Promptfoo runtime boundary used by the eval system.
 
 ## Intent
 Promptfoo is the supported eval tool for this repository.
 
-This directory owns:
-- engine configuration,
-- provider adapter files,
-- Promptfoo-specific execution assets,
-- engine-specific assertions when needed,
-- and engine run entrypoints.
+This boundary owns:
+- Promptfoo configs
+- provider adapter files
+- Promptfoo-specific prompts and suites
+- offline fixtures and generated reports
+- family-specific execution surfaces
 
-## Boundary rule
-Promptfoo is the operational tool target and, for `skill-contract-forge`, the Promptfoo-native suite files in this folder are also the only supported case-authoring source.
+It must not grow a parallel repo-owned eval runtime around Promptfoo.
 
-What must not survive is a parallel repo-owned eval runtime or projection layer around Promptfoo.
+## Baseline contract
+The repo-level minimum family contract lives at:
+- `evals/contracts/promptfoo-family-baseline.md`
 
-## Current status
-Supported commands:
+The active Promptfoo families currently in scope are:
+- `skill-contract-forge`
+- `skill-implementation-forge`
+- `skill-eval-forge`
+
+## Family layout
+Each maintained family under `evals/engines/promptfoo/<skill-name>/` keeps this minimum layout:
+- `promptfooconfig.yaml`
+- `promptfooconfig.uplift.with-skill.yaml`
+- `promptfooconfig.uplift.without-skill.yaml`
+- `prompts/with-skill.txt`
+- `prompts/without-skill.txt`
+- `tests/contract.yaml`
+- `tests/uplift.yaml`
+- `tests/uplift.without-skill.yaml`
+
+Entrypoint roles:
+- `promptfooconfig.yaml` = structural contract gate
+- `promptfooconfig.uplift.with-skill.yaml` = comparative uplift gate
+- `promptfooconfig.uplift.without-skill.yaml` = informational baseline surface
+
+## Support model
+### Canonical public npm surface
 - `npm run promptfoo:validate`
 - `npm run promptfoo:run`
 - `npm run promptfoo:run:offline`
 
-Standard non-public execution pattern:
+### Direct-config family execution
 - `promptfoo validate -c evals/engines/promptfoo/<skill-name>/promptfooconfig*.yaml`
 - `promptfoo eval -c evals/engines/promptfoo/<skill-name>/promptfooconfig*.yaml ...`
 
-Supported runtime:
-- native Promptfoo execution from `evals/engines/promptfoo/` with repo-owned wrappers removed
+### Family status
+| Family | Validate | Live run | Offline replay | Public npm surface |
+| --- | --- | --- | --- | --- |
+| `skill-contract-forge` | yes | yes | yes | yes |
+| `skill-implementation-forge` | yes | yes | no | no |
+| `skill-eval-forge` | yes | yes | no | no |
 
-## Entrypoints
-Each evaluated skill owns its own Promptfoo family under `evals/engines/promptfoo/<skill-name>/`.
+Support status is the declared Phase A support model. Final closure still requires local validation and execution evidence.
 
-Every maintained family exposes:
-- `promptfooconfig.yaml` as the canonical structural contract gate entrypoint
-- `promptfooconfig.uplift.with-skill.yaml` as the comparative uplift gate entrypoint for `with_skill`
-- `promptfooconfig.uplift.without-skill.yaml` as the informational baseline entrypoint for `without_skill`
-
-## Shared Assets
-- `providers/` holds provider adapter files only.
-- `fixtures/` and `generated/` remain runtime support/output areas and are not suite-definition entrypoints.
-- `<skill-name>/prompts/` holds prompt templates for that skill family only.
-- `<skill-name>/tests/` holds Promptfoo test suites for that skill family only.
-- direct per-skill families such as `skill-contract-forge/` and `skill-implementation-forge/` are the supported way to add more skill eval surfaces.
-- `skill-eval-forge/` follows the same direct per-skill topology, but its v1 surface is config-local rather than published through npm aliases.
-
-No `tests/defaults.yaml` is shipped in this phase.
-The current duplication between contract and uplift suites is small and semantically meaningful, so a shared defaults layer would add indirection without enough payoff yet.
+## Shared assets
+- `providers/` holds provider adapter files only
+- `fixtures/` holds replay fixtures, scoped by family and surface
+- `generated/` holds intentionally kept live reports, not source-of-truth contracts
+- `<skill-name>/prompts/` holds prompts for that family only
+- `<skill-name>/tests/` holds Promptfoo-native suites for that family only
 
 ## Reliability semantics
-- `packs/core/skill-contract-forge/SKILL.md` is the authority for `skill-contract-forge` output behavior.
-- offline fixtures are replay snapshots only; they are not the source of truth and must not be refreshed to encode non-compliant live behavior.
-- offline replay now uses one fixture per runtime surface:
-  - `fixtures/skill-contract-forge-suite-model-outputs.json` for the contract gate
-  - `fixtures/skill-contract-forge.uplift.with-skill.model-outputs.json` for uplift `with_skill`
-  - `fixtures/skill-contract-forge.uplift.without-skill.model-outputs.json` for uplift `without_skill`
-- `contract` answers "does this output satisfy the skill boundary?"
-- `uplift with_skill` answers "does the skill improve routing and stop-boundary behavior compared to the baseline prompt?"
-- `uplift without_skill` answers "what does the baseline prompt do without the skill active?"
-- Both suites now use native Promptfoo `assert-set`, `threshold`, and `metric` fields so critical checks are explicit and metrics show which dimension failed.
+- the relevant `packs/core/<skill-name>/SKILL.md` file remains the authority for skill behavior
+- `contract` answers whether output satisfies the structural skill boundary
+- `uplift with_skill` answers whether the skill improves routing or stop-boundary behavior compared to the baseline prompt
+- `uplift without_skill` answers what the baseline prompt does without the skill active
+- `without_skill` is informational and is not a contractual conformance gate
+- live behavior wins when live and offline replay disagree
+- public offline replay must write a separate `*.offline.eval.json` artifact rather than overwriting a `*.live.eval.json` report
 
-Operational authority:
-- `npm run promptfoo:validate` is the canonical public contract-validate entrypoint.
-- `npm run promptfoo:run:offline` is the preferred public low-cost replay and smoke path.
-- `npm run promptfoo:run` is the public semantic authority when replay and live behavior disagree.
-- direct `promptfoo -c <config>` execution is the standard path for family-specific work outside the small public npm surface.
-- `without_skill` remains an informational baseline rather than a closure gate.
-- `skill-contract-forge` currently has the maintained offline replay surface; `skill-implementation-forge` currently has validate and live execution only.
-- `skill-eval-forge` currently has direct config entrypoints only; public npm aliases and offline replay remain deferred.
+## Assertions policy
+Phase A prefers deterministic assertions.
 
-For `skill-eval-forge`, the active Promptfoo execution surface is:
-- `evals/engines/promptfoo/skill-eval-forge/promptfooconfig.yaml`
-- `evals/engines/promptfoo/skill-eval-forge/promptfooconfig.uplift.with-skill.yaml`
-- `evals/engines/promptfoo/skill-eval-forge/promptfooconfig.uplift.without-skill.yaml`
-- `evals/engines/promptfoo/skill-eval-forge/tests/contract.yaml`
-- `evals/engines/promptfoo/skill-eval-forge/tests/uplift.yaml`
-- `evals/engines/promptfoo/skill-eval-forge/tests/uplift.without-skill.yaml`
-- `evals/engines/promptfoo/skill-eval-forge/prompts/with-skill.txt`
-- `evals/engines/promptfoo/skill-eval-forge/prompts/without-skill.txt`
+The maintained baseline relies on native Promptfoo assertions such as:
+- `icontains`
+- `not-icontains`
+- `icontains-any`
+- `not-icontains-any`
+- `contains-json`
+- `assert-set`
 
-The canonical case-definition authority for `skill-eval-forge` lives at:
-- `evals/engines/promptfoo/skill-eval-forge/tests/contract.yaml`
-- `evals/engines/promptfoo/skill-eval-forge/tests/uplift.yaml`
-- `evals/engines/promptfoo/skill-eval-forge/tests/uplift.without-skill.yaml`
+Model-graded assertions are not required for the Phase A baseline.
 
-### Critical checks
-- Contract critical checks cover the exact routing envelope from `SKILL.md`: classification, workflow when applicable, embedded Eval Brief schema validity on trigger paths, terminal markers, and incompatible classification absence.
-- Uplift `with_skill` critical checks cover the same routing envelope boundaries for comparative purposes, without promoting full Eval Brief schema validity to the central uplift criterion.
-- The `without_skill` surface is informational and uses a lighter baseline suite that checks the baseline does not impersonate a contract-compliant skill output through classification headers, workflow headers, terminal markers, or contract-brief schema keys.
+## Fixtures and generated reports
+Maintained offline replay fixtures currently exist for `skill-contract-forge`:
+- `fixtures/skill-contract-forge.contract.model-outputs.json`
+- `fixtures/skill-contract-forge.uplift.with-skill.model-outputs.json`
+- `fixtures/skill-contract-forge.uplift.without-skill.model-outputs.json`
 
-### Auxiliary checks
-- Promptfoo `0.121.2` still treats some auxiliary assertion shapes as real failures, so wording-only hints are documented rather than enforced in runtime gates.
-- Wording guidance remains in `SKILL.md`, active eval docs, and human review rather than inside the hard Promptfoo gate.
+Kept generated reports currently follow one naming convention:
+- `generated/skill-contract-forge.contract.live.eval.json`
+- `generated/skill-implementation-forge.contract.live.eval.json`
+- `generated/skill-eval-forge.contract.live.eval.json`
+- `generated/skill-eval-forge.uplift.with-skill.live.eval.json`
+- `generated/skill-eval-forge.uplift.without-skill.live.eval.json`
 
-For `skill-contract-forge`, the active Promptfoo execution surface is:
-- `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml`
-- `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.with-skill.yaml`
-- `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.without-skill.yaml`
-- `evals/engines/promptfoo/providers/default.openai.yaml`
-- `evals/engines/promptfoo/skill-contract-forge/tests/contract.yaml`
-- `evals/engines/promptfoo/skill-contract-forge/tests/uplift.yaml`
-- `evals/engines/promptfoo/skill-contract-forge/prompts/with-skill.txt`
-- `evals/engines/promptfoo/skill-contract-forge/prompts/without-skill.txt`
-- `evals/contracts/skill-contract-forge/eval-brief-output.schema.json`
+When additional reports are kept, use only:
+- `<skill-name>.contract.live.eval.json`
+- `<skill-name>.uplift.with-skill.live.eval.json`
+- `<skill-name>.uplift.without-skill.live.eval.json`
 
-The canonical case-definition authority for `skill-contract-forge` lives at:
-- `evals/engines/promptfoo/skill-contract-forge/tests/contract.yaml`
-- `evals/engines/promptfoo/skill-contract-forge/tests/uplift.yaml`
-- `evals/engines/promptfoo/skill-contract-forge/tests/uplift.without-skill.yaml`
+Public offline replay reports use:
+- `<skill-name>.contract.offline.eval.json`
 
-Canonical Promptfoo config is read from:
-- `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml`
+## Minimum structural edge cases per family
+Each maintained family must cover these edge cases somewhere in its suites:
+- clear trigger
+- clear non-trigger
+- missing precondition or insufficient target specificity
+- deictic target reference
+- mixed workflow request
+- baseline impersonation guard for `without_skill`
+- incompatible marker guard
 
-Canonical contract suite is read from:
-- `evals/engines/promptfoo/skill-contract-forge/tests/contract.yaml`
-
-Default provider adapter is read from:
-- `evals/engines/promptfoo/providers/default.openai.yaml`
-
-Comparative uplift configs are read from:
-- `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.with-skill.yaml`
-- `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.without-skill.yaml`
-
-Comparative uplift suite is read from:
-- `evals/engines/promptfoo/skill-contract-forge/tests/uplift.yaml`
-- `evals/engines/promptfoo/skill-contract-forge/tests/uplift.without-skill.yaml`
-
-Promptfoo raw eval output is written to:
-- `evals/engines/promptfoo/generated/skill-contract-forge.eval.json`
-
-The canonical gate runs only:
-- `with_skill` prompt path (skill context injected from `SKILL.md`)
-- provider selection via the default provider adapter in `providers/default.openai.yaml`
-
-The uplift comparison surface runs in two separate executions:
-- `with_skill` via `skill-contract-forge/promptfooconfig.uplift.with-skill.yaml` as the semantic uplift gate
-- `without_skill` via `skill-contract-forge/promptfooconfig.uplift.without-skill.yaml` as the informational baseline surface
-- provider selection via the same default provider adapter
-
-Repo-specific logic stays in native Promptfoo assertions authored per case in `skill-contract-forge/tests/contract.yaml`.
-Trigger cases use schema-backed `contains-json` checks against the Eval Brief contract file.
-
-Repo-specific uplift logic stays in native Promptfoo assertions authored per case in `skill-contract-forge/tests/uplift.yaml`.
-Those uplift assertions are comparative by design, expose named metrics for routing dimensions, and do not replace the contract gate.
-The `without_skill` baseline surface uses its own lighter suite so the repository can compare behavior without forcing the baseline path to satisfy the skill-owned output envelope.
-
-The repository currently ships `default.openai.yaml` as the operational default provider adapter.
-Changing provider choice is an adapter swap, not a suite or contract change.
-
-The repository does not maintain a second runner, local wrapper, or sync/projection layer as part of the supported `skill-contract-forge` flow.
-Historical helper and pilot runtime residue are no longer kept inside the active `evals/` tree.
-
-Offline smoke execution uses Promptfoo-native fixture replay:
-- `npm run promptfoo:run:offline`
-- direct family-specific offline replays, when supported, use the surface-specific fixture files under `evals/engines/promptfoo/fixtures/`
-
-Those offline replays use Promptfoo-native captured outputs to rerun assertions cheaply. They are supported replay evidence, not a stronger authority surface than a conflicting live run.
-
-Examples of direct family-specific execution:
-- `promptfoo validate -c evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.with-skill.yaml`
-- `promptfoo eval -c evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.without-skill.yaml -o evals/engines/promptfoo/generated/skill-contract-forge.uplift.without-skill.live.eval.json --no-progress-bar --table-cell-max-length 80`
-- `promptfoo validate -c evals/engines/promptfoo/skill-implementation-forge/promptfooconfig.uplift.with-skill.yaml`
-- `promptfoo validate -c evals/engines/promptfoo/skill-eval-forge/promptfooconfig.uplift.without-skill.yaml`
+## Boundary rules
+- Keep `evals/engines/promptfoo/` as the runtime boundary.
+- Keep Promptfoo families shallow and file-based.
+- Do not add a repo-owned runner or projection layer around Promptfoo.
+- Do not treat generated reports or fixture files as contract definitions.
+- Do not treat `without_skill` as a hard closure gate.

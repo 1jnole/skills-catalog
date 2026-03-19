@@ -21,8 +21,8 @@
   },
   "scripts": {
     "promptfoo:validate": "promptfoo validate -c evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml",
-    "promptfoo:run": "promptfoo eval -c evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml -o evals/engines/promptfoo/generated/skill-contract-forge.eval.json --no-progress-bar --table-cell-max-length 80",
-    "promptfoo:run:offline": "promptfoo eval -c evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml --model-outputs evals/engines/promptfoo/fixtures/skill-contract-forge-suite-model-outputs.json -o evals/engines/promptfoo/generated/skill-contract-forge.eval.json --no-progress-bar --table-cell-max-length 80",
+    "promptfoo:run": "promptfoo eval -c evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml -o evals/engines/promptfoo/generated/skill-contract-forge.contract.live.eval.json --no-progress-bar --table-cell-max-length 80",
+    "promptfoo:run:offline": "promptfoo eval -c evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml --model-outputs evals/engines/promptfoo/fixtures/skill-contract-forge.contract.model-outputs.json -o evals/engines/promptfoo/generated/skill-contract-forge.contract.offline.eval.json --no-progress-bar --table-cell-max-length 80",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:run": "vitest run",

@@ -249,6 +249,8 @@
             - target skill
             - unclear
             - name or description of the skill
+            - existing skill name
+            - exact existing skill name
             - which existing skill
         - type: not-icontains
           metric: incompatible_trigger
@@ -292,6 +294,8 @@
             - target skill
             - unclear
             - name or description of the skill
+            - existing skill name
+            - exact existing skill name
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"

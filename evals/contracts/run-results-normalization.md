@@ -3,7 +3,7 @@
 This note captures the canonical normalized result shape that separates engine output from core semantics.
 
 ## Current source of truth
-- `evals/engines/promptfoo/generated/skill-contract-forge.eval.json`
+- `evals/engines/promptfoo/generated/skill-contract-forge.contract.live.eval.json`
 
 ## Canonical normalized shape
 A normalized case result always contains:
@@ -26,6 +26,9 @@ Each mode keeps only canonical fields:
 - `status = error` must carry `error`.
 - technical metadata in errored modes is not part of the canonical output.
 - legacy errored artifacts without error payload are upgraded with a fallback error marker during normalization.
+
+## Verification note
+Generated reports may be kept as examples of the normalized run-result shape, but they do not replace local runtime validation of the supported Promptfoo surfaces.
 
 ## Boundary rule
 Engine-specific raw reports do not define the long-term contract directly.
