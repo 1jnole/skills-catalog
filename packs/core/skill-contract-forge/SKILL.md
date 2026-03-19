@@ -11,6 +11,10 @@ Use this skill to define or refactor the **contract** of a single skill before i
 
 This skill only performs the contract step. It does **not** implement the final skill bundle, runtime evaluation harness, provider wiring, or benchmark execution.
 
+## Phase objective
+
+The objective of this phase is to freeze the skill boundary so the next phase can implement from an explicit contract instead of inventing it.
+
 ## Use this skill when
 
 Use this skill when the request is about defining or clarifying what one skill should be before implementation.
@@ -215,6 +219,7 @@ Engine-specific execution assets live outside this skill contract.
 4. Capture only the minimal downstream evaluation intent needed by the next step.
 5. Produce the boundary-only Eval Brief JSON.
 6. End trigger-path responses with the exact line `Eval Brief ready`.
+7. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, and nearby negative cases without silently widening scope.
 
 ## Quality bar
 

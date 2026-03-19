@@ -157,8 +157,9 @@ Preferred repo gate:
 - `npm run promptfoo:run:offline`
 
 Authority rule:
-- `npm run promptfoo:run:offline*` is the preferred low-cost smoke gate.
-- `npm run promptfoo:run*` is the semantic authority when replay and live behavior disagree.
+- `npm run promptfoo:run:offline` is the preferred public low-cost smoke gate.
+- `npm run promptfoo:run` is the public semantic authority when replay and live behavior disagree.
+- direct `promptfoo -c <config>` execution is the standard path for family-specific validation and runs outside the small public npm surface.
 - `without_skill` remains an informational baseline rather than a closure gate.
 
 For non-critical changes:

@@ -1,0 +1,347 @@
+- description: author-evals-from-approved-contract-and-implementation
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: author-evals-from-approved-contract-and-implementation
+    prompt: >-
+      Author Promptfoo-native eval coverage for `skill-implementation-forge`.
+      Use the approved contract artifact at `openspec/specs/skill-implementation-forge/spec.md`,
+      the existing implementation at `packs/core/skill-implementation-forge/SKILL.md`,
+      and the active Promptfoo eval context under `evals/engines/promptfoo/skill-implementation-forge/`.
+      Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
+      Proceed from those authoritative inputs and stop at the normal completion marker for this phase.
+    expected_stop: Skill eval ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: golden
+    expected_stop: Skill eval ready
+  assert:
+    - type: assert-set
+      metric: critical_uplift
+      threshold: 1
+      assert:
+        - type: icontains
+          metric: target_skill
+          value: skill-implementation-forge
+        - type: icontains
+          metric: terminal_marker
+          value: Skill eval ready
+- description: refactor-existing-eval-coverage
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: refactor-existing-eval-coverage
+    prompt: >-
+      Refactor Promptfoo-native eval coverage for `skill-eval-forge`.
+      Use the approved contract artifact at `openspec/specs/skill-eval-forge/spec.md`,
+      the existing implementation at `packs/core/skill-eval-forge/SKILL.md`,
+      and the active Promptfoo eval context under `evals/engines/promptfoo/skill-eval-forge/`.
+      Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
+      Keep the shared runtime unchanged, proceed from those authoritative inputs, and stop at the normal completion marker for this phase.
+    expected_stop: Skill eval ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: golden
+    expected_stop: Skill eval ready
+  assert:
+    - type: assert-set
+      metric: critical_uplift
+      threshold: 1
+      assert:
+        - type: icontains
+          metric: target_skill
+          value: skill-eval-forge
+        - type: icontains
+          metric: terminal_marker
+          value: Skill eval ready
+- description: contract-authoring-request
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: contract-authoring-request
+    prompt: Define the contract for a new skill first.
+    expected_stop: do_not_trigger
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: negative
+    expected_stop: do_not_trigger
+  assert:
+    - type: assert-set
+      metric: out_of_scope_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: out_of_scope_marker
+          value:
+            - out of scope
+            - outside the scope
+            - does not cover
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill eval ready
+- description: missing-contract-artifact
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: missing-contract-artifact
+    prompt: Author evals for `example-skill`.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: negative
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please specify
+            - need
+        - type: icontains
+          metric: contract_reason
+          value: contract
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill eval ready
+- description: contract-artifact-mentioned-only
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: contract-artifact-mentioned-only
+    prompt: Author eval coverage for `skill-implementation-forge`. The approved contract artifact exists somewhere in the repo, but I am only mentioning it here and have not identified an authoritative path yet. The existing implementation already exists at `packs/core/skill-implementation-forge/SKILL.md`, and the active eval context is under `evals/engines/promptfoo/skill-implementation-forge/`.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please specify
+            - need
+        - type: icontains-any
+          metric: contract_reason
+          value:
+            - contract
+            - artifact
+            - path
+            - identify
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill eval ready
+- description: implementation-mentioned-only
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: implementation-mentioned-only
+    prompt: Author eval coverage for `skill-implementation-forge`. Use the approved contract artifact at `openspec/specs/skill-implementation-forge/spec.md`, but the existing implementation is only mentioned as already being somewhere in the repo and I have not identified an authoritative path for it yet. The active eval context is under `evals/engines/promptfoo/skill-implementation-forge/`.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please specify
+            - need
+        - type: icontains-any
+          metric: implementation_reason
+          value:
+            - implementation
+            - path
+            - identify
+            - repo
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill eval ready
+- description: eval-context-mentioned-only
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: eval-context-mentioned-only
+    prompt: Author eval coverage for `example-skill` from its approved contract artifact and existing implementation. The active Promptfoo eval context exists somewhere in the repo, but I am only mentioning it and have not identified the exact suite path yet.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please specify
+            - need
+        - type: icontains-any
+          metric: context_reason
+          value:
+            - eval context
+            - promptfoo
+            - suite path
+            - path
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill eval ready
+- description: deictic-target
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: deictic-target
+    prompt: Write evals for this skill from its approved contract artifact and existing implementation.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please specify
+            - need
+        - type: icontains-any
+          metric: target_reason
+          value:
+            - target skill
+            - this skill
+            - which skill
+            - exact named skill
+            - named skill you want
+            - specify the exact named skill
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill eval ready
+- description: shared-infra-widening
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: shared-infra-widening
+    prompt: Author evals for `example-skill` from its approved contract artifact and existing implementation, and in the same pass update providers, fixtures, generated outputs, and the shared runner.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please specify
+            - need
+            - stop and ask
+            - out of scope
+            - cannot proceed
+            - please confirm
+        - type: icontains-any
+          metric: widening_reason
+          value:
+            - providers
+            - fixtures
+            - generated outputs
+            - shared runner
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill eval ready
+- description: mixed-contract-and-eval-request
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: mixed-contract-and-eval-request
+    prompt: Rewrite the contract for `example-skill` and add its eval coverage in one pass.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please specify
+            - need
+        - type: icontains-any
+          metric: mixed_phase_reason
+          value:
+            - contract
+            - one pass
+            - inseparable
+            - mixed
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill eval ready
+- description: mixed-implementation-and-eval-request
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: mixed-implementation-and-eval-request
+    prompt: Implement `example-skill` and add its eval coverage in one inseparable pass.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please specify
+            - need
+        - type: icontains-any
+          metric: mixed_phase_reason
+          value:
+            - implement
+            - implementation
+            - inseparable
+            - mixed
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill eval ready

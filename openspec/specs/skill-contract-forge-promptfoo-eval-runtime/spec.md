@@ -22,7 +22,8 @@ The supported `skill-contract-forge` Promptfoo runtime MUST use Promptfoo-native
 #### Scenario: Supported runtime paths are referenced together
 
 - **WHEN** stable specs or active change artifacts describe the current evaluation architecture
-- **THEN** they SHALL identify `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`, `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`, and `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml` as the supported case-definition authority
+- **THEN** they SHALL identify `evals/engines/promptfoo/skill-contract-forge/tests/contract.yaml`, `evals/engines/promptfoo/skill-contract-forge/tests/uplift.yaml`, and `evals/engines/promptfoo/skill-contract-forge/tests/uplift.without-skill.yaml` as the supported case-definition authority
+- **AND** they SHALL identify `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml`, `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.with-skill.yaml`, and `evals/engines/promptfoo/skill-contract-forge/promptfooconfig.uplift.without-skill.yaml` as the supported runtime entrypoints
 - **AND** they SHALL NOT identify `packs/core/skill-contract-forge/evals/evals.json` as an active authoring source for this skill
 - **AND** they SHALL NOT describe any repo-owned local runner, wrapper CLI, grading override, sync command, or projection command as part of the supported runtime
 - **AND** they SHALL NOT keep obsolete `skill-contract-forge` eval-authoring shadow files in the active repository tree
@@ -39,10 +40,12 @@ The supported `skill-contract-forge` runtime MUST NOT depend on `evals/engines/p
 - **THEN** they SHALL NOT present `assertions.cjs` as part of the supported runtime path
 
 ### Requirement: Deterministic assertions are the default migration mechanism
+
 Case assertions in this slug MUST use documented Promptfoo assertion types, with deterministic assertions preferred by default.
 
 #### Scenario: Case assertions are authored for migration closure
-- **WHEN** a case assertion is added or updated in `evals/engines/promptfoo/tests/skill-contract-forge.contract.yaml`, `evals/engines/promptfoo/tests/skill-contract-forge.uplift.yaml`, or `evals/engines/promptfoo/tests/skill-contract-forge.uplift.without-skill.yaml`
+
+- **WHEN** a case assertion is added or updated in `evals/engines/promptfoo/skill-contract-forge/tests/contract.yaml`, `evals/engines/promptfoo/skill-contract-forge/tests/uplift.yaml`, or `evals/engines/promptfoo/skill-contract-forge/tests/uplift.without-skill.yaml`
 - **THEN** it SHALL use documented Promptfoo assertion types
 - **AND** it SHOULD use deterministic assertions before any `javascript` assertion
 - **AND** any remaining `javascript` assertion SHALL be justified in the change artifacts
@@ -52,9 +55,10 @@ Docs touched by this migration SHALL distinguish supported runtime truth from hi
 
 #### Scenario: Runtime surfaces are described together
 - **WHEN** an affected document describes the supported `skill-contract-forge` Promptfoo workflow
-- **THEN** it SHALL identify `promptfoo validate*` as structural configuration validation
-- **AND** it SHALL identify `promptfoo:run:offline*` as the preferred low-cost replay or smoke path
-- **AND** it SHALL identify `promptfoo:run*` as the semantic authority when offline replay and live behavior disagree
+- **THEN** it SHALL identify `npm run promptfoo:validate` as the canonical public contract-validate entrypoint
+- **AND** it SHALL identify `npm run promptfoo:run:offline` as the preferred public low-cost replay or smoke path
+- **AND** it SHALL identify `npm run promptfoo:run` as the public semantic authority when offline replay and live behavior disagree
+- **AND** it SHALL identify direct `promptfoo -c <config>` execution as the standard path for family-specific validation and runs outside the small public npm surface
 - **AND** it SHALL identify `without_skill` as an informational baseline rather than a closure gate
 
 #### Scenario: Legacy path appears in affected docs
@@ -64,7 +68,7 @@ Docs touched by this migration SHALL distinguish supported runtime truth from hi
 
 #### Scenario: Replay fixture refresh follows live recovery
 - **WHEN** the repository refreshes Promptfoo `--model-outputs` fixtures for `skill-contract-forge`
-- **THEN** it SHALL confirm the corresponding `promptfoo:run*` live surface is green first
+- **THEN** it SHALL confirm the corresponding live surface is green first, whether that surface is reached through `npm run promptfoo:run` or direct `promptfoo -c <config>` execution
 - **AND** it SHALL refresh only the replay fixture for the confirmed live surface
 - **AND** it SHALL NOT refresh replay fixtures to encode behavior that still fails in live evaluation
 
@@ -78,4 +82,3 @@ The supported `skill-contract-forge` Promptfoo runtime MUST keep retired engine 
 - **THEN** those files SHALL NOT live under `evals/engines/promptfoo/support/` or `evals/engines/promptfoo/fixtures/`
 - **AND** they MAY be removed from the active repository tree instead of being kept in an in-repo quarantine location
 - **AND** active docs SHALL NOT treat them as part of the supported runtime surface
-

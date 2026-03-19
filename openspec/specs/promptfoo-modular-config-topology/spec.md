@@ -5,31 +5,35 @@ Define a modular Promptfoo topology where entrypoints, prompts, tests, and provi
 ## Requirements
 ### Requirement: Promptfoo entrypoints have a single clear purpose
 
-The supported Promptfoo configs for `skill-contract-forge` MUST each represent one explicit execution role, and their suite files SHALL be authored directly in the Promptfoo-native suite files without repo-owned projection tooling.
+The supported Promptfoo configs for each evaluated skill MUST each represent one explicit execution role, and their suite files SHALL be authored directly in the Promptfoo-native suite files without repo-owned projection tooling.
 
 #### Scenario: Promptfoo topology is reviewed after the cleanup slug lands
 
 - **WHEN** the supported Promptfoo config files and test suites are inspected
-- **THEN** `promptfooconfig.yaml` SHALL remain the canonical contract gate
-- **AND** the uplift configs SHALL remain separate comparative entrypoints
-- **AND** the repository SHALL NOT ship `promptfoo:sync`, `promptfoo:sync:check`, or equivalent `skill-contract-forge` sync tooling
+- **THEN** each evaluated skill SHALL live under `evals/engines/promptfoo/<skill-name>/`
+- **AND** each skill family SHALL expose `promptfooconfig.yaml`, `promptfooconfig.uplift.with-skill.yaml`, and `promptfooconfig.uplift.without-skill.yaml`
+- **AND** the repository SHALL NOT ship `promptfoo:sync`, `promptfoo:sync:check`, or equivalent sync tooling
 
 ### Requirement: Promptfoo modular topology is documented without unnecessary indirection
 
-The Promptfoo engine documentation MUST describe prompts, tests, and providers as separate responsibility areas and MUST NOT present sync or projection tooling as part of the supported `skill-contract-forge` flow.
+The Promptfoo engine documentation MUST describe shared runtime assets and direct per-skill families without presenting sync or projection tooling as part of the supported flow.
 
 #### Scenario: Engine README is reviewed after the cleanup slug lands
 
 - **WHEN** `evals/engines/promptfoo/README.md` is read
 - **THEN** it SHALL identify Promptfoo itself as the only runtime execution boundary
-- **AND** it SHALL NOT describe sync/check commands as available or required for `skill-contract-forge`
+- **AND** it SHALL describe `providers/`, `fixtures/`, and `generated/` as shared root assets
+- **AND** it SHALL describe `evals/engines/promptfoo/<skill-name>/` as the supported home for skill-local configs, prompts, and tests
+- **AND** it SHALL NOT describe sync/check commands as available or required
 
 ### Requirement: Active Promptfoo docs present one supported command surface
-The maintained Promptfoo-facing docs MUST describe one consistent supported command surface for `skill-contract-forge` across root and eval READMEs without reintroducing sync or wrapper tooling.
+
+The maintained Promptfoo-facing docs MUST describe one consistent supported command surface and one consistent direct per-skill topology across the eval-facing READMEs.
 
 #### Scenario: Maintained Promptfoo docs are reviewed together
-- **WHEN** `README.md`, `evals/README.md`, and `evals/engines/promptfoo/README.md` are reviewed after this closeout
-- **THEN** they SHALL list the supported validate, uplift validate, live replay, and offline replay commands for `skill-contract-forge`
-- **AND** they SHALL identify the Promptfoo-native suites under `evals/engines/promptfoo/tests/` as the active case-definition authority for this skill
-- **AND** they SHALL NOT present `promptfoo:sync`, `promptfoo:sync:check`, or equivalent wrapper tooling as part of the supported flow
+
+- **WHEN** `evals/README.md` and `evals/engines/promptfoo/README.md` are reviewed after this closeout
+- **THEN** they SHALL list the supported validate and run commands for the maintained Promptfoo families
+- **AND** they SHALL describe direct per-skill families under `evals/engines/promptfoo/<skill-name>/`
+- **AND** they SHALL NOT present `promptfoo:sync`, `promptfoo:sync:check`, or the rejected `evals/engines/promptfoo/skills/<skill-name>/` topology as part of the supported flow
 

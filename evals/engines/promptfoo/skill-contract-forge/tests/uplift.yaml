@@ -1,6 +1,6 @@
 - description: new-skill-one-clear-job
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: new-skill-one-clear-job
     prompt: Create a new reusable skill for spotting JavaScript array mutation mistakes. Start from the contract, keep one job only, and do not implement eval runtime behavior.
     expected_stop: Eval Brief ready
@@ -31,7 +31,7 @@
           value: "Classification: stop-and-ask"
 - description: existing-skill-refactor-clear-target
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: existing-skill-refactor-clear-target
     prompt: Refactor the existing skill `openspec-bootstrap`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.
     expected_stop: Eval Brief ready
@@ -62,7 +62,7 @@
           value: "Classification: stop-and-ask"
 - description: skill-rewrite-clear-target
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: skill-rewrite-clear-target
     prompt: Rewrite the existing skill `openspec-bootstrap` using the current repo docs as the source of truth. Freeze the job, trigger boundary, nearby negatives, and success model before you touch the final instructions.
     expected_stop: Eval Brief ready
@@ -93,7 +93,7 @@
           value: "Classification: stop-and-ask"
 - description: agents-policy-request
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: agents-policy-request
     prompt: Update the repo AGENTS.md managed block and tighten the repository policy wording.
     expected_stop: do_not_trigger
@@ -134,7 +134,7 @@
           value: Eval Brief ready
 - description: runtime-harness-implementation
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: runtime-harness-implementation
     prompt: Build the offline eval runner for skill-contract-forge with grading, timing, and benchmark output. Use Node, TypeScript, Zod, and AI SDK.
     expected_stop: do_not_trigger
@@ -176,7 +176,7 @@
           value: Eval Brief ready
 - description: ambiguous-multi-workflow-request
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: ambiguous-multi-workflow-request
     prompt: Create a skill, reorganize the repo policies, and build the first runner in one pass so everything lands together.
     expected_stop: stop_and_ask
@@ -216,7 +216,7 @@
           value: Eval Brief ready
 - description: ambiguous-refactor-missing-target
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: ambiguous-refactor-missing-target
     prompt: Refactor this skill so the contract is clearer, keep it contract-first, and stop at Eval Brief ready.
     expected_stop: stop_and_ask
@@ -249,6 +249,8 @@
             - target skill
             - unclear
             - name or description of the skill
+            - existing skill name
+            - exact existing skill name
             - which existing skill
         - type: not-icontains
           metric: incompatible_trigger
@@ -261,7 +263,7 @@
           value: Eval Brief ready
 - description: ambiguous-rewrite-missing-target
   vars:
-    skill_prompt: file://../../../packs/core/skill-contract-forge/SKILL.md
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: ambiguous-rewrite-missing-target
     prompt: Rewrite the skill so it matches the current repo docs, freeze the contract first, and stop at Eval Brief ready.
     expected_stop: stop_and_ask
@@ -292,6 +294,8 @@
             - target skill
             - unclear
             - name or description of the skill
+            - existing skill name
+            - exact existing skill name
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -301,3 +305,5 @@
         - type: not-icontains
           metric: terminal_absent
           value: Eval Brief ready
+
+

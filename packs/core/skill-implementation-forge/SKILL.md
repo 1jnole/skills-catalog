@@ -16,6 +16,10 @@ Use this skill to implement or refactor one named skill from an approved contrac
 
 This skill owns the implementation phase only. It does not define the contract, does not author downstream eval suites, and does not change eval/runtime architecture.
 
+## Phase objective
+
+The objective of this phase is to materialize one named skill from an approved contract artifact without renegotiating the contract.
+
 ## Use this skill when
 
 Use this skill when:
@@ -85,7 +89,8 @@ If the artifact does not freeze the single job, target skill, outputs, or stop c
 3. Create or refactor `SKILL.md`.
 4. Add nearby support files only when the approved contract artifact explicitly requires them.
 5. Keep the implementation aligned with the approved contract artifact.
-6. Stop at the exact terminal marker `Skill implementation ready`.
+6. Before finalizing, check that the resulting skill still has one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative examples, and relevant edge cases.
+7. Stop at the exact terminal marker `Skill implementation ready`.
 
 ## Guardrails
 

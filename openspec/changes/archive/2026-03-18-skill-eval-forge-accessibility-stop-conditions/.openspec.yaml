@@ -1,0 +1,4 @@
+type: change
+changeType: modify
+slug: skill-eval-forge-accessibility-stop-conditions
+title: Separate skill-eval-forge precondition existence from accessibility
