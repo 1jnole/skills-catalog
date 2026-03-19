@@ -1,3 +1,34 @@
+- description: refactor-existing-skill-from-authoritative-contract
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: refactor-existing-skill-from-authoritative-contract
+    prompt: >-
+      Refactor `skill-eval-forge`.
+      Use the approved contract artifact at `openspec/specs/skill-eval-forge/spec.md`.
+      The target skill already exists at `packs/core/skill-eval-forge/SKILL.md`.
+      Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
+      Keep downstream eval authoring and eval/runtime changes out of scope.
+      Proceed from that authoritative contract input and stop at the normal completion marker for this phase.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: golden
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains-any
+          metric: no_skill_owned_terminal_or_boundary
+          value:
+            - Skill implementation ready
+            - implementation ready
+            - ready for implementation
+            - follow the skill contract
+            - per the skill-implementation-forge contract
+            - stop and ask
 - description: new-skill-artifact-mentioned-only
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md

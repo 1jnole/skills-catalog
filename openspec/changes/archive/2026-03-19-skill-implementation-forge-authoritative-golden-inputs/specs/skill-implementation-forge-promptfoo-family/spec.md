@@ -1,18 +1,4 @@
-# skill-implementation-forge-promptfoo-family Specification
-
-## Purpose
-TBD - created by archiving change normalize-skill-implementation-forge-precondition-semantics. Update Purpose after archive.
-## Requirements
-### Requirement: Promptfoo family honors authoritative implementation preconditions
-
-The `skill-implementation-forge` Promptfoo family SHALL treat prompts that only mention an approved contract artifact, without actually providing an authoritative artifact, as clarification paths rather than valid implementation triggers.
-
-#### Scenario: Artifact is mentioned but not delivered
-
-- **WHEN** a Promptfoo test prompt says there is an approved contract artifact or frozen brief but does not include the artifact or a concrete authoritative path
-- **THEN** the expected outcome SHALL be `stop_and_ask`
-- **AND** the assertions SHALL require clarification language
-- **AND** the assertions SHALL require the absence of `Skill implementation ready`
+## MODIFIED Requirements
 
 ### Requirement: Contract and uplift suites stay semantically aligned
 
@@ -47,4 +33,3 @@ The `uplift.without-skill.yaml` suite SHALL remain an informational baseline and
 - **THEN** `uplift.without-skill.yaml` SHALL mirror the same `case_id`, description, and prompt semantics
 - **AND** it SHALL remain baseline-only rather than triggering implementation completion
 - **AND** it SHALL assert absence of `Skill implementation ready` and other skill-owned boundary language
-
