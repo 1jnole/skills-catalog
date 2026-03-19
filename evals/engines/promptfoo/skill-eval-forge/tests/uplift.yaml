@@ -108,6 +108,105 @@
         - type: not-icontains
           metric: terminal_absent
           value: Skill eval ready
+- description: contract-artifact-mentioned-only
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: contract-artifact-mentioned-only
+    prompt: Author eval coverage for `skill-implementation-forge`. The approved contract artifact exists somewhere in the repo, but I am only mentioning it here and have not identified an authoritative path yet. The existing implementation already exists at `packs/core/skill-implementation-forge/SKILL.md`, and the active eval context is under `evals/engines/promptfoo/skill-implementation-forge/`.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please specify
+            - need
+        - type: icontains-any
+          metric: contract_reason
+          value:
+            - contract
+            - artifact
+            - path
+            - identify
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill eval ready
+- description: implementation-mentioned-only
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: implementation-mentioned-only
+    prompt: Author eval coverage for `skill-implementation-forge`. Use the approved contract artifact at `openspec/specs/skill-implementation-forge/spec.md`, but the existing implementation is only mentioned as already being somewhere in the repo and I have not identified an authoritative path for it yet. The active eval context is under `evals/engines/promptfoo/skill-implementation-forge/`.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please specify
+            - need
+        - type: icontains-any
+          metric: implementation_reason
+          value:
+            - implementation
+            - path
+            - identify
+            - repo
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill eval ready
+- description: eval-context-mentioned-only
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: eval-context-mentioned-only
+    prompt: Author eval coverage for `example-skill` from its approved contract artifact and existing implementation. The active Promptfoo eval context exists somewhere in the repo, but I am only mentioning it and have not identified the exact suite path yet.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please specify
+            - need
+        - type: icontains-any
+          metric: context_reason
+          value:
+            - eval context
+            - promptfoo
+            - suite path
+            - path
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill eval ready
 - description: deictic-target
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md

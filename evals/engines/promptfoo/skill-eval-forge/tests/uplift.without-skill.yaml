@@ -123,6 +123,219 @@
             - evals/engines/promptfoo/
             - active repo eval boundary
             - per the skill-eval-forge contract
+- description: contract-artifact-mentioned-only
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: contract-artifact-mentioned-only
+    prompt: Author eval coverage for `skill-implementation-forge`. A repo-local requirements reference is said to exist, but I am only mentioning it here and have not identified the exact reference yet. The code under evaluation and the related test setup are said to be known elsewhere; only the requirements reference is still mentioned rather than inspectable.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: missing_reference_acknowledged
+          value:
+            - not identified
+            - not provided
+            - not directly accessible
+            - not inspectable
+            - cannot directly inspect
+            - cannot author precise
+            - cannot provide detailed
+        - type: icontains-any
+          metric: user_handoff_requested
+          value:
+            - if you provide
+            - if you can provide
+            - share the exact
+            - share the specific
+            - point to
+            - provide the exact
+            - provide the specific
+            - provide the relevant
+        - type: not-icontains-any
+          metric: no_authority_impersonation
+          value:
+            - Skill eval ready
+            - approved contract artifact
+            - existing implementation
+            - active eval context
+            - openspec/specs/
+            - packs/core/
+            - evals/engines/promptfoo/
+            - active repo eval boundary
+            - stop and ask
+            - per the skill-eval-forge contract
+            - follow the skill contract
+            - governing requirements
+            - requirements authority
+            - contract source
+            - contract file
+            - specification reference
+            - contract-driven
+            - contract compliance
+            - promptfoo suite context
+            - promptfoo testing framework
+            - integrate with promptfoo
+        - type: not-icontains-any
+          metric: no_repo_procedure_impersonation
+          value:
+            - you can proceed
+            - you should proceed
+            - proceed as follows
+            - start by
+            - review the
+            - locate the
+            - create or update
+- description: implementation-mentioned-only
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: implementation-mentioned-only
+    prompt: Author eval coverage for `skill-implementation-forge`. The repo-local requirements reference is already identified and available, but the code under evaluation is only mentioned as already being somewhere in the repo and I have not identified the exact reference for it yet. The related test setup is said to be known elsewhere.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: missing_reference_acknowledged
+          value:
+            - not identified
+            - not provided
+            - not directly accessible
+            - not inspectable
+            - cannot directly inspect
+            - cannot author precise
+            - cannot provide detailed
+        - type: icontains-any
+          metric: user_handoff_requested
+          value:
+            - if you provide
+            - if you can provide
+            - share the exact
+            - share the specific
+            - point to
+            - provide the exact
+            - provide the specific
+            - provide the relevant
+        - type: not-icontains-any
+          metric: no_authority_impersonation
+          value:
+            - Skill eval ready
+            - approved contract artifact
+            - existing implementation
+            - active eval context
+            - openspec/specs/
+            - packs/core/
+            - evals/engines/promptfoo/
+            - active repo eval boundary
+            - stop and ask
+            - per the skill-eval-forge contract
+            - follow the skill contract
+            - governing requirements
+            - requirements authority
+            - contract source
+            - contract file
+            - specification reference
+            - contract-driven
+            - contract compliance
+            - promptfoo suite context
+            - promptfoo testing framework
+            - integrate with promptfoo
+        - type: not-icontains-any
+          metric: no_repo_procedure_impersonation
+          value:
+            - you can proceed
+            - you should proceed
+            - proceed as follows
+            - start by
+            - review the
+            - locate the
+            - create or update
+- description: eval-context-mentioned-only
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: eval-context-mentioned-only
+    prompt: Author eval coverage for `example-skill` from its repo-local requirements reference and available code. The related test setup exists somewhere in the repo, but I am only mentioning it and have not identified the exact path yet.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: missing_reference_acknowledged
+          value:
+            - not identified
+            - not provided
+            - not directly accessible
+            - not inspectable
+            - cannot directly inspect
+            - cannot author precise
+            - cannot provide detailed
+        - type: icontains-any
+          metric: user_handoff_requested
+          value:
+            - if you provide
+            - if you can provide
+            - share the exact
+            - share the specific
+            - point to
+            - provide the exact
+            - provide the specific
+            - provide the relevant
+        - type: not-icontains-any
+          metric: no_authority_impersonation
+          value:
+            - Skill eval ready
+            - approved contract artifact
+            - existing implementation
+            - active eval context
+            - openspec/specs/
+            - packs/core/
+            - evals/engines/promptfoo/
+            - active repo eval boundary
+            - stop and ask
+            - per the skill-eval-forge contract
+            - follow the skill contract
+            - governing requirements
+            - requirements authority
+            - contract source
+            - contract file
+            - specification reference
+            - contract-driven
+            - contract compliance
+            - promptfoo suite context
+            - promptfoo testing framework
+            - integrate with promptfoo
+        - type: not-icontains-any
+          metric: no_repo_procedure_impersonation
+          value:
+            - you can proceed
+            - you should proceed
+            - proceed as follows
+            - start by
+            - review the
+            - locate the
+            - create or update
 - description: deictic-target
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
