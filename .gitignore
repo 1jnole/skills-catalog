@@ -44,5 +44,9 @@ packs/core/*/evals/runs/
 evals/engines/promptfoo/generated/
 
 # Codex / agent runtime
-.codex/
+.codex/*
+!.codex/config.toml
+!.codex/agents/
+.codex/agents/*
+!.codex/agents/*.toml
 traces/

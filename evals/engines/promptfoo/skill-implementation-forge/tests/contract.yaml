@@ -1,3 +1,53 @@
+- description: refactor-existing-skill-from-authoritative-contract
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: refactor-existing-skill-from-authoritative-contract
+    prompt: >-
+      Refactor `skill-eval-forge`.
+      Use the approved contract artifact at `openspec/specs/skill-eval-forge/spec.md`.
+      The target skill already exists at `packs/core/skill-eval-forge/SKILL.md`.
+      Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
+      Keep downstream eval authoring and eval/runtime changes out of scope.
+      Proceed from that authoritative contract input and stop at `Skill implementation ready`.
+    expected_stop: Skill implementation ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: golden
+    expected_stop: Skill implementation ready
+  assert:
+    - type: assert-set
+      metric: critical_contract
+      threshold: 1
+      assert:
+        - type: icontains
+          metric: target_skill
+          value: skill-eval-forge
+        - type: icontains-any
+          metric: contract_authority
+          value:
+            - contract artifact
+            - approved contract artifact
+            - authoritative contract
+        - type: icontains-any
+          metric: repo_local_authority
+          value:
+            - repo-local
+            - local path
+            - file path
+            - path in the repo
+            - implementation at
+            - skill at
+            - in the repo
+        - type: icontains-any
+          metric: implementation_scope
+          value:
+            - implement
+            - implementation
+            - refactor
+        - type: icontains
+          metric: terminal_marker
+          value: Skill implementation ready
 - description: new-skill-artifact-mentioned-only
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md

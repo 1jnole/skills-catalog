@@ -116,6 +116,25 @@ The repo-specific operating rules live in:
 - [AGENTS.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/AGENTS.md)
 - [openspec/AGENTS.override.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/openspec/AGENTS.override.md)
 
+### Repo-scoped subagents
+This repo tracks a small repo-scoped subagent baseline under `.codex/` for day-to-day read-heavy work:
+- `.codex/config.toml`
+- `.codex/agents/repo-mapper.toml`
+- `.codex/agents/openspec-preflight.toml`
+- `.codex/agents/promptfoo-drift-checker.toml`
+
+These defaults are intentionally narrow:
+- `repo_mapper` locates the minimum relevant files before edits.
+- `openspec_preflight` checks whether a slug is ready for validate, apply, review, or archive.
+- `promptfoo_drift_checker` compares contract and uplift suites for semantic drift.
+
+Cost note:
+- the goal is to shift repo exploration and review off the main frontier agent onto `gpt-5.4-mini`
+- this can reduce expensive main-agent usage in repeated read-heavy tasks
+- it does not guarantee lower total token usage on every run because subagents still do their own model and tool work
+
+Use the repo-scoped subagents when the task is mostly reading, comparing, or preflighting. Keep the main agent for integration, ambiguity resolution, and final editing decisions.
+
 ## Skill-forge workflow
 
 This repo uses the forge workflow as its default authoring pipeline:
@@ -216,4 +235,6 @@ For eval commands, see [evals/README.md](/C:/Users/Jorge/WebstormProjects/skills
 - [OpenAI Codex changelog](https://developers.openai.com/codex/changelog/)
 - [OpenAI Codex: AGENTS.md guide](https://developers.openai.com/codex/guides/agents-md/)
 - [OpenAI Codex: Agent skills](https://developers.openai.com/codex/skills/)
+- [OpenAI Codex: Subagents](https://developers.openai.com/codex/subagents)
+- [OpenAI Codex: Subagent concepts](https://developers.openai.com/codex/concepts/subagents)
 - [OpenAI: Unrolling the Codex agent loop](https://openai.com/index/unrolling-the-codex-agent-loop/)
