@@ -1,8 +1,5 @@
-# skill-implementation-forge-promptfoo-family Specification
+## MODIFIED Requirements
 
-## Purpose
-Define the comparative Promptfoo family for `skill-implementation-forge` so `uplift.with-skill` validates the implementation boundary lightly and `uplift.without-skill` stays informational without impersonating the skill.
-## Requirements
 ### Requirement: The family checks implementation behavior without phrasing lock-in
 
 The `skill-implementation-forge` Promptfoo family SHALL test the implementation-from-contract boundary described by `packs/core/skill-implementation-forge/SKILL.md` and SHALL validate boundary behavior semantically rather than by requiring exact wording.
@@ -35,4 +32,3 @@ The `without_skill` baseline SHALL remain informational even when prompts paraph
 - **WHEN** the baseline suite includes prompts that paraphrase workflow as a practical sequence, normal completion marker, implementation boundary, or repo-local process
 - **THEN** the baseline SHALL stay brief and informational
 - **AND** it SHALL NOT prescribe repo-shaped steps or imply that the skill boundary is active
-

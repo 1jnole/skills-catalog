@@ -8,6 +8,7 @@
       The target skill already exists at `packs/core/skill-eval-forge/SKILL.md`.
       Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
       Keep downstream eval authoring and eval/runtime changes out of scope.
+      If you answer without the skill, stay brief and informational rather than outlining implementation steps.
       Proceed from that authoritative contract input and stop at the normal completion marker for this phase.
     expected_stop: baseline_only
     should_trigger: false
@@ -25,10 +26,20 @@
           value:
             - Skill implementation ready
             - implementation ready
-            - ready for implementation
             - follow the skill contract
             - per the skill-implementation-forge contract
+            - implementation boundary is active
+            - stop-and-ask
             - stop and ask
+        - type: not-icontains-any
+          metric: no_repo_workflow
+          value:
+            - approach is as follows
+            - step 1
+            - start by
+            - create or update
+            - inspect the contract
+            - review the implementation
 - description: new-skill-artifact-mentioned-only
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
@@ -45,23 +56,34 @@
       metric: baseline_surface
       threshold: 1
       assert:
-        - type: not-icontains
-          metric: no_terminal_marker
-          value: Skill implementation ready
-        - type: not-icontains
-          metric: no_implementation_surface
-          value: SKILL.md
-        - type: not-icontains
-          metric: no_contract_authority_phrase
-          value: approved contract artifact
-        - type: not-icontains
-          metric: no_contract_authority_phrase
-          value: approved contract artifact
-- description: existing-skill-refactor-artifact-mentioned-only
+        - type: icontains-any
+          metric: asks_for_material
+          value:
+            - please provide
+            - please share
+            - exact path
+            - actual brief
+            - actual contract
+            - provide the brief
+            - describe what the skill should do
+        - type: not-icontains-any
+          metric: no_skill_owned_language
+          value:
+            - Skill implementation ready
+            - approved contract artifact
+            - follow the skill contract
+            - per the skill-implementation-forge contract
+            - stop-and-ask
+            - stop and ask
+- description: deictic-target-with-authoritative-contract
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
-    case_id: existing-skill-refactor-artifact-mentioned-only
-    prompt: Refactor `openspec-bootstrap` from its approved contract artifact, but I have only mentioned that artifact and have not provided it or an exact repo-local path. Do not touch downstream evals.
+    case_id: deictic-target-with-authoritative-contract
+    prompt: >-
+      Implement this skill from the approved contract artifact at `openspec/specs/skill-eval-forge/spec.md`.
+      For this evaluation, treat that repo-local contract artifact as already opened and operationally inspectable authority, and do not ask for the contract again.
+      The only ambiguity left in the request is the deictic target phrase `this skill`, so the missing information is the exact skill name.
+      Stop at the normal completion marker for this phase only if the request is truly in trigger scope.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
@@ -73,62 +95,23 @@
       metric: baseline_surface
       threshold: 1
       assert:
-        - type: not-icontains
-          metric: no_terminal_marker
-          value: Skill implementation ready
-        - type: not-icontains
-          metric: no_implementation_surface
-          value: SKILL.md
-- description: downstream-eval-deferred-artifact-mentioned-only
-  vars:
-    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
-    case_id: downstream-eval-deferred-artifact-mentioned-only
-    prompt: Implement `example-skill` from the approved contract artifact I mentioned, but I am not actually providing that artifact or an exact path here. We will author Promptfoo-native eval suites later.
-    expected_stop: baseline_only
-    should_trigger: false
-  metadata:
-    skill_name: skill-implementation-forge
-    case_bucket: regression
-    expected_stop: baseline_only
-  assert:
-    - type: assert-set
-      metric: baseline_surface
-      threshold: 1
-      assert:
-        - type: not-icontains
-          metric: no_terminal_marker
-          value: Skill implementation ready
-        - type: not-icontains
-          metric: no_implementation_surface
-          value: SKILL.md
-        - type: not-icontains
-          metric: no_contract_authority_phrase
-          value: approved contract artifact
-- description: contract-authoring-request
-  vars:
-    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
-    case_id: contract-authoring-request
-    prompt: Define the contract for a new skill.
-    expected_stop: baseline_only
-    should_trigger: false
-  metadata:
-    skill_name: skill-implementation-forge
-    case_bucket: negative
-    expected_stop: baseline_only
-  assert:
-    - type: assert-set
-      metric: baseline_surface
-      threshold: 1
-      assert:
-        - type: not-icontains
-          metric: no_terminal_marker
-          value: Skill implementation ready
-        - type: not-icontains
-          metric: no_implementation_surface
-          value: SKILL.md
-        - type: not-icontains
-          metric: no_contract_authority_phrase
-          value: approved contract artifact
+        - type: icontains-any
+          metric: asks_for_target
+          value:
+            - which skill
+            - exact skill
+            - specify the skill
+            - skill name
+        - type: not-icontains-any
+          metric: no_skill_owned_language
+          value:
+            - Skill implementation ready
+            - approved contract artifact
+            - follow the skill contract
+            - per the skill-implementation-forge contract
+            - implementation boundary is active
+            - stop-and-ask
+            - stop and ask
 - description: eval-authoring-request
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
@@ -145,63 +128,17 @@
       metric: baseline_surface
       threshold: 1
       assert:
-        - type: not-icontains
-          metric: no_terminal_marker
-          value: Skill implementation ready
-        - type: not-icontains
-          metric: no_implementation_surface
-          value: SKILL.md
-- description: missing-contract
-  vars:
-    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
-    case_id: missing-contract
-    prompt: Implement `example-skill`.
-    expected_stop: baseline_only
-    should_trigger: false
-  metadata:
-    skill_name: skill-implementation-forge
-    case_bucket: negative
-    expected_stop: baseline_only
-  assert:
-    - type: assert-set
-      metric: baseline_surface
-      threshold: 1
-      assert:
-        - type: not-icontains
-          metric: no_terminal_marker
-          value: Skill implementation ready
+        - type: not-icontains-any
+          metric: no_skill_owned_language
+          value:
+            - Skill implementation ready
+            - approved contract artifact
+            - follow the skill contract
+            - per the skill-implementation-forge contract
+            - implementation boundary is active
         - type: not-icontains
           metric: no_implementation_surface
           value: SKILL.md
-        - type: not-icontains
-          metric: no_contract_authority_phrase
-          value: approved contract artifact
-- description: deictic-target
-  vars:
-    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
-    case_id: deictic-target
-    prompt: Implement this skill from the approved brief.
-    expected_stop: baseline_only
-    should_trigger: false
-  metadata:
-    skill_name: skill-implementation-forge
-    case_bucket: regression
-    expected_stop: baseline_only
-  assert:
-    - type: assert-set
-      metric: baseline_surface
-      threshold: 1
-      assert:
-        - type: not-icontains
-          metric: no_terminal_marker
-          value: Skill implementation ready
-        - type: not-icontains
-          metric: no_implementation_surface
-          value: SKILL.md
-        - type: not-icontains
-          metric: no_contract_authority_phrase
-          value: approved contract artifact
-
 - description: baseline-should-not-impersonate-skill-boundary
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
@@ -218,15 +155,19 @@
       metric: baseline_surface
       threshold: 1
       assert:
-        - type: not-icontains
-          metric: no_terminal_marker
-          value: Skill implementation ready
-        - type: not-icontains
-          metric: no_implementation_surface
-          value: SKILL.md
-        - type: not-icontains
-          metric: no_contract_authority_phrase
-          value: approved contract artifact
-        - type: not-icontains
-          metric: no_boundary_phrase
-          value: follow the skill contract
+        - type: not-icontains-any
+          metric: no_skill_owned_language
+          value:
+            - Skill implementation ready
+            - approved contract artifact
+            - follow the skill contract
+            - per the skill-implementation-forge contract
+            - implementation boundary is active
+            - normal completion marker
+        - type: not-icontains-any
+          metric: no_repo_workflow
+          value:
+            - start by
+            - create or update
+            - inspect the contract
+            - review the implementation

@@ -2,7 +2,6 @@
 
 ## Purpose
 Define the implementation-phase boundary for building or refactoring one named skill from an approved contract artifact without renegotiating that contract or widening into downstream phases.
-
 ## Requirements
 ### Requirement: `skill-implementation-forge` exists as the implementation-phase core skill
 
@@ -11,13 +10,6 @@ The repository SHALL provide a core skill named `skill-implementation-forge` for
 `skill-implementation-forge` SHALL only trigger when the primary job is implementing or refactoring one named target skill from an approved contract artifact that is operationally inspectable.
 
 For this skill, an approved contract artifact is operationally inspectable only when the agent can resolve it concretely, such as by an exact repo-local path, a `file://` reference, or another uniquely identified artifact that can be opened without interpretive searching. Conversational references such as "the approved brief", "the frozen contract", or "the contract we discussed" SHALL NOT count as operationally inspectable authority.
-
-#### Scenario: Core pack is reviewed after the skill lands
-
-- **WHEN** `packs/core/skill-implementation-forge/` is reviewed
-- **THEN** the package SHALL contain a normative `SKILL.md`
-- **AND** the skill SHALL describe a single job of implementing or refactoring one named skill from an already approved contract
-- **AND** the skill SHALL stop at the exact marker `Skill implementation ready`
 
 #### Scenario: Implementation request has inspectable authority
 
@@ -71,11 +63,6 @@ For this skill, an approved contract artifact is operationally inspectable only 
 
 `skill-implementation-forge` SHALL require both an authoritative contract artifact and a clearly identified target skill before implementation begins.
 
-#### Scenario: Mentioned contract artifact is not actually provided
-
-- **WHEN** a request says there is an approved contract artifact or frozen brief but does not actually provide the artifact or a concrete authoritative path
-- **THEN** the skill SHALL stop and ask for the real artifact instead of treating the mention alone as sufficient authority
-
 #### Scenario: Deictic target is not enough for implementation
 
 - **WHEN** the request asks to implement "this skill", "the current skill", or another deictic target instead of naming the skill explicitly
@@ -106,3 +93,4 @@ The `skill-implementation-forge` package SHALL remain a shallow skill package an
 - **WHEN** `packs/core/skill-implementation-forge/` is reviewed
 - **THEN** the package SHALL NOT include an `evals/` subtree
 - **AND** it SHALL NOT add Promptfoo configs, provider adapters, fixtures, generated outputs, or shared eval runner tooling
+
