@@ -8,7 +8,8 @@
       the existing implementation at `packs/core/skill-implementation-forge/SKILL.md`,
       and the active Promptfoo eval context under `evals/engines/promptfoo/skill-implementation-forge/`.
       Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
-      Proceed from those authoritative inputs and stop at `Skill eval ready`.
+      Proceed from those authoritative inputs, do not draft YAML or enumerate proposed tests here,
+      and stop at `Skill eval ready`.
     expected_stop: Skill eval ready
     should_trigger: true
   metadata:
@@ -42,7 +43,8 @@
       the existing implementation at `packs/core/skill-eval-forge/SKILL.md`,
       and the active Promptfoo eval context under `evals/engines/promptfoo/skill-eval-forge/`.
       Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
-      Keep the shared runtime unchanged, proceed from those authoritative inputs, and stop at `Skill eval ready`.
+      Keep the shared runtime unchanged, proceed from those authoritative inputs,
+      do not draft YAML or enumerate proposed tests here, and stop at `Skill eval ready`.
     expected_stop: Skill eval ready
     should_trigger: true
   metadata:
@@ -122,7 +124,10 @@
             - please provide
             - please specify
             - need
+            - please separate
+            - separate
             - stop and ask
+            - stop-and-ask
             - out of scope
             - cannot proceed
         - type: icontains-any
@@ -132,6 +137,32 @@
             - fixtures
             - generated outputs
             - shared runner
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill eval ready
+- description: runtime-redesign-request
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: runtime-redesign-request
+    prompt: Redesign the shared eval/runtime architecture for this repo, including provider wiring, fixture strategy, and the shared runner.
+    expected_stop: do_not_trigger
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: negative
+    expected_stop: do_not_trigger
+  assert:
+    - type: assert-set
+      metric: non_trigger_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: non_trigger_marker
+          value:
+            - non-trigger
+            - out of scope
+            - outside the scope
+            - does not cover
         - type: not-icontains
           metric: terminal_absent
           value: Skill eval ready
@@ -148,18 +179,16 @@
     expected_stop: do_not_trigger
   assert:
     - type: assert-set
-      metric: out_of_scope_behavior
+      metric: non_trigger_behavior
       threshold: 1
       assert:
         - type: icontains-any
-          metric: out_of_scope_marker
+          metric: non_trigger_marker
           value:
+            - non-trigger
             - out of scope
             - outside the scope
             - does not cover
-        - type: icontains
-          metric: contract_reason
-          value: contract
         - type: not-icontains
           metric: terminal_absent
           value: Skill eval ready
@@ -176,23 +205,21 @@
     expected_stop: do_not_trigger
   assert:
     - type: assert-set
-      metric: out_of_scope_behavior
+      metric: non_trigger_behavior
       threshold: 1
       assert:
         - type: icontains-any
-          metric: out_of_scope_marker
+          metric: non_trigger_marker
           value:
+            - non-trigger
             - out of scope
             - outside the scope
             - does not cover
-            - strictly for eval authoring
-            - not skill implementation
-            - scope is strictly
-        - type: icontains-any
-          metric: implementation_reason
+        - type: not-icontains-any
+          metric: not_stop_and_ask_label
           value:
-            - implement
-            - implementation
+            - stop and ask
+            - stop-and-ask
         - type: not-icontains
           metric: terminal_absent
           value: Skill eval ready
@@ -219,6 +246,8 @@
             - please provide
             - please specify
             - need
+            - please separate
+            - separate
         - type: icontains-any
           metric: mixed_phase_reason
           value:
@@ -252,6 +281,8 @@
             - please provide
             - please specify
             - need
+            - please separate
+            - separate
         - type: icontains-any
           metric: mixed_phase_reason
           value:
@@ -423,6 +454,73 @@
         - type: not-icontains
           metric: terminal_absent
           value: Skill eval ready
+- description: contract-discussed-but-not-inspectable
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: contract-discussed-but-not-inspectable
+    prompt: Author eval coverage for `skill-implementation-forge` from the approved contract we discussed earlier, the current implementation, and the current evals.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please specify
+            - need
+        - type: icontains-any
+          metric: inspectable_authority_reason
+          value:
+            - exact path
+            - repo-local path
+            - file
+            - inspect
+            - inspectable
+            - authoritative path
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill eval ready
+- description: classification-envelope-drift
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: classification-envelope-drift
+    prompt: >-
+      Author eval coverage for `skill-eval-forge`.
+      Use the approved contract artifact at `openspec/specs/skill-eval-forge/spec.md`,
+      the existing implementation at `packs/core/skill-eval-forge/SKILL.md`,
+      and the active eval context under `evals/engines/promptfoo/skill-eval-forge/`.
+      Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
+      Do not draft YAML or enumerate proposed tests here.
+      Do not copy `Classification:` or `Workflow:` lines from skill-contract-forge, and stop at `Skill eval ready`.
+    expected_stop: Skill eval ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: Skill eval ready
+  assert:
+    - type: assert-set
+      metric: response_boundary_behavior
+      threshold: 1
+      assert:
+        - type: icontains
+          metric: terminal_marker
+          value: Skill eval ready
+        - type: not-icontains
+          metric: no_classification_header
+          value: "Classification:"
+        - type: not-icontains
+          metric: no_workflow_header
+          value: "Workflow:"
 - description: conflicting-contract-and-implementation
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md

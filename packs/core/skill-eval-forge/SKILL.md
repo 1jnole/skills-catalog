@@ -45,6 +45,18 @@ The request must provide:
 - an existing implementation of that same target skill, identified specifically enough to inspect as authority
 - enough repo-local eval context to author or refactor coverage without inventing runtime behavior or target behavior
 
+For this skill, an authority is inspectable only when it is concretely resolvable, such as:
+- an exact repo-local path
+- a `file://...` reference
+- another uniquely identified artifact that can be opened without interpretive searching
+
+These references are not inspectable authority on their own:
+- `the approved contract`
+- `the frozen brief`
+- `the current implementation`
+- `the current evals`
+- other conversational references that still require the model to infer where authority lives
+
 Useful supporting inputs may include:
 - active Promptfoo-native suite files under the active repo eval boundary in `evals/engines/promptfoo/`
 - repository source-of-truth context when available:
@@ -65,6 +77,22 @@ The exact terminal marker is:
 
 `Skill eval ready`
 
+`skill-eval-forge` keeps its own response boundary. It does not adopt `Classification:` or `Workflow:` response headers unless a future `skill-eval-forge` contract explicitly requires them.
+
+Use `Skill eval ready` only for valid trigger-path completion. Do not end `non-trigger` or `stop-and-ask` responses with that marker.
+
+## Routing precedence
+
+Use `non-trigger` when the primary job is no longer eval authoring for one named skill, even if evals are mentioned secondarily.
+
+When a request is `non-trigger`, respond briefly as `non-trigger` or with a short out-of-scope explanation. Do not relabel that response as `stop-and-ask`, and do not ask for missing eval-authoring authorities in place of the routing decision.
+
+Implementation-first requests remain `non-trigger` even when they mention an approved contract artifact, because the primary job is still skill implementation rather than eval authoring. Respond as `non-trigger`, not as `stop-and-ask`.
+
+If a request explicitly combines eval authoring with contract rewriting or skill implementation in one inseparable pass, route it as `stop-and-ask` even when the sentence starts with `rewrite` or `implement`, because the work can only continue safely after the phases are separated.
+
+Use `stop-and-ask` when the primary job is still eval authoring for one named skill, but a material authority is missing, conflicting, or mixed with separable widening that prevents safe continuation.
+
 ## Stop-and-ask conditions
 
 Stop and ask when:
@@ -82,6 +110,12 @@ These prompts are insufficient on their own:
 - `fix the current evals`
 - `cover the next skill`
 - `update this suite`
+
+Requests like these are `non-trigger`, not `stop-and-ask`, because eval authoring is no longer the primary job:
+- `define the contract for a new skill first`
+- `implement the skill from its approved contract artifact`
+- `redesign the shared eval runner`
+- `change provider wiring and fixture strategy`
 
 ## Procedure
 
@@ -106,6 +140,7 @@ These prompts are insufficient on their own:
 - When authoring an informational `without_skill` baseline, keep it baseline-shaped: it must not impersonate the skill-owned boundary by reproducing terminal markers, invented preconditions, or repo-local stop rules as if the skill were active.
 - Keep the package shallow and self-contained by default.
 - Treat the active Promptfoo-native repo eval boundary under `evals/engines/promptfoo/` as authoritative. Do not recreate removed legacy per-skill eval harness patterns.
+- Do not copy the response envelope of `skill-contract-forge`; this skill does not require `Classification:` or `Workflow:` headers unless its own contract changes in a future slug.
 
 ## Examples
 

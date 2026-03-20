@@ -1,8 +1,5 @@
-# skill-eval-forge Specification
+## MODIFIED Requirements
 
-## Purpose
-TBD - created by archiving change add-skill-eval-forge. Update Purpose after archive.
-## Requirements
 ### Requirement: `skill-eval-forge` owns eval authoring for one named implemented skill
 
 The repository SHALL provide a core skill named `skill-eval-forge` for the eval-authoring phase of the skill-forge workflow.
