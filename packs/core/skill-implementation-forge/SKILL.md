@@ -24,6 +24,7 @@ The objective of this phase is to materialize one named skill from an approved c
 
 Use this skill when:
 - the target skill already has an approved contract artifact
+- that contract artifact is provided in an operationally inspectable form, such as an exact repo-local path or `file://` reference
 - the task is to implement or refactor the skill from that contract
 - the work can stay within one named skill
 - downstream eval work, if mentioned, is explicitly deferred
@@ -43,6 +44,8 @@ Do not use this skill for:
 The request must provide:
 - one approved contract artifact for exactly one target skill
 - a clearly identified target skill name
+
+For this phase, an approved contract artifact is operationally inspectable only when it is identified concretely enough to open as authority, such as by an exact repo-local path, a `file://` reference, or another uniquely resolvable artifact. Conversational references such as `the approved brief`, `the frozen contract`, or `the contract we discussed` are not enough.
 
 Useful supporting inputs may include:
 - an existing implementation of the target skill
@@ -67,6 +70,7 @@ The exact terminal marker is:
 
 Stop and ask when:
 - the approved contract artifact is missing
+- the approved contract artifact is only mentioned, not provided in an operationally inspectable form
 - the contract is ambiguous or not specific enough to implement safely
 - the target skill is not clearly identified
 - the request mixes implementation with contract authoring in one inseparable pass
@@ -81,6 +85,8 @@ These prompts are insufficient on their own:
 
 The existence of a contract artifact is not enough by itself.
 If the artifact does not freeze the single job, target skill, outputs, or stop conditions clearly enough to guide implementation, stop and ask rather than filling the gaps from intuition.
+
+Use `non-trigger` when the primary job is no longer implementation-from-contract for one named skill, even if the prompt mentions implementation secondarily. Use `stop-and-ask` only when the core job is still implementation but a material precondition is missing or the request widens inseparably.
 
 ## Procedure
 
@@ -102,6 +108,8 @@ If the artifact does not freeze the single job, target skill, outputs, or stop c
 - If downstream eval work is mentioned but explicitly deferred, remain in implementation scope and defer that later work.
 - If the approved contract artifact conflicts with the current implementation, implement from the approved contract artifact rather than silently redefining it.
 - Keep the package shallow by default.
+- Do not adopt `Classification:` or `Workflow:` response headers by imitation of another forge skill.
+- Do not end a non-trigger or stop-and-ask response with `Skill implementation ready`.
 
 ## Examples
 
@@ -112,6 +120,7 @@ In scope:
 
 Stop and ask:
 - “Implement this skill so it is cleaner and more complete.”
+- “Implement `example-skill` from the approved brief I mentioned earlier,” when that brief is not actually attached or given as an exact path.
 - “Implement the skill and also rewrite its contract.”
 - “Implement `example-skill` from this approved brief,” where the brief still leaves the actual job, required outputs, or stop conditions unresolved.
 

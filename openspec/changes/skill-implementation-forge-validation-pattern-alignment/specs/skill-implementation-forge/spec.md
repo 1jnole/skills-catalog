@@ -1,9 +1,5 @@
-# skill-implementation-forge Specification
+## MODIFIED Requirements
 
-## Purpose
-Define the implementation-phase boundary for building or refactoring one named skill from an approved contract artifact without renegotiating that contract or widening into downstream phases.
-
-## Requirements
 ### Requirement: `skill-implementation-forge` exists as the implementation-phase core skill
 
 The repository SHALL provide a core skill named `skill-implementation-forge` for the implementation phase of the forge workflow.
@@ -11,13 +7,6 @@ The repository SHALL provide a core skill named `skill-implementation-forge` for
 `skill-implementation-forge` SHALL only trigger when the primary job is implementing or refactoring one named target skill from an approved contract artifact that is operationally inspectable.
 
 For this skill, an approved contract artifact is operationally inspectable only when the agent can resolve it concretely, such as by an exact repo-local path, a `file://` reference, or another uniquely identified artifact that can be opened without interpretive searching. Conversational references such as "the approved brief", "the frozen contract", or "the contract we discussed" SHALL NOT count as operationally inspectable authority.
-
-#### Scenario: Core pack is reviewed after the skill lands
-
-- **WHEN** `packs/core/skill-implementation-forge/` is reviewed
-- **THEN** the package SHALL contain a normative `SKILL.md`
-- **AND** the skill SHALL describe a single job of implementing or refactoring one named skill from an already approved contract
-- **AND** the skill SHALL stop at the exact marker `Skill implementation ready`
 
 #### Scenario: Implementation request has inspectable authority
 
@@ -52,29 +41,9 @@ For this skill, an approved contract artifact is operationally inspectable only 
 - **WHEN** one request explicitly combines implementation with contract rewriting or eval authoring in one inseparable pass
 - **THEN** `skill-implementation-forge` SHALL route that request as stop-and-ask rather than as a plain non-trigger contract or eval request
 
-### Requirement: The skill is contract-driven and refuses hidden widening
-
-`skill-implementation-forge` SHALL treat an approved contract artifact as the authoritative implementation input and SHALL refuse to redefine the contract or absorb downstream eval/runtime work.
-
-#### Scenario: Implementation request is in scope
-
-- **WHEN** a request provides a frozen contract for one named target skill
-- **THEN** the skill SHALL stay within contract-driven implementation
-- **AND** it SHALL allow `SKILL.md` plus nearby support files only when the frozen contract explicitly requires them
-
-#### Scenario: Request widens into contract or eval work
-
-- **WHEN** a request asks to renegotiate the contract, author Promptfoo-native evals, or change eval runtime architecture as part of the same step
-- **THEN** the skill SHALL treat that widening as out of scope or stop-and-ask rather than silently absorbing it
-
 ### Requirement: Missing contract and deictic targets trigger clarification
 
 `skill-implementation-forge` SHALL require both an authoritative contract artifact and a clearly identified target skill before implementation begins.
-
-#### Scenario: Mentioned contract artifact is not actually provided
-
-- **WHEN** a request says there is an approved contract artifact or frozen brief but does not actually provide the artifact or a concrete authoritative path
-- **THEN** the skill SHALL stop and ask for the real artifact instead of treating the mention alone as sufficient authority
 
 #### Scenario: Deictic target is not enough for implementation
 
@@ -96,13 +65,3 @@ The repository SHALL keep `skill-implementation-forge` aligned to its own implem
 - **THEN** it SHALL describe `skill-implementation-forge` in its own implementation-from-contract terms
 - **AND** it SHALL NOT require `Classification:` or `Workflow:` response headers unless a future `skill-implementation-forge` contract explicitly adds them
 - **AND** it SHALL keep `Skill implementation ready` exclusive to valid trigger-path completion
-
-### Requirement: The skill package does not own Promptfoo runtime assets
-
-The `skill-implementation-forge` package SHALL remain a shallow skill package and SHALL NOT absorb Promptfoo-native eval or runtime assets.
-
-#### Scenario: Package structure is reviewed
-
-- **WHEN** `packs/core/skill-implementation-forge/` is reviewed
-- **THEN** the package SHALL NOT include an `evals/` subtree
-- **AND** it SHALL NOT add Promptfoo configs, provider adapters, fixtures, generated outputs, or shared eval runner tooling
