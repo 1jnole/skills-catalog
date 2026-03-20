@@ -18,26 +18,24 @@ The repository SHALL provide a direct Promptfoo family for `skill-eval-forge` un
 
 The `skill-eval-forge` Promptfoo family SHALL test the eval-authoring boundary described by `packs/core/skill-eval-forge/SKILL.md` and SHALL validate boundary behavior semantically rather than by requiring exact wording.
 
-#### Scenario: Authority is mentioned but not operationally identifiable
-
-- **WHEN** a Promptfoo test prompt says the approved contract artifact, the existing implementation, or the active eval context exists but does not identify it specifically enough to inspect as authority
-- **THEN** the expected outcome SHALL be `stop_and_ask`
-- **AND** the assertions SHALL require clarification language
-- **AND** the assertions SHALL require the absence of `Skill eval ready`
-
-#### Scenario: Comparative uplift preserves the highest-signal authority guardrails
+#### Scenario: Comparative uplift stays lighter than the contract gate
 
 - **WHEN** `evals/engines/promptfoo/skill-eval-forge/tests/uplift.yaml` is reviewed
-- **THEN** it SHALL include comparative authority guardrails for contract artifact, implementation, and eval context mentioned-only cases
+- **THEN** it SHALL keep only a compact set of high-signal comparative cases for trigger routing, non-trigger precedence, inspectable-authority stop-boundary, mixed-phase stop-boundary, and terminal-marker behavior
 - **AND** it SHALL remain lighter than the contract gate
 
-#### Scenario: Baseline mirrors renamed authority cases without impersonating the skill
+#### Scenario: Comparative uplift preserves inspectable-authority and boundary signal
 
-- **WHEN** `evals/engines/promptfoo/skill-eval-forge/tests/uplift.without-skill.yaml` is reviewed after those authority cases are renamed
-- **THEN** it SHALL mirror those prompt semantics where applicable
-- **AND** it SHALL continue forbidding skill-owned terminal markers, skill-owned authority framing, and repo-local boundary framing
-- **AND** it SHALL acknowledge when repo-local references are only mentioned rather than inspectable
-- **AND** it SHALL stay at brief general guidance rather than inventing repo-shaped authoring procedures
+- **WHEN** `uplift.yaml` exercises requests whose core job is still eval authoring
+- **THEN** it SHALL still distinguish a valid trigger path from a stop-and-ask path caused by missing inspectable authority or inseparable mixed-phase work
+- **AND** it SHALL keep `Skill eval ready` exclusive to valid trigger-path completion
+
+#### Scenario: Baseline acknowledges missing inspectable references
+
+- **WHEN** `evals/engines/promptfoo/skill-eval-forge/tests/uplift.without-skill.yaml` includes prompts where contract, implementation, or eval references are only mentioned or paraphrased
+- **THEN** the expected baseline behavior SHALL acknowledge that the concrete reference is not inspectable
+- **AND** it SHALL ask the user to provide concrete material
+- **AND** it SHALL NOT impersonate `skill-eval-forge` authority or terminal markers
 
 #### Scenario: Baseline remains resistant to paraphrased authority and workflow framing
 
@@ -57,4 +55,3 @@ The initial Promptfoo family for `skill-eval-forge` SHALL support direct config 
 - **THEN** they SHALL describe `skill-eval-forge` as a direct Promptfoo family with config-local entrypoints
 - **AND** they SHALL state that the family is not yet part of the supported public npm command surface
 - **AND** they SHALL NOT claim that `skill-eval-forge` already has maintained offline replay fixtures unless those fixtures are added in a later change
-

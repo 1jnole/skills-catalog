@@ -64,3 +64,4 @@ The repository SHALL NOT teach `skill-eval-forge` as a legacy per-skill eval har
 - **WHEN** `packs/core/skill-eval-forge/SKILL.md` explains where eval work belongs
 - **THEN** it SHALL describe Promptfoo-native eval authoring aligned to the active repo runtime boundary under `evals/engines/promptfoo/`
 - **AND** it SHALL NOT instruct contributors to create or redesign a separate local eval runtime inside the skill package
+
