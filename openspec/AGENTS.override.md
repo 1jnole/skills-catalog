@@ -91,6 +91,19 @@ Avoid dumping full logs.
 
 ---
 
+## Low-token workflow
+
+Use these defaults to reduce token spend without weakening validation quality:
+- Work one slug at a time; implement, validate, review, and archive it before opening the next slug unless the repo explicitly needs parallel slugs.
+- Freeze `done` in a short checklist before editing; do not keep renegotiating acceptance criteria during apply.
+- Prefer diff-based review with concrete findings over full-file rereads once the plan is approved.
+- Run the narrowest useful verification first, then the full suite only after the focused check passes.
+- Keep commentary compact when the strategy has not changed; report phase changes, edits, blockers, and final verification rather than narrating every micro-step.
+- Do not restate approved plans in full; refer to the active slug and its recorded acceptance criteria instead.
+- Archive completed slugs promptly so later work does not carry stale change context.
+
+---
+
 ## Phase routing (command-by-moment)
 
 ### 0) Preflight
