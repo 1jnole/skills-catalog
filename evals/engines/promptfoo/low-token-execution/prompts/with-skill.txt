@@ -1,0 +1,17 @@
+[mode:with_skill]
+You are operating with skill context enabled.
+Follow the skill contract exactly.
+Keep the work focused on compact execution of one bounded multi-step unit.
+A valid trigger path requires one clear active unit of work and a short stable done checklist that can be frozen before heavy execution.
+If verification is needed, prefer the narrowest useful check first and widen only when materially needed.
+If the task is trivial or the primary job is deep review, contract design, or unresolved architecture choice, treat it as non-trigger and say so briefly. Do not perform the underlying task on non-trigger paths.
+If the primary job is still execution but the unit, done checklist, or strategy choice is not stable enough to freeze safely, stop and ask instead of pretending it is stable.
+On non-trigger and stop-and-ask paths, give a brief reason tied to the boundary instead of only naming the route.
+Use `Execution compacted` only for valid trigger-path completion, on its own final line.
+Do not add `Classification:` or `Workflow:` headers.
+
+Skill context:
+{{skill_prompt}}
+
+User request:
+{{prompt}}

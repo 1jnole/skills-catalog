@@ -1,0 +1,148 @@
+- description: bounded-multi-step-task-with-frozen-done
+  vars:
+    skill_prompt: file://../../../../packs/core/low-token-execution/SKILL.md
+    case_id: bounded-multi-step-task-with-frozen-done
+    prompt: >-
+      Use `low-token-execution` for one bounded repo task.
+      The active unit is to add the Promptfoo family for `low-token-execution`.
+      Freeze `done` as: add the family files, validate the three configs for that family,
+      rerun any failing case narrowly before a full rerun, and stop only with `Execution compacted`.
+      Keep the current unit small and do not reopen the plan unless a real contradiction appears.
+    expected_stop: Execution compacted
+    should_trigger: true
+  metadata:
+    skill_name: low-token-execution
+    case_bucket: golden
+    expected_stop: Execution compacted
+  assert:
+    - type: assert-set
+      metric: comparative_trigger
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: compact_execution_signal
+          value:
+            - done
+            - focused
+            - narrow
+            - current unit
+        - type: icontains
+          metric: terminal_marker
+          value: Execution compacted
+- description: trivial-single-step-request
+  vars:
+    skill_prompt: file://../../../../packs/core/low-token-execution/SKILL.md
+    case_id: trivial-single-step-request
+    prompt: >-
+      Does `low-token-execution` apply to this request: tell me the current UTC time.
+      If it does not apply, say so briefly and do not provide the time itself.
+    expected_stop: do_not_trigger
+    should_trigger: false
+  metadata:
+    skill_name: low-token-execution
+    case_bucket: negative
+    expected_stop: do_not_trigger
+  assert:
+    - type: assert-set
+      metric: comparative_non_trigger
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: non_trigger_marker
+          value:
+            - non-trigger
+            - out of scope
+            - does not apply
+            - too trivial
+        - type: not-icontains
+          metric: terminal_absent
+          value: Execution compacted
+- description: deictic-unit-reference
+  vars:
+    skill_prompt: file://../../../../packs/core/low-token-execution/SKILL.md
+    case_id: deictic-unit-reference
+    prompt: >-
+      Use `low-token-execution` for this.
+      The phrase `this` is the only description of the active unit, so the work itself is still unspecified.
+      Stop at `Execution compacted` only if the request is truly in trigger scope.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: low-token-execution
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: comparative_stop_and_ask
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: asks_for_unit
+          value:
+            - what task
+            - concrete task
+            - exact multi-step task
+            - deliverable
+            - specify the unit
+            - clarify
+        - type: not-icontains
+          metric: terminal_absent
+          value: Execution compacted
+- description: strategy-choice-still-open
+  vars:
+    skill_prompt: file://../../../../packs/core/low-token-execution/SKILL.md
+    case_id: strategy-choice-still-open
+    prompt: >-
+      Use `low-token-execution` for this repo task.
+      We have not chosen between a narrow patch and a broad refactor, and that choice changes scope, risk, and validation.
+      Stop at `Execution compacted` only if the task is truly stable enough to compact.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: low-token-execution
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: comparative_stop_and_ask
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: asks_for_strategy
+          value:
+            - narrow patch
+            - broad refactor
+            - which direction
+            - choose
+            - prefer
+        - type: not-icontains
+          metric: terminal_absent
+          value: Execution compacted
+- description: mixed-contract-and-execution-request
+  vars:
+    skill_prompt: file://../../../../packs/core/low-token-execution/SKILL.md
+    case_id: mixed-contract-and-execution-request
+    prompt: >-
+      Define the contract for a new skill and then use `low-token-execution` to carry the rest of the work compactly.
+      If `low-token-execution` does not apply, say so briefly instead of forcing the workflow.
+    expected_stop: do_not_trigger
+    should_trigger: false
+  metadata:
+    skill_name: low-token-execution
+    case_bucket: regression
+    expected_stop: do_not_trigger
+  assert:
+    - type: assert-set
+      metric: comparative_non_trigger
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: non_trigger_marker
+          value:
+            - non-trigger
+            - out of scope
+            - does not apply
+            - contract
+        - type: not-icontains
+          metric: terminal_absent
+          value: Execution compacted

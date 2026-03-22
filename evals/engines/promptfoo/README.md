@@ -22,6 +22,7 @@ The active Promptfoo families currently in scope are:
 - `skill-contract-forge`
 - `skill-implementation-forge`
 - `skill-eval-forge`
+- `low-token-execution`
 
 ## Family layout
 Each maintained family under `evals/engines/promptfoo/<skill-name>/` keeps this minimum layout:
@@ -55,6 +56,7 @@ Entrypoint roles:
 | `skill-contract-forge` | yes | yes | yes | yes |
 | `skill-implementation-forge` | yes | yes | no | no |
 | `skill-eval-forge` | yes | yes | no | no |
+| `low-token-execution` | yes | yes | no | no |
 
 Support status is the declared Phase A support model. Final closure still requires local validation and execution evidence.
 

@@ -1,0 +1,144 @@
+- description: bounded-multi-step-task-with-frozen-done
+  vars:
+    skill_prompt: file://../../../../packs/core/low-token-execution/SKILL.md
+    case_id: bounded-multi-step-task-with-frozen-done
+    prompt: >-
+      Use `low-token-execution` for one bounded repo task.
+      The active unit is to add the Promptfoo family for `low-token-execution`.
+      Freeze `done` as: add the family files, validate the three configs for that family,
+      rerun any failing case narrowly before a full rerun, and stop only with `Execution compacted`.
+      If you answer without the skill, stay brief and informational rather than outlining a playbook or frozen checklist.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: low-token-execution
+    case_bucket: golden
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains-any
+          metric: no_skill_owned_language
+          value:
+            - Execution compacted
+            - compact-execution boundary
+            - per the low-token-execution skill
+            - follow the low-token-execution contract
+            - Classification:
+            - Workflow:
+        - type: not-icontains-any
+          metric: no_repo_playbook
+          value:
+            - step 1
+            - start by
+            - freeze `done`
+            - freeze done
+            - rerun any failing case
+            - action plan
+- description: strategy-choice-still-open
+  vars:
+    skill_prompt: file://../../../../packs/core/low-token-execution/SKILL.md
+    case_id: strategy-choice-still-open
+    prompt: >-
+      We have not chosen between a narrow patch and a broad refactor, and that choice changes scope, risk, and validation.
+      If you answer without the skill, ask which direction I prefer instead of recommending an active path.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: low-token-execution
+    case_bucket: regression
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: asks_preference
+          value:
+            - which direction
+            - which one
+            - do you prefer
+            - would you prefer
+        - type: not-icontains-any
+          metric: no_skill_owned_language
+          value:
+            - Execution compacted
+            - low-token-execution contract
+            - compact-execution boundary
+            - stop-and-ask
+            - stop and ask
+- description: workflow-sequence-paraphrased
+  vars:
+    skill_prompt: file://../../../../packs/core/low-token-execution/SKILL.md
+    case_id: workflow-sequence-paraphrased
+    prompt: >-
+      Freeze the success checklist before heavy work, rerun the narrowest useful check first,
+      then widen only after that passes, and close one unit before opening another.
+      If you answer without the skill, do not turn that into a numbered procedure or repo-shaped workflow.
+      Ask what concrete task that workflow should apply to.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: low-token-execution
+    case_bucket: regression
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: asks_for_task
+          value:
+            - what task
+            - concrete task
+            - what work
+            - which task
+            - specific task
+            - project
+            - apply this approach
+        - type: not-icontains-any
+          metric: no_repo_playbook
+          value:
+            - step 1
+            - start by
+            - then
+            - checklist
+            - workflow
+- description: baseline-should-not-impersonate-skill-boundary
+  vars:
+    skill_prompt: file://../../../../packs/core/low-token-execution/SKILL.md
+    case_id: baseline-should-not-impersonate-skill-boundary
+    prompt: >-
+      Follow the repo-local compact execution boundary for this task, use whatever local rules you know,
+      and finish with the skill's normal completion marker.
+    expected_stop: baseline_only
+    should_trigger: false
+  metadata:
+    skill_name: low-token-execution
+    case_bucket: regression
+    expected_stop: baseline_only
+  assert:
+    - type: assert-set
+      metric: baseline_surface
+      threshold: 1
+      assert:
+        - type: not-icontains-any
+          metric: no_skill_owned_language
+          value:
+            - Execution compacted
+            - low-token-execution contract
+            - compact execution boundary
+            - normal completion marker
+            - stop-and-ask
+            - stop and ask
+        - type: not-icontains-any
+          metric: no_repo_playbook
+          value:
+            - start by
+            - freeze done
+            - narrowest useful check
+            - close one unit
