@@ -49,6 +49,7 @@ Useful supporting inputs may include:
 - an already approved plan or slug
 - file paths or artifacts already in scope
 - explicit verification commands or repo gates
+- explicit closeout commands such as apply, validate, or archive steps for the current unit
 
 ## Outputs
 
@@ -82,8 +83,9 @@ Use `non-trigger` when the task is too trivial to benefit from a compact-executi
 5. Prefer diff-based review over full re-reads once the active unit is clear.
 6. Run the narrowest useful verification first.
 7. Widen to the full suite only after the focused check passes or broader coverage is materially needed.
-8. Close or archive the current unit before opening another substantial one unless parallelism is clearly justified.
-9. Stop at the exact terminal marker `Execution compacted`.
+8. When a closeout command fails because the target state is already applied or already clean, take the smallest deterministic corrective step, revalidate closure, and keep the active unit narrow.
+9. Close or archive the current unit before opening another substantial one unless parallelism is clearly justified.
+10. Stop at the exact terminal marker `Execution compacted`.
 
 ## Guardrails
 
@@ -92,6 +94,7 @@ Use `non-trigger` when the task is too trivial to benefit from a compact-executi
 - Do not narrate every micro-step when the strategy has not changed.
 - Do not carry multiple large units of work in parallel unless there is a real throughput gain.
 - Do not pretend execution discipline solves missing domain authority.
+- Do not turn an already-applied or already-clean closeout failure into a reason to reopen the whole plan.
 - Do not adopt `Classification:` or `Workflow:` response headers by imitation of forge skills.
 - Do not end a non-trigger or stop-and-ask response with `Execution compacted`.
 
@@ -101,6 +104,7 @@ In scope:
 - "Implement this approved slug, validate it, review it, and keep the process compact."
 - "Carry this multi-step repo task to closure without reopening the plan every turn."
 - "We already know the target and the checks; execute with narrow verification first."
+- "Finish this bounded unit, and if archive says the spec is already applied, resolve the closeout minimally and keep moving."
 
 Stop and ask:
 - "Start and we will decide the success criteria later."
@@ -119,3 +123,4 @@ Out of scope:
 - The focused verification fails: fix the local issue first and rerun narrowly before expanding the verification surface.
 - The user pressures for speed: stay compact, but keep the minimum validation needed to trust the result.
 - Parallel work could help: only open parallel units when they are truly independent and closure of the current unit is not blocked by coordination cost.
+- A closeout step reports that the state is already applied or already clean: prefer the smallest deterministic reconciliation, then revalidate closure instead of widening the active unit.

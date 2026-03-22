@@ -2,7 +2,6 @@
 
 ## Purpose
 Define the operational boundary for compact multi-step execution that reduces token and context waste without lowering validation quality.
-
 ## Requirements
 ### Requirement: `low-token-execution` exists as a compact multi-step execution skill
 
@@ -65,6 +64,12 @@ The repository SHALL provide a core skill named `low-token-execution` for compac
 - **WHEN** a bounded unit of work reaches its defined `done`
 - **THEN** `low-token-execution` SHALL prefer closing or archiving that unit before opening another substantial unit unless parallelism is materially justified
 
+#### Scenario: Already-applied closeout state is handled minimally
+
+- **WHEN** a closeout step for the active unit reports that the target state is already applied or already clean
+- **THEN** `low-token-execution` SHALL prefer the smallest deterministic reconciliation step
+- **AND** it SHALL revalidate closure without reopening the whole plan or widening the active unit
+
 ### Requirement: `low-token-execution` stays in its own operational boundary
 
 The repository SHALL keep `low-token-execution` aligned to operational execution discipline rather than broad review, product strategy, or architecture design.
@@ -99,3 +104,4 @@ The `low-token-execution` package SHALL remain a shallow skill package in this s
 - **WHEN** `packs/core/low-token-execution/` is reviewed
 - **THEN** the package SHALL contain `SKILL.md`
 - **AND** it SHALL NOT add an `evals/` subtree, Promptfoo configs, provider adapters, fixtures, generated outputs, or shared runner tooling in this slug
+

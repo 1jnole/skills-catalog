@@ -96,10 +96,14 @@ Avoid dumping full logs.
 Use these defaults to reduce token spend without weakening validation quality:
 - Work one slug at a time; implement, validate, review, and archive it before opening the next slug unless the repo explicitly needs parallel slugs.
 - Freeze `done` in a short checklist before editing; do not keep renegotiating acceptance criteria during apply.
+- After the first context pass, prefer diff-first rereads over reopening full specs, skills, or suites unless a real contradiction appears.
 - Prefer diff-based review with concrete findings over full-file rereads once the plan is approved.
 - Run the narrowest useful verification first, then the full suite only after the focused check passes.
+- If only one case or one family surface changed, rerun that narrow surface before rerunning the whole family or broader repo gates.
+- Treat `openspec list --json`, `git status`, and similar state snapshots as phase-boundary checks, not per-micro-step rituals.
 - Keep commentary compact when the strategy has not changed; report phase changes, edits, blockers, and final verification rather than narrating every micro-step.
 - Do not restate approved plans in full; refer to the active slug and its recorded acceptance criteria instead.
+- When apply/archive reports an already-applied or already-clean state, prefer the smallest deterministic reconciliation that preserves correctness instead of reopening the active unit.
 - Archive completed slugs promptly so later work does not carry stale change context.
 
 ---
