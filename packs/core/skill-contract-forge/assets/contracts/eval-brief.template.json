@@ -1,7 +1,7 @@
 {
   "skill": {
     "name": "example-skill",
-    "description": "Describe the skill in the same user-facing terms that `SKILL.md` frontmatter will need later.",
+    "description": "Use this skill when the task is to define one reusable skill contract before implementation. Do not use it for runtime implementation, downstream eval authoring, or repository policy work.",
     "version": "0.1.0"
   },
   "authoring": {

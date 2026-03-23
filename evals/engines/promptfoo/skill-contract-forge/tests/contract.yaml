@@ -32,11 +32,54 @@
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
+- description: new-skill-description-is-routing-metadata
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: new-skill-description-is-routing-metadata
+    prompt: Create a new reusable skill called `planner` for producing exactly one repo-native implementation plan before coding starts. Freeze the contract first, and make the skill description useful for implicit skill routing instead of as a summary of the output artifact.
+    expected_stop: Eval Brief ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: regression
+    expected_stop: Eval Brief ready
+  assert:
+    - type: assert-set
+      metric: critical_contract
+      threshold: 1
+      assert:
+        - type: starts-with
+          metric: classification
+          value: "Classification: trigger"
+        - type: icontains
+          metric: workflow
+          value: "Workflow: new-skill"
+        - type: contains-json
+          metric: schema_valid
+          value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
+        - type: icontains
+          metric: description_routing_language
+          value: '"description": "Use this skill when'
+        - type: icontains
+          metric: description_negative_boundary
+          value: Do not use it
+        - type: not-icontains
+          metric: description_not_output_summary
+          value: '"description": "Produce one repo-native implementation plan artifact'
+        - type: icontains
+          metric: terminal_marker
+          value: Eval Brief ready
+        - type: not-icontains
+          metric: incompatible_non_trigger
+          value: "Classification: non-trigger"
+        - type: not-icontains
+          metric: incompatible_stop_and_ask
+          value: "Classification: stop-and-ask"
 - description: existing-skill-refactor-clear-target
   vars:
     skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: existing-skill-refactor-clear-target
-    prompt: Refactor the existing skill `openspec-bootstrap`. First map what it does now, compare it to the blueprint, then produce the correct boundary artifact without implementing runtime behavior.
+    prompt: Refactor the existing skill `openspec-bootstrap`. First map what it does now from the current skill and repo docs, then produce the correct boundary artifact without implementing runtime behavior.
     expected_stop: Eval Brief ready
     should_trigger: true
   metadata:

@@ -1,0 +1,12 @@
+- [x] 1. Endurecer el contrato de `skill-contract-forge` para que `skill.description` sea metadata de activación.
+  - [x] 1.1 Actualizar `SKILL.md` para diferenciar `authoring.singleJob` de `skill.description`.
+  - [x] 1.2 Actualizar la plantilla y los ejemplos con descripciones orientadas a routing y anti-ejemplos de output summary.
+- [x] 2. Endurecer la familia Promptfoo afectada.
+  - [x] 2.1 Añadir una regresión en `contract.yaml` que falle si la descripción se formula como deliverable summary.
+  - [x] 2.2 Refrescar los fixtures offline afectados para que reflejen la semántica soportada.
+- [x] 3. Verificar, revisar y archivar el slug.
+  - [x] 3.1 Run `openspec validate "skill-contract-forge-description-routing-hardening" --type change`.
+  - [x] 3.2 Run `npm run promptfoo:validate`.
+  - [x] 3.3 Run `npm run promptfoo:run`.
+  - [x] 3.4 Run `npm run promptfoo:run:offline`.
+  - [x] 3.5 Review the diff for errors, fix any findings, and archive the slug.

@@ -85,6 +85,14 @@ On trigger paths, `skill` must freeze both:
 - `name`
 - `description`
 
+Write `skill.description` as activation-oriented frontmatter metadata:
+- describe when the skill should be used
+- include nearby negative boundary guidance about when it should not be used
+- keep it concise enough for `SKILL.md` frontmatter
+- prefer wording such as `Use this skill when ... Do not use it for ...`
+- do not phrase it as a deliverable summary such as `Produce one ...`
+- do not simply paraphrase `authoring.singleJob`
+
 On trigger paths, `authoring.packageShape` must freeze both:
 - `requiredFiles`
 - `supportFolders`
@@ -241,12 +249,13 @@ Engine-specific execution assets live outside this skill contract.
 2. If triggered, choose exactly one workflow.
 3. Freeze the contract: single job, target skill, activation boundary, negatives, stop conditions, and success model.
 4. Freeze the canonical skill metadata in `skill.name` and `skill.description` so downstream implementation does not have to infer required frontmatter.
+   Write `skill.description` from the activation boundary: summarize when to use the skill from `activationProbes`, add nearby non-use boundaries from `negativeSignals`, and do not collapse it into a deliverable-only summary of `authoring.singleJob`.
 5. Freeze the minimal package shape in `authoring.packageShape`, keeping `requiredFiles` anchored on `SKILL.md` and `supportFolders` limited to the folders the request truly justifies.
 6. If `supportFolders` includes `agents`, freeze `authoring.interface.display_name`, `authoring.interface.short_description`, and `authoring.interface.default_prompt` in the same brief.
 7. Capture only the minimal downstream evaluation intent needed by the next step.
 8. Produce the boundary-only Eval Brief JSON.
 9. End trigger-path responses with the exact line `Eval Brief ready`.
-10. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative cases, explicit `skill.name` plus `skill.description`, and the smallest justified `packageShape` without silently widening scope.
+10. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative cases, explicit `skill.name` plus an activation-oriented `skill.description`, and the smallest justified `packageShape` without silently widening scope.
 
 ## Quality bar
 

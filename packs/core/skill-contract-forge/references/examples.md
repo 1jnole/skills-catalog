@@ -12,7 +12,7 @@ Workflow: new-skill
 {
   "skill": {
     "name": "example-skill",
-    "description": "Describe the skill in the same user-facing terms that `SKILL.md` frontmatter will need later."
+    "description": "Use this skill when the task is to define one reusable skill contract before implementation. Do not use it for runtime implementation, downstream eval authoring, or repository policy work."
   },
   "authoring": {
     "singleJob": "Define one reusable skill contract before implementation.",
@@ -107,6 +107,10 @@ Invalid because the brief must stay boundary-only and must not spill into runtim
 ### Trigger output missing `skill.description`
 
 Invalid because trigger-path briefs must freeze the repo-required skill metadata instead of expecting downstream implementation to recover it later.
+
+### Trigger output uses `skill.description` as an output summary
+
+Invalid because `skill.description` must behave like activation metadata for `SKILL.md` frontmatter, not like a short description of the artifact it will produce.
 
 ### Trigger output missing `authoring.packageShape`
 
