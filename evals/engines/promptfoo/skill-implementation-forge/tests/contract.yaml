@@ -40,6 +40,8 @@
             - implementation at
             - skill at
             - in the repo
+            - packs/core/skill-eval-forge/SKILL.md
+            - openspec/specs/skill-eval-forge/spec.md
         - type: icontains-any
           metric: implementation_scope
           value:
@@ -69,6 +71,7 @@
     prompt: >-
       Implement `skill-eval-forge` from the approved contract artifact at `openspec/specs/skill-eval-forge/spec.md`.
       The target skill already exists at `packs/core/skill-eval-forge/SKILL.md`.
+      Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
       We can handle downstream Promptfoo-native eval authoring later in a separate phase.
       Stay inside implementation-from-contract and stop at `Skill implementation ready`.
     expected_stop: Skill implementation ready
@@ -97,6 +100,142 @@
             - implement
             - implementation
             - refactor
+        - type: icontains
+          metric: terminal_marker
+          value: Skill implementation ready
+- description: package-shape-references-contract
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: package-shape-references-contract
+    prompt: >-
+      Implement `openspec-bootstrap` from the approved contract artifact at `notes/openspec-bootstrap-brief.json`.
+      That approved contract already freezes canonical `skill.name`, canonical `skill.description`, and `authoring.packageShape` with `requiredFiles: ["SKILL.md"]` plus `supportFolders: ["references"]`.
+      For this evaluation, treat that repo-local brief as already opened and operationally inspectable authority.
+      Keep the implementation shallow, materialize only the support folder the contract requires, and do not widen into assets, scripts, or downstream eval authoring.
+      Run `npm run validate:skill-metadata` before the normal completion marker for this phase.
+    expected_stop: Skill implementation ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: regression
+    expected_stop: Skill implementation ready
+  assert:
+    - type: assert-set
+      metric: critical_contract
+      threshold: 1
+      assert:
+        - type: icontains
+          metric: target_skill
+          value: openspec-bootstrap
+        - type: icontains-any
+          metric: package_shape_authority
+          value:
+            - packageShape
+            - supportFolders
+            - references
+            - support folder
+        - type: icontains-any
+          metric: shallow_scope
+          value:
+            - shallow
+            - do not widen
+            - only the support folder
+            - not a broader scaffold
+            - references/
+            - references folder
+            - supportFolders:
+        - type: icontains-any
+          metric: validation_gate
+          value:
+            - npm run validate:skill-metadata
+            - validate:skill-metadata
+            - skill metadata validation
+        - type: icontains
+          metric: terminal_marker
+          value: Skill implementation ready
+- description: legacy-contract-without-package-shape
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: legacy-contract-without-package-shape
+    prompt: >-
+      Implement `example-skill` from the approved contract artifact at `notes/example-skill-legacy-brief.md`.
+      That legacy artifact already freezes canonical `skill.name`, canonical `skill.description`, one clear job, outputs, and stop conditions, but it predates `authoring.packageShape` and does not include it.
+      For this evaluation, treat that repo-local legacy brief as already opened and operationally inspectable authority.
+      Stay conservative instead of inferring extra support folders from repo conventions, run `npm run validate:skill-metadata`, and then use the normal completion marker for this phase.
+    expected_stop: Skill implementation ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: regression
+    expected_stop: Skill implementation ready
+  assert:
+    - type: assert-set
+      metric: critical_contract
+      threshold: 1
+      assert:
+        - type: icontains
+          metric: target_skill
+          value: example-skill
+        - type: icontains-any
+          metric: contract_authority
+          value:
+            - contract artifact
+            - approved contract artifact
+            - notes/example-skill-legacy-brief.md
+        - type: icontains-any
+          metric: legacy_fallback
+          value:
+            - legacy
+            - packageShape
+            - SKILL.md only
+            - no extra support folders
+            - conservative
+        - type: icontains-any
+          metric: validation_gate
+          value:
+            - npm run validate:skill-metadata
+            - validate:skill-metadata
+            - skill metadata validation
+        - type: icontains
+          metric: terminal_marker
+          value: Skill implementation ready
+- description: contract-with-agents-package-shape-and-interface
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: contract-with-agents-package-shape-and-interface
+    prompt: >-
+      Implement `cloudflare-deploy-helper` from the approved contract artifact at `notes/cloudflare-deploy-helper-brief.json`.
+      That approved contract already freezes canonical `skill.name`, canonical `skill.description`, and `authoring.packageShape` with `requiredFiles: ["SKILL.md"]` plus `supportFolders: ["agents"]`.
+      It also freezes `authoring.interface.display_name`, `authoring.interface.short_description`, and `authoring.interface.default_prompt`.
+      Materialize only the required package shape, keep downstream eval authoring out of scope, run `npm run validate:skill-metadata`, and then use the normal completion marker for this phase.
+    expected_stop: Skill implementation ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: regression
+    expected_stop: Skill implementation ready
+  assert:
+    - type: assert-set
+      metric: critical_contract
+      threshold: 1
+      assert:
+        - type: icontains
+          metric: target_skill
+          value: cloudflare-deploy-helper
+        - type: icontains-any
+          metric: agents_materialization
+          value:
+            - agents/openai.yaml
+            - agents
+            - display_name
+            - short_description
+            - default_prompt
+        - type: icontains-any
+          metric: validation_gate
+          value:
+            - npm run validate:skill-metadata
+            - validate:skill-metadata
+            - skill metadata validation
         - type: icontains
           metric: terminal_marker
           value: Skill implementation ready
@@ -573,6 +712,52 @@
             - missing
             - omit
             - omitted
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill implementation ready
+- description: contract-with-agents-package-shape-missing-interface
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: contract-with-agents-package-shape-missing-interface
+    prompt: >-
+      Implement `cloudflare-deploy-helper` from the approved contract artifact at `notes/cloudflare-deploy-helper-brief.json`.
+      The artifact freezes canonical `skill.name`, canonical `skill.description`, and `authoring.packageShape` with `requiredFiles: ["SKILL.md"]` plus `supportFolders: ["agents"]`.
+      It does not freeze `authoring.interface.display_name`, `authoring.interface.short_description`, or `authoring.interface.default_prompt`.
+      Do not invent metadata for `agents/openai.yaml`; stay in implementation scope only if the contract is really sufficient.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please share
+            - please specify
+        - type: icontains-any
+          metric: ambiguity_reason
+          value:
+            - authoring.interface
+            - display_name
+            - short_description
+            - default_prompt
+            - agents/openai.yaml
+            - interface
+        - type: icontains-any
+          metric: missing_authority
+          value:
+            - missing
+            - omit
+            - omitted
+            - approved contract artifact
         - type: not-icontains
           metric: terminal_absent
           value: Skill implementation ready

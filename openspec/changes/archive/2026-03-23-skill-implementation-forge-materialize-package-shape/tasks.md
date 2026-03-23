@@ -1,0 +1,15 @@
+- [x] 1. Adaptar `skill-implementation-forge` para materializar `packageShape`.
+  - [x] 1.1 Actualizar `packs/core/skill-implementation-forge/SKILL.md` para obedecer `authoring.packageShape` cuando exista.
+  - [x] 1.2 Añadir fallback legacy explícito a `SKILL.md` solo cuando el contrato aprobado no incluya `packageShape`.
+  - [x] 1.3 Hacer `stop-and-ask` si el contrato pide `agents` pero omite `authoring.interface`.
+- [x] 2. Endurecer la familia Promptfoo de `skill-implementation-forge`.
+  - [x] 2.1 Añadir cobertura de contract gate para trigger con `packageShape`, trigger legacy sin `packageShape`, y `agents` sin `interface`.
+  - [x] 2.2 Ajustar `uplift.yaml` para cubrir al menos un trigger con `packageShape` y una regresión `agents` sin `interface`.
+- [x] 3. Verificar, revisar y archivar el slug.
+  - [x] 3.1 Run `openspec validate "skill-implementation-forge-materialize-package-shape" --type change`.
+  - [x] 3.2 Run `promptfoo validate -c evals/engines/promptfoo/skill-implementation-forge/promptfooconfig.yaml`.
+  - [x] 3.3 Run `promptfoo eval -c evals/engines/promptfoo/skill-implementation-forge/promptfooconfig.yaml -o evals/engines/promptfoo/generated/skill-implementation-forge.contract.live.eval.json --no-progress-bar --table-cell-max-length 80`.
+  - [x] 3.4 Run `promptfoo validate -c evals/engines/promptfoo/skill-implementation-forge/promptfooconfig.uplift.with-skill.yaml`.
+  - [x] 3.5 Run `promptfoo eval -c evals/engines/promptfoo/skill-implementation-forge/promptfooconfig.uplift.with-skill.yaml -o evals/engines/promptfoo/generated/skill-implementation-forge.uplift.with-skill.live.eval.json --no-progress-bar --table-cell-max-length 80`.
+  - [x] 3.6 Run `npm run validate:skill-metadata`.
+  - [x] 3.7 Review the diff for errors, fix any findings, and archive the slug.
