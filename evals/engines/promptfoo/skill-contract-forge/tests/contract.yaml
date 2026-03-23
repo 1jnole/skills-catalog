@@ -101,13 +101,14 @@
           metric: schema_valid
           value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
         - type: icontains
-          metric: source_refs_present
-          value: '"sourceRefs": ['
-        - type: icontains-any
-          metric: source_refs_grounded_agency
-          value:
-            - AGENTS.md
-            - packs/core/skill-contract-forge/SKILL.md
+          metric: source_refs_explicit_empty
+          value: '"sourceRefs": []'
+        - type: not-icontains
+          metric: source_refs_no_agents_filler
+          value: AGENTS.md
+        - type: not-icontains
+          metric: source_refs_no_current_skill_filler
+          value: packs/core/skill-contract-forge/SKILL.md
         - type: not-icontains
           metric: source_refs_no_fake_contract_doc
           value: docs/contracts/planner-contract.md
@@ -464,6 +465,8 @@
             - only handles
             - does not produce
             - this skill is only for
+            - only defines or refines
+            - only defines
         - type: icontains-any
           metric: reason_marker
           value:

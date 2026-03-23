@@ -81,7 +81,8 @@ For trigger briefs:
 - cite repo-local files that exist
 - cite user-provided material when it was explicitly supplied
 - keep the list minimal if that is all the repo truth supports
-- do not leave `sourceRefs` empty; use a minimal grounded ref such as `AGENTS.md` if that is the only honest repo-local source
+- allow `sourceRefs: []` when no repo-local source materially shaped the contract
+- cite `AGENTS.md` only when repo-level policy actually influenced the brief
 
 Do not:
 - invent `docs/contracts/<skill>.md` just because that path sounds plausible

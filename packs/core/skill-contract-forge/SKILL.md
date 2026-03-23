@@ -114,7 +114,8 @@ If the request does not justify a support folder clearly, default to `supportFol
 Keep `sourceRefs` grounded:
 - cite only repo-local sources that exist or material explicitly provided by the user
 - list only sources actually used to freeze the contract for this run
-- do not leave `sourceRefs` empty on trigger paths; if no stronger repo-local source exists, cite a minimal grounded source such as `AGENTS.md`
+- allow `sourceRefs: []` when the brief is grounded primarily in the user request and no repo-local source materially shaped the contract
+- cite `AGENTS.md` only when repository-level policy actually influenced the contract
 - if stronger source-of-truth docs are missing, keep `sourceRefs` minimal and honest rather than decorative
 - do not invent plausible paths such as contract docs or target-skill files that do not exist
 
@@ -259,7 +260,7 @@ Engine-specific execution assets live outside this skill contract.
    Write `skill.description` from the activation boundary: summarize when to use the skill from `activationProbes`, add nearby non-use boundaries from `negativeSignals`, and do not collapse it into a deliverable-only summary of `authoring.singleJob`.
 5. Freeze the minimal package shape in `authoring.packageShape`, keeping `requiredFiles` anchored on `SKILL.md` and `supportFolders` limited to the folders the request truly justifies.
 6. If `supportFolders` includes `agents`, freeze `authoring.interface.display_name`, `authoring.interface.short_description`, and `authoring.interface.default_prompt` in the same brief.
-7. Freeze only grounded `sourceRefs`: cite repo-local or explicitly provided sources that actually exist for this run, keep the list non-empty on trigger paths, and do not invent plausible contract docs or target-skill paths.
+7. Freeze only grounded `sourceRefs`: cite repo-local or explicitly provided sources that actually exist for this run, allow `[]` when no repo-local source materially shaped the contract, and do not invent plausible contract docs or target-skill paths.
 8. Capture only the minimal downstream evaluation intent needed by the next step.
 9. Produce the boundary-only Eval Brief JSON.
 10. End trigger-path responses with the exact line `Eval Brief ready`.

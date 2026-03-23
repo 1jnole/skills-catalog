@@ -34,9 +34,7 @@ Workflow: new-skill
   "negativeSignals": [
     "Requests for runtime implementation."
   ],
-  "sourceRefs": [
-    "AGENTS.md"
-  ]
+  "sourceRefs": []
 }
 Eval Brief ready
 ```
@@ -116,9 +114,9 @@ Invalid because `skill.description` must behave like activation metadata for `SK
 
 Invalid because `sourceRefs` must reflect real authority used for the brief, not plausible-but-missing docs such as `docs/contracts/<skill>.md` or target skill paths that do not exist yet.
 
-### Trigger output leaves `sourceRefs` empty
+### Trigger output uses `AGENTS.md` as filler
 
-Invalid because trigger-path briefs already require `sourceRefs`, and an empty list is neither grounded nor schema-valid. If no stronger repo-local doc exists, cite a minimal grounded source such as `AGENTS.md`.
+Invalid when `AGENTS.md` did not materially shape the contract. `sourceRefs` should list only sources that actually influenced the brief, and it may be `[]` when the contract comes mainly from the user request.
 
 ### Trigger output missing `authoring.packageShape`
 

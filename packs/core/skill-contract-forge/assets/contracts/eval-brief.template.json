@@ -72,8 +72,5 @@
     "Asks for shared eval runtime implementation",
     "Starts from a finished Eval Brief and asks for eval authoring"
   ],
-  "sourceRefs": [
-    "AGENTS.md",
-    "<existing-repo-local-source>.md"
-  ]
+  "sourceRefs": []
 }
