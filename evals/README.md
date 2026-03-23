@@ -60,7 +60,7 @@ Entrypoint roles:
 | Family | Baseline shape | Validate | Live run | Offline replay | Public npm surface | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
 | `skill-contract-forge` | yes | yes | yes | yes | yes | canonical public contract surface |
-| `skill-implementation-forge` | yes | yes | yes | no | no | family-specific work uses direct-config execution |
+| `skill-implementation-forge` | yes | yes | yes | no | no | family-specific work uses direct-config execution; current coverage includes package-shape behavior and `agents` without interface regression checks |
 | `skill-eval-forge` | yes | yes | yes | no | no | family-specific work uses direct-config execution |
 
 Support status is the declared Phase A support model. Final closure still requires local validation and execution evidence.
@@ -117,6 +117,11 @@ Every maintained family must cover these edge cases somewhere in its contract or
 - mixed workflow request
 - baseline impersonation guard for `without_skill`
 - incompatible marker guard
+
+For `skill-implementation-forge`, the maintained family also currently covers:
+- approved contracts that freeze `authoring.packageShape`
+- legacy approved contracts that omit `packageShape` and therefore require a conservative `SKILL.md`-only fallback
+- `agents` package-shape requests that omit `authoring.interface`, which must stay `stop-and-ask`
 
 ## Operational authority
 - `evals/contracts/promptfoo-family-baseline.md` defines the minimum family contract
