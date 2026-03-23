@@ -7,6 +7,8 @@ Bare JSON is invalid if the skill requires routing header lines first.
 On trigger paths, keep `skill`, `authoring`, `successModel`, `activationProbes`, `negativeSignals`, and `sourceRefs` as top-level JSON fields.
 On trigger paths, `skill` must stay a JSON object, never a bare string.
 On trigger paths, write `skill.description` as routing metadata for frontmatter: say when to use the skill and when not to use it; do not reduce it to a deliverable summary.
+On trigger paths, keep `sourceRefs` grounded in repo-local sources that exist today or material explicitly provided by the user; do not invent plausible source documents.
+On trigger paths, `sourceRefs` must not be empty. If no stronger grounded source exists for the brief, cite a minimal repo-local source such as `AGENTS.md` rather than inventing paths or leaving the list blank.
 On trigger paths, `authoring` must stay a JSON object and must include at least one direct job-defining field such as `job`, `singleJob`, `primaryJob`, or `description`.
 If downstream eval or runtime work is explicitly deferred to later, keep the request in the contract-authoring trigger path and defer that later work instead of widening scope.
 If a refactor or rewrite request does not identify the target skill, use `Classification: stop-and-ask` instead of inventing a target.

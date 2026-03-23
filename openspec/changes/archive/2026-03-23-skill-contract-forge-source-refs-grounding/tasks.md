@@ -1,0 +1,12 @@
+- [x] 1. Endurecer el contrato de `skill-contract-forge` para grounding de `sourceRefs`.
+  - [x] 1.1 Actualizar `SKILL.md` para exigir refs repo-locales existentes o material explícitamente dado por el usuario.
+  - [x] 1.2 Actualizar plantilla, ejemplos y edge cases con guidance y anti-ejemplos de refs inventadas.
+- [x] 2. Endurecer la familia Promptfoo afectada.
+  - [x] 2.1 Añadir una regresión en `contract.yaml` que falle si aparecen `sourceRefs` inventadas para `planner`.
+  - [x] 2.2 Sanear los fixtures offline afectados para que solo citen refs grounded.
+- [x] 3. Verificar, revisar y archivar el slug.
+  - [x] 3.1 Run `openspec validate "skill-contract-forge-source-refs-grounding" --type change`.
+  - [x] 3.2 Run `npm run promptfoo:validate`.
+  - [x] 3.3 Run `npm run promptfoo:run`.
+  - [x] 3.4 Run `npm run promptfoo:run:offline`.
+  - [x] 3.5 Review the diff for errors, fix any findings, and archive the slug.

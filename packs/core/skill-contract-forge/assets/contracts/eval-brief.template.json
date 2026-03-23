@@ -73,7 +73,7 @@
     "Starts from a finished Eval Brief and asks for eval authoring"
   ],
   "sourceRefs": [
-    "packs/core/<target-skill>/SKILL.md",
-    "<path-to-domain-or-source-material>.md"
+    "AGENTS.md",
+    "<existing-repo-local-source>.md"
   ]
 }

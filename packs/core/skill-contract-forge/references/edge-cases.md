@@ -72,3 +72,20 @@ When the request is trigger-shaped but underspecified, prefer `Classification: s
 - the source-of-truth documents
 
 This skill should hand off a precise brief, not a speculative one.
+
+## Grounded source refs
+
+Keep `sourceRefs` grounded in sources that are really available for the current run.
+
+For trigger briefs:
+- cite repo-local files that exist
+- cite user-provided material when it was explicitly supplied
+- keep the list minimal if that is all the repo truth supports
+- do not leave `sourceRefs` empty; use a minimal grounded ref such as `AGENTS.md` if that is the only honest repo-local source
+
+Do not:
+- invent `docs/contracts/<skill>.md` just because that path sounds plausible
+- cite `packs/.../<target-skill>/SKILL.md` for a new skill that does not exist yet
+- pad `sourceRefs` with decorative paths that were not actually used to freeze the contract
+
+If the contract would materially depend on a stronger source-of-truth doc that is not present, prefer `Classification: stop-and-ask` over pretending the authority exists.

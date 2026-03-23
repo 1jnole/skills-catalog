@@ -111,6 +111,13 @@ If `authoring.packageShape.supportFolders` includes `agents`, the brief must als
 
 If the request does not justify a support folder clearly, default to `supportFolders: []` rather than inventing scaffolding.
 
+Keep `sourceRefs` grounded:
+- cite only repo-local sources that exist or material explicitly provided by the user
+- list only sources actually used to freeze the contract for this run
+- do not leave `sourceRefs` empty on trigger paths; if no stronger repo-local source exists, cite a minimal grounded source such as `AGENTS.md`
+- if stronger source-of-truth docs are missing, keep `sourceRefs` minimal and honest rather than decorative
+- do not invent plausible paths such as contract docs or target-skill files that do not exist
+
 Do not include runtime behavior, provider wiring, benchmark layout, grader logic, or scoring implementation in the brief payload.
 
 ## Required response format
@@ -252,10 +259,11 @@ Engine-specific execution assets live outside this skill contract.
    Write `skill.description` from the activation boundary: summarize when to use the skill from `activationProbes`, add nearby non-use boundaries from `negativeSignals`, and do not collapse it into a deliverable-only summary of `authoring.singleJob`.
 5. Freeze the minimal package shape in `authoring.packageShape`, keeping `requiredFiles` anchored on `SKILL.md` and `supportFolders` limited to the folders the request truly justifies.
 6. If `supportFolders` includes `agents`, freeze `authoring.interface.display_name`, `authoring.interface.short_description`, and `authoring.interface.default_prompt` in the same brief.
-7. Capture only the minimal downstream evaluation intent needed by the next step.
-8. Produce the boundary-only Eval Brief JSON.
-9. End trigger-path responses with the exact line `Eval Brief ready`.
-10. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative cases, explicit `skill.name` plus an activation-oriented `skill.description`, and the smallest justified `packageShape` without silently widening scope.
+7. Freeze only grounded `sourceRefs`: cite repo-local or explicitly provided sources that actually exist for this run, keep the list non-empty on trigger paths, and do not invent plausible contract docs or target-skill paths.
+8. Capture only the minimal downstream evaluation intent needed by the next step.
+9. Produce the boundary-only Eval Brief JSON.
+10. End trigger-path responses with the exact line `Eval Brief ready`.
+11. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative cases, explicit `skill.name` plus an activation-oriented `skill.description`, grounded `sourceRefs`, and the smallest justified `packageShape` without silently widening scope.
 
 ## Quality bar
 

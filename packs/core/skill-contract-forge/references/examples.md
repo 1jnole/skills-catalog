@@ -35,7 +35,7 @@ Workflow: new-skill
     "Requests for runtime implementation."
   ],
   "sourceRefs": [
-    "packs/core/example-skill/SKILL.md"
+    "AGENTS.md"
   ]
 }
 Eval Brief ready
@@ -111,6 +111,14 @@ Invalid because trigger-path briefs must freeze the repo-required skill metadata
 ### Trigger output uses `skill.description` as an output summary
 
 Invalid because `skill.description` must behave like activation metadata for `SKILL.md` frontmatter, not like a short description of the artifact it will produce.
+
+### Trigger output invents `sourceRefs`
+
+Invalid because `sourceRefs` must reflect real authority used for the brief, not plausible-but-missing docs such as `docs/contracts/<skill>.md` or target skill paths that do not exist yet.
+
+### Trigger output leaves `sourceRefs` empty
+
+Invalid because trigger-path briefs already require `sourceRefs`, and an empty list is neither grounded nor schema-valid. If no stronger repo-local doc exists, cite a minimal grounded source such as `AGENTS.md`.
 
 ### Trigger output missing `authoring.packageShape`
 

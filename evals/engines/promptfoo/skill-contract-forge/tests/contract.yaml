@@ -75,11 +75,59 @@
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
+- description: new-skill-source-refs-stay-grounded
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: new-skill-source-refs-stay-grounded
+    prompt: Create a new reusable skill called `planner` for producing exactly one repo-native implementation plan before coding starts. Freeze the contract first using only repo-local authority that exists today, and do not invent supporting source documents.
+    expected_stop: Eval Brief ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: regression
+    expected_stop: Eval Brief ready
+  assert:
+    - type: assert-set
+      metric: critical_contract
+      threshold: 1
+      assert:
+        - type: starts-with
+          metric: classification
+          value: "Classification: trigger"
+        - type: icontains
+          metric: workflow
+          value: "Workflow: new-skill"
+        - type: contains-json
+          metric: schema_valid
+          value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
+        - type: icontains
+          metric: source_refs_present
+          value: '"sourceRefs": ['
+        - type: icontains-any
+          metric: source_refs_grounded_agency
+          value:
+            - AGENTS.md
+            - packs/core/skill-contract-forge/SKILL.md
+        - type: not-icontains
+          metric: source_refs_no_fake_contract_doc
+          value: docs/contracts/planner-contract.md
+        - type: not-icontains
+          metric: source_refs_no_fake_target_skill_path
+          value: packs/core/planner/SKILL.md
+        - type: icontains
+          metric: terminal_marker
+          value: Eval Brief ready
+        - type: not-icontains
+          metric: incompatible_non_trigger
+          value: "Classification: non-trigger"
+        - type: not-icontains
+          metric: incompatible_stop_and_ask
+          value: "Classification: stop-and-ask"
 - description: existing-skill-refactor-clear-target
   vars:
     skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: existing-skill-refactor-clear-target
-    prompt: Refactor the existing skill `openspec-bootstrap`. First map what it does now from the current skill and repo docs, then produce the correct boundary artifact without implementing runtime behavior.
+    prompt: Refactor the existing skill `openspec-bootstrap`. First map what it does now from the repo-local skill files and repo docs that are already available for inspection, then produce the correct boundary artifact without implementing runtime behavior.
     expected_stop: Eval Brief ready
     should_trigger: true
   metadata:
@@ -415,6 +463,7 @@
             - does not cover
             - only handles
             - does not produce
+            - this skill is only for
         - type: icontains-any
           metric: reason_marker
           value:
@@ -429,6 +478,8 @@
             - benchmark suite
             - downstream evaluation
             - evaluation artifacts
+            - evaluation harness creation
+            - runtime or evaluation harness creation
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
