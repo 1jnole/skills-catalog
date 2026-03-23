@@ -421,6 +421,7 @@
             - target skill
             - unclear
             - name or description of the skill
+            - exact name of the skill to refactor
             - existing skill name
             - exact existing skill name
             - existing skill
@@ -466,6 +467,7 @@
             - target skill
             - unclear
             - name or description of the skill
+            - exact existing skill to rewrite
             - existing skill name
             - exact existing skill name
         - type: not-icontains

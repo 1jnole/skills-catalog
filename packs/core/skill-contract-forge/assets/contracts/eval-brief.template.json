@@ -1,6 +1,7 @@
 {
   "skill": {
     "name": "example-skill",
+    "description": "Describe the skill in the same user-facing terms that `SKILL.md` frontmatter will need later.",
     "version": "0.1.0"
   },
   "authoring": {

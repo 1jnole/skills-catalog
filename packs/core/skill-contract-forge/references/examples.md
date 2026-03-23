@@ -11,7 +11,8 @@ Classification: trigger
 Workflow: new-skill
 {
   "skill": {
-    "name": "example-skill"
+    "name": "example-skill",
+    "description": "Describe the skill in the same user-facing terms that `SKILL.md` frontmatter will need later."
   },
   "authoring": {
     "singleJob": "Define one reusable skill contract before implementation."
@@ -96,6 +97,10 @@ Classification: stop-and-ask
 ### Trigger output with implementation detail
 
 Invalid because the brief must stay boundary-only and must not spill into runtime wiring, grader logic, or benchmark execution detail.
+
+### Trigger output missing `skill.description`
+
+Invalid because trigger-path briefs must freeze the repo-required skill metadata instead of expecting downstream implementation to recover it later.
 
 ## What the examples are for
 

@@ -42,6 +42,7 @@ If the request is mainly about runtime implementation or downstream eval authori
 When this skill applies, the outcome is a boundary-only **Eval Brief** for one skill.
 
 That handoff must define:
+- the canonical skill metadata required by `SKILL.md` today
 - the skill job
 - the target skill
 - the activation boundary
@@ -78,6 +79,10 @@ The brief should be implementation-ready for the next step, but must remain cont
 - `activationProbes`
 - `negativeSignals`
 - `sourceRefs`
+
+On trigger paths, `skill` must freeze both:
+- `name`
+- `description`
 
 Do not include runtime behavior, provider wiring, benchmark layout, grader logic, or scoring implementation in the brief payload.
 
@@ -216,10 +221,11 @@ Engine-specific execution assets live outside this skill contract.
 1. Classify the request as `trigger`, `non-trigger`, or `stop-and-ask`.
 2. If triggered, choose exactly one workflow.
 3. Freeze the contract: single job, target skill, activation boundary, negatives, stop conditions, and success model.
-4. Capture only the minimal downstream evaluation intent needed by the next step.
-5. Produce the boundary-only Eval Brief JSON.
-6. End trigger-path responses with the exact line `Eval Brief ready`.
-7. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, and nearby negative cases without silently widening scope.
+4. Freeze the canonical skill metadata in `skill.name` and `skill.description` so downstream implementation does not have to infer required frontmatter.
+5. Capture only the minimal downstream evaluation intent needed by the next step.
+6. Produce the boundary-only Eval Brief JSON.
+7. End trigger-path responses with the exact line `Eval Brief ready`.
+8. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative cases, and explicit `skill.name` plus `skill.description` without silently widening scope.
 
 ## Quality bar
 
