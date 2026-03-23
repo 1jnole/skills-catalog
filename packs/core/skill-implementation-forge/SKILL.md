@@ -47,6 +47,8 @@ The request must provide:
 
 For this phase, an approved contract artifact is operationally inspectable only when it is identified concretely enough to open as authority, such as by an exact repo-local path, a `file://` reference, or another uniquely resolvable artifact. Conversational references such as `the approved brief`, `the frozen contract`, or `the contract we discussed` are not enough.
 
+For implementation closure in this repo, that approved contract artifact must freeze the canonical `skill.name` and `skill.description` that downstream `SKILL.md` frontmatter needs. If either field is missing from the contract authority, stop and ask rather than reconstructing metadata from the current repository state or conversational context.
+
 Useful supporting inputs may include:
 - an existing implementation of the target skill
 - repository source-of-truth context when available:
@@ -72,6 +74,7 @@ Stop and ask when:
 - the approved contract artifact is missing
 - the approved contract artifact is only mentioned, not provided in an operationally inspectable form
 - the contract is ambiguous or not specific enough to implement safely
+- the approved contract artifact does not freeze canonical `skill.name` and `skill.description`
 - the target skill is not clearly identified
 - the request mixes implementation with contract authoring in one inseparable pass
 - the request mixes implementation with downstream eval authoring in one inseparable pass
@@ -91,12 +94,14 @@ Use `non-trigger` when the primary job is no longer implementation-from-contract
 ## Procedure
 
 1. Confirm that the task is implementation-from-contract for one named skill.
-2. Inspect the current target state, if any.
-3. Create or refactor `SKILL.md`.
-4. Add nearby support files only when the approved contract artifact explicitly requires them.
-5. Keep the implementation aligned with the approved contract artifact.
-6. Before finalizing, check that the resulting skill still has one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative examples, and relevant edge cases.
-7. Stop at the exact terminal marker `Skill implementation ready`.
+2. Confirm that the approved contract artifact freezes canonical `skill.name` and `skill.description` for the target skill; if not, stop and ask.
+3. Inspect the current target state, if any.
+4. Create or refactor `SKILL.md`.
+5. Add nearby support files only when the approved contract artifact explicitly requires them.
+6. Keep the implementation aligned with the approved contract artifact.
+7. Before finalizing, check that the resulting skill still has one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative examples, and relevant edge cases.
+8. Run `npm run validate:skill-metadata` before closure.
+9. Stop at the exact terminal marker `Skill implementation ready`.
 
 ## Guardrails
 
@@ -107,6 +112,7 @@ Use `non-trigger` when the primary job is no longer implementation-from-contract
 - Do not infer a missing target skill from deictic phrases such as `this skill`, `the current skill`, or `the next skill`.
 - If downstream eval work is mentioned but explicitly deferred, remain in implementation scope and defer that later work.
 - If the approved contract artifact conflicts with the current implementation, implement from the approved contract artifact rather than silently redefining it.
+- Do not infer missing frontmatter metadata from repo state, file names, or conversational hints when the approved contract artifact omits canonical `skill.description`.
 - Keep the package shallow by default.
 - Do not adopt `Classification:` or `Workflow:` response headers by imitation of another forge skill.
 - Do not end a non-trigger or stop-and-ask response with `Skill implementation ready`.
@@ -114,7 +120,7 @@ Use `non-trigger` when the primary job is no longer implementation-from-contract
 ## Examples
 
 In scope:
-- “Implement the new skill from this approved contract artifact and stop at `Skill implementation ready`.”
+- “Implement the new skill from this approved contract artifact, which already freezes `skill.name` and `skill.description`, run `npm run validate:skill-metadata`, and stop at `Skill implementation ready`.”
 - “Refactor one named skill from its approved contract artifact without touching downstream evals.”
 - “The current implementation and the approved contract differ; align the skill to the approved contract and stop at `Skill implementation ready`.”
 
@@ -122,6 +128,7 @@ Stop and ask:
 - “Implement this skill so it is cleaner and more complete.”
 - “Implement `example-skill` from the approved brief I mentioned earlier,” when that brief is not actually attached or given as an exact path.
 - “Implement the skill and also rewrite its contract.”
+- “Implement `example-skill` from this approved contract artifact,” when the artifact freezes `skill.name` but omits canonical `skill.description`.
 - “Implement `example-skill` from this approved brief,” where the brief still leaves the actual job, required outputs, or stop conditions unresolved.
 
 Out of scope:
@@ -135,6 +142,7 @@ Out of scope:
 - The approved contract explicitly requires one nearby support file such as `references/`: add only that support file, not a broader scaffold.
 - The current implementation already exists but drifts from the approved contract: refactor the implementation to match the approved contract.
 - The current implementation and the approved contract conflict materially: treat the approved contract artifact as authoritative for this phase and do not renegotiate the contract inside implementation.
+- The approved contract artifact names the target skill correctly but omits canonical `skill.description`: stop and ask instead of inferring frontmatter metadata from the current implementation.
 - Downstream eval work is mentioned but explicitly deferred: remain in implementation scope and defer that later phase.
 - The task points to an exact contract file path instead of pasting the brief inline: this is valid if the file is authoritative and specific enough.
 - The contract artifact exists but leaves core implementation questions unresolved: stop and ask rather than inventing the missing boundary.

@@ -5,6 +5,7 @@
     prompt: >-
       Refactor `skill-eval-forge`.
       Use the approved contract artifact at `openspec/specs/skill-eval-forge/spec.md`.
+      That approved contract already freezes canonical `skill.name` and `skill.description` for the target skill.
       The target skill already exists at `packs/core/skill-eval-forge/SKILL.md`.
       Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
       Keep downstream eval authoring and eval/runtime changes out of scope.
@@ -45,6 +46,19 @@
             - implement
             - implementation
             - refactor
+        - type: icontains-any
+          metric: frontmatter_authority
+          value:
+            - skill.name
+            - skill.description
+            - canonical
+            - frontmatter
+        - type: icontains-any
+          metric: validation_gate
+          value:
+            - npm run validate:skill-metadata
+            - validate:skill-metadata
+            - skill metadata validation
         - type: icontains
           metric: terminal_marker
           value: Skill implementation ready
@@ -515,6 +529,50 @@
             - unresolved
             - stop conditions
             - outputs
+        - type: not-icontains
+          metric: terminal_absent
+          value: Skill implementation ready
+- description: contract-artifact-missing-skill-description
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: contract-artifact-missing-skill-description
+    prompt: >-
+      Implement `example-skill` from the approved contract artifact at `notes/example-skill-brief.md`.
+      The artifact already freezes canonical `skill.name`, but it omits canonical `skill.description`.
+      Do not infer the missing frontmatter metadata from the current repo state or from the skill name alone.
+      Stay inside implementation-from-contract and stop only when you truly have the required authority.
+    expected_stop: stop_and_ask
+    should_trigger: false
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: regression
+    expected_stop: stop_and_ask
+  assert:
+    - type: assert-set
+      metric: stop_and_ask_behavior
+      threshold: 1
+      assert:
+        - type: icontains-any
+          metric: stop_marker
+          value:
+            - clarify
+            - please provide
+            - please share
+            - please specify
+        - type: icontains-any
+          metric: ambiguity_reason
+          value:
+            - skill.description
+            - description
+            - frontmatter
+            - metadata
+        - type: icontains-any
+          metric: missing_authority
+          value:
+            - approved contract artifact
+            - missing
+            - omit
+            - omitted
         - type: not-icontains
           metric: terminal_absent
           value: Skill implementation ready
