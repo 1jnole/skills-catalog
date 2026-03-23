@@ -6,6 +6,12 @@
   },
   "authoring": {
     "singleJob": "Describe one repeatable skill workflow and stop at Eval Brief ready.",
+    "packageShape": {
+      "requiredFiles": [
+        "SKILL.md"
+      ],
+      "supportFolders": []
+    },
     "triggerBoundary": {
       "shouldTriggerWhen": [
         "Request asks to create or refactor one reusable skill"

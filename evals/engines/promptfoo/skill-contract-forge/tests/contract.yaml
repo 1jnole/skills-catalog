@@ -168,6 +168,52 @@
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
+- description: new-skill-needs-agents-interface
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: new-skill-needs-agents-interface
+    prompt: Create a new reusable skill for Cloudflare deployment workflows. Keep the contract first, and this skill should ship with the UI-facing metadata needed for skill lists plus dependency-facing interface metadata, but do not implement runtime behavior yet.
+    expected_stop: Eval Brief ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: regression
+    expected_stop: Eval Brief ready
+  assert:
+    - type: assert-set
+      metric: critical_contract
+      threshold: 1
+      assert:
+        - type: starts-with
+          metric: classification
+          value: "Classification: trigger"
+        - type: icontains
+          metric: workflow
+          value: "Workflow: new-skill"
+        - type: contains-json
+          metric: schema_valid
+          value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
+        - type: icontains
+          metric: package_shape_agents
+          value: agents
+        - type: icontains
+          metric: interface_display_name
+          value: display_name
+        - type: icontains
+          metric: interface_short_description
+          value: short_description
+        - type: icontains
+          metric: interface_default_prompt
+          value: default_prompt
+        - type: icontains
+          metric: terminal_marker
+          value: Eval Brief ready
+        - type: not-icontains
+          metric: incompatible_non_trigger
+          value: "Classification: non-trigger"
+        - type: not-icontains
+          metric: incompatible_stop_and_ask
+          value: "Classification: stop-and-ask"
 - description: agents-policy-request
   vars:
     skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
@@ -468,6 +514,7 @@
             - unclear
             - name or description of the skill
             - exact existing skill to rewrite
+            - exact name of the existing skill to rewrite
             - existing skill name
             - exact existing skill name
         - type: not-icontains

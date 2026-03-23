@@ -15,7 +15,13 @@ Workflow: new-skill
     "description": "Describe the skill in the same user-facing terms that `SKILL.md` frontmatter will need later."
   },
   "authoring": {
-    "singleJob": "Define one reusable skill contract before implementation."
+    "singleJob": "Define one reusable skill contract before implementation.",
+    "packageShape": {
+      "requiredFiles": [
+        "SKILL.md"
+      ],
+      "supportFolders": []
+    }
   },
   "successModel": {
     "outcomeGoals": [
@@ -101,6 +107,14 @@ Invalid because the brief must stay boundary-only and must not spill into runtim
 ### Trigger output missing `skill.description`
 
 Invalid because trigger-path briefs must freeze the repo-required skill metadata instead of expecting downstream implementation to recover it later.
+
+### Trigger output missing `authoring.packageShape`
+
+Invalid because trigger-path briefs must freeze the minimal package shape instead of leaving downstream implementation to invent whether support folders are needed.
+
+### Trigger output selects `agents` without `authoring.interface`
+
+Invalid because once a brief says `agents` is required, it must also freeze the minimal interface metadata that downstream implementation would need for `agents/openai.yaml`.
 
 ## What the examples are for
 

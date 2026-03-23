@@ -43,6 +43,7 @@ When this skill applies, the outcome is a boundary-only **Eval Brief** for one s
 
 That handoff must define:
 - the canonical skill metadata required by `SKILL.md` today
+- the minimal package shape required by that skill
 - the skill job
 - the target skill
 - the activation boundary
@@ -83,6 +84,24 @@ The brief should be implementation-ready for the next step, but must remain cont
 On trigger paths, `skill` must freeze both:
 - `name`
 - `description`
+
+On trigger paths, `authoring.packageShape` must freeze both:
+- `requiredFiles`
+- `supportFolders`
+
+Use the smallest justified package shape:
+- keep core trigger, procedure, inputs, outputs, stop conditions, and nearby examples in `SKILL.md`
+- use `references` for consultation material or long reference content
+- use `scripts` for repetitive or fragile logic that should not be rewritten ad hoc
+- use `assets` for templates or output resources
+- use `agents` only when metadata, UI, or dependency-facing interface files are materially required
+
+If `authoring.packageShape.supportFolders` includes `agents`, the brief must also freeze:
+- `authoring.interface.display_name`
+- `authoring.interface.short_description`
+- `authoring.interface.default_prompt`
+
+If the request does not justify a support folder clearly, default to `supportFolders: []` rather than inventing scaffolding.
 
 Do not include runtime behavior, provider wiring, benchmark layout, grader logic, or scoring implementation in the brief payload.
 
@@ -222,10 +241,12 @@ Engine-specific execution assets live outside this skill contract.
 2. If triggered, choose exactly one workflow.
 3. Freeze the contract: single job, target skill, activation boundary, negatives, stop conditions, and success model.
 4. Freeze the canonical skill metadata in `skill.name` and `skill.description` so downstream implementation does not have to infer required frontmatter.
-5. Capture only the minimal downstream evaluation intent needed by the next step.
-6. Produce the boundary-only Eval Brief JSON.
-7. End trigger-path responses with the exact line `Eval Brief ready`.
-8. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative cases, and explicit `skill.name` plus `skill.description` without silently widening scope.
+5. Freeze the minimal package shape in `authoring.packageShape`, keeping `requiredFiles` anchored on `SKILL.md` and `supportFolders` limited to the folders the request truly justifies.
+6. If `supportFolders` includes `agents`, freeze `authoring.interface.display_name`, `authoring.interface.short_description`, and `authoring.interface.default_prompt` in the same brief.
+7. Capture only the minimal downstream evaluation intent needed by the next step.
+8. Produce the boundary-only Eval Brief JSON.
+9. End trigger-path responses with the exact line `Eval Brief ready`.
+10. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative cases, explicit `skill.name` plus `skill.description`, and the smallest justified `packageShape` without silently widening scope.
 
 ## Quality bar
 

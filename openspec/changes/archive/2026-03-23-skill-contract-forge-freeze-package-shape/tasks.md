@@ -1,0 +1,13 @@
+- [x] 1. Extender el contrato de `skill-contract-forge` para congelar `packageShape`.
+  - [x] 1.1 Añadir `authoring.packageShape` al schema soportado para trigger payloads.
+  - [x] 1.2 Actualizar el skill, plantilla y ejemplos para enseñar la regla de colocación y el default `supportFolders: []`.
+  - [x] 1.3 Hacer `authoring.interface` obligatorio solo cuando `supportFolders` incluya `agents`.
+- [x] 2. Endurecer el contract gate y los fixtures afectados.
+  - [x] 2.1 Ajustar la suite Promptfoo de `skill-contract-forge` para que los trigger payloads sin `packageShape` fallen.
+  - [x] 2.2 Añadir una cobertura específica para el caso `agents` que requiera `authoring.interface`.
+  - [x] 2.3 Refrescar los fixtures offline afectados tras validar el comportamiento soportado.
+- [x] 3. Verificar, revisar y archivar el slug.
+  - [x] 3.1 Run `openspec validate "skill-contract-forge-freeze-package-shape" --type change`.
+  - [x] 3.2 Run `npm run promptfoo:validate`.
+  - [x] 3.3 Run `npm run promptfoo:run:offline`.
+  - [x] 3.4 Review the diff for errors, fix any findings, and archive the slug.
