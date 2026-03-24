@@ -90,3 +90,18 @@ Do not:
 - pad `sourceRefs` with decorative paths that were not actually used to freeze the contract
 
 If the contract would materially depend on a stronger source-of-truth doc that is not present, prefer `Classification: stop-and-ask` over pretending the authority exists.
+
+## Grounded repo defaults
+
+Do not invent repo-local truths just to make a brief feel more complete.
+
+For trigger briefs:
+- do not claim a repo-default planning path unless a grounded source actually defines it
+- do not list `AGENTS.md` as a required input unless repo policy materially shapes the contract
+- do not elevate official external docs into required authority unless the skill contract truly depends on them
+- prefer generic inputs such as `user request`, `repo-local context when available`, and `explicit user constraints` when no stronger grounded source exists
+
+Anti-examples:
+- `planner is the default planning path in this repo`
+- `AGENTS.md` listed as a mandatory input for a new skill whose contract is otherwise grounded only in the user request
+- `current official external docs only when directly needed by the plan` listed as a mandatory input even though no dependency-specific contract was frozen

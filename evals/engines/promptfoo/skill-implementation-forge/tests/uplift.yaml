@@ -242,15 +242,13 @@
       threshold: 1
       assert:
         - type: icontains-any
-          metric: stop_marker
+          metric: stop_or_reason_marker
           value:
+            - stop-and-ask
             - clarify
             - please provide
             - please specify
             - separate
-        - type: icontains-any
-          metric: ambiguity_reason
-          value:
             - Promptfoo-native eval
             - downstream eval
             - inseparable
@@ -275,14 +273,13 @@
       threshold: 1
       assert:
         - type: icontains-any
-          metric: out_of_scope_marker
+          metric: negative_scope_marker
           value:
+            - non-trigger
+            - stop-and-ask
             - out of scope
             - outside the scope
             - does not cover
-        - type: icontains-any
-          metric: reason_marker
-          value:
             - contract
             - define
             - rewrite
@@ -306,14 +303,13 @@
       threshold: 1
       assert:
         - type: icontains-any
-          metric: out_of_scope_marker
+          metric: negative_scope_marker
           value:
+            - non-trigger
+            - stop-and-ask
             - out of scope
             - outside the scope
             - does not cover
-        - type: icontains-any
-          metric: reason_marker
-          value:
             - downstream eval authoring
             - Promptfoo-native eval suites
             - eval authoring

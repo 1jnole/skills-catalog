@@ -4,8 +4,10 @@ Follow the skill contract exactly.
 Keep the work focused on implementation-from-contract for one named target skill.
 Do not widen into contract authoring, downstream eval authoring, or eval/runtime changes.
 If the skill contract requires a specific stopping point, obey it exactly.
+If the primary request is contract authoring or eval authoring instead of implementation-from-contract, respond as non-trigger rather than stop-and-ask.
 If the target skill or approved contract artifact is missing or ambiguous, stop and ask instead of inventing them.
 Treat the approved contract artifact as authoritative for implementation scope.
+Preserve conditional rules from the contract instead of flattening them into mandatory inputs or hardcoded repo defaults.
 If downstream eval work is mentioned but explicitly deferred, remain in implementation scope and defer that later work.
 
 Skill context:

@@ -55,11 +55,12 @@ If `authoring.packageShape.supportFolders` includes `agents`, the approved contr
 
 Useful supporting inputs may include:
 - an existing implementation of the target skill
-- repository source-of-truth context when available:
+- repository source-of-truth context when the approved contract artifact or the implementation task actually depends on it:
   - `README.md`
   - `AGENTS.md`
   - `packs/core/skill-contract-forge/SKILL.md`
 - repository docs explicitly referenced by the approved contract artifact
+- current official external docs only when the approved contract artifact or the requested implementation explicitly depends on them
 
 ## Outputs
 
@@ -105,12 +106,13 @@ Use `non-trigger` when the primary job is no longer implementation-from-contract
 4. If `authoring.packageShape.supportFolders` includes `agents`, confirm that the same contract artifact also freezes `authoring.interface.display_name`, `authoring.interface.short_description`, and `authoring.interface.default_prompt`; if not, stop and ask.
 5. Inspect the current target state, if any.
 6. Create or refactor `SKILL.md` as the core implementation surface.
-7. Add only the support files and folders the approved contract artifact requires. Do not widen beyond `requiredFiles` and `supportFolders`, and do not create empty support folders.
-8. When support folders are required, keep support content in the nearest justified folder instead of leaving a monolithic `SKILL.md`.
-9. Keep the implementation aligned with the approved contract artifact.
-10. Before finalizing, check that the resulting skill still has one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative examples, relevant edge cases, and the smallest justified package shape.
-11. Run `npm run validate:skill-metadata` before closure.
-12. Stop at the exact terminal marker `Skill implementation ready`.
+7. Preserve conditional contract semantics in the implementation. If the approved contract says to use repo conventions or `AGENTS.md` only when present, or to fall back to a default path only when no repo-local convention exists, keep that conditional behavior instead of flattening it into an unconditional input, rule, or path.
+8. Add only the support files and folders the approved contract artifact requires. Do not widen beyond `requiredFiles` and `supportFolders`, and do not create empty support folders.
+9. When support folders are required, keep support content in the nearest justified folder instead of leaving a monolithic `SKILL.md`.
+10. Keep the implementation aligned with the approved contract artifact.
+11. Before finalizing, check that the resulting skill still has one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative examples, relevant edge cases, and the smallest justified package shape.
+12. Run `npm run validate:skill-metadata` before closure.
+13. Stop at the exact terminal marker `Skill implementation ready`.
 
 ## Guardrails
 
@@ -127,6 +129,9 @@ Use `non-trigger` when the primary job is no longer implementation-from-contract
 - Do not create empty support folders or broader scaffolding than the approved contract artifact requires.
 - Do not materialize `agents/openai.yaml` unless the approved contract artifact explicitly requires `agents` and freezes the corresponding `authoring.interface`.
 - Do not leave long reference, script, or template content duplicated in `SKILL.md` when the approved contract artifact already requires a dedicated support folder for it.
+- Do not turn optional context such as `AGENTS.md`, repo conventions, or official external docs into mandatory inputs or always-on rules unless the approved contract artifact makes them materially mandatory.
+- Do not collapse conditional path rules like “use the repo-local planning location when defined, otherwise fall back to `plans/<request-slug>.plan.md`” into a hardcoded default path unless the approved contract artifact freezes that exact unconditional path.
+- Do not invent repo-default behavior that the approved contract artifact did not actually ground.
 - Do not adopt `Classification:` or `Workflow:` response headers by imitation of another forge skill.
 - Do not end a non-trigger or stop-and-ask response with `Skill implementation ready`.
 
@@ -162,6 +167,8 @@ Out of scope:
 - The current implementation already exists but drifts from the approved contract: refactor the implementation to match the approved contract.
 - The current implementation and the approved contract conflict materially: treat the approved contract artifact as authoritative for this phase and do not renegotiate the contract inside implementation.
 - The approved contract artifact names the target skill correctly but omits canonical `skill.description`: stop and ask instead of inferring frontmatter metadata from the current implementation.
+- The approved contract uses conditional repo authority such as “use `AGENTS.md` when present” or “consult official external docs only when materially needed”: preserve that optionality instead of rewriting it as a mandatory input.
+- The approved contract uses conditional output-path rules such as “use the repo-local planning location when defined, otherwise fall back to `plans/`”: preserve that fallback behavior instead of hardcoding the fallback path as if it were always the repo default.
 - Downstream eval work is mentioned but explicitly deferred: remain in implementation scope and defer that later phase.
 - The task points to an exact contract file path instead of pasting the brief inline: this is valid if the file is authoritative and specific enough.
 - The contract artifact exists but leaves core implementation questions unresolved: stop and ask rather than inventing the missing boundary.

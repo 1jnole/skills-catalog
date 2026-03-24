@@ -239,6 +239,67 @@
         - type: icontains
           metric: terminal_marker
           value: Skill implementation ready
+- description: preserve-conditional-authority-and-path-fallback
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: preserve-conditional-authority-and-path-fallback
+    prompt: >-
+      Implement `planner` from the approved contract artifact at `notes/planner-brief.json`.
+      That approved contract already freezes canonical `skill.name`, canonical `skill.description`, and `authoring.packageShape` with `requiredFiles: ["SKILL.md"]` plus `supportFolders: []`.
+      The contract says the skill should use repo conventions or `AGENTS.md` only when present and only when they materially shape the plan.
+      It also says to consult current official external docs only when materially needed by the plan.
+      For the output path, the contract says to use the repo-local planning location when one is defined; otherwise fall back to `plans/<request-slug>.plan.md`, creating `plans/` only when no planning location exists yet.
+      For this evaluation, treat that repo-local brief as already opened and operationally inspectable authority.
+      Preserve those conditional rules in the implementation instead of flattening them into mandatory inputs or an unconditional default path, run `npm run validate:skill-metadata`, and then use the normal completion marker for this phase.
+    expected_stop: Skill implementation ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: regression
+    expected_stop: Skill implementation ready
+  assert:
+    - type: assert-set
+      metric: critical_contract
+      threshold: 1
+      assert:
+        - type: icontains
+          metric: target_skill
+          value: planner
+        - type: icontains-any
+          metric: conditional_authority
+          value:
+            - when present
+            - when needed
+            - when defined
+            - only when
+            - if present
+            - if needed
+            - otherwise
+            - fall back
+            - fallback
+        - type: icontains-any
+          metric: optional_repo_context
+          value:
+            - repo conventions
+            - AGENTS.md
+            - official external docs
+            - repo-local planning location
+        - type: not-icontains-any
+          metric: no_flattened_inputs
+          value:
+            - explicit constraints from the user or `AGENTS.md`
+            - explicit constraints from the user or AGENTS.md
+            - follow source priority: user constraints, `AGENTS.md`, repo patterns, then official external docs when needed
+            - follow source priority: user constraints, AGENTS.md, repo patterns, then official external docs when needed
+        - type: icontains-any
+          metric: validation_gate
+          value:
+            - npm run validate:skill-metadata
+            - validate:skill-metadata
+            - skill metadata validation
+        - type: icontains
+          metric: terminal_marker
+          value: Skill implementation ready
 - description: new-skill-artifact-mentioned-only
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
@@ -362,14 +423,13 @@
       threshold: 1
       assert:
         - type: icontains-any
-          metric: out_of_scope_marker
+          metric: negative_scope_marker
           value:
+            - non-trigger
+            - stop-and-ask
             - out of scope
             - outside the scope
             - does not cover
-        - type: icontains-any
-          metric: reason_marker
-          value:
             - contract
             - define
             - rewrite
@@ -393,14 +453,13 @@
       threshold: 1
       assert:
         - type: icontains-any
-          metric: out_of_scope_marker
+          metric: negative_scope_marker
           value:
+            - non-trigger
+            - stop-and-ask
             - out of scope
             - outside the scope
             - does not cover
-        - type: icontains-any
-          metric: reason_marker
-          value:
             - downstream eval authoring
             - Promptfoo-native eval suites
             - eval authoring
@@ -424,14 +483,13 @@
       threshold: 1
       assert:
         - type: icontains-any
-          metric: out_of_scope_marker
+          metric: negative_scope_marker
           value:
+            - non-trigger
+            - stop-and-ask
             - out of scope
             - outside the scope
             - does not cover
-        - type: icontains-any
-          metric: reason_marker
-          value:
             - runtime architecture
             - eval/runtime
             - shared eval infrastructure
@@ -455,14 +513,13 @@
       threshold: 1
       assert:
         - type: icontains-any
-          metric: out_of_scope_marker
+          metric: negative_scope_marker
           value:
+            - non-trigger
+            - stop-and-ask
             - out of scope
             - outside the scope
             - does not cover
-        - type: icontains-any
-          metric: reason_marker
-          value:
             - provider
             - adapters
             - eval runner
@@ -548,14 +605,12 @@
       threshold: 1
       assert:
         - type: icontains-any
-          metric: stop_marker
+          metric: stop_or_reason_marker
           value:
+            - stop-and-ask
             - clarify
             - please provide
             - please specify
-        - type: icontains-any
-          metric: ambiguity_reason
-          value:
             - contract
             - inseparable
             - mixed
@@ -579,15 +634,13 @@
       threshold: 1
       assert:
         - type: icontains-any
-          metric: stop_marker
+          metric: stop_or_reason_marker
           value:
+            - stop-and-ask
             - clarify
             - please provide
             - please specify
             - separate
-        - type: icontains-any
-          metric: ambiguity_reason
-          value:
             - Promptfoo-native eval
             - downstream eval
             - inseparable
@@ -778,15 +831,13 @@
       threshold: 1
       assert:
         - type: icontains-any
-          metric: stop_marker
+          metric: stop_or_reason_marker
           value:
+            - stop-and-ask
             - clarify
             - please provide
             - please share
             - please specify
-        - type: icontains-any
-          metric: ambiguity_reason
-          value:
             - approved brief
             - approved contract artifact
             - not attached

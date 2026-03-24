@@ -79,7 +79,7 @@
   vars:
     skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
     case_id: new-skill-source-refs-stay-grounded
-    prompt: Create a new reusable skill called `planner` for producing exactly one repo-native implementation plan before coding starts. Freeze the contract first using only repo-local authority that exists today, and do not invent supporting source documents.
+    prompt: Create a new reusable skill called `planner` for producing exactly one repo-native implementation plan before coding starts. Freeze the contract first using only repo-local authority that exists today, and do not invent supporting source documents, repo-default planning paths, or mandatory AGENTS.md or external-doc inputs unless grounded authority really requires them.
     expected_stop: Eval Brief ready
     should_trigger: true
   metadata:
@@ -104,8 +104,8 @@
           metric: source_refs_explicit_empty
           value: '"sourceRefs": []'
         - type: not-icontains
-          metric: source_refs_no_agents_filler
-          value: AGENTS.md
+          metric: no_agents_array_entry
+          value: '"AGENTS.md",'
         - type: not-icontains
           metric: source_refs_no_current_skill_filler
           value: packs/core/skill-contract-forge/SKILL.md
@@ -115,6 +115,12 @@
         - type: not-icontains
           metric: source_refs_no_fake_target_skill_path
           value: packs/core/planner/SKILL.md
+        - type: not-icontains
+          metric: no_invented_repo_default_path
+          value: planner is the default planning path in this repo
+        - type: not-icontains
+          metric: no_invented_mandatory_external_docs_input
+          value: current official external docs only when directly needed by the plan
         - type: icontains
           metric: terminal_marker
           value: Eval Brief ready
