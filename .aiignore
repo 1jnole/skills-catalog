@@ -9,6 +9,11 @@ tmp/
 temp/
 coverage/
 .nyc_output/
+evals/engines/promptfoo/generated/
+
+# Historical specs/change archives that are useful for humans but too expensive
+# to keep in routine AI context unless explicitly needed.
+openspec/changes/archive/
 
 # Framework and tooling caches
 .angular/cache/

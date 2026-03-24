@@ -21,6 +21,7 @@
   },
   "scripts": {
     "promptfoo:validate": "promptfoo validate -c evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml",
+    "promptfoo:clean": "node -e \"const fs=require('fs'); const path=require('path'); const dir='evals/engines/promptfoo/generated'; if (fs.existsSync(dir)) { for (const name of fs.readdirSync(dir)) { if (name.endsWith('.json')) fs.rmSync(path.join(dir, name), { force: true }); } }\"",
     "promptfoo:run": "promptfoo eval -c evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml -o evals/engines/promptfoo/generated/skill-contract-forge.contract.live.eval.json --no-progress-bar --table-cell-max-length 80",
     "promptfoo:run:offline": "promptfoo eval -c evals/engines/promptfoo/skill-contract-forge/promptfooconfig.yaml --model-outputs evals/engines/promptfoo/fixtures/skill-contract-forge.contract.model-outputs.json -o evals/engines/promptfoo/generated/skill-contract-forge.contract.offline.eval.json --no-progress-bar --table-cell-max-length 80",
     "test": "vitest run",
