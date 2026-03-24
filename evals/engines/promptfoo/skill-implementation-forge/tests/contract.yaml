@@ -354,22 +354,16 @@
           metric: target_skill
           value: openspec-bootstrap
         - type: icontains-any
-          metric: stop_marker
+          metric: stop_or_reason_marker
           value:
-            - clarify
-            - please provide
-            - please share
-            - please specify
-        - type: icontains-any
-          metric: ambiguity_reason
-          value: approved contract artifact
-        - type: icontains-any
-          metric: missing_authority
-          value:
+            - stop-and-ask
+            - approved contract artifact
             - not provided
             - not included
             - repo-local path
             - exact path
+            - inspectable form
+            - operationally inspectable
         - type: not-icontains
           metric: terminal_absent
           value: Skill implementation ready
@@ -390,19 +384,15 @@
       threshold: 1
       assert:
         - type: icontains-any
-          metric: stop_marker
+          metric: stop_or_reason_marker
           value:
-            - clarify
-            - please provide
-            - please share
-            - please specify
-        - type: icontains-any
-          metric: ambiguity_reason
-          value:
+            - stop-and-ask
             - approved contract artifact
             - not provided
             - not included
             - exact path
+            - inspectable form
+            - operationally inspectable
         - type: not-icontains
           metric: terminal_absent
           value: Skill implementation ready
@@ -669,17 +659,15 @@
       threshold: 1
       assert:
         - type: icontains-any
-          metric: stop_marker
+          metric: stop_or_reason_marker
           value:
-            - clarify
-            - please provide
-            - please specify
-        - type: icontains-any
-          metric: ambiguity_reason
-          value:
+            - stop-and-ask
             - target skill
             - clearly identified
             - this skill
+            - exact target skill name
+            - named target skill
+            - deictic
         - type: not-icontains-any
           metric: no_fake_access_blocker
           value:
@@ -845,5 +833,48 @@
             - repo-local path
         - type: not-icontains
           metric: terminal_absent
+          value: Skill implementation ready
+
+- description: materialize-durable-support-content-from-brief
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: materialize-durable-support-content-from-brief
+    prompt: >-
+      Implement `planner` from the approved contract artifact at `notes/planner-brief.json`.
+      That approved contract already freezes canonical `skill.name`, canonical `skill.description`, and `authoring.packageShape` with `requiredFiles: ["SKILL.md"]` plus `supportFolders: ["references", "assets"]`.
+      The contract says reusable planning examples belong in `references/` and output templates belong in `assets/`.
+      The repo-local authoring notes at `notes/planner-authoring-notes.md` helped create the brief, but they are not part of the downstream handoff and must not be required here.
+      Materialize only the support content the contract requires, run `npm run validate:skill-metadata`, and then use the normal completion marker for this phase.
+    expected_stop: Skill implementation ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: regression
+    expected_stop: Skill implementation ready
+  assert:
+    - type: assert-set
+      metric: portable_handoff_behavior
+      threshold: 1
+      assert:
+        - type: icontains
+          metric: target_skill
+          value: planner
+        - type: icontains-any
+          metric: support_materialization
+          value:
+            - references
+            - assets
+            - templates
+            - examples
+            - package shape
+            - support folders
+        - type: icontains-any
+          metric: validation_gate
+          value:
+            - npm run validate:skill-metadata
+            - validate:skill-metadata
+            - skill metadata validation
+        - type: icontains
+          metric: terminal_marker
           value: Skill implementation ready
 

@@ -316,3 +316,43 @@
         - type: not-icontains
           metric: terminal_absent
           value: Skill implementation ready
+
+- description: package-shape-routes-durable-support-content
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
+    case_id: package-shape-routes-durable-support-content
+    prompt: >-
+      Implement `planner` from the approved contract artifact at `notes/planner-brief.json`.
+      That approved contract already freezes canonical `skill.name`, canonical `skill.description`, and `authoring.packageShape` with `supportFolders: ["references", "assets"]`.
+      Reusable planning examples belong in `references/`, output templates belong in `assets/`, and the original repo-local note path `notes/planner-authoring-notes.md` is not part of the handoff.
+      Keep the implementation shallow, materialize only that support content, run `npm run validate:skill-metadata`, and then use the normal completion marker for this phase.
+    expected_stop: Skill implementation ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-implementation-forge
+    case_bucket: regression
+    expected_stop: Skill implementation ready
+  assert:
+    - type: assert-set
+      metric: critical_uplift
+      threshold: 1
+      assert:
+        - type: icontains
+          metric: target_skill
+          value: planner
+        - type: icontains-any
+          metric: durable_support_routing
+          value:
+            - references
+            - assets
+            - examples
+            - templates
+        - type: icontains-any
+          metric: validation_gate
+          value:
+            - npm run validate:skill-metadata
+            - validate:skill-metadata
+            - skill metadata validation
+        - type: icontains
+          metric: terminal_marker
+          value: Skill implementation ready

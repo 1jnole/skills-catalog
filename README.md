@@ -157,6 +157,7 @@ These phases are intentionally separated. Do not merge contract definition, skil
 
 The current repo handoff between contract and implementation is intentionally explicit:
 - `skill-contract-forge` now freezes canonical `skill.name` and `skill.description` in the approved brief.
+- the approved brief artifact is the only required contractual handoff between contract and implementation; auxiliary repo-local authoring refs are not part of the durable handoff
 - New-style repo-native briefs also freeze `authoring.packageShape` with:
   - `requiredFiles`
   - `supportFolders`
@@ -170,12 +171,18 @@ The current repo handoff between contract and implementation is intentionally ex
   - `authoring.interface.display_name`
   - `authoring.interface.short_description`
   - `authoring.interface.default_prompt`
+- if long examples, templates, or reference material must survive into later phases, the contract should freeze that need through `packageShape` so implementation materializes them into `references/` or `assets/` rather than relying on upstream local file refs
 
 `skill-implementation-forge` now treats that handoff as authority:
 - when `authoring.packageShape` exists, implementation obeys it and does not widen the package
 - when a legacy approved brief omits `packageShape`, implementation falls back conservatively to `SKILL.md` only
 - if a contract requires `agents` but omits `authoring.interface`, implementation must stop and ask instead of inventing `agents/openai.yaml`
 - trigger-path implementation closure still requires `npm run validate:skill-metadata` before `Skill implementation ready`
+
+`skill-eval-forge` reads the same portable boundary downstream:
+- eval authoring requires the approved brief artifact, the implemented skill, and active eval context
+- it should read durable examples/templates from the implemented package when the contract froze `references/` or `assets/`
+- it should not require the original repo-local authoring files from the contract phase
 
 ### Workflow at a glance
 

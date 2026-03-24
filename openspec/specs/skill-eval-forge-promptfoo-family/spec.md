@@ -55,3 +55,18 @@ The initial Promptfoo family for `skill-eval-forge` SHALL support direct config 
 - **THEN** they SHALL describe `skill-eval-forge` as a direct Promptfoo family with config-local entrypoints
 - **AND** they SHALL state that the family is not yet part of the supported public npm command surface
 - **AND** they SHALL NOT claim that `skill-eval-forge` already has maintained offline replay fixtures unless those fixtures are added in a later change
+
+### Requirement: The family enforces portable eval-authoring authority
+The maintained `skill-eval-forge` Promptfoo family SHALL verify that eval-authoring behavior depends on the approved brief artifact, the existing implementation, and active eval context rather than on auxiliary local authoring refs.
+
+#### Scenario: Contract and implementation authority are sufficient without auxiliary refs
+- **WHEN** `evals/engines/promptfoo/skill-eval-forge/tests/contract.yaml` includes an eval-authoring request with an inspectable approved brief artifact, inspectable implementation, and inspectable active eval context
+- **AND** the request does not rely on auxiliary repo-local authoring refs
+- **THEN** the expected behavior SHALL remain trigger-path compatible
+- **AND** it SHALL keep `Skill eval ready` exclusive to valid trigger-path completion
+
+#### Scenario: Family rejects auxiliary-ref-dependent eval authority
+- **WHEN** the maintained contract or uplift suite includes an eval-authoring request that depends on auxiliary repo-local authoring refs not required by the approved brief or implemented package
+- **THEN** the expected behavior SHALL reject that dependency
+- **AND** it SHALL require portable downstream authority instead
+

@@ -24,7 +24,7 @@
       "stopConditions": [
         "Skill target is unclear",
         "More than one workflow is requested",
-        "No stable source references available"
+        "The brief cannot yet carry enough portable authority to hand off safely"
       ]
     }
   },

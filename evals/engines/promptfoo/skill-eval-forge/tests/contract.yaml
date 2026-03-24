@@ -334,23 +334,19 @@
     case_bucket: regression
     expected_stop: stop_and_ask
   assert:
-    - type: assert-set
-      metric: stop_and_ask_behavior
-      threshold: 1
-      assert:
-        - type: icontains-any
-          metric: stop_marker
-          value:
-            - clarify
-            - please provide
-            - please specify
-            - need
-        - type: icontains
-          metric: implementation_reason
-          value: implementation
-        - type: not-icontains
-          metric: terminal_absent
-          value: Skill eval ready
+    - type: icontains
+      metric: target_skill
+      value: example-skill
+    - type: icontains-any
+      metric: missing_impl_reason
+      value:
+        - stop-and-ask
+        - implementation does not exist yet
+        - implementation is missing
+        - cannot safely author eval coverage
+        - please provide
+        - please specify
+        - need
 - description: contract-artifact-mentioned-only
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
@@ -586,4 +582,47 @@
             - identified
         - type: not-icontains
           metric: terminal_absent
+          value: Skill eval ready
+
+- description: evals-read-durable-support-from-implemented-package
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: evals-read-durable-support-from-implemented-package
+    prompt: >-
+      Author Promptfoo-native eval coverage for `planner`.
+      Use the approved contract artifact at `notes/planner-brief.json`,
+      the existing implementation at `packs/core/planner/SKILL.md`,
+      and the active Promptfoo eval context under `evals/engines/promptfoo/planner/`.
+      The approved contract froze `references/` for reusable planning examples and `assets/` for output templates.
+      Read that durable support content from the implemented skill package rather than from the original repo-local authoring notes at `notes/planner-authoring-notes.md`.
+      Proceed from those authoritative inputs and stop at `Skill eval ready`.
+    expected_stop: Skill eval ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: Skill eval ready
+  assert:
+    - type: assert-set
+      metric: portable_handoff_behavior
+      threshold: 1
+      assert:
+        - type: icontains
+          metric: target_skill
+          value: planner
+        - type: icontains-any
+          metric: implemented_support_material
+          value:
+            - references
+            - assets
+            - implemented package
+            - implementation
+            - support content
+            - support material
+            - package
+            - frozen references
+            - implemented skill package
+            - durable frozen references
+        - type: icontains
+          metric: terminal_marker
           value: Skill eval ready

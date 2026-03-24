@@ -112,17 +112,27 @@ If `authoring.packageShape.supportFolders` includes `agents`, the brief must als
 If the request does not justify a support folder clearly, default to `supportFolders: []` rather than inventing scaffolding.
 
 Keep `sourceRefs` grounded:
-- cite only repo-local sources that exist or material explicitly provided by the user
-- list only sources actually used to freeze the contract for this run
-- allow `sourceRefs: []` when the brief is grounded primarily in the user request and no repo-local source materially shaped the contract
-- cite `AGENTS.md` only when repository-level policy actually influenced the contract
+- treat `sourceRefs` as portable handoff authority, not as a log of every local file consulted during authoring
+- allow `sourceRefs: []` when the brief already carries the distilled contract boundary, even if repo-local material was consulted upstream
+- cite only material that must survive as durable authority inside the handoff itself, such as explicitly provided user material
+- do not list auxiliary repo-local authoring files merely because they were inspected while freezing the contract
 - if stronger source-of-truth docs are missing, keep `sourceRefs` minimal and honest rather than decorative
 - do not invent plausible paths such as contract docs or target-skill files that do not exist
+
+For existing-skill refactors or rewrites, repo-local inspection is still allowed when needed to map the current skill boundary before freezing the brief.
+The portability rule applies to the handoff payload, not to whether you may inspect nearby skill files, repo docs, or active eval cases during authoring.
 
 Keep repo-local claims grounded too:
 - do not assert repo-specific defaults, conventions, or planning locations unless a grounded source actually establishes them
 - do not turn optional context such as `AGENTS.md` or official external docs into required inputs or authoritative source order unless the brief truly depends on them
 - prefer generic phrasing such as `repo-local context when available` over invented repo obligations
+- distill repo-local constraints into the brief instead of preserving their local file paths as downstream dependencies
+
+When downstream phases must still inspect long examples, templates, or reference material:
+- freeze that need through `authoring.packageShape`
+- put reusable reference material in `references`
+- put templates or output scaffolds in `assets`
+- do not rely on auxiliary local source refs to keep that content reachable downstream
 
 Do not include runtime behavior, provider wiring, benchmark layout, grader logic, or scoring implementation in the brief payload.
 
@@ -254,6 +264,8 @@ Typical examples:
 - local case suites used as downstream eval context
 
 These materials help shape the contract. They do **not** change the boundary of this skill.
+When refactoring or rewriting a named existing skill, inspect the nearby skill files and repo docs as needed to map the current boundary before freezing the brief.
+If those materials need to survive into implementation or eval authoring, distill them into the brief or freeze them into `references/` or `assets/` via `authoring.packageShape` instead of preserving local file refs.
 Engine-specific execution assets live outside this skill contract.
 
 ## Procedure
@@ -265,12 +277,12 @@ Engine-specific execution assets live outside this skill contract.
    Write `skill.description` from the activation boundary: summarize when to use the skill from `activationProbes`, add nearby non-use boundaries from `negativeSignals`, and do not collapse it into a deliverable-only summary of `authoring.singleJob`.
 5. Freeze the minimal package shape in `authoring.packageShape`, keeping `requiredFiles` anchored on `SKILL.md` and `supportFolders` limited to the folders the request truly justifies.
 6. If `supportFolders` includes `agents`, freeze `authoring.interface.display_name`, `authoring.interface.short_description`, and `authoring.interface.default_prompt` in the same brief.
-7. Freeze only grounded `sourceRefs`: cite repo-local or explicitly provided sources that actually exist for this run, allow `[]` when no repo-local source materially shaped the contract, and do not invent plausible contract docs or target-skill paths.
-8. Keep repo-local claims honest: do not invent repo defaults, planning paths, mandatory `AGENTS.md` inputs, or mandatory external-doc dependencies unless grounded authority actually requires them.
+7. Freeze only portable `sourceRefs`: allow `[]` when the distilled brief is sufficient, include only durable authority that must survive the handoff, and do not preserve auxiliary repo-local authoring refs as downstream dependencies.
+8. Keep repo-local claims honest: do not invent repo defaults, planning paths, mandatory `AGENTS.md` inputs, or mandatory external-doc dependencies unless grounded authority actually requires them, and distill any consulted repo-local rules into the brief itself.
 9. Capture only the minimal downstream evaluation intent needed by the next step.
 10. Produce the boundary-only Eval Brief JSON.
 11. End trigger-path responses with the exact line `Eval Brief ready`.
-12. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative cases, explicit `skill.name` plus an activation-oriented `skill.description`, grounded `sourceRefs`, honest repo-local claims, and the smallest justified `packageShape` without silently widening scope.
+12. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative cases, explicit `skill.name` plus an activation-oriented `skill.description`, portable `sourceRefs`, honest repo-local claims, and the smallest justified `packageShape` without silently widening scope.
 
 ## Quality bar
 

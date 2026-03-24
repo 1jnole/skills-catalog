@@ -104,6 +104,8 @@ Do not use this phase to:
 - Do not enter eval authoring without both an approved contract artifact and an existing implementation.
 - Do not renegotiate the contract inside implementation or eval.
 - If a phase is missing a critical precondition, stop and ask instead of inventing.
+- Treat the approved brief artifact as the required contract-to-implementation handoff; do not treat auxiliary repo-local authoring refs as required cross-phase authority.
+- If examples, templates, or long reference material must survive into later phases, freeze that need in the contract so implementation materializes it into `references/` or `assets/` of the target skill package.
 
 ## Built-ins vs forge suite
 

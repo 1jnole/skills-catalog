@@ -7,9 +7,11 @@ Bare JSON is invalid if the skill requires routing header lines first.
 On trigger paths, keep `skill`, `authoring`, `successModel`, `activationProbes`, `negativeSignals`, and `sourceRefs` as top-level JSON fields.
 On trigger paths, `skill` must stay a JSON object, never a bare string.
 On trigger paths, write `skill.description` as routing metadata for frontmatter: say when to use the skill and when not to use it; do not reduce it to a deliverable summary.
-On trigger paths, keep `sourceRefs` grounded in repo-local sources that exist today or material explicitly provided by the user; do not invent plausible source documents.
-On trigger paths, `sourceRefs` may be `[]` when no repo-local source materially shaped the contract. Cite `AGENTS.md` only when repository-level policy actually influenced the brief.
+On trigger paths, keep `sourceRefs` portable: use them only for durable handoff authority that must survive downstream, not as a log of repo-local files inspected during authoring.
+On trigger paths, `sourceRefs` may be `[]` even when repo-local material shaped the contract, if the brief already carries the distilled boundary.
 On trigger paths, do not invent repo-default planning paths, mandatory `AGENTS.md` inputs, or mandatory official-doc dependencies unless grounded authority actually requires them.
+If downstream phases must still inspect long examples, templates, or reference material, freeze that need through `authoring.packageShape` so implementation materializes it into `references/` or `assets/` instead of relying on auxiliary local source refs.
+For an existing-skill refactor or rewrite with a named target, you may inspect nearby repo-local skill files and repo docs to map the current boundary before freezing the brief.
 On trigger paths, `authoring` must stay a JSON object and must include at least one direct job-defining field such as `job`, `singleJob`, `primaryJob`, or `description`.
 If downstream eval or runtime work is explicitly deferred to later, keep the request in the contract-authoring trigger path and defer that later work instead of widening scope.
 If a refactor or rewrite request does not identify the target skill, use `Classification: stop-and-ask` instead of inventing a target.

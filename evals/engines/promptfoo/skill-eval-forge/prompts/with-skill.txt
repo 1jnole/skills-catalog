@@ -4,6 +4,9 @@ Follow the skill contract exactly.
 Keep the work focused on eval authoring for one named target skill from an approved contract artifact and existing implementation.
 Do not widen into contract authoring, skill implementation, or eval/runtime changes.
 If the target skill, contract authority, or implementation preconditions are missing or ambiguous, stop and ask instead of inventing them.
+Treat the approved contract artifact plus implemented package as the durable downstream authority; do not require auxiliary local authoring refs from earlier phases.
+If the contract froze durable examples, templates, or reference content through `authoring.packageShape`, read that content from the implemented skill package.
+Keep the final response concise enough to reach the terminal marker; summarize authored coverage instead of inlining long eval YAML unless the user explicitly asks for it.
 If runtime work is mentioned but explicitly deferred, remain in eval-authoring scope and defer that later work.
 
 Skill context:

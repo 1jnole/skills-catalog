@@ -75,21 +75,29 @@ This skill should hand off a precise brief, not a speculative one.
 
 ## Grounded source refs
 
-Keep `sourceRefs` grounded in sources that are really available for the current run.
+Keep `sourceRefs` grounded in durable authority that should really survive the current run.
 
 For trigger briefs:
-- cite repo-local files that exist
-- cite user-provided material when it was explicitly supplied
-- keep the list minimal if that is all the repo truth supports
-- allow `sourceRefs: []` when no repo-local source materially shaped the contract
-- cite `AGENTS.md` only when repo-level policy actually influenced the brief
+- treat `sourceRefs` as portable handoff authority, not as an inventory of inspected files
+- cite user-provided material when it was explicitly supplied and still matters downstream
+- keep the list minimal if the distilled brief already carries the contract
+- allow `sourceRefs: []` when repo-local material shaped the brief but does not need to survive as a file reference downstream
 
 Do not:
 - invent `docs/contracts/<skill>.md` just because that path sounds plausible
 - cite `packs/.../<target-skill>/SKILL.md` for a new skill that does not exist yet
+- preserve `AGENTS.md`, spec files, notes, or other repo-local authoring paths as durable refs when their substance has already been distilled into the brief
 - pad `sourceRefs` with decorative paths that were not actually used to freeze the contract
 
 If the contract would materially depend on a stronger source-of-truth doc that is not present, prefer `Classification: stop-and-ask` over pretending the authority exists.
+
+## Portable downstream content
+
+If downstream phases must still inspect examples, templates, or long reference material:
+- freeze that need through `authoring.packageShape`
+- route reusable examples or reference content into `references/`
+- route templates or output scaffolds into `assets/`
+- keep the approved brief as the handoff artifact instead of teaching auxiliary local source paths as required downstream authority
 
 ## Grounded repo defaults
 

@@ -47,7 +47,11 @@ The request must provide:
 
 For this phase, an approved contract artifact is operationally inspectable only when it is identified concretely enough to open as authority, such as by an exact repo-local path, a `file://` reference, or another uniquely resolvable artifact. Conversational references such as `the approved brief`, `the frozen contract`, or `the contract we discussed` are not enough.
 
+When a request says an approved contract artifact exists but does not provide an operationally inspectable locator, stop and ask. Do not substitute the current forge skill prompt, a nearby repo artifact, or a guessed repo-default path as the missing contract authority.
+
 For implementation closure in this repo, that approved contract artifact must freeze the canonical `skill.name` and `skill.description` that downstream `SKILL.md` frontmatter needs. If either field is missing from the contract authority, stop and ask rather than reconstructing metadata from the current repository state or conversational context.
+
+Treat that approved contract artifact as the sole required contractual handoff from the contract phase. Do not require auxiliary repo-local authoring refs just because they were consulted while the brief was created.
 
 For repo-native contracts authored after package-shape hardening, the approved contract artifact should also freeze `authoring.packageShape.requiredFiles` and `authoring.packageShape.supportFolders`. If a legacy approved contract predates that shape and omits `authoring.packageShape`, stay conservative: default to `SKILL.md` only and do not infer extra support folders from repo habits.
 
@@ -62,6 +66,8 @@ Useful supporting inputs may include:
 - repository docs explicitly referenced by the approved contract artifact
 - current official external docs only when the approved contract artifact or the requested implementation explicitly depends on them
 
+Those materials are supportive context, not extra required handoff authority. If the approved contract distilled their effect already, do not reopen them as a hidden precondition.
+
 ## Outputs
 
 Produce:
@@ -69,6 +75,8 @@ Produce:
 - `SKILL.md` for the target skill
 - nearby `references/`, `assets/`, `agents/`, or `scripts/` only when the approved contract artifact explicitly requires them through `authoring.packageShape`
 - `agents/openai.yaml` only when the approved contract artifact explicitly requires `agents` and also freezes the needed `authoring.interface`
+
+When the approved contract artifact freezes durable examples, templates, or long reference content through `authoring.packageShape`, materialize that content into the target package instead of leaving the implementation dependent on upstream local authoring paths.
 
 The exact terminal marker is:
 
@@ -107,7 +115,7 @@ Use `non-trigger` when the primary job is no longer implementation-from-contract
 5. Inspect the current target state, if any.
 6. Create or refactor `SKILL.md` as the core implementation surface.
 7. Preserve conditional contract semantics in the implementation. If the approved contract says to use repo conventions or `AGENTS.md` only when present, or to fall back to a default path only when no repo-local convention exists, keep that conditional behavior instead of flattening it into an unconditional input, rule, or path.
-8. Add only the support files and folders the approved contract artifact requires. Do not widen beyond `requiredFiles` and `supportFolders`, and do not create empty support folders.
+8. Add only the support files and folders the approved contract artifact requires. Do not widen beyond `requiredFiles` and `supportFolders`, do not create empty support folders, and do not treat auxiliary local authoring refs as hidden required outputs.
 9. When support folders are required, keep support content in the nearest justified folder instead of leaving a monolithic `SKILL.md`.
 10. Keep the implementation aligned with the approved contract artifact.
 11. Before finalizing, check that the resulting skill still has one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative examples, relevant edge cases, and the smallest justified package shape.
@@ -123,12 +131,14 @@ Use `non-trigger` when the primary job is no longer implementation-from-contract
 - Do not infer a missing target skill from deictic phrases such as `this skill`, `the current skill`, or `the next skill`.
 - If downstream eval work is mentioned but explicitly deferred, remain in implementation scope and defer that later work.
 - If the approved contract artifact conflicts with the current implementation, implement from the approved contract artifact rather than silently redefining it.
+- If a request only mentions that an approved contract artifact exists, do not substitute another artifact from surrounding context just to keep moving. Stop and ask for the inspectable authority instead.
 - Do not infer missing frontmatter metadata from repo state, file names, or conversational hints when the approved contract artifact omits canonical `skill.description`.
 - Keep the package shallow by default.
 - Do not infer extra support folders when a legacy approved contract omits `authoring.packageShape`; default to `SKILL.md` only.
 - Do not create empty support folders or broader scaffolding than the approved contract artifact requires.
 - Do not materialize `agents/openai.yaml` unless the approved contract artifact explicitly requires `agents` and freezes the corresponding `authoring.interface`.
 - Do not leave long reference, script, or template content duplicated in `SKILL.md` when the approved contract artifact already requires a dedicated support folder for it.
+- Do not require or preserve auxiliary local authoring refs as implementation authority when the approved contract artifact already carries the needed boundary.
 - Do not turn optional context such as `AGENTS.md`, repo conventions, or official external docs into mandatory inputs or always-on rules unless the approved contract artifact makes them materially mandatory.
 - Do not collapse conditional path rules like “use the repo-local planning location when defined, otherwise fall back to `plans/<request-slug>.plan.md`” into a hardcoded default path unless the approved contract artifact freezes that exact unconditional path.
 - Do not invent repo-default behavior that the approved contract artifact did not actually ground.

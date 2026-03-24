@@ -65,6 +65,8 @@ Useful supporting inputs may include:
   - `packs/core/skill-contract-forge/SKILL.md`
   - `packs/core/skill-implementation-forge/SKILL.md`
 
+Those materials may help interpretation, but the required downstream authorities remain the approved contract artifact, the existing implementation, and the active eval context. Do not require auxiliary local authoring refs from earlier phases when the brief and implementation already carry the needed behavior.
+
 ## Outputs
 
 Produce:
@@ -72,6 +74,7 @@ Produce:
 - only the files required to author or refactor that eval coverage within the active repo eval boundary under `evals/engines/promptfoo/`
 - nearby support files only when they are materially necessary to explain the eval-authoring workflow
 - when authoring informational baseline surfaces, keep them clearly baseline-only and do not let them impersonate the skill-owned eval boundary
+- a concise completion response that names the authorities used and the key coverage added, without inlining large eval YAML or other long generated artifacts unless the user explicitly asks for them
 
 The exact terminal marker is:
 
@@ -122,10 +125,12 @@ Requests like these are `non-trigger`, not `stop-and-ask`, because eval authorin
 1. Confirm that the task is eval authoring for one named skill whose contract and implementation already exist.
 2. Inspect the approved contract artifact and the current target skill implementation.
 3. Inspect the active Promptfoo-native eval context needed for that skill under `evals/engines/promptfoo/`.
-4. Author or refactor Promptfoo-native eval coverage only for that one named skill.
-5. Keep the resulting eval work aligned with the approved contract artifact and existing implementation.
-6. Before finalizing, check that the authored coverage still aligns with one named target skill, its approved contract artifact, and its existing implementation.
-7. Stop at the exact terminal marker `Skill eval ready`.
+4. If the approved contract froze durable examples, templates, or reference content through `authoring.packageShape`, inspect that content from the implemented skill package rather than from upstream local authoring notes.
+5. Author or refactor Promptfoo-native eval coverage only for that one named skill.
+6. Keep the resulting eval work aligned with the approved contract artifact and existing implementation.
+7. Before finalizing, check that the authored coverage still aligns with one named target skill, its approved contract artifact, and its existing implementation.
+8. Keep the final response compact enough to reliably include the exact terminal marker. Summarize authored files and coverage instead of inlining large eval definitions unless the user explicitly asks for them.
+9. Stop at the exact terminal marker `Skill eval ready`.
 
 ## Guardrails
 
@@ -137,6 +142,8 @@ Requests like these are `non-trigger`, not `stop-and-ask`, because eval authorin
 - If runtime work is mentioned but explicitly deferred, remain in eval-authoring scope and defer that later work.
 - If the approved contract artifact conflicts materially with the existing implementation, stop and ask instead of silently choosing one and inventing expected behavior.
 - If the request asks for eval authoring plus contract rewriting or skill implementation in one inseparable pass, stop and ask rather than silently choosing one phase.
+- Do not require auxiliary local authoring refs from the contract phase when the approved brief and implemented package already carry the needed downstream authority.
+- Do not inline large eval suites, fixtures, or generated artifacts in the final response unless the user explicitly requests them; prefer a concise authored-summary that preserves the terminal marker.
 - When authoring an informational `without_skill` baseline, keep it baseline-shaped: it must not impersonate the skill-owned boundary by reproducing terminal markers, invented preconditions, or repo-local stop rules as if the skill were active.
 - Keep the package shallow and self-contained by default.
 - Treat the active Promptfoo-native repo eval boundary under `evals/engines/promptfoo/` as authoritative. Do not recreate removed legacy per-skill eval harness patterns.
@@ -168,6 +175,7 @@ Out of scope:
 - The contract and implementation mostly align but one behavior is materially inconsistent: stop and ask if resolving it would redefine the contract.
 - The request points to an exact contract file path instead of pasting the contract inline: this is valid if the file is authoritative and specific enough.
 - The request identifies exact repo-local paths for the approved contract artifact, existing implementation, and active eval context: treat those as sufficient operational authority and proceed without asking to reconfirm them.
+- The approved contract froze `references/` or `assets/` for durable downstream content: inspect that content from the implemented skill package instead of requiring the original local authoring files.
 - The request says the contract or implementation exists "somewhere in the repo" without identifying it precisely enough to inspect: stop and ask rather than inventing where the authority lives.
 - Runtime work is mentioned but explicitly deferred: remain in eval-authoring scope and defer that later phase.
 - A request asks for eval authoring plus provider, fixture, generated-output, or shared-runner changes in the same pass: stop and ask unless that runtime work is clearly deferred.

@@ -114,9 +114,9 @@ Invalid because `skill.description` must behave like activation metadata for `SK
 
 Invalid because `sourceRefs` must reflect real authority used for the brief, not plausible-but-missing docs such as `docs/contracts/<skill>.md` or target skill paths that do not exist yet.
 
-### Trigger output uses `AGENTS.md` as filler
+### Trigger output preserves auxiliary local refs as handoff authority
 
-Invalid when `AGENTS.md` did not materially shape the contract. `sourceRefs` should list only sources that actually influenced the brief, and it may be `[]` when the contract comes mainly from the user request.
+Invalid when the brief lists repo-local authoring files just because they were inspected upstream. Durable examples, templates, or reference material should be distilled into the brief or routed into `references/` or `assets/` through `authoring.packageShape`.
 
 ### Trigger output missing `authoring.packageShape`
 

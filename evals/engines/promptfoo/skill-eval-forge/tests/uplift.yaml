@@ -212,3 +212,48 @@
         - type: not-icontains
           metric: no_workflow_header
           value: "Workflow:"
+
+- description: uplift-reads-durable-support-from-implemented-package
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
+    case_id: uplift-reads-durable-support-from-implemented-package
+    prompt: >-
+      Author eval coverage for `planner`.
+      Use the approved contract artifact at `notes/planner-brief.json`,
+      the existing implementation at `packs/core/planner/SKILL.md`,
+      and the active eval context under `evals/engines/promptfoo/planner/`.
+      The approved contract froze `references/` for examples and `assets/` for templates.
+      Read that durable support content from the implemented package and do not require the original authoring notes at `notes/planner-authoring-notes.md`.
+      Proceed from those authoritative inputs and stop at the normal completion marker for this phase.
+    expected_stop: Skill eval ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-eval-forge
+    case_bucket: regression
+    expected_stop: Skill eval ready
+  assert:
+    - type: assert-set
+      metric: critical_uplift
+      threshold: 1
+      assert:
+        - type: icontains
+          metric: target_skill
+          value: planner
+        - type: icontains-any
+          metric: durable_support_routing
+          value:
+            - references
+            - assets
+            - implementation
+            - package
+            - support content
+            - support material
+            - frozen references
+            - implemented skill package
+            - durable frozen references
+        - type: not-icontains
+          metric: no_classification_header
+          value: "Classification:"
+        - type: not-icontains
+          metric: no_workflow_header
+          value: "Workflow:"

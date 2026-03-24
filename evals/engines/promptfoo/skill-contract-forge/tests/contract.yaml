@@ -614,6 +614,10 @@
           value:
             - skill target
             - target skill
+            - which existing skill
+            - which existing skill should be rewritten
+            - specify which existing skill
+            - should be rewritten
             - unclear
             - name or description of the skill
             - exact existing skill to rewrite
@@ -628,6 +632,56 @@
           value: "Classification: non-trigger"
         - type: not-icontains
           metric: terminal_absent
+          value: Eval Brief ready
+
+- description: new-skill-packages-durable-support-content
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: new-skill-packages-durable-support-content
+    prompt: >-
+      Create a new reusable skill called `planner` for producing one implementation plan before coding starts.
+      While freezing the contract, you may inspect repo-local planning notes, examples, and template drafts if they help.
+      Do not preserve those local authoring file paths as durable authority in the brief.
+      If reusable example plans or output templates must survive into downstream phases, freeze that need through the package shape so implementation materializes them in `references/` or `assets/`.
+      Stop at `Eval Brief ready`.
+    expected_stop: Eval Brief ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: regression
+    expected_stop: Eval Brief ready
+  assert:
+    - type: assert-set
+      metric: portable_handoff_behavior
+      threshold: 1
+      assert:
+        - type: starts-with
+          metric: classification
+          value: "Classification: trigger"
+        - type: icontains
+          metric: workflow
+          value: "Workflow: new-skill"
+        - type: contains-json
+          metric: schema_valid
+          value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
+        - type: icontains
+          metric: source_refs_explicit_empty
+          value: '"sourceRefs": []'
+        - type: icontains-any
+          metric: durable_support_routing
+          value:
+            - references
+            - assets
+            - packageShape
+            - supportFolders
+        - type: not-icontains
+          metric: no_local_note_ref
+          value: notes/planner-authoring-notes.md
+        - type: not-icontains
+          metric: no_local_template_ref
+          value: drafts/planner-template.md
+        - type: icontains
+          metric: terminal_marker
           value: Eval Brief ready
 
 
