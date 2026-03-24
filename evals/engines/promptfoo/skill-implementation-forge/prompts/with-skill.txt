@@ -4,13 +4,10 @@ Follow the skill contract exactly.
 Keep the work focused on implementation-from-contract for one named target skill.
 Do not widen into contract authoring, downstream eval authoring, or eval/runtime changes.
 If the skill contract requires a specific stopping point, obey it exactly.
-If the primary request is contract authoring or eval authoring instead of implementation-from-contract, respond as non-trigger rather than stop-and-ask.
-If the target skill or approved contract artifact is missing or ambiguous, stop and ask instead of inventing them.
-If a request says an approved contract artifact exists but does not provide an inspectable locator, do not substitute another nearby artifact from prompt context; stop and ask for the exact authority instead.
-Treat the approved contract artifact as authoritative for implementation scope.
-Treat that approved contract artifact as the sole required contractual handoff; do not require auxiliary local authoring refs that were only consulted upstream.
-Preserve conditional rules from the contract instead of flattening them into mandatory inputs or hardcoded repo defaults.
-If the contract freezes durable examples, templates, or long reference content through `authoring.packageShape`, materialize them into the target package rather than relying on upstream local paths.
+If the primary request is clearly out of scope for implementation-from-contract, respond as non-trigger.
+If the request stays inside implementation scope but required authority is missing, ambiguous, conflicting, or under-specified, respond as stop-and-ask instead of inventing it.
+Accept approved contract authority when it is accessible and verifiable in the current working context.
+Treat the approved contract artifact as the authoritative implementation handoff, preserve conditional rules from that contract, and do not substitute nearby prompt context for missing authority.
 If downstream eval work is mentioned but explicitly deferred, remain in implementation scope and defer that later work.
 
 Skill context:

@@ -1,13 +1,13 @@
 [mode:with_skill]
 You are operating with skill context enabled.
 Follow the skill contract exactly.
-Keep the work focused on eval authoring for one named target skill from an approved contract artifact and existing implementation.
-Do not widen into contract authoring, skill implementation, or eval/runtime changes.
-If the target skill, contract authority, or implementation preconditions are missing or ambiguous, stop and ask instead of inventing them.
-Treat the approved contract artifact plus implemented package as the durable downstream authority; do not require auxiliary local authoring refs from earlier phases.
-If the contract froze durable examples, templates, or reference content through `authoring.packageShape`, read that content from the implemented skill package.
-Keep the final response concise enough to reach the terminal marker; summarize authored coverage instead of inlining long eval YAML unless the user explicitly asks for it.
-If runtime work is mentioned but explicitly deferred, remain in eval-authoring scope and defer that later work.
+Keep the work focused on eval authoring or eval refactoring for one named target skill.
+Do not widen into contract authoring, skill implementation, or eval/runtime redesign.
+If the primary request is clearly outside eval authoring for one named implemented skill, respond as non-trigger.
+If the request stays inside eval-authoring scope but required authority is missing, ambiguous, conflicting, or too incomplete, respond as stop-and-ask instead of inventing it.
+Accept approved brief, implemented package, and active eval context authority when they are accessible and verifiable in the current working context.
+Treat the approved brief artifact and implemented package as the authoritative eval-authoring handoff, preserve conditional rules from those authorities, and do not substitute nearby prompt context for missing authority.
+If runtime or implementation work is mentioned but explicitly deferred, remain in eval-authoring scope and defer that later work.
 
 Skill context:
 {{skill_prompt}}

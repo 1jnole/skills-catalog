@@ -1,117 +1,84 @@
+# Acceptance criteria
+# - Baseline responses should remain clearly inferior without impersonating the skill-owned boundary.
+# - Keep baseline plain-prose and avoid skill markers, labels, or repo workflow imitation.
 - description: refactor-existing-skill-from-authoritative-contract
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
     case_id: refactor-existing-skill-from-authoritative-contract
-    prompt: >-
-      Refactor `skill-eval-forge`.
-      Use the approved contract artifact at `openspec/specs/skill-eval-forge/spec.md`.
-      The target skill already exists at `packs/core/skill-eval-forge/SKILL.md`.
-      Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
-      Keep downstream eval authoring and eval/runtime changes out of scope.
-      If you answer without the skill, stay brief and informational rather than outlining implementation steps.
-      Proceed from that authoritative contract input and stop at the normal completion marker for this phase.
+    prompt: Refactor `skill-eval-forge`. Use the approved contract artifact at `openspec/specs/skill-eval-forge/spec.md`. The target skill already exists at `packs/core/skill-eval-forge/SKILL.md`. Those authorities are already available in the current working context, so do not ask to reconfirm them. Keep downstream eval authoring and eval/runtime changes out of scope. If you answer without the skill, stay brief and informational rather than outlining implementation steps. Proceed from that authoritative contract input and stop at the normal completion marker for this phase.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
     skill_name: skill-implementation-forge
     case_bucket: golden
     expected_stop: baseline_only
+    intent_class: baseline
+    authority_mode: materialized
   assert:
-    - type: assert-set
-      metric: baseline_surface
-      threshold: 1
-      assert:
-        - type: not-icontains-any
-          metric: no_skill_owned_terminal_or_boundary
-          value:
-            - Skill implementation ready
-            - implementation ready
-            - follow the skill contract
-            - per the skill-implementation-forge contract
-            - implementation boundary is active
-            - stop-and-ask
-            - stop and ask
-        - type: not-icontains-any
-          metric: no_repo_workflow
-          value:
-            - approach is as follows
-            - step 1
-            - start by
-            - create or update
-            - inspect the contract
-            - review the implementation
+  - type: assert-set
+    metric: baseline_surface
+    threshold: 1
+    assert:
+    - type: not-icontains-any
+      metric: no_skill_owned_terminal_or_boundary
+      value:
+      - Skill implementation ready
+      - follow the skill contract
+      - per the skill-implementation-forge contract
+      - stop-and-ask
+      - stop and ask
 - description: new-skill-artifact-mentioned-only
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
     case_id: new-skill-artifact-mentioned-only
-    prompt: Implement the new skill `skill-eval-forge` from the frozen Eval Brief I mentioned, but I am not including that brief or a repo-local path here.
+    prompt: Implement the new skill `skill-eval-forge` from the frozen Eval Brief I mentioned, but I am not including that brief or any directly accessible authority here.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
     skill_name: skill-implementation-forge
     case_bucket: regression
     expected_stop: baseline_only
+    intent_class: baseline
+    authority_mode: missing
   assert:
-    - type: assert-set
-      metric: baseline_surface
-      threshold: 1
-      assert:
-        - type: icontains-any
-          metric: asks_for_material
-          value:
-            - please provide
-            - please share
-            - exact path
-            - actual brief
-            - actual contract
-            - provide the brief
-            - describe what the skill should do
-        - type: not-icontains-any
-          metric: no_skill_owned_language
-          value:
-            - Skill implementation ready
-            - approved contract artifact
-            - follow the skill contract
-            - per the skill-implementation-forge contract
-            - stop-and-ask
-            - stop and ask
-- description: deictic-target-with-authoritative-contract
+  - type: assert-set
+    metric: baseline_surface
+    threshold: 1
+    assert:
+    - type: not-icontains-any
+      metric: no_skill_owned_language
+      value:
+      - Skill implementation ready
+      - follow the skill contract
+      - per the skill-implementation-forge contract
+      - stop-and-ask
+      - stop and ask
+- description: baseline-does-not-impersonate-deictic-request
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
-    case_id: deictic-target-with-authoritative-contract
-    prompt: >-
-      Implement this skill from the approved contract artifact at `openspec/specs/skill-eval-forge/spec.md`.
-      For this evaluation, treat that repo-local contract artifact as already opened and operationally inspectable authority, and do not ask for the contract again.
-      The only ambiguity left in the request is the deictic target phrase `this skill`, so the missing information is the exact skill name.
-      Stop at the normal completion marker for this phase only if the request is truly in trigger scope.
+    case_id: baseline-does-not-impersonate-deictic-request
+    prompt: Implement this skill from the approved contract artifact at `openspec/specs/skill-eval-forge/spec.md`. For this evaluation, treat that contract artifact as already accessible and verifiable authority in the current working context, and do not ask for the contract again. The only ambiguity left in the request is the deictic target phrase `this skill`, so the missing information is the exact skill name. Stop at the normal completion marker for this phase only if the request is truly in trigger scope.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
     skill_name: skill-implementation-forge
     case_bucket: regression
     expected_stop: baseline_only
+    intent_class: baseline
+    authority_mode: path
   assert:
-    - type: assert-set
-      metric: baseline_surface
-      threshold: 1
-      assert:
-        - type: icontains-any
-          metric: asks_for_target
-          value:
-            - which skill
-            - exact skill
-            - specify the skill
-            - skill name
-        - type: not-icontains-any
-          metric: no_skill_owned_language
-          value:
-            - Skill implementation ready
-            - approved contract artifact
-            - follow the skill contract
-            - per the skill-implementation-forge contract
-            - implementation boundary is active
-            - stop-and-ask
-            - stop and ask
+  - type: assert-set
+    metric: baseline_surface
+    threshold: 1
+    assert:
+    - type: not-icontains-any
+      metric: no_skill_owned_language
+      value:
+      - Skill implementation ready
+      - follow the skill contract
+      - per the skill-implementation-forge contract
+      - stop-and-ask
+      - stop and ask
 - description: eval-authoring-request
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
@@ -123,51 +90,41 @@
     skill_name: skill-implementation-forge
     case_bucket: negative
     expected_stop: baseline_only
+    intent_class: baseline
+    authority_mode: missing
   assert:
-    - type: assert-set
-      metric: baseline_surface
-      threshold: 1
-      assert:
-        - type: not-icontains-any
-          metric: no_skill_owned_language
-          value:
-            - Skill implementation ready
-            - approved contract artifact
-            - follow the skill contract
-            - per the skill-implementation-forge contract
-            - implementation boundary is active
-        - type: not-icontains
-          metric: no_implementation_surface
-          value: SKILL.md
+  - type: assert-set
+    metric: baseline_surface
+    threshold: 1
+    assert:
+    - type: not-icontains-any
+      metric: no_skill_owned_language
+      value:
+      - Skill implementation ready
+      - follow the skill contract
+      - per the skill-implementation-forge contract
 - description: baseline-should-not-impersonate-skill-boundary
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
     case_id: baseline-should-not-impersonate-skill-boundary
-    prompt: Follow the repo-local implementation boundary for `example-skill`, use any local implementation authority you know about, and finish with the skill's normal completion marker.
+    prompt: Follow the implementation boundary for `example-skill`, use any implementation authority you already know about, and finish with the skill's normal completion marker.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
     skill_name: skill-implementation-forge
     case_bucket: regression
     expected_stop: baseline_only
+    intent_class: baseline
+    authority_mode: missing
   assert:
-    - type: assert-set
-      metric: baseline_surface
-      threshold: 1
-      assert:
-        - type: not-icontains-any
-          metric: no_skill_owned_language
-          value:
-            - Skill implementation ready
-            - approved contract artifact
-            - follow the skill contract
-            - per the skill-implementation-forge contract
-            - implementation boundary is active
-            - normal completion marker
-        - type: not-icontains-any
-          metric: no_repo_workflow
-          value:
-            - start by
-            - create or update
-            - inspect the contract
-            - review the implementation
+  - type: assert-set
+    metric: baseline_surface
+    threshold: 1
+    assert:
+    - type: not-icontains-any
+      metric: no_skill_owned_language
+      value:
+      - Skill implementation ready
+      - follow the skill contract
+      - per the skill-implementation-forge contract
+      - normal completion marker

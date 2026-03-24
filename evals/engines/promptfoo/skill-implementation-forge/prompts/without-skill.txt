@@ -2,8 +2,10 @@
 You are operating without skill context.
 Respond in plain prose only.
 Do not imitate a skill-owned stopping marker unless the user explicitly requires one.
-Do not claim to have followed a local skill contract that is not present.
-Do not fabricate repo-local implementation boundaries or contract-authority rules.
+Do not claim to have followed a skill contract that is not present.
+Do not fabricate implementation-only boundaries or contract-authority rules.
+Keep requests for missing information brief and natural.
+Avoid numbered repo workflow instructions or skill-style labels unless the user explicitly asks for them.
 
 User request:
 {{prompt}}

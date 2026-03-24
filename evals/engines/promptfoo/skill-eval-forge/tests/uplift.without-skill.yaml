@@ -1,19 +1,24 @@
+# Acceptance criteria
+# - Measure that the baseline does not impersonate the skill.
+# - Keep the baseline checks focused on terminal markers, skill-owned boundary language, and invented inspectable authority.
+
 - description: author-evals-from-approved-contract-and-implementation
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
     case_id: author-evals-from-approved-contract-and-implementation
     prompt: >-
       Author Promptfoo-native eval coverage for `skill-implementation-forge`.
-      Use the approved contract artifact at `openspec/specs/skill-implementation-forge/spec.md`,
-      the existing implementation at `packs/core/skill-implementation-forge/SKILL.md`,
+      Use the approved brief artifact at `openspec/specs/skill-implementation-forge/spec.md`,
+      the implemented skill package at `packs/core/skill-implementation-forge/SKILL.md`,
       and the active Promptfoo eval context under `evals/engines/promptfoo/skill-implementation-forge/`.
-      Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
-      Proceed from those authoritative inputs and stop at the normal completion marker for this phase.
+      Those authorities are already available now, so proceed from them and stop at the normal completion marker for this phase.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
     skill_name: skill-eval-forge
     case_bucket: golden
+    intent_class: baseline
+    authority_mode: materialized
     expected_stop: baseline_only
   assert:
     - type: assert-set
@@ -24,220 +29,92 @@
           metric: no_skill_owned_terminal_or_boundary
           value:
             - Skill eval ready
-            - approved contract artifact
-            - existing implementation
-            - active eval context
-            - active repo eval boundary
             - follow the skill contract
             - per the skill-eval-forge contract
             - stop and ask
             - stop-and-ask
-- description: contract-discussed-but-not-inspectable
+
+- description: brief-discussed-but-not-accessible
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
-    case_id: contract-discussed-but-not-inspectable
-    prompt: Author eval coverage for `skill-implementation-forge` from the approved contract we discussed earlier, the current implementation, and the current evals.
+    case_id: brief-discussed-but-not-accessible
+    prompt: Author eval coverage for `skill-implementation-forge` from the approved brief we discussed earlier, the current implementation, and the current evals.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
     skill_name: skill-eval-forge
     case_bucket: regression
+    intent_class: baseline
+    authority_mode: discussed_only
     expected_stop: baseline_only
   assert:
     - type: assert-set
       metric: baseline_surface
       threshold: 1
       assert:
-        - type: icontains-any
-          metric: missing_reference_acknowledged
-          value:
-            - not identified
-            - not provided
-            - not directly accessible
-            - not inspectable
-            - cannot directly inspect
-            - concrete reference
-            - exact reference
-        - type: icontains-any
-          metric: user_handoff_requested
-          value:
-            - if you provide
-            - if you can share
-            - if you can provide
-            - share the exact
-            - share the specific
-            - provide the exact
-            - provide the specific
-            - provide the relevant
         - type: not-icontains-any
           metric: no_authority_impersonation
           value:
             - Skill eval ready
-            - approved contract artifact
-            - existing implementation
-            - active eval context
-            - openspec/specs/
-            - packs/core/
-            - evals/engines/promptfoo/
-            - active repo eval boundary
+            - follow the skill contract
+            - per the skill-eval-forge contract
             - stop and ask
             - stop-and-ask
-            - per the skill-eval-forge contract
-            - follow the skill contract
-            - source of truth
-            - governing brief
-            - requirements authority
+
 - description: implementation-mentioned-only
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
     case_id: implementation-mentioned-only
-    prompt: Author eval coverage for `skill-implementation-forge`. Use the contract reference and the current test setup, but the implementation itself is only mentioned indirectly and is not inspectable here.
+    prompt: Author eval coverage for `skill-implementation-forge`. Use the brief reference and the current test setup, but the implementation itself is only mentioned indirectly and is not inspectable here.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
     skill_name: skill-eval-forge
     case_bucket: regression
+    intent_class: baseline
+    authority_mode: partial
     expected_stop: baseline_only
   assert:
     - type: assert-set
       metric: baseline_surface
       threshold: 1
       assert:
-        - type: icontains-any
-          metric: missing_reference_acknowledged
-          value:
-            - not identified
-            - not provided
-            - not directly accessible
-            - not inspectable
-            - cannot directly inspect
-            - exact reference
-            - concrete reference
-            - direct access
-            - implementation details
-        - type: icontains-any
-          metric: user_handoff_requested
-          value:
-            - if you provide
-            - if you can share
-            - if you can provide
-            - share the exact
-            - share the specific
-            - provide the exact
-            - provide the specific
-            - provide the relevant
         - type: not-icontains-any
           metric: no_authority_impersonation
           value:
             - Skill eval ready
-            - approved contract artifact
-            - existing implementation
-            - active eval context
-            - active repo eval boundary
+            - follow the skill contract
+            - per the skill-eval-forge contract
             - stop and ask
             - stop-and-ask
-            - per the skill-eval-forge contract
-            - follow the skill contract
-- description: contract-authority-paraphrased
+
+- description: brief-authority-paraphrased
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
-    case_id: contract-authority-paraphrased
-    prompt: Author eval coverage for `skill-implementation-forge`. A repo-local governing brief is mentioned, but the exact file or path is not inspectable here. The related implementation and setup are also only referred to indirectly.
+    case_id: brief-authority-paraphrased
+    prompt: Author eval coverage for `skill-implementation-forge`. A governing brief is mentioned, but the exact file or reference is not inspectable here. The related implementation and setup are also only referred to indirectly.
     expected_stop: baseline_only
     should_trigger: false
   metadata:
     skill_name: skill-eval-forge
     case_bucket: regression
+    intent_class: baseline
+    authority_mode: paraphrased
     expected_stop: baseline_only
   assert:
     - type: assert-set
       metric: baseline_surface
       threshold: 1
       assert:
-        - type: icontains-any
-          metric: missing_reference_acknowledged
-          value:
-            - not inspectable
-            - not directly accessible
-            - cannot directly inspect
-            - without access to
-            - exact reference
-            - concrete reference
-        - type: icontains-any
-          metric: user_handoff_requested
-          value:
-            - if you provide
-            - if you can share
-            - if you can provide
-            - share the exact
-            - provide the exact
-            - provide the specific
-            - provide the relevant
         - type: not-icontains-any
           metric: no_authority_impersonation
           value:
             - Skill eval ready
-            - approved contract artifact
-            - existing implementation
-            - active eval context
-            - stop and ask
-            - stop-and-ask
-            - active repo eval boundary
             - follow the skill contract
             - per the skill-eval-forge contract
-            - source of truth
-            - requirements authority
-- description: procedure-sequence-paraphrased
-  vars:
-    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
-    case_id: procedure-sequence-paraphrased
-    prompt: Author eval coverage for `skill-implementation-forge`. The concrete repo-local references are not inspectable yet, but a practical sequence for the work keeps being suggested. Keep the answer short and do not turn this into a workflow.
-    expected_stop: baseline_only
-    should_trigger: false
-  metadata:
-    skill_name: skill-eval-forge
-    case_bucket: regression
-    expected_stop: baseline_only
-  assert:
-    - type: assert-set
-      metric: baseline_surface
-      threshold: 1
-      assert:
-        - type: icontains-any
-          metric: missing_reference_acknowledged
-          value:
-            - not inspectable
-            - not directly accessible
-            - cannot directly inspect
-            - exact reference
-            - concrete reference
-        - type: icontains-any
-          metric: user_handoff_requested
-          value:
-            - if you provide
-            - if you can share
-            - if you can provide
-            - share the exact
-            - provide the exact
-            - provide the specific
-            - provide the relevant
-        - type: not-icontains-any
-          metric: no_repo_procedure_impersonation
-          value:
-            - you can proceed
-            - you should proceed
-            - proceed as follows
-            - start by
-            - review the
-            - locate the
-            - create or update
-            - first
-            - then
-            - next
-            - step-by-step
-            - roadmap
-            - playbook
-            - practical sequence
+            - stop and ask
+            - stop-and-ask
+
 - description: baseline-should-not-impersonate-skill-boundary
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
@@ -248,6 +125,8 @@
   metadata:
     skill_name: skill-eval-forge
     case_bucket: regression
+    intent_class: baseline
+    authority_mode: none
     expected_stop: baseline_only
   assert:
     - type: assert-set
@@ -258,11 +137,6 @@
           metric: no_boundary_impersonation
           value:
             - Skill eval ready
-            - approved contract artifact
-            - existing implementation
-            - active eval context
-            - evals/engines/promptfoo/
-            - active repo eval boundary
             - follow the skill contract
             - per the skill-eval-forge contract
             - stop and ask

@@ -1,8 +1,8 @@
 ---
 name: skill-eval-forge
 description: |
-  Use this skill to author or refactor eval coverage for one named skill from an approved contract artifact and existing implementation.
-  Do not use it for contract authoring, skill implementation, or eval/runtime changes.
+  Use this skill to author or refactor eval coverage for one named implemented skill from an approved brief artifact.
+  Do not use it for contract authoring, skill implementation, or eval/runtime redesign.
   Stops at `Skill eval ready`.
 metadata:
   short-description: Author eval coverage for one named implemented skill
@@ -10,126 +10,101 @@ metadata:
 
 # skill-eval-forge
 
-## Purpose
-
-Use this skill to author or refactor eval coverage for one named skill from its approved contract artifact and existing implementation.
-
-This skill owns the eval-authoring phase only. It does not define or rewrite the contract, does not implement the target skill, and does not change eval/runtime architecture.
-
-## Phase objective
-
-The objective of this phase is to author or refactor Promptfoo-native eval coverage for one named implemented skill without redefining the contract or the implementation phase.
+Author or refactor eval coverage for exactly one named implemented skill from an approved brief artifact. This skill owns **phase 3 — eval authoring** only. It does not redefine the contract, implement the skill, or redesign eval/runtime architecture.
 
 ## Use this skill when
 
 Use this skill when:
-- the target skill already has an approved contract artifact
-- the target skill already has an existing implementation
-- the task is to author or refactor eval coverage for that one named skill
-- runtime or broader tooling work, if mentioned, is explicitly deferred
+- the job is to author or refactor eval coverage for exactly one named implemented skill
+- an approved brief artifact and the current implementation of that same skill are available as authority
+- enough active eval context is available to author safely
+- the work can stay inside eval authoring
+- any runtime, provider, or implementation work is explicitly deferred
 
 ## Do not use this skill when
 
 Do not use this skill for:
-- defining, rewriting, or tightening the contract
+- contract authoring, rewriting, or tightening
 - implementing or refactoring the target skill itself
-- redesigning eval/runtime architecture
-- changing providers, fixtures, generated outputs, or shared runner structure
+- eval/runtime architecture changes
+- provider, fixture, generated-output, or shared-runner changes
 - repo-wide policy or unrelated tooling refactors
-- requests that mix eval authoring with contract authoring or implementation in one inseparable pass
+- requests that inseparably mix eval authoring with another phase
 
 ## Inputs
 
 The request must provide:
-- one approved contract artifact for exactly one named target skill, identified specifically enough to inspect as authority
-- an existing implementation of that same target skill, identified specifically enough to inspect as authority
-- enough repo-local eval context to author or refactor coverage without inventing runtime behavior or target behavior
+- one clearly identified target skill
+- one approved brief artifact for that skill
+- the current implementation of that same skill
+- enough active eval context to author or refactor coverage safely
 
-For this skill, an authority is inspectable only when it is concretely resolvable, such as:
-- an exact repo-local path
-- a `file://...` reference
-- another uniquely identified artifact that can be opened without interpretive searching
+For this phase, those authorities must be **accessible and verifiable in the current working context**. Valid forms can include:
+- brief content pasted inline
+- uploaded or attached artifacts
+- an implemented skill package already materialized in the working files
+- active eval files or suites already materialized in the working files
+- a concretely resolvable artifact reference available to the current tools
 
-These references are not inspectable authority on their own:
-- `the approved contract`
-- `the frozen brief`
+Do **not** require an exact repo-local path or `file://` reference as a universal precondition. Those are valid transport forms when available, not mandatory ones.
+
+These are not sufficient authority on their own:
+- `the approved brief`
 - `the current implementation`
 - `the current evals`
-- other conversational references that still require the model to infer where authority lives
+- `this skill`
+- `this suite`
+- `the next skill`
+- any other conversational pointer that still requires guessing where authority lives
 
-Useful supporting inputs may include:
-- active Promptfoo-native suite files under the active repo eval boundary in `evals/engines/promptfoo/`
-- repository source-of-truth context when available:
-  - `README.md`
-  - `AGENTS.md`
-  - `packs/core/skill-contract-forge/SKILL.md`
-  - `packs/core/skill-implementation-forge/SKILL.md`
+If any required authority is only mentioned, not actually accessible, stop and ask. Do not substitute guessed repo paths, nearby forge files, or inferred defaults as missing authority.
 
-Those materials may help interpretation, but the required downstream authorities remain the approved contract artifact, the existing implementation, and the active eval context. Do not require auxiliary local authoring refs from earlier phases when the brief and implementation already carry the needed behavior.
+Treat the approved brief artifact and implemented skill package as the durable downstream handoff from earlier phases. Do not require upstream local authoring refs when the brief and implementation already carry the needed downstream authority.
+
+If the approved brief artifact froze durable examples, templates, or long reference material through `authoring.packageShape`, inspect that material from the implemented package when it has been materialized there.
+
+In this repository, when repo context exists, treat the active Promptfoo-native boundary under `evals/engines/promptfoo/` as authoritative for repo eval work.
 
 ## Outputs
 
 Produce:
-- Promptfoo-native eval suite additions or edits for exactly one named skill
-- only the files required to author or refactor that eval coverage within the active repo eval boundary under `evals/engines/promptfoo/`
-- nearby support files only when they are materially necessary to explain the eval-authoring workflow
-- when authoring informational baseline surfaces, keep them clearly baseline-only and do not let them impersonate the skill-owned eval boundary
-- a concise completion response that names the authorities used and the key coverage added, without inlining large eval YAML or other long generated artifacts unless the user explicitly asks for them
+- Promptfoo-native eval additions or edits for exactly one named skill
+- only the files required to author or refactor that coverage inside the active repo eval boundary
+- informational baseline surfaces only when they remain clearly baseline-only and do not impersonate the skill-owned boundary
+- a concise completion response that names the authorities used and the key coverage added, without inlining large eval YAML or generated artifacts unless the user explicitly asks for them
 
 The exact terminal marker is:
 
 `Skill eval ready`
 
-`skill-eval-forge` keeps its own response boundary. It does not adopt `Classification:` or `Workflow:` response headers unless a future `skill-eval-forge` contract explicitly requires them.
-
 Use `Skill eval ready` only for valid trigger-path completion. Do not end `non-trigger` or `stop-and-ask` responses with that marker.
+
+`skill-eval-forge` keeps its own response boundary. It does not adopt `Classification:` or `Workflow:` headers unless its own contract changes in a future slug.
 
 ## Routing precedence
 
-Use `non-trigger` when the primary job is no longer eval authoring for one named skill, even if evals are mentioned secondarily.
+Use `non-trigger` when the primary job is no longer one-skill eval authoring, even if evals are mentioned secondarily.
 
-When a request is `non-trigger`, respond briefly as `non-trigger` or with a short out-of-scope explanation. Do not relabel that response as `stop-and-ask`, and do not ask for missing eval-authoring authorities in place of the routing decision.
+Use `stop-and-ask` when the core job is still one-skill eval authoring, but a material precondition is missing, conflicting, or too incomplete to continue safely.
 
-Implementation-first requests remain `non-trigger` even when they mention an approved contract artifact, because the primary job is still skill implementation rather than eval authoring. Respond as `non-trigger`, not as `stop-and-ask`.
-
-If a request explicitly combines eval authoring with contract rewriting or skill implementation in one inseparable pass, route it as `stop-and-ask` even when the sentence starts with `rewrite` or `implement`, because the work can only continue safely after the phases are separated.
-
-Use `stop-and-ask` when the primary job is still eval authoring for one named skill, but a material authority is missing, conflicting, or mixed with separable widening that prevents safe continuation.
-
-## Stop-and-ask conditions
-
-Stop and ask when:
-- the approved contract artifact is missing or only vaguely described
-- the target skill implementation is missing or only vaguely described
-- the target skill is not clearly identified
-- the contract artifact and implementation describe materially conflicting behavior that cannot be resolved without redefining the contract
-- the request mixes eval authoring with contract authoring in one inseparable pass
-- the request mixes eval authoring with skill implementation in one inseparable pass
-- the request widens into eval/runtime redesign or shared infrastructure work, including providers, fixtures, generated outputs, or shared runner structure
-- the available eval context is too incomplete to author coverage safely without inventing behavior
-
-These prompts are insufficient on their own:
-- `write evals for this skill`
-- `fix the current evals`
-- `cover the next skill`
-- `update this suite`
-
-Requests like these are `non-trigger`, not `stop-and-ask`, because eval authoring is no longer the primary job:
-- `define the contract for a new skill first`
-- `implement the skill from its approved contract artifact`
-- `redesign the shared eval runner`
-- `change provider wiring and fixture strategy`
+Return `stop-and-ask` when:
+- the target skill is not explicit
+- the approved brief artifact is only mentioned, not accessible as authority
+- the implementation is only mentioned, not accessible as authority
+- the active eval context is too incomplete to author safely
+- the approved brief artifact and implementation conflict materially
+- the request mixes phases in one inseparable pass
 
 ## Procedure
 
-1. Confirm that the task is eval authoring for one named skill whose contract and implementation already exist.
-2. Inspect the approved contract artifact and the current target skill implementation.
-3. Inspect the active Promptfoo-native eval context needed for that skill under `evals/engines/promptfoo/`.
-4. If the approved contract froze durable examples, templates, or reference content through `authoring.packageShape`, inspect that content from the implemented skill package rather than from upstream local authoring notes.
-5. Author or refactor Promptfoo-native eval coverage only for that one named skill.
-6. Keep the resulting eval work aligned with the approved contract artifact and existing implementation.
-7. Before finalizing, check that the authored coverage still aligns with one named target skill, its approved contract artifact, and its existing implementation.
-8. Keep the final response compact enough to reliably include the exact terminal marker. Summarize authored files and coverage instead of inlining large eval definitions unless the user explicitly asks for them.
+1. Confirm that the job is eval authoring or refactor for exactly one named implemented skill.
+2. Confirm that the approved brief artifact, implementation, and active eval context are accessible and verifiable in the current working context.
+3. Inspect the approved brief artifact, the implemented skill, and the active eval context.
+4. If durable examples, templates, or long references were frozen through `authoring.packageShape` and materialized in the package, inspect those package copies instead of upstream local authoring notes.
+5. Author or refactor Promptfoo-native coverage only for that one named skill inside the active eval boundary.
+6. If informational `without_skill` baselines are present or requested, keep them baseline-only and clearly separate from trigger-path behavior.
+7. Before finalizing, verify that the authored coverage still aligns with one named skill, one approved brief artifact, the current implementation, and the active eval context, without widening into runtime or repo-wide work.
+8. Keep the final response compact enough to reliably include the exact terminal marker.
 9. Stop at the exact terminal marker `Skill eval ready`.
 
 ## Guardrails
@@ -139,45 +114,17 @@ Requests like these are `non-trigger`, not `stop-and-ask`, because eval authorin
 - Do not change eval/runtime architecture, providers, fixtures, generated outputs, or shared runner structure.
 - Do not widen into repo-wide policy changes or unrelated tooling refactors.
 - Do not infer a missing target skill from deictic phrases such as `this skill`, `the current skill`, `the next skill`, or `this suite`.
-- If runtime work is mentioned but explicitly deferred, remain in eval-authoring scope and defer that later work.
-- If the approved contract artifact conflicts materially with the existing implementation, stop and ask instead of silently choosing one and inventing expected behavior.
-- If the request asks for eval authoring plus contract rewriting or skill implementation in one inseparable pass, stop and ask rather than silently choosing one phase.
-- Do not require auxiliary local authoring refs from the contract phase when the approved brief and implemented package already carry the needed downstream authority.
-- Do not inline large eval suites, fixtures, or generated artifacts in the final response unless the user explicitly requests them; prefer a concise authored-summary that preserves the terminal marker.
-- When authoring an informational `without_skill` baseline, keep it baseline-shaped: it must not impersonate the skill-owned boundary by reproducing terminal markers, invented preconditions, or repo-local stop rules as if the skill were active.
+- If runtime or implementation work is mentioned but explicitly deferred, remain in eval-authoring scope and defer that later work.
+- If the approved brief artifact conflicts materially with the implementation, stop and ask instead of silently choosing one and inventing expected behavior.
+- Do not require upstream local authoring refs when the approved brief artifact and implemented package already carry the needed downstream authority.
+- Do not inline large eval suites, fixtures, or generated artifacts in the final response unless the user explicitly requests them.
+- Do not let an informational `without_skill` baseline reproduce trigger-path closures, invented preconditions, or repo-local stop rules as if the skill were active.
+- Treat the active Promptfoo-native repo eval boundary as authoritative when it exists. Do not recreate removed legacy per-skill eval harness patterns.
 - Keep the package shallow and self-contained by default.
-- Treat the active Promptfoo-native repo eval boundary under `evals/engines/promptfoo/` as authoritative. Do not recreate removed legacy per-skill eval harness patterns.
-- Do not copy the response envelope of `skill-contract-forge`; this skill does not require `Classification:` or `Workflow:` headers unless its own contract changes in a future slug.
 
-## Examples
+## References
 
-In scope:
-- “Author evals for `skill-implementation-forge` from its approved contract artifact and existing implementation, then stop at `Skill eval ready`.”
-- “Refactor Promptfoo-native eval coverage for one named skill without changing the runtime.”
-- “The skill already exists; add or tighten coverage for that skill only.”
-
-Stop and ask:
-- “Write evals for this skill.”
-- “Author evals and also rewrite the contract.”
-- “Rewrite the contract and add evals in one pass.”
-- “Add evals and also update providers, fixtures, generated outputs, or the shared runner.”
-- “Add coverage for `example-skill`,” where the contract and implementation disagree about expected behavior.
-
-Out of scope:
-- “Define the contract for a new skill first.”
-- “Implement the skill and then add evals.”
-- “Redesign the eval/runtime architecture while updating eval coverage.”
-
-## Edge cases
-
-- The approved contract artifact exists but the target skill implementation does not: stop and ask rather than inventing eval expectations.
-- The existing implementation exists but the approved contract artifact does not: stop and ask rather than treating implementation drift as authority.
-- The contract and implementation mostly align but one behavior is materially inconsistent: stop and ask if resolving it would redefine the contract.
-- The request points to an exact contract file path instead of pasting the contract inline: this is valid if the file is authoritative and specific enough.
-- The request identifies exact repo-local paths for the approved contract artifact, existing implementation, and active eval context: treat those as sufficient operational authority and proceed without asking to reconfirm them.
-- The approved contract froze `references/` or `assets/` for durable downstream content: inspect that content from the implemented skill package instead of requiring the original local authoring files.
-- The request says the contract or implementation exists "somewhere in the repo" without identifying it precisely enough to inspect: stop and ask rather than inventing where the authority lives.
-- Runtime work is mentioned but explicitly deferred: remain in eval-authoring scope and defer that later phase.
-- A request asks for eval authoring plus provider, fixture, generated-output, or shared-runner changes in the same pass: stop and ask unless that runtime work is clearly deferred.
-- A baseline comparison surface is being authored: keep it informative, but do not let it imitate the active skill-owned boundary.
-- The skill needs no nearby support files: keep the eval skill self-contained in `SKILL.md`.
+Consult these only when needed:
+- `references/routing.md` for routing boundaries and trigger/stop distinctions
+- `references/edge-cases.md` for authority, baseline, and package-boundary edge cases
+- `references/examples.md` for concise trigger, stop-and-ask, and non-trigger examples

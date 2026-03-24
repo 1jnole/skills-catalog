@@ -1,19 +1,25 @@
+# Acceptance criteria
+# - Keep uplift representative and lighter than contract coverage.
+# - Measure improvement with the skill active without re-litigating every contractual edge.
+
 - description: author-evals-from-approved-contract-and-implementation
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
     case_id: author-evals-from-approved-contract-and-implementation
     prompt: >-
       Author Promptfoo-native eval coverage for `skill-implementation-forge`.
-      Use the approved contract artifact at `openspec/specs/skill-implementation-forge/spec.md`,
-      the existing implementation at `packs/core/skill-implementation-forge/SKILL.md`,
+      Use the approved brief artifact at `openspec/specs/skill-implementation-forge/spec.md`,
+      the implemented skill package at `packs/core/skill-implementation-forge/SKILL.md`,
       and the active Promptfoo eval context under `evals/engines/promptfoo/skill-implementation-forge/`.
-      Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
-      Proceed from those authoritative inputs and stop at the normal completion marker for this phase.
+      Those authorities are already accessible and verifiable in the current working context.
+      Proceed from them and stop at the normal completion marker for this phase.
     expected_stop: Skill eval ready
     should_trigger: true
   metadata:
     skill_name: skill-eval-forge
     case_bucket: golden
+    intent_class: trigger
+    authority_mode: materialized
     expected_stop: Skill eval ready
   assert:
     - type: assert-set
@@ -32,22 +38,25 @@
         - type: not-icontains
           metric: no_workflow_header
           value: "Workflow:"
+
 - description: refactor-existing-eval-coverage
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
     case_id: refactor-existing-eval-coverage
     prompt: >-
       Refactor Promptfoo-native eval coverage for `skill-eval-forge`.
-      Use the approved contract artifact at `openspec/specs/skill-eval-forge/spec.md`,
-      the existing implementation at `packs/core/skill-eval-forge/SKILL.md`,
+      Use the approved brief artifact at `openspec/specs/skill-eval-forge/spec.md`,
+      the implemented skill package at `packs/core/skill-eval-forge/SKILL.md`,
       and the active Promptfoo eval context under `evals/engines/promptfoo/skill-eval-forge/`.
-      Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
-      Keep the shared runtime unchanged, proceed from those authoritative inputs, and stop at the normal completion marker for this phase.
+      Those authorities are already accessible and verifiable in the current working context.
+      Keep shared runtime behavior unchanged and stop at the normal completion marker for this phase.
     expected_stop: Skill eval ready
     should_trigger: true
   metadata:
     skill_name: skill-eval-forge
     case_bucket: golden
+    intent_class: trigger
+    authority_mode: materialized
     expected_stop: Skill eval ready
   assert:
     - type: assert-set
@@ -66,61 +75,19 @@
         - type: not-icontains
           metric: no_workflow_header
           value: "Workflow:"
-- description: implementation-request
+
+- description: brief-discussed-but-not-accessible
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
-    case_id: implementation-request
-    prompt: Implement `example-skill` from its approved contract artifact.
-    expected_stop: do_not_trigger
-    should_trigger: false
-  metadata:
-    skill_name: skill-eval-forge
-    case_bucket: negative
-    expected_stop: do_not_trigger
-  assert:
-    - type: assert-set
-      metric: non_trigger_behavior
-      threshold: 1
-      assert:
-        - type: icontains-any
-          metric: non_trigger_marker
-          value:
-            - non-trigger
-            - out of scope
-            - outside the scope
-            - does not cover
-        - type: not-icontains-any
-          metric: no_clarification_handoff
-          value:
-            - clarify
-            - please provide
-            - please specify
-            - if you provide
-            - if you can share
-            - if you can provide
-            - share the exact
-            - provide the exact
-            - repo-local path
-            - exact path
-            - inspectable
-        - type: not-icontains-any
-          metric: not_stop_and_ask_label
-          value:
-            - stop and ask
-            - stop-and-ask
-        - type: not-icontains
-          metric: terminal_absent
-          value: Skill eval ready
-- description: contract-discussed-but-not-inspectable
-  vars:
-    skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
-    case_id: contract-discussed-but-not-inspectable
-    prompt: Author eval coverage for `skill-implementation-forge` from the approved contract we discussed earlier, the current implementation, and the current evals.
+    case_id: brief-discussed-but-not-accessible
+    prompt: Author eval coverage for `skill-implementation-forge` from the approved brief we discussed earlier, the current implementation, and the current evals.
     expected_stop: stop_and_ask
     should_trigger: false
   metadata:
     skill_name: skill-eval-forge
     case_bucket: regression
+    intent_class: stop_and_ask
+    authority_mode: discussed_only
     expected_stop: stop_and_ask
   assert:
     - type: assert-set
@@ -133,19 +100,17 @@
             - clarify
             - please provide
             - please specify
-            - need
         - type: icontains-any
-          metric: inspectable_authority_reason
+          metric: authority_reason
           value:
-            - exact path
-            - repo-local path
-            - inspect
-            - inspectable
-            - authoritative path
-            - concrete reference
+            - brief
+            - not accessible
+            - not inspectable
+            - exact reference
         - type: not-icontains
           metric: terminal_absent
           value: Skill eval ready
+
 - description: mixed-implementation-and-eval-request
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
@@ -156,6 +121,8 @@
   metadata:
     skill_name: skill-eval-forge
     case_bucket: regression
+    intent_class: stop_and_ask
+    authority_mode: mixed
     expected_stop: stop_and_ask
   assert:
     - type: assert-set
@@ -168,35 +135,36 @@
             - clarify
             - please provide
             - please specify
-            - need
             - please separate
             - separate
         - type: icontains-any
           metric: mixed_phase_reason
           value:
-            - implement
             - implementation
             - inseparable
             - mixed
         - type: not-icontains
           metric: terminal_absent
           value: Skill eval ready
+
 - description: classification-envelope-drift
   vars:
     skill_prompt: file://../../../../packs/core/skill-eval-forge/SKILL.md
     case_id: classification-envelope-drift
     prompt: >-
       Author eval coverage for `skill-eval-forge`.
-      Use the approved contract artifact at `openspec/specs/skill-eval-forge/spec.md`,
-      the existing implementation at `packs/core/skill-eval-forge/SKILL.md`,
-      and the active eval context under `evals/engines/promptfoo/skill-eval-forge/`.
-      Those repo-local inputs are already confirmed and available now, so do not ask to reconfirm them.
-      Do not copy `Classification:` or `Workflow:` lines from skill-contract-forge, and stop at the normal completion marker for this phase.
+      Use the approved brief artifact at `openspec/specs/skill-eval-forge/spec.md`,
+      the implemented skill package at `packs/core/skill-eval-forge/SKILL.md`,
+      and the active Promptfoo eval context under `evals/engines/promptfoo/skill-eval-forge/`.
+      Those authorities are already accessible and verifiable in the current working context.
+      Do not copy `Classification:` or `Workflow:` lines, and stop at the normal completion marker for this phase.
     expected_stop: Skill eval ready
     should_trigger: true
   metadata:
     skill_name: skill-eval-forge
     case_bucket: regression
+    intent_class: trigger
+    authority_mode: materialized
     expected_stop: Skill eval ready
   assert:
     - type: assert-set
@@ -219,17 +187,20 @@
     case_id: uplift-reads-durable-support-from-implemented-package
     prompt: >-
       Author eval coverage for `planner`.
-      Use the approved contract artifact at `notes/planner-brief.json`,
-      the existing implementation at `packs/core/planner/SKILL.md`,
-      and the active eval context under `evals/engines/promptfoo/planner/`.
-      The approved contract froze `references/` for examples and `assets/` for templates.
+      Use the approved brief artifact at `notes/planner-brief.json`,
+      the implemented skill package at `packs/core/planner/SKILL.md`,
+      and the active Promptfoo eval context under `evals/engines/promptfoo/planner/`.
+      The approved brief froze `references/` for examples and `assets/` for templates.
       Read that durable support content from the implemented package and do not require the original authoring notes at `notes/planner-authoring-notes.md`.
-      Proceed from those authoritative inputs and stop at the normal completion marker for this phase.
+      Proceed from those authorities and stop at the normal completion marker for this phase.
     expected_stop: Skill eval ready
     should_trigger: true
   metadata:
     skill_name: skill-eval-forge
     case_bucket: regression
+    intent_class: trigger
+    authority_mode: materialized
+    shape_mode: frozen_support_material
     expected_stop: Skill eval ready
   assert:
     - type: assert-set
@@ -248,9 +219,7 @@
             - package
             - support content
             - support material
-            - frozen references
             - implemented skill package
-            - durable frozen references
         - type: not-icontains
           metric: no_classification_header
           value: "Classification:"

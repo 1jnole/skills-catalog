@@ -55,13 +55,27 @@ Entrypoint roles:
 - `promptfooconfig.uplift.with-skill.yaml` = comparative uplift gate for `with_skill`
 - `promptfooconfig.uplift.without-skill.yaml` = informational baseline for `without_skill`
 
+Suite responsibilities:
+- `tests/contract.yaml` carries the normative contract boundary for the family
+- `tests/uplift.yaml` demonstrates comparative improvement with the skill active and should stay lighter than `contract`
+- `tests/uplift.without-skill.yaml` is baseline-only and should measure non-impersonation rather than trigger-path correctness
+
+## Suite maintenance checklist
+Use this checklist when editing Promptfoo family prompts or tests:
+- treat the target skill's `SKILL.md` as the source of truth; helper prompts and YAML suites should translate that contract, not replace it
+- keep `prompts/with-skill.txt` as harness guidance; do not let it become a second contract with narrower or broader routing rules
+- preserve distinct suite roles: `contract` for normative boundary checks, `uplift` for lighter comparative improvement, and `uplift.without-skill` for baseline non-impersonation only
+- prefer small structural assertions over long wording lists; rely first on terminal markers, routing boundary, and the primary stop reason
+- protect routing edge cases when simplifying YAML, especially deictic target, authority-mentioned-only, mixed-phase requests, conflicting authority, and baseline impersonation guards
+- run `promptfoo validate -c evals/engines/promptfoo/<skill-name>/promptfooconfig*.yaml` after meaningful family edits
+
 ## Family support matrix
 
 | Family | Baseline shape | Validate | Live run | Offline replay | Public npm surface | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
 | `skill-contract-forge` | yes | yes | yes | yes | yes | canonical public contract surface |
-| `skill-implementation-forge` | yes | yes | yes | no | no | family-specific work uses direct-config execution; current coverage includes package-shape behavior and `agents` without interface regression checks |
-| `skill-eval-forge` | yes | yes | yes | no | no | family-specific work uses direct-config execution |
+| `skill-implementation-forge` | yes | yes | yes | no | no | family-specific work uses direct-config execution; current coverage includes accessible-authority forms, package-shape behavior, legacy package-shape fallback, and `agents` interface regression checks |
+| `skill-eval-forge` | yes | yes | yes | no | no | family-specific work uses direct-config execution; current coverage includes authority-form routing, mixed-phase routing, and baseline non-impersonation |
 
 Support status is the declared Phase A support model. Final closure still requires local validation and execution evidence.
 
@@ -84,6 +98,7 @@ Phase A does not require model-graded assertions as part of the baseline.
 - refresh fixtures only after live behavior is acceptable
 - the public offline replay writes a dedicated `*.offline.eval.json` artifact and must not overwrite a `*.live.eval.json` report
 - `without_skill` remains an informational baseline rather than a closure gate
+- `without_skill` should stay focused on non-impersonation of skill-owned markers and boundary language, not on reproducing trigger-path routing
 
 Existing maintained fixtures:
 - `evals/engines/promptfoo/fixtures/skill-contract-forge.contract.model-outputs.json`
@@ -122,6 +137,12 @@ For `skill-implementation-forge`, the maintained family also currently covers:
 - approved contracts that freeze `authoring.packageShape`
 - legacy approved contracts that omit `packageShape` and therefore require a conservative `SKILL.md`-only fallback
 - `agents` package-shape requests that omit `authoring.interface`, which must stay `stop-and-ask`
+
+For `skill-eval-forge`, the maintained family also currently covers:
+- approved brief + implementation + active eval context as the eval-authoring authority set
+- implementation/eval and contract/eval mixed-phase requests that remain `stop-and-ask`
+- explicitly deferred adjacent runtime work that remains in eval scope
+- baseline non-impersonation of `Skill eval ready` and skill-owned boundary language
 
 ## Operational authority
 - `evals/contracts/promptfoo-family-baseline.md` defines the minimum family contract
