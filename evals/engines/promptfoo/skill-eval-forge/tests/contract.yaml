@@ -30,6 +30,9 @@
         - type: icontains
           metric: target_skill
           value: skill-implementation-forge
+        - type: icontains
+          metric: trigger_header
+          value: "Result: trigger"
         - type: icontains-any
           metric: authority_surface
           value:
@@ -138,6 +141,7 @@
         - type: icontains-any
           metric: stop_marker
           value:
+            - "Result: stop-and-ask"
             - stop-and-ask
             - separate
             - separate phase
@@ -215,6 +219,7 @@
         - type: icontains-any
           metric: non_trigger_marker
           value:
+            - "Result: non-trigger"
             - non-trigger
             - out of scope
             - does not cover
@@ -585,6 +590,9 @@
         - type: icontains
           metric: terminal_marker
           value: Skill eval ready
+        - type: icontains
+          metric: trigger_header
+          value: "Result: trigger"
         - type: not-icontains
           metric: no_classification_header
           value: "Classification:"

@@ -152,11 +152,13 @@
           metric: classification
           value: "Classification: non-trigger"
         - type: icontains-any
-          metric: out_of_scope_marker
+          metric: boundary_marker
           value:
             - Out of scope for skill-contract-forge.
             - outside the scope
             - out of scope
+            - outside the contract authoring scope
+            - outside the contract authoring phase
         - type: icontains-any
           metric: reason_marker
           value:
@@ -199,9 +201,9 @@
         - type: icontains-any
           metric: ambiguity_shape
           value:
-            - multiple workflows
-            - multiple independent workflows
-            - multiple major workflows
+            - workflow
+            - scope
+            - pass
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -231,22 +233,10 @@
           metric: classification
           value: "Classification: stop-and-ask"
         - type: icontains-any
-          metric: stop_marker
+          metric: missing_target_anchor
           value:
-            - lacks identification
-            - specify the exact target
-            - identify the target skill
-            - missing target skill
-        - type: icontains-any
-          metric: ambiguity_reason
-          value:
-            - skill target
             - target skill
-            - unclear
-            - name or description of the skill
-            - existing skill name
-            - exact existing skill name
-            - which existing skill
+            - existing skill
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -276,21 +266,10 @@
           metric: classification
           value: "Classification: stop-and-ask"
         - type: icontains-any
-          metric: stop_marker
+          metric: missing_target_anchor
           value:
-            - lacks identification
-            - identify the target skill
-            - missing target skill
-            - specify which existing skill
-        - type: icontains-any
-          metric: ambiguity_reason
-          value:
-            - skill target
             - target skill
-            - unclear
-            - name or description of the skill
-            - existing skill name
-            - exact existing skill name
+            - existing skill
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"

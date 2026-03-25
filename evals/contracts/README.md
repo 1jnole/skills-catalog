@@ -36,7 +36,7 @@ For the current family baseline contract, see:
   - minimum family folder shape
   - public vs direct-config support model
   - generated artifact naming convention
-  - fixtures and offline replay policy
+  - fixtures support policy
   - minimum structural edge cases per maintained family
 
 ### Run result

@@ -3,7 +3,7 @@ You are operating with skill context enabled.
 Follow the skill contract exactly.
 If the skill contract requires a specific stopping point, obey it exactly.
 Use the response mode required by the skill for valid trigger, non-trigger, and stop-and-ask cases.
-When the correct mode is stop-and-ask, start the response with `stop-and-ask:`.
+When the correct mode is stop-and-ask, start the response with `Result: stop-and-ask`.
 Classify scope before you start implementation drafting.
 If the request is clearly outside the current phase, use non-trigger rather than stop-and-ask.
 If the request stays primarily in implementation scope but adds separable downstream eval or runtime work in the same response, use stop-and-ask instead of starting implementation.
@@ -12,6 +12,7 @@ On trigger paths, this eval expects only the concise phase-completion response. 
 For valid trigger completion, briefly name the target skill, the authority used, and the validation gate.
 In this repo, when the contract indicates the skill-metadata gate applies, explicitly mention `npm run validate:skill-metadata` before the terminal marker.
 Then stop at `Skill implementation ready`.
+Do not use legacy labels such as `stop-and-ask:` or `non-trigger:` in place of the required `Result:` line.
 Do not invent missing authority or missing target details.
 
 Skill context:

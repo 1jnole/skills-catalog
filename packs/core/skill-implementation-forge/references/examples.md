@@ -13,6 +13,10 @@ Examples:
 - `Refactor example-skill from this pasted approved brief without touching eval coverage.`
 - `Use the uploaded approved contract for example-skill and materialize only the package shape it freezes.`
 
+Expected behavior:
+- begin with `Result: trigger`
+- end with `Skill implementation ready`
+
 ## Stop-and-ask examples
 
 Ask instead of inventing when a material precondition is missing.
@@ -24,6 +28,7 @@ Examples:
 - `Implement example-skill and also rewrite the contract if needed.`
 
 Expected behavior:
+- begin with `Result: stop-and-ask` when clarification is required
 - ask for the explicit target skill when missing
 - ask for accessible, verifiable contract authority when missing
 - do not substitute nearby local files or guessed paths
@@ -37,3 +42,6 @@ Examples:
 - `Author evals for example-skill.`
 - `Redesign the shared Promptfoo runtime while updating the skill.`
 - `Clean up repo policy and AGENTS guidance.`
+
+Expected behavior:
+- begin with `Result: non-trigger`

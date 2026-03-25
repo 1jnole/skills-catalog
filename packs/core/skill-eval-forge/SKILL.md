@@ -1,11 +1,12 @@
 ---
 name: skill-eval-forge
 description: |
-  Use this skill to author or refactor eval coverage for one named implemented skill from an approved brief artifact.
-  Do not use it for contract authoring, skill implementation, or eval/runtime redesign.
+  Authors or refactors eval coverage for one named implemented skill from an approved brief artifact.
+  Use when the task is eval authoring for a single implemented skill with approved brief authority.
+  Do not use for contract authoring, skill implementation, or eval/runtime redesign.
   Stops at `Skill eval ready`.
 metadata:
-  short-description: Author eval coverage for one named implemented skill
+  short-description: Authors eval coverage for one named implemented skill
 ---
 
 # skill-eval-forge
@@ -79,7 +80,47 @@ The exact terminal marker is:
 
 Use `Skill eval ready` only for valid trigger-path completion. Do not end `non-trigger` or `stop-and-ask` responses with that marker.
 
-`skill-eval-forge` keeps its own response boundary. It does not adopt `Classification:` or `Workflow:` headers unless its own contract changes in a future slug.
+## Required response format
+
+Use the exact response envelope below.
+
+### Trigger path
+
+Line 1 must be exactly:
+
+`Result: trigger`
+
+Then give the concise eval-authoring response.
+
+The final line must be exactly:
+
+`Skill eval ready`
+
+### Non-trigger path
+
+Line 1 must be exactly:
+
+`Result: non-trigger`
+
+Then explain briefly why the request is outside one-skill eval-authoring scope.
+
+Do not end with `Skill eval ready`.
+
+### Stop-and-ask path
+
+Line 1 must be exactly:
+
+`Result: stop-and-ask`
+
+Then ask only for the missing clarification needed to continue safely.
+
+Do not end with `Skill eval ready`.
+
+### Format guardrails
+
+- Do not replace the required `Result:` line with `Classification:` or `Workflow:` headers.
+- Do not prepend commentary, bullets, or explanation before the required `Result:` line.
+- Keep the response compact enough to preserve the exact terminal marker on trigger paths.
 
 ## Routing precedence
 
@@ -104,8 +145,9 @@ Return `stop-and-ask` when:
 5. Author or refactor Promptfoo-native coverage only for that one named skill inside the active eval boundary.
 6. If informational `without_skill` baselines are present or requested, keep them baseline-only and clearly separate from trigger-path behavior.
 7. Before finalizing, verify that the authored coverage still aligns with one named skill, one approved brief artifact, the current implementation, and the active eval context, without widening into runtime or repo-wide work.
-8. Keep the final response compact enough to reliably include the exact terminal marker.
-9. Stop at the exact terminal marker `Skill eval ready`.
+8. Start the response with the exact `Result:` line for the routed path.
+9. Keep the final response compact enough to reliably include the exact terminal marker.
+10. On trigger paths, stop at the exact terminal marker `Skill eval ready`.
 
 ## Guardrails
 
@@ -116,6 +158,7 @@ Return `stop-and-ask` when:
 - Do not infer a missing target skill from deictic phrases such as `this skill`, `the current skill`, `the next skill`, or `this suite`.
 - If runtime or implementation work is mentioned but explicitly deferred, remain in eval-authoring scope and defer that later work.
 - If the approved brief artifact conflicts materially with the implementation, stop and ask instead of silently choosing one and inventing expected behavior.
+- Do not use `Classification:` or `Workflow:` headers for this skill's response boundary.
 - Do not require upstream local authoring refs when the approved brief artifact and implemented package already carry the needed downstream authority.
 - Do not inline large eval suites, fixtures, or generated artifacts in the final response unless the user explicitly requests them.
 - Do not let an informational `without_skill` baseline reproduce trigger-path closures, invented preconditions, or repo-local stop rules as if the skill were active.

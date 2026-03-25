@@ -1,7 +1,7 @@
 # skill-contract-forge-eval-coverage-hardening Specification
 
 ## Purpose
-Harden `skill-contract-forge` evaluation coverage around the highest-signal routing and payload failures while keeping offline fixtures subordinate to live Promptfoo runtime truth.
+Harden `skill-contract-forge` evaluation coverage around the highest-signal routing and payload failures while keeping maintained fixture snapshots subordinate to live Promptfoo runtime truth.
 ## Requirements
 ### Requirement: Trigger cases require schema-backed Eval Brief payloads
 Trigger cases in the supported `skill-contract-forge` runtime MUST require embedded JSON that satisfies the supported Eval Brief schema, including the repo-required skill metadata and package-shape authority frozen by trigger-path briefs.
@@ -47,29 +47,32 @@ The supported hardened suite MUST include explicit coverage for key routing boun
 - **THEN** the supported `skill-contract-forge` contract SHALL treat that request as `Classification: stop-and-ask`
 - **AND** it SHALL NOT infer the target skill from repository, folder, or active-skill context alone
 
-### Requirement: Offline fixtures align with hardened runtime behavior
-Offline fixtures used by the preferred Promptfoo replay gates MUST be refreshed only after the post-refactor live behavior is restored.
+### Requirement: Fixture snapshots align with hardened runtime behavior
+
+Maintained fixture snapshots for `skill-contract-forge`, if kept or refreshed, MUST remain subordinate to live Promptfoo runtime truth.
 
 #### Scenario: Live recovery succeeds after package refactor
 - **WHEN** live `contract` and live `uplift with-skill` return to the intended green state
-- **THEN** the repository SHALL refresh the surface-specific offline fixtures to snapshot that recovered behavior
-- **AND** offline replay SHALL be re-run to confirm that the restored behavior is reproducible
+- **THEN** the repository MAY refresh the surface-specific fixture snapshots to reflect that recovered behavior
+- **AND** it SHALL NOT refresh fixture snapshots to encode behavior that still fails in live evaluation
 
 ### Requirement: Affected docs describe hardened runtime truth
-Affected runtime and local-authoring docs MUST identify the authoritative contract and the role of offline fixtures correctly.
+
+Affected runtime and local-authoring docs MUST identify the authoritative contract and the role of maintained fixture snapshots correctly.
 
 #### Scenario: Eval docs are reviewed after alignment
 - **WHEN** affected `skill-contract-forge` eval docs are reviewed
 - **THEN** they SHALL identify `packs/core/skill-contract-forge/SKILL.md` as the authority for output behavior
-- **AND** they SHALL describe offline fixtures as snapshots used for replay rather than the source of truth
+- **AND** they SHALL describe maintained fixture snapshots as subordinate support artifacts rather than as a supported public replay path
 
-### Requirement: Replay evidence remains aligned for anchor regression cases
-Maintained offline replay evidence for `skill-contract-forge` MUST stay aligned with the supported routing envelope for anchor regression cases used by the Promptfoo uplift surfaces.
+### Requirement: Fixture evidence remains aligned for anchor regression cases
 
-#### Scenario: Anchor replay evidence is reviewed after a replay repair
-- **WHEN** maintained replay fixtures, suites, or replay outputs are reviewed for the `with_skill` uplift surface
+Maintained `skill-contract-forge` fixture snapshots, if kept for anchor regression cases, MUST stay aligned with the supported routing envelope for those cases.
+
+#### Scenario: Anchor fixture snapshots are reviewed after a replay repair
+- **WHEN** maintained fixture snapshots are reviewed for the `with_skill` uplift surface
 - **THEN** anchor regression cases SHALL reflect the same routing expectation enforced by the supported suite assertions
-- **AND** the repository SHALL NOT keep a known mismatched replay output as the maintained offline baseline
+- **AND** the repository SHALL NOT keep a known mismatched fixture snapshot as the maintained reference artifact
 
 ### Requirement: Hardened coverage rejects output-style skill descriptions
 The supported `skill-contract-forge` Promptfoo coverage MUST detect trigger-path descriptions that behave like deliverable summaries instead of activation metadata.

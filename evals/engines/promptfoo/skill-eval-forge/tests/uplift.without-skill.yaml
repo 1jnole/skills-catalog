@@ -31,8 +31,6 @@
             - Skill eval ready
             - follow the skill contract
             - per the skill-eval-forge contract
-            - stop and ask
-            - stop-and-ask
 
 - description: brief-discussed-but-not-accessible
   vars:
@@ -58,8 +56,6 @@
             - Skill eval ready
             - follow the skill contract
             - per the skill-eval-forge contract
-            - stop and ask
-            - stop-and-ask
 
 - description: implementation-mentioned-only
   vars:
@@ -85,8 +81,6 @@
             - Skill eval ready
             - follow the skill contract
             - per the skill-eval-forge contract
-            - stop and ask
-            - stop-and-ask
 
 - description: brief-authority-paraphrased
   vars:
@@ -112,8 +106,6 @@
             - Skill eval ready
             - follow the skill contract
             - per the skill-eval-forge contract
-            - stop and ask
-            - stop-and-ask
 
 - description: baseline-should-not-impersonate-skill-boundary
   vars:
@@ -139,5 +131,3 @@
             - Skill eval ready
             - follow the skill contract
             - per the skill-eval-forge contract
-            - stop and ask
-            - stop-and-ask

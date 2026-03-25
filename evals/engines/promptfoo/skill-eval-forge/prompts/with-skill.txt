@@ -3,21 +3,22 @@ You are operating with skill context enabled.
 Follow the skill contract exactly.
 If the skill contract requires a specific stopping point, obey it exactly.
 Use the response mode required by the skill for valid trigger, non-trigger, and stop-and-ask cases.
-When the correct mode is non-trigger, start the response with `non-trigger:`.
-When the correct mode is stop-and-ask, start the response with `stop-and-ask:`.
+When the correct mode is non-trigger, start the response with `Result: non-trigger`.
+When the correct mode is stop-and-ask, start the response with `Result: stop-and-ask`.
 Classify scope before asking for missing authorities.
-Use `non-trigger:` only when the primary job is outside phase 3 altogether.
-For clearly out-of-scope contract authoring, implementation-only, or runtime/provider redesign requests, use `non-trigger:` rather than `stop-and-ask:`.
-If the request is only to implement a skill from an approved brief artifact, that is still phase-2 work here. Return `non-trigger:` immediately instead of asking for missing eval authorities.
+Use `Result: non-trigger` only when the primary job is outside phase 3 altogether.
+For clearly out-of-scope contract authoring, implementation-only, or runtime/provider redesign requests, use `Result: non-trigger` rather than `Result: stop-and-ask`.
+If the request is only to implement a skill from an approved brief artifact, that is still phase-2 work here. Return `Result: non-trigger` immediately instead of asking for missing eval authorities.
 Treat prompts of the form `Implement <skill> from its approved brief artifact` as phase-2 implementation requests, not as in-scope eval authoring with missing authorities.
 Do not request missing brief, implementation, or eval authorities for work this phase does not cover.
-For implementation-only requests, after `non-trigger:` explain only that the work belongs to phase 2 and is outside phase 3. Do not ask for any artifact, implementation, or eval context after classifying it as out of scope.
-Do not use `stop-and-ask:` to redirect implementation work into this phase.
-If runtime, provider, fixture, or shared-infrastructure work is mentioned only as explicitly deferred or unchanged, remain on the trigger path for eval authoring rather than switching to `stop-and-ask:`.
-If the primary job remains eval authoring for one named skill but the same response also asks for separable runtime/provider/shared-infra follow-up, use `stop-and-ask:` rather than `non-trigger:`.
-If the request mixes eval authoring with contract, implementation, runtime, or provider work in one inseparable pass, use `stop-and-ask:` and name that phase conflict before any missing-authority issue.
-On `stop-and-ask:` paths, briefly name the missing authority, conflict, or ambiguity that blocks in-scope eval authoring.
-On `non-trigger:` paths, briefly name only the out-of-scope phase or job mismatch. Do not ask for missing authorities after classifying the request as out of scope.
+For implementation-only requests, after `Result: non-trigger` explain only that the work belongs to phase 2 and is outside phase 3. Do not ask for any artifact, implementation, or eval context after classifying it as out of scope.
+Do not use `Result: stop-and-ask` to redirect implementation work into this phase.
+If runtime, provider, fixture, or shared-infrastructure work is mentioned only as explicitly deferred or unchanged, remain on the trigger path for eval authoring rather than switching to `Result: stop-and-ask`.
+If the primary job remains eval authoring for one named skill but the same response also asks for separable runtime/provider/shared-infra follow-up, use `Result: stop-and-ask` rather than `Result: non-trigger`.
+If the request mixes eval authoring with contract, implementation, runtime, or provider work in one inseparable pass, use `Result: stop-and-ask` and name that phase conflict before any missing-authority issue.
+On `Result: stop-and-ask` paths, briefly name the missing authority, conflict, or ambiguity that blocks in-scope eval authoring.
+On `Result: non-trigger` paths, briefly name only the out-of-scope phase or job mismatch. Do not ask for missing authorities after classifying the request as out of scope.
+Do not use legacy labels such as `non-trigger:` or `stop-and-ask:` in place of the required `Result:` line.
 Do not invent missing authority or missing target details.
 
 Skill context:

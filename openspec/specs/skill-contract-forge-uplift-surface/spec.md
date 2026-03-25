@@ -26,12 +26,13 @@ The `with_skill` uplift surface MUST recover green comparative routing behavior 
 - **THEN** it MAY recover that behavior by tightening `SKILL.md` and its supportive routing references
 - **AND** it SHALL NOT need to collapse the supportive `references/` split back into `SKILL.md`
 
-### Requirement: Offline uplift with-skill replay preserves stop-and-ask boundaries
+### Requirement: Fixture-backed uplift snapshots preserve stop-and-ask boundaries when retained
 
-The supported offline `with_skill` uplift replay for `skill-contract-forge` MUST preserve the maintained stop-and-ask routing boundary for ambiguous refactor requests.
+If the repository keeps maintained fixture snapshots for `skill-contract-forge` uplift `with_skill`, those snapshots MUST preserve the maintained stop-and-ask routing boundary for ambiguous refactor requests.
 
-#### Scenario: Ambiguous refactor request is replayed offline on uplift with-skill
+#### Scenario: Ambiguous refactor request is represented in a maintained uplift fixture snapshot
 
-- **WHEN** the repository replays `ambiguous-refactor-missing-target` through the maintained `skill-contract-forge` uplift `with_skill` offline surface, whether by supported npm entrypoint or direct Promptfoo config execution
-- **THEN** the replayed output SHALL classify the request as `stop-and-ask`
+- **WHEN** the repository reviews a maintained `skill-contract-forge` uplift `with_skill` fixture snapshot that includes `ambiguous-refactor-missing-target`
+- **THEN** that snapshot SHALL classify the request as `stop-and-ask`
 - **AND** it SHALL NOT classify that request as `trigger`
+

@@ -225,20 +225,20 @@ flowchart TD
   C -- no --> D[Fix YAML, prompts, assertions, or wiring]
   C -- yes --> E["promptfoo:run or promptfoo eval -c <config>"]
   E --> F[Compare contract, uplift with-skill, and uplift without-skill]
-  F --> G["promptfoo:run:offline or family-specific replay by config"]
-  G --> H{Offline matches live?}
-  H -- yes --> I[Keep fixtures and archive the change]
-  H -- no --> J[Live is the semantic authority]
-  J --> K[Refresh fixtures only after live is green]
+  F --> G["Family-specific replay only when an active config-supported replay surface exists"]
+  G --> H{Replay disagrees with live?}
+  H -- no --> I[Keep fixtures and archive the change]
+  H -- yes --> J[Live is the semantic authority]
+  J --> K[Refresh support artifacts only after live is green]
   K --> E
 ```
 
 Operating rule:
 - `npm run promptfoo:validate` is the canonical public contract-validate entrypoint.
 - `npm run promptfoo:run` is the canonical public live semantic gate.
-- `npm run promptfoo:run:offline` is the canonical public replay and smoke path.
 - direct `promptfoo -c <config>` execution is the standard path for family-specific validation and runs outside the small public npm surface.
-- if live and offline disagree, live wins.
+- do not assume a public offline replay command exists unless the active runtime docs explicitly expose one.
+- if live and replay disagree, live wins.
 
 For the current supported Promptfoo command surface, see [evals/README.md](/C:/Users/Jorge/WebstormProjects/skills-catalog/evals/README.md).
 

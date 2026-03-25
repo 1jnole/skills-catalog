@@ -12,7 +12,7 @@ Workflow: new-skill
 {
   "skill": {
     "name": "example-skill",
-    "description": "Use this skill when the task is to define one reusable skill contract before implementation. Do not use it for runtime implementation, downstream eval authoring, or repository policy work."
+    "description": "Defines one reusable skill contract before implementation. Use when the task is contract authoring for a single skill. Do not use for runtime implementation, downstream eval authoring, or repository policy work."
   },
   "authoring": {
     "singleJob": "Define one reusable skill contract before implementation.",

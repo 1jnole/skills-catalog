@@ -30,7 +30,6 @@ Promptfoo is the supported eval tool for this repository.
 ### Canonical public npm surface
 - `npm run promptfoo:validate`
 - `npm run promptfoo:run`
-- `npm run promptfoo:run:offline`
 
 ### Direct-config family execution
 Use native Promptfoo entrypoints for family-specific work outside the small public npm surface:
@@ -72,9 +71,9 @@ Use this checklist when editing Promptfoo family prompts or tests:
 
 ## Family support matrix
 
-| Family | Baseline shape | Validate | Live run | Offline replay | Public npm surface | Notes |
+| Family | Baseline shape | Validate | Live run | Fixture snapshots | Public npm surface | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| `skill-contract-forge` | yes | yes | yes | yes | yes | canonical public contract surface |
+| `skill-contract-forge` | yes | yes | yes | yes | yes | canonical public contract surface for validate/live execution; maintained fixtures remain support artifacts only |
 | `skill-implementation-forge` | yes | yes | yes | no | no | family-specific work uses direct-config execution; current coverage includes accessible-authority forms, package-shape behavior, legacy package-shape fallback, and `agents` interface regression checks |
 | `skill-eval-forge` | yes | yes | yes | no | no | family-specific work uses direct-config execution; current coverage includes authority-form routing, mixed-phase routing, and baseline non-impersonation |
 
@@ -93,11 +92,10 @@ Allowed by default:
 
 Phase A does not require model-graded assertions as part of the baseline.
 
-## Fixtures and offline policy
-- the supported offline path uses Promptfoo `--model-outputs` fixtures under `evals/engines/promptfoo/fixtures/`
-- live behavior is the semantic authority when live and offline disagree
+## Fixtures policy
+- maintained `--model-outputs` fixtures under `evals/engines/promptfoo/fixtures/` are support artifacts, not a supported public replay command surface
+- live behavior is the semantic authority
 - refresh fixtures only after live behavior is acceptable
-- the public offline replay writes a dedicated `*.offline.eval.json` artifact and must not overwrite a `*.live.eval.json` report
 - `without_skill` remains an informational baseline rather than a closure gate
 - `without_skill` should stay focused on non-impersonation of skill-owned markers and boundary language, not on reproducing trigger-path routing
 
@@ -111,9 +109,6 @@ When a live Promptfoo report is intentionally kept under `evals/engines/promptfo
 - `<skill-name>.contract.live.eval.json`
 - `<skill-name>.uplift.with-skill.live.eval.json`
 - `<skill-name>.uplift.without-skill.live.eval.json`
-
-Public offline replay outputs use a separate replay artifact:
-- `<skill-name>.contract.offline.eval.json`
 
 Phase A does not require every family to keep all three reports. It requires any kept reports to follow one convention.
 
@@ -150,13 +145,12 @@ For `skill-eval-forge`, the maintained family also currently covers:
 - `evals/engines/promptfoo/README.md` defines the active Promptfoo runtime boundary
 - `npm run promptfoo:validate` is the canonical public contract-validate entrypoint
 - `npm run promptfoo:run` is the canonical public live semantic authority
-- `npm run promptfoo:run:offline` is the canonical public replay and smoke path
 - direct `promptfoo -c <config>` execution is the standard path for family-specific runs outside the small public npm surface
 
 ## What this means now
 - the eval boundary is Promptfoo-native and family-based
 - the three forge families now share one documented baseline shape
 - support levels are explicit rather than implied
-- offline replay is cheap health-check support, not a second semantic authority
+- maintained fixture snapshots are support data, not a second semantic authority or a supported public replay command
 - generated artifact naming is standardized
 - broader dogfooding and semantic expansion remain Phase B work

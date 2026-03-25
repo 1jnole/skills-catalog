@@ -1,11 +1,12 @@
 ---
 name: skill-implementation-forge
 description: |
-  Use this skill to implement or refactor one named skill from an approved contract artifact.
-  Do not use it for contract authoring, downstream eval authoring, or eval/runtime changes.
+  Implements or refactors one named skill from an approved contract artifact.
+  Use when the task is implementation for a single skill with approved contract authority.
+  Do not use for contract authoring, downstream eval authoring, or eval/runtime changes.
   Stops at `Skill implementation ready`.
 metadata:
-  short-description: Implement one named skill from an approved contract artifact
+  short-description: Implements one named skill from an approved contract artifact
 ---
 
 # skill-implementation-forge
@@ -91,6 +92,48 @@ The exact terminal marker is:
 
 Use `Skill implementation ready` only for valid trigger-path completion. Do not end `non-trigger` or `stop-and-ask` responses with that marker.
 
+## Required response format
+
+Use the exact response envelope below.
+
+### Trigger path
+
+Line 1 must be exactly:
+
+`Result: trigger`
+
+Then give the concise implementation-phase response.
+
+The final line must be exactly:
+
+`Skill implementation ready`
+
+### Non-trigger path
+
+Line 1 must be exactly:
+
+`Result: non-trigger`
+
+Then explain briefly why the request is outside implementation-from-contract scope.
+
+Do not end with `Skill implementation ready`.
+
+### Stop-and-ask path
+
+Line 1 must be exactly:
+
+`Result: stop-and-ask`
+
+Then ask only for the missing clarification needed to continue safely.
+
+Do not end with `Skill implementation ready`.
+
+### Format guardrails
+
+- Do not replace the required `Result:` line with `Classification:` or `Workflow:` headers.
+- Do not prepend commentary, bullets, or explanation before the required `Result:` line.
+- Keep the response compact enough to preserve the exact terminal marker on trigger paths.
+
 ## Routing precedence
 
 Use `non-trigger` when the primary job is no longer implementation-from-contract for one named skill, even if implementation is mentioned secondarily.
@@ -118,7 +161,8 @@ Return `stop-and-ask` when:
 10. Preserve conditional contract semantics. Do not turn a conditional repo convention into an unconditional path or input requirement.
 11. Before finalizing, verify that the resulting skill still has one clear job, explicit inputs and outputs, strong stop-and-ask behavior, relevant edge cases handled at the smallest justified package shape, and no unnecessary support folders.
 12. If the current repo provides a skill-metadata validation gate, run it before closure. In this repo, use `npm run validate:skill-metadata`.
-13. Stop at the exact terminal marker `Skill implementation ready`.
+13. Start the response with the exact `Result:` line for the routed path.
+14. On trigger paths, stop at the exact terminal marker `Skill implementation ready`.
 
 ## Guardrails
 
@@ -129,6 +173,7 @@ Return `stop-and-ask` when:
 - Do not infer a missing target skill from deictic phrases such as `this skill`, `the current skill`, or `the next skill`.
 - If downstream eval work is mentioned but explicitly deferred, remain in implementation scope and defer that later work.
 - If the approved contract artifact conflicts with the current implementation, implement from the approved contract artifact rather than silently redefining it.
+- Do not use `Classification:` or `Workflow:` headers for this skill's response boundary.
 - Keep the package shallow by default.
 - Do not infer extra support folders from repo habits when the contract does not freeze them.
 - Do not require upstream local authoring refs when the approved contract artifact and implemented package already carry the needed downstream behavior.

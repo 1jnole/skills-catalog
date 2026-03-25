@@ -58,11 +58,17 @@
           metric: schema_valid
           value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
         - type: icontains
+          metric: description_field_present
+          value: '"description": "'
+        - type: icontains
           metric: description_routing_language
-          value: '"description": "Use this skill when'
+          value: "Use when"
         - type: icontains
           metric: description_negative_boundary
-          value: Do not use it
+          value: Do not use for
+        - type: not-icontains
+          metric: description_not_second_person_instruction
+          value: '"description": "Use this skill when'
         - type: not-icontains
           metric: description_not_output_summary
           value: '"description": "Produce one repo-native implementation plan artifact'
@@ -373,11 +379,13 @@
           metric: classification
           value: "Classification: non-trigger"
         - type: icontains-any
-          metric: out_of_scope_marker
+          metric: boundary_marker
           value:
             - Out of scope for skill-contract-forge.
             - outside the scope
             - out of scope
+            - outside the contract authoring scope
+            - outside the contract authoring phase
         - type: icontains-any
           metric: reason_marker
           value:
@@ -462,7 +470,7 @@
           metric: classification
           value: "Classification: non-trigger"
         - type: icontains-any
-          metric: out_of_scope_marker
+          metric: boundary_marker
           value:
             - Out of scope for skill-contract-forge.
             - outside the scope
@@ -473,6 +481,8 @@
             - this skill is only for
             - only defines or refines
             - only defines
+            - outside the contract authoring phase
+            - contract authoring scope
         - type: icontains-any
           metric: reason_marker
           value:
@@ -523,9 +533,9 @@
         - type: icontains-any
           metric: ambiguity_shape
           value:
-            - multiple workflows
-            - multiple independent workflows
-            - multiple major workflows
+            - workflow
+            - scope
+            - pass
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -555,26 +565,10 @@
           metric: classification
           value: "Classification: stop-and-ask"
         - type: icontains-any
-          metric: stop_marker
+          metric: missing_target_anchor
           value:
-            - lacks identification
-            - identify the target skill
-            - missing target skill
-            - exact target skill
-            - exact name of the existing skill
-            - exact existing skill
-        - type: icontains-any
-          metric: ambiguity_reason
-          value:
-            - skill target
             - target skill
-            - unclear
-            - name or description of the skill
-            - exact name of the skill to refactor
-            - existing skill name
-            - exact existing skill name
             - existing skill
-            - which existing skill
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"
@@ -604,29 +598,10 @@
           metric: classification
           value: "Classification: stop-and-ask"
         - type: icontains-any
-          metric: stop_marker
+          metric: missing_target_anchor
           value:
-            - lacks identification
-            - identify the target skill
-            - missing target skill
-            - exact target skill
-            - exact name of the existing skill
-            - exact existing skill
-        - type: icontains-any
-          metric: ambiguity_reason
-          value:
-            - skill target
             - target skill
-            - which existing skill
-            - which existing skill should be rewritten
-            - specify which existing skill
-            - should be rewritten
-            - unclear
-            - name or description of the skill
-            - exact existing skill to rewrite
-            - exact name of the existing skill to rewrite
-            - existing skill name
-            - exact existing skill name
+            - existing skill
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"

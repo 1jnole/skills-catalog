@@ -13,6 +13,10 @@ Examples:
 - `Refactor Promptfoo-native coverage for example-skill using this pasted brief and the implemented package already in the repo.`
 - `Use the uploaded approved brief and current implementation of example-skill to tighten only its eval coverage.`
 
+Expected behavior:
+- begin with `Result: trigger`
+- end with `Skill eval ready`
+
 ## Stop-and-ask examples
 
 Ask instead of inventing when a material precondition is missing.
@@ -25,6 +29,7 @@ Examples:
 - `Implement example-skill and write the evals in one pass.`
 
 Expected behavior:
+- begin with `Result: stop-and-ask` when clarification is required
 - ask for the explicit target skill when missing
 - ask for accessible, verifiable brief, implementation, or eval authority when missing
 - do not substitute nearby local files or guessed paths
@@ -38,3 +43,6 @@ Examples:
 - `Implement example-skill from its approved brief artifact.`
 - `Redesign the shared Promptfoo runtime while updating coverage.`
 - `Change provider wiring and fixture strategy for the repo.`
+
+Expected behavior:
+- begin with `Result: non-trigger`

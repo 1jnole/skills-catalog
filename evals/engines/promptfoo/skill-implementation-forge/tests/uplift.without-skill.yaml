@@ -25,8 +25,6 @@
       - Skill implementation ready
       - follow the skill contract
       - per the skill-implementation-forge contract
-      - stop-and-ask
-      - stop and ask
 - description: new-skill-artifact-mentioned-only
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
@@ -51,8 +49,6 @@
       - Skill implementation ready
       - follow the skill contract
       - per the skill-implementation-forge contract
-      - stop-and-ask
-      - stop and ask
 - description: baseline-does-not-impersonate-deictic-request
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
@@ -77,8 +73,6 @@
       - Skill implementation ready
       - follow the skill contract
       - per the skill-implementation-forge contract
-      - stop-and-ask
-      - stop and ask
 - description: eval-authoring-request
   vars:
     skill_prompt: file://../../../../packs/core/skill-implementation-forge/SKILL.md
@@ -127,4 +121,3 @@
       - Skill implementation ready
       - follow the skill contract
       - per the skill-implementation-forge contract
-      - normal completion marker

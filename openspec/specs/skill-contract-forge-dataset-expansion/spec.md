@@ -24,10 +24,12 @@ The repository MUST track at least one realistic rewording of the missing-target
 - **THEN** a missing-target rewording case SHALL exist in the contract suite
 - **AND** that case SHALL also exist in the uplift `with_skill` suite
 
-### Requirement: Expanded suites remain offline-replayable
-The repository MUST preserve the supported offline Promptfoo replay path after Phase 6B dataset expansion.
+### Requirement: Expanded suites keep fixture snapshots optional
 
-#### Scenario: The expanded dataset is replayed offline
-- **WHEN** the supported offline Promptfoo commands are run against the expanded suites
-- **THEN** the fixture replay SHALL include outputs for the newly added runtime cases
+The repository MUST NOT require a supported public offline replay command just to preserve the expanded `skill-contract-forge` dataset.
+
+#### Scenario: Expanded dataset support is reviewed
+- **WHEN** the expanded `skill-contract-forge` dataset and its surrounding docs are reviewed
+- **THEN** the repository SHALL preserve the live Promptfoo suite coverage for the expanded cases
+- **AND** any maintained fixture snapshots for those cases SHALL remain optional support artifacts rather than a required public replay surface
 

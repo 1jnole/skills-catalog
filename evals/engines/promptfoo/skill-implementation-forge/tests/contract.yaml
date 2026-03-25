@@ -51,6 +51,9 @@
       - npm run validate:skill-metadata
       - validate:skill-metadata
       - skill metadata validation
+    - type: icontains
+      metric: trigger_header
+      value: "Result: trigger"
     - type: not-icontains
       metric: no_stop_and_ask
       value: stop-and-ask
@@ -488,6 +491,7 @@
     - type: icontains-any
       metric: negative_scope_marker
       value:
+      - "Result: non-trigger"
       - non-trigger
       - out of scope
       - does not cover
@@ -770,6 +774,7 @@
     - type: icontains-any
       metric: stop_or_reason_marker
       value:
+      - "Result: stop-and-ask"
       - stop-and-ask
       - target skill
       - clearly identified

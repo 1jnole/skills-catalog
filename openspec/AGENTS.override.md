@@ -170,12 +170,13 @@ Stop conditions (during apply):
 - destructive risk
 
 ### 4) Verification and gates
-Preferred repo gate:
-- `npm run promptfoo:run:offline`
+Preferred repo gates:
+- `npm run promptfoo:validate`
+- `npm run promptfoo:run`
 
 Authority rule:
-- `npm run promptfoo:run:offline` is the preferred public low-cost smoke gate.
-- `npm run promptfoo:run` is the public semantic authority when replay and live behavior disagree.
+- `npm run promptfoo:validate` is the preferred low-cost structural gate when Promptfoo surfaces are affected.
+- `npm run promptfoo:run` is the public semantic authority for the maintained public run surface.
 - direct `promptfoo -c <config>` execution is the standard path for family-specific validation and runs outside the small public npm surface.
 - `without_skill` remains an informational baseline rather than a closure gate.
 

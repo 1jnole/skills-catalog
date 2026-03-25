@@ -51,26 +51,21 @@ Case assertions in this slug MUST use documented Promptfoo assertion types, with
 - **AND** any remaining `javascript` assertion SHALL be justified in the change artifacts
 
 ### Requirement: Minimum affected docs are aligned with runtime truth
+
 Docs touched by this migration SHALL distinguish supported runtime truth from historical artifacts and SHALL describe the operational authority of each supported Promptfoo-native surface.
 
 #### Scenario: Runtime surfaces are described together
 - **WHEN** an affected document describes the supported `skill-contract-forge` Promptfoo workflow
 - **THEN** it SHALL identify `npm run promptfoo:validate` as the canonical public contract-validate entrypoint
-- **AND** it SHALL identify `npm run promptfoo:run:offline` as the preferred public low-cost replay or smoke path
-- **AND** it SHALL identify `npm run promptfoo:run` as the public semantic authority when offline replay and live behavior disagree
+- **AND** it SHALL identify `npm run promptfoo:run` as the canonical public live semantic authority
 - **AND** it SHALL identify direct `promptfoo -c <config>` execution as the standard path for family-specific validation and runs outside the small public npm surface
+- **AND** it SHALL NOT identify `npm run promptfoo:run:offline` as a supported public replay or smoke entrypoint unless a future change introduces a working replay surface
 - **AND** it SHALL identify `without_skill` as an informational baseline rather than a closure gate
 
-#### Scenario: Legacy path appears in affected docs
-- **WHEN** an affected document mentions a legacy or historical eval path
-- **THEN** the document SHALL label it as historical or unsupported for the active runtime
-- **AND** it SHALL identify the supported runtime path for this slug
-
-#### Scenario: Replay fixture refresh follows live recovery
-- **WHEN** the repository refreshes Promptfoo `--model-outputs` fixtures for `skill-contract-forge`
-- **THEN** it SHALL confirm the corresponding live surface is green first, whether that surface is reached through `npm run promptfoo:run` or direct `promptfoo -c <config>` execution
-- **AND** it SHALL refresh only the replay fixture for the confirmed live surface
-- **AND** it SHALL NOT refresh replay fixtures to encode behavior that still fails in live evaluation
+#### Scenario: Maintained fixture snapshots are described
+- **WHEN** an affected document mentions maintained `--model-outputs` fixture files for `skill-contract-forge`
+- **THEN** it SHALL describe them as subordinate support artifacts or historical snapshots
+- **AND** it SHALL NOT present them as proof that a supported public config-driven replay command currently exists
 
 ### Requirement: Legacy engine support stays outside the active runtime surface
 
@@ -82,3 +77,4 @@ The supported `skill-contract-forge` Promptfoo runtime MUST keep retired engine 
 - **THEN** those files SHALL NOT live under `evals/engines/promptfoo/support/` or `evals/engines/promptfoo/fixtures/`
 - **AND** they MAY be removed from the active repository tree instead of being kept in an in-repo quarantine location
 - **AND** active docs SHALL NOT treat them as part of the supported runtime surface
+

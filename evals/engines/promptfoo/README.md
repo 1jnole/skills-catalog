@@ -9,7 +9,7 @@ This boundary owns:
 - Promptfoo configs
 - provider adapter files
 - Promptfoo-specific prompts and suites
-- offline fixtures and generated reports
+- maintained fixture snapshots and generated reports
 - family-specific execution surfaces
 
 It must not grow a parallel repo-owned eval runtime around Promptfoo.
@@ -44,14 +44,13 @@ Entrypoint roles:
 ### Canonical public npm surface
 - `npm run promptfoo:validate`
 - `npm run promptfoo:run`
-- `npm run promptfoo:run:offline`
 
 ### Direct-config family execution
 - `promptfoo validate -c evals/engines/promptfoo/<skill-name>/promptfooconfig*.yaml`
 - `promptfoo eval -c evals/engines/promptfoo/<skill-name>/promptfooconfig*.yaml ...`
 
 ### Family status
-| Family | Validate | Live run | Offline replay | Public npm surface |
+| Family | Validate | Live run | Fixture snapshots | Public npm surface |
 | --- | --- | --- | --- | --- |
 | `skill-contract-forge` | yes | yes | yes | yes |
 | `skill-implementation-forge` | yes | yes | no | no |
@@ -73,8 +72,8 @@ Support status is the declared Phase A support model. Final closure still requir
 - `uplift with_skill` answers whether the skill improves routing or stop-boundary behavior compared to the baseline prompt
 - `uplift without_skill` answers what the baseline prompt does without the skill active
 - `without_skill` is informational and is not a contractual conformance gate
-- live behavior wins when live and offline replay disagree
-- public offline replay must write a separate `*.offline.eval.json` artifact rather than overwriting a `*.live.eval.json` report
+- live behavior is the semantic authority
+- maintained fixture snapshots are support artifacts and do not define a supported public replay command
 
 ## Assertions policy
 Phase A prefers deterministic assertions.
@@ -90,7 +89,7 @@ The maintained baseline relies on native Promptfoo assertions such as:
 Model-graded assertions are not required for the Phase A baseline.
 
 ## Fixtures and generated reports
-Maintained offline replay fixtures currently exist for `skill-contract-forge`:
+Maintained fixture snapshots currently exist for `skill-contract-forge`:
 - `fixtures/skill-contract-forge.contract.model-outputs.json`
 - `fixtures/skill-contract-forge.uplift.with-skill.model-outputs.json`
 - `fixtures/skill-contract-forge.uplift.without-skill.model-outputs.json`
@@ -102,13 +101,10 @@ Kept generated reports currently follow one naming convention:
 - `generated/skill-eval-forge.uplift.with-skill.live.eval.json`
 - `generated/skill-eval-forge.uplift.without-skill.live.eval.json`
 
-When additional reports are kept, use only:
+When additional live reports are kept, use only:
 - `<skill-name>.contract.live.eval.json`
 - `<skill-name>.uplift.with-skill.live.eval.json`
 - `<skill-name>.uplift.without-skill.live.eval.json`
-
-Public offline replay reports use:
-- `<skill-name>.contract.offline.eval.json`
 
 ## Minimum structural edge cases per family
 Each maintained family must cover these edge cases somewhere in its suites:
@@ -125,4 +121,5 @@ Each maintained family must cover these edge cases somewhere in its suites:
 - Keep Promptfoo families shallow and file-based.
 - Do not add a repo-owned runner or projection layer around Promptfoo.
 - Do not treat generated reports or fixture files as contract definitions.
+- Do not advertise a public offline replay command unless the active Promptfoo surface really supports it.
 - Do not treat `without_skill` as a hard closure gate.

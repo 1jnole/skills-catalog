@@ -129,8 +129,8 @@ Do not treat built-ins as the authority for:
 - Treat `evals/README.md` as the source of truth for the supported Promptfoo command surface.
 - For `skill-contract-forge`, Promptfoo-native suites are the active case-definition authority.
 - Skill-owned `evals/` folders are optional support material only and must not override active runtime suites unless a future spec explicitly says so.
-- Treat `npm run promptfoo:run` and `npm run promptfoo:run:offline` as the canonical contract run entrypoints.
-- If live and offline replay disagrees, live behavior wins.
+- Treat `npm run promptfoo:validate` and `npm run promptfoo:run` as the canonical public Promptfoo entrypoints.
+- Treat maintained `--model-outputs` fixtures as support artifacts only unless a future spec reintroduces a supported replay surface.
 
 ## Model selection policy
 

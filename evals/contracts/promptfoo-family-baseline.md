@@ -36,7 +36,6 @@ Phase A uses two support tiers.
 These are the stable public npm entrypoints for the repository:
 - `npm run promptfoo:validate`
 - `npm run promptfoo:run`
-- `npm run promptfoo:run:offline`
 
 ### Tier 2 — direct-config family execution
 Family-specific work outside the small public npm surface uses native Promptfoo entrypoints:
@@ -49,24 +48,20 @@ When a live Promptfoo report is intentionally kept under `evals/engines/promptfo
 - `<skill-name>.uplift.with-skill.live.eval.json`
 - `<skill-name>.uplift.without-skill.live.eval.json`
 
-Public offline replay reports use a separate replay artifact:
-- `<skill-name>.contract.offline.eval.json`
-
 Phase A does not require every family to ship all three generated artifacts. It only requires that kept artifacts follow one naming convention.
 
-## Fixtures and replay policy
-- offline replay is a low-cost replay and smoke path, not the semantic authority
-- live behavior wins when live and offline disagree
+## Fixtures policy
+- maintained fixture snapshots are support artifacts, not a supported public replay command surface
+- live behavior is the semantic authority
 - refresh fixtures only after live behavior is acceptable
 - fixture files must stay scoped to one family and one surface
-- public offline replay must not overwrite a `*.live.eval.json` report
 
 Recommended fixture naming:
 - `<skill-name>.contract.model-outputs.json`
 - `<skill-name>.uplift.with-skill.model-outputs.json`
 - `<skill-name>.uplift.without-skill.model-outputs.json`
 
-Phase A keeps one canonical fixture naming scheme for maintained replay surfaces. Avoid reintroducing alternate names for the same family and surface.
+Phase A keeps one canonical fixture naming scheme for maintained support snapshots. Avoid reintroducing alternate names for the same family and surface.
 
 ## Assertions policy
 Phase A prefers deterministic checks.

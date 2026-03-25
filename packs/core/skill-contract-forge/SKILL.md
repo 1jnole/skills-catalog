@@ -1,6 +1,6 @@
 ---
 name: skill-contract-forge
-description: "Use this skill when the task is to define or refactor the contract of one skill before implementation. Do not use it for final skill implementation, runtime eval infrastructure, or downstream eval authoring. Produces a boundary-only Eval Brief and stops at Eval Brief ready."
+description: "Defines or refactors the contract of one skill before implementation. Use when the task is contract authoring for a single skill. Do not use for final skill implementation, runtime eval infrastructure, or downstream eval authoring. Produces a boundary-only Eval Brief and stops at Eval Brief ready."
 ---
 
 # skill-contract-forge
@@ -73,6 +73,8 @@ Useful supporting inputs may include existing skill files, repository docs, temp
 
 Produce a boundary-only Eval Brief as structured JSON.
 
+Before emitting trigger-path JSON, copy the structure from `assets/eval-brief.template.json`.
+
 The brief should be implementation-ready for the next step, but must remain contract-only. On trigger paths, the current Eval Brief contract expects these top-level fields:
 - `skill`
 - `authoring`
@@ -89,7 +91,7 @@ Write `skill.description` as activation-oriented frontmatter metadata:
 - describe when the skill should be used
 - include nearby negative boundary guidance about when it should not be used
 - keep it concise enough for `SKILL.md` frontmatter
-- prefer wording such as `Use this skill when ... Do not use it for ...`
+- start with a third-person capability summary, then add routing language such as `Use when ... Do not use for ...`
 - do not phrase it as a deliverable summary such as `Produce one ...`
 - do not simply paraphrase `authoring.singleJob`
 
@@ -140,6 +142,9 @@ Do not include runtime behavior, provider wiring, benchmark layout, grader logic
 
 Use the exact response envelope below.
 
+Before writing any JSON on a trigger path, output the two routing header lines first and exactly as written.
+Do not paraphrase, merge, or substitute those header lines based on the selected workflow name.
+
 ### Trigger path
 
 Line 1 must be exactly:
@@ -156,6 +161,27 @@ Then emit the Eval Brief JSON payload.
 The final line must be exactly:
 
 `Eval Brief ready`
+
+Valid trigger headers look like:
+
+`Classification: trigger`
+`Workflow: new-skill`
+
+or
+
+`Classification: trigger`
+`Workflow: existing-skill-refactor`
+
+or
+
+`Classification: trigger`
+`Workflow: skill-rewrite`
+
+Invalid trigger headers include:
+
+`Classification: existing-skill-refactor`
+`Classification: skill-rewrite`
+`Classification: new-skill`
 
 ### Non-trigger path
 
@@ -182,6 +208,9 @@ Do not end with `Eval Brief ready`.
 ### Format guardrails
 
 - Do not replace the required classification or workflow lines with JSON keys.
+- Never use a workflow token such as `new-skill`, `existing-skill-refactor`, or `skill-rewrite` as the classification line.
+- Line 1 is always exactly one of `Classification: trigger`, `Classification: non-trigger`, or `Classification: stop-and-ask`.
+- Even when the chosen workflow is `existing-skill-refactor` or `skill-rewrite`, the classification line still remains `Classification: trigger`.
 - Do not output bare JSON without the required routing header lines.
 - Do not prepend commentary, bullets, or explanation before the required classification line.
 - On trigger paths, keep the JSON payload boundary-only and place `Eval Brief ready` on its own final line.
@@ -264,6 +293,9 @@ Typical examples:
 - local case suites used as downstream eval context
 
 These materials help shape the contract. They do **not** change the boundary of this skill.
+Read `assets/skill-template.job.md` only when reusable job wording would help freeze the contract cleanly.
+Read `assets/skill-template.guardrail.md` only when reusable guardrail wording would help freeze stop conditions or non-use boundaries cleanly.
+Read `assets/spec-template.md` only when reusable Eval Brief plan wording would help freeze success-model or non-goal text cleanly.
 When refactoring or rewriting a named existing skill, inspect the nearby skill files and repo docs as needed to map the current boundary before freezing the brief.
 If those materials need to survive into implementation or eval authoring, distill them into the brief or freeze them into `references/` or `assets/` via `authoring.packageShape` instead of preserving local file refs.
 Engine-specific execution assets live outside this skill contract.
