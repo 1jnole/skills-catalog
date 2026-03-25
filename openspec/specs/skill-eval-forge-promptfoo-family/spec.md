@@ -18,32 +18,11 @@ The repository SHALL provide a direct Promptfoo family for `skill-eval-forge` un
 
 The `skill-eval-forge` Promptfoo family SHALL test the eval-authoring boundary described by `packs/core/skill-eval-forge/SKILL.md` and SHALL validate boundary behavior semantically rather than by requiring exact wording.
 
-#### Scenario: Comparative uplift stays lighter than the contract gate
+#### Scenario: Baseline avoids skill-owned markers without policing generic stop wording
 
-- **WHEN** `evals/engines/promptfoo/skill-eval-forge/tests/uplift.yaml` is reviewed
-- **THEN** it SHALL keep only a compact set of high-signal comparative cases for trigger routing, non-trigger precedence, inspectable-authority stop-boundary, mixed-phase stop-boundary, and terminal-marker behavior
-- **AND** it SHALL remain lighter than the contract gate
-
-#### Scenario: Comparative uplift preserves inspectable-authority and boundary signal
-
-- **WHEN** `uplift.yaml` exercises requests whose core job is still eval authoring
-- **THEN** it SHALL still distinguish a valid trigger path from a stop-and-ask path caused by missing inspectable authority or inseparable mixed-phase work
-- **AND** it SHALL keep `Skill eval ready` exclusive to valid trigger-path completion
-
-#### Scenario: Baseline acknowledges missing inspectable references
-
-- **WHEN** `evals/engines/promptfoo/skill-eval-forge/tests/uplift.without-skill.yaml` includes prompts where contract, implementation, or eval references are only mentioned or paraphrased
-- **THEN** the expected baseline behavior SHALL acknowledge that the concrete reference is not inspectable
-- **AND** it SHALL ask the user to provide concrete material
-- **AND** it SHALL NOT impersonate `skill-eval-forge` authority or terminal markers
-
-#### Scenario: Baseline remains resistant to paraphrased authority and workflow framing
-
-- **WHEN** `evals/engines/promptfoo/skill-eval-forge/tests/uplift.without-skill.yaml` includes prompts that paraphrase missing repo-local references as a governing brief or source of truth, or paraphrase procedure as a practical sequence or workflow
-- **THEN** `without_skill` SHALL stay informational and brief
-- **AND** it SHALL acknowledge that the concrete reference is not inspectable
-- **AND** it SHALL ask the user to provide inspectable material
-- **AND** it SHALL NOT impersonate skill-owned authority or repo-shaped workflow
+- **WHEN** `evals/engines/promptfoo/skill-eval-forge/tests/uplift.without-skill.yaml` is reviewed
+- **THEN** its load-bearing negative assertions SHALL reject `Skill eval ready` and skill-owned contract phrasing
+- **AND** it SHALL NOT require generic phrases like `stop and ask` or `stop-and-ask` to be absent when those phrases are not acting as the skill-owned response envelope
 
 ### Requirement: `skill-eval-forge` family is config-local in v1
 

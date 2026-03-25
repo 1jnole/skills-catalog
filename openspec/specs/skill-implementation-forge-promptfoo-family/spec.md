@@ -17,18 +17,11 @@ The `skill-implementation-forge` Promptfoo family SHALL test the implementation-
 
 The `without_skill` baseline SHALL remain informational even when prompts paraphrase repo-local authority or workflow semantics.
 
-#### Scenario: Baseline acknowledges missing inspectable references
+#### Scenario: Baseline avoids skill-owned markers without policing generic stop wording
 
-- **WHEN** `evals/engines/promptfoo/skill-implementation-forge/tests/uplift.without-skill.yaml` includes prompts where contract references are only mentioned or paraphrased
-- **THEN** the expected baseline behavior SHALL acknowledge that the concrete reference is not inspectable
-- **AND** it SHALL ask the user to provide concrete material
-- **AND** it SHALL NOT impersonate `skill-implementation-forge` authority or terminal markers
-
-#### Scenario: Baseline resists paraphrased workflow framing
-
-- **WHEN** the baseline suite includes prompts that paraphrase workflow as a practical sequence, normal completion marker, implementation boundary, or repo-local process
-- **THEN** the baseline SHALL stay brief and informational
-- **AND** it SHALL NOT prescribe repo-shaped steps or imply that the skill boundary is active
+- **WHEN** `evals/engines/promptfoo/skill-implementation-forge/tests/uplift.without-skill.yaml` is reviewed
+- **THEN** its load-bearing negative assertions SHALL reject `Skill implementation ready` and skill-owned contract phrasing
+- **AND** it SHALL NOT require generic phrases like `stop and ask` or `stop-and-ask` to be absent when those phrases are not acting as the skill-owned response envelope
 
 ### Requirement: The family enforces frontmatter-authority preconditions
 

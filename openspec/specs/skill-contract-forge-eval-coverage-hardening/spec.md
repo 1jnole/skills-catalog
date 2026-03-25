@@ -36,16 +36,29 @@ The supported `skill-contract-forge` runtime SHALL reject outputs that mix incom
 - **THEN** the hardened Promptfoo suite SHALL mark the case as failed
 
 ### Requirement: High-signal routing boundaries are covered
+
 The supported hardened suite MUST include explicit coverage for key routing boundaries that are known regression risks.
 
-#### Scenario: Ambiguous skill-refactor request is evaluated
-- **WHEN** a request does not identify a clear skill target or clear authoring boundary
-- **THEN** the hardened suite SHALL verify that the case is treated as stop-and-ask
+#### Scenario: Valid semantic non-trigger behavior is not rejected by stale lexical markers
 
-#### Scenario: Deictic refactor or rewrite wording does not identify a target skill
-- **WHEN** a refactor or rewrite request uses phrases such as `this skill`, `the current skill`, `rewrite this`, or similar deictic wording without naming the existing target skill
-- **THEN** the supported `skill-contract-forge` contract SHALL treat that request as `Classification: stop-and-ask`
-- **AND** it SHALL NOT infer the target skill from repository, folder, or active-skill context alone
+- **WHEN** `evals/engines/promptfoo/skill-contract-forge/tests/contract.yaml` or `evals/engines/promptfoo/skill-contract-forge/tests/uplift.yaml` covers out-of-scope runtime or downstream eval requests
+- **THEN** the supported suite SHALL require the correct routing classification and the primary out-of-scope reason
+- **AND** it MAY accept concise boundary language such as `outside the contract authoring scope` or `outside the contract authoring phase`
+- **AND** it SHALL NOT require one exact canned phrase when the live response is semantically correct
+
+#### Scenario: Trigger-path header coverage keeps classification and workflow distinct
+
+- **WHEN** the supported suite covers trigger-path existing-skill refactor requests
+- **THEN** it SHALL require `Classification: trigger`
+- **AND** it SHALL separately require `Workflow: existing-skill-refactor`
+- **AND** supported guidance for `packs/core/skill-contract-forge/SKILL.md` SHALL make clear that workflow tokens are never valid substitutes for the required classification line
+
+#### Scenario: Missing-target stop-and-ask cases use semantic anchors
+
+- **WHEN** `evals/engines/promptfoo/skill-contract-forge/tests/contract.yaml` or `evals/engines/promptfoo/skill-contract-forge/tests/uplift.yaml` includes ambiguous refactor or rewrite requests without an explicit target skill
+- **THEN** the supported suite SHALL require `Classification: stop-and-ask`
+- **AND** it SHALL require a small semantic anchor around the missing target or existing skill
+- **AND** it SHALL NOT depend on long enumerations of acceptable explanatory wording
 
 ### Requirement: Fixture snapshots align with hardened runtime behavior
 
