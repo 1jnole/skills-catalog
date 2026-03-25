@@ -53,6 +53,8 @@ That handoff must define:
 - minimal downstream evaluation intent
 - relevant source references
 
+When the environment supports persisted working files, treat the approved brief as one inspectable handoff artifact for later phases rather than leaving the contract only in transient chat output.
+
 The response must stop at:
 
 `Eval Brief ready`
@@ -68,6 +70,7 @@ The request should make it possible to identify:
 For `existing-skill-refactor` and `skill-rewrite`, the target skill must be identified explicitly. Deictic phrases such as `this skill`, `the current skill`, `rewrite this`, or similar shorthand do not identify a valid target skill on their own.
 
 Useful supporting inputs may include existing skill files, repository docs, templates, examples, and prior notes about the skill boundary.
+For `existing-skill-refactor` and `skill-rewrite`, inspect the current target skill package first when it is available, especially the maintained `SKILL.md` and any existing `references/`, `assets/`, `scripts/`, or `agents/` folders that materially shape package or interface decisions.
 
 ## Output contract
 
@@ -82,6 +85,12 @@ The brief should be implementation-ready for the next step, but must remain cont
 - `activationProbes`
 - `negativeSignals`
 - `sourceRefs`
+
+Treat `activationProbes`, `negativeSignals`, and `seedEvalIntent` as a tiny high-signal surface, not as filler:
+- use `activationProbes` for a small set of representative trigger prompts that should help later discovery and dogfooding
+- keep `negativeSignals` focused on nearby non-trigger requests, not generic out-of-scope noise
+- use `seedEvalIntent` to preserve what later phases should compare, including at least one ambiguity or stop-and-ask edge when the boundary has a likely confusion point
+- prefer 3-5 strong signals over a padded list of weak or repetitive items
 
 On trigger paths, `skill` must freeze both:
 - `name`
@@ -296,7 +305,8 @@ These materials help shape the contract. They do **not** change the boundary of 
 Read `assets/skill-template.job.md` only when reusable job wording would help freeze the contract cleanly.
 Read `assets/skill-template.guardrail.md` only when reusable guardrail wording would help freeze stop conditions or non-use boundaries cleanly.
 Read `assets/spec-template.md` only when reusable Eval Brief plan wording would help freeze success-model or non-goal text cleanly.
-When refactoring or rewriting a named existing skill, inspect the nearby skill files and repo docs as needed to map the current boundary before freezing the brief.
+When refactoring or rewriting a named existing skill, inspect the current target skill package and nearby repo docs as needed to map the current boundary before freezing the brief.
+Start with the maintained `SKILL.md`, then inspect only the support folders that materially affect `authoring.packageShape` or `authoring.interface`.
 If those materials need to survive into implementation or eval authoring, distill them into the brief or freeze them into `references/` or `assets/` via `authoring.packageShape` instead of preserving local file refs.
 Engine-specific execution assets live outside this skill contract.
 
@@ -311,10 +321,10 @@ Engine-specific execution assets live outside this skill contract.
 6. If `supportFolders` includes `agents`, freeze `authoring.interface.display_name`, `authoring.interface.short_description`, and `authoring.interface.default_prompt` in the same brief.
 7. Freeze only portable `sourceRefs`: allow `[]` when the distilled brief is sufficient, include only durable authority that must survive the handoff, and do not preserve auxiliary repo-local authoring refs as downstream dependencies.
 8. Keep repo-local claims honest: do not invent repo defaults, planning paths, mandatory `AGENTS.md` inputs, or mandatory external-doc dependencies unless grounded authority actually requires them, and distill any consulted repo-local rules into the brief itself.
-9. Capture only the minimal downstream evaluation intent needed by the next step.
-10. Produce the boundary-only Eval Brief JSON.
+9. Freeze a tiny high-signal discovery surface inside the brief: preserve 3-5 representative `activationProbes`, focused nearby `negativeSignals`, and `seedEvalIntent` comparison notes that include at least one ambiguity or stop-and-ask edge when relevant.
+10. Produce the boundary-only Eval Brief JSON and, when the environment supports working-file persistence, materialize it as one inspectable approved brief artifact instead of multiple paraphrased handoff files.
 11. End trigger-path responses with the exact line `Eval Brief ready`.
-12. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative cases, explicit `skill.name` plus an activation-oriented `skill.description`, portable `sourceRefs`, honest repo-local claims, and the smallest justified `packageShape` without silently widening scope.
+12. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative cases, explicit `skill.name` plus an activation-oriented `skill.description`, portable `sourceRefs`, honest repo-local claims, one durable brief artifact when working files are available, a compact high-signal probe/negative surface, and the smallest justified `packageShape` without silently widening scope.
 
 ## Quality bar
 

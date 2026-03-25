@@ -1,0 +1,21 @@
+- [x] 1. Implement `zod-normalize-inputs` from the approved contract artifact.
+- [x] 1.1 Author `proposal.md`, `design.md`, and a delta spec for the implementation change.
+- [x] 1.2 Refactor `packs/zod/zod-normalize-inputs/SKILL.md` to match the approved contract.
+- [x] 1.3 Update `packs/zod/zod-normalize-inputs/agents/openai.yaml` to match the contract-frozen interface metadata.
+- [x] 2. Validate the implementation.
+- [x] 2.1 Run `openspec validate "implement-zod-normalize-inputs-from-contract" --type change`.
+  - **Command:** `openspec validate "implement-zod-normalize-inputs-from-contract" --type change`
+  - **Result:** PASS - `Change 'implement-zod-normalize-inputs-from-contract' is valid`
+  - **Date:** `2026-03-25`
+  - **Note:** The implementation slug includes a valid delta spec and aligned implementation artifacts.
+- [x] 2.2 Run `python C:\\Users\\Jorge\\.codex\\skills\\.system\\skill-creator\\scripts\\quick_validate.py packs/zod/zod-normalize-inputs`.
+  - **Command:** `python C:\Users\Jorge\.codex\skills\.system\skill-creator\scripts\quick_validate.py packs/zod/zod-normalize-inputs`
+  - **Result:** PASS - `Skill is valid!`
+  - **Date:** `2026-03-25`
+  - **Note:** The refactored skill package remains structurally valid after implementation.
+- [x] 2.3 Run `npm run validate:skill-metadata`.
+  - **Command:** `npm run validate:skill-metadata`
+  - **Result:** PASS - `Skill metadata validation passed.`
+  - **Date:** `2026-03-25`
+  - **Note:** Repo-wide skill metadata remains aligned after updating the target skill package.
+- [x] 3. Record evidence in this task list and stop at the implementation handoff.

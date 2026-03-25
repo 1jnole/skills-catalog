@@ -67,6 +67,29 @@ If durable examples, templates, or long references must survive into later phase
 - implementation should materialize them into the target package
 - downstream phases should read the materialized package content, not require the original local authoring refs
 
+## Existing package already mostly satisfies the contract
+
+When the current target package already exists:
+- inspect `SKILL.md` first
+- inspect only the support files materially affected by the approved contract
+- preserve support files that already satisfy the contract
+
+Do not:
+- rewrite every file in `references/`, `assets/`, `scripts/`, or `agents/` just because the folder is contract-required
+- duplicate already-aligned support content into new files for the same purpose
+- treat “folder exists” as evidence that every file inside it needs editing
+
+## Mapping brief fields into maintained files
+
+Implementation should map approved brief fields into the nearest maintained outputs.
+
+Common mappings:
+- `skill.name` and `skill.description` -> `SKILL.md` frontmatter
+- approved boundary, nearby negatives, and stop conditions -> maintained `SKILL.md` instructions
+- `authoring.interface` -> `agents/openai.yaml` or equivalent dependency-facing agent metadata when `agents` is required
+
+Do not leave those mappings implicit when the approved contract already froze them explicitly.
+
 ## Repo-local gate
 
 A repo-local validation gate is useful but repo-conditional.

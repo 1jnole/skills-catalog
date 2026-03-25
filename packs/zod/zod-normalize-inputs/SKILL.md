@@ -1,45 +1,52 @@
 ---
 name: zod-normalize-inputs
-description: "Normalizes untrusted stringly-typed inputs (query/path params, form fields, DB row shapes) into domain-friendly typed values using Zod coercion/transform/refine. Use when inputs originate as strings or loosely-typed values and you need typed, rehydrated data at the boundary. Don't use when parsing HTTP JSON responses (use zod-validate-api-boundaries) or when inputs are already normalized/validated upstream."
+description: "Normalizes untrusted stringly-typed or loosely typed inputs into domain-friendly values with Zod coercion, transform, and refine. Use when query/path params, form fields, DB row shapes, or similar boundary inputs need typed normalization before application logic. Do not use for HTTP JSON response validation, schema-variant derivation from a base schema, or inputs already normalized upstream."
 ---
 # zod-normalize-inputs
 
 ## Overview
-Normalize untrusted inputs (especially strings) *at the boundary* so the rest of the codebase can rely on stable, typed values.
+Normalize untrusted inputs at the boundary so the rest of the codebase can rely on stable, typed values without repeating coercion across layers.
 
-This skill is about **input normalization** (coerce/transform/refine), not about validating API JSON responses.
-When schema-based boundary coercion overlaps with `js-type-coercion-boundaries`, prefer this skill.
+This skill is about Zod-based input normalization with `z.coerce.*`, `.transform`, and `.refine`/`.superRefine`, not about response validation or schema-variant derivation.
 
-## Procedures
-Step 1: Select the minimal pattern set (routing)
-0) Read `references/mental-model-sets.md`.
-1) Read `references/catalog.md`.
-2) Pick 1–2 relevant patterns (and any matching pitfalls).
-3) If the task is out of scope, stop and route to:
-   - API JSON response validation → `zod-validate-api-boundaries`
+## Use When
+- Query params or path params arrive as strings and need typed normalization with Zod.
+- Form fields need boundary normalization before application logic.
+- DB rows or other stringly-shaped records need decoding into typed values.
+- A validated string needs transformation into a runtime-friendly value such as `Date`.
+- Constraints beyond primitives belong on top of already normalized boundary values.
 
-Step 2: Implement normalization at the boundary
-1) Identify the boundary (query/path params, form submit, DB row decoding).
-2) Define/extend a Zod schema that:
-   - **coerces** string values to the desired primitive type when appropriate
-   - **transforms** validated inputs into runtime-friendly shapes (e.g., `Date`)
-   - adds **refine/superRefine** only for rules not expressible by primitives
-3) Derive types via `z.infer` (single source of truth).
+## Do Not Use When
+- The main task is HTTP JSON response validation. Use `zod-validate-api-boundaries`.
+- The main task is deriving create, patch, public, or private schema variants from a base schema. Use `zod-derive-schema-variants`.
+- Inputs are already normalized and validated upstream.
+- The task is general coercion cleanup without adopting or extending a Zod boundary schema. Use `js-guardrails-type-coercion-boundaries`.
 
-Step 3: Apply stop conditions
-- Do not normalize inside domain/pure logic when the boundary already normalized it.
-- Avoid duplicating the same normalization in multiple layers; normalize once.
+## Stop And Ask When
+- It is unclear whether normalization belongs at this boundary or was already done in another layer.
+- The request mixes input normalization with response validation or schema-variant derivation in one inseparable step.
+- The boundary source of the untrusted values is missing or ambiguous.
+- The change would duplicate the same normalization logic across multiple layers instead of choosing one boundary.
 
-Step 4: Verify behavior
-- Add a small set of positive/negative examples (see `references/patterns.md`).
-- If validation failures are user-facing (forms), prefer result-based flows (e.g., resolver) over uncontrolled exceptions.
+## Procedure
+1. Read `references/mental-model-sets.md` to confirm the boundary-normalization model.
+2. Read `references/catalog.md`, then pick 1-2 relevant patterns and any matching pitfalls.
+3. Identify the boundary source of the untrusted values: query params, path params, form submission, DB row decoding, or a similar stringly input edge.
+4. Define or extend a Zod schema that:
+   - coerces string values into the intended primitive types where appropriate
+   - transforms validated values into runtime-friendly shapes such as `Date`
+   - uses `.refine` or `.superRefine` only for rules not captured by primitives
+5. Derive types from the schema with `z.infer` so the schema stays the single source of truth.
+6. Normalize once at the boundary. Do not repeat the same coercion in downstream domain logic or parallel layers.
+7. Verify behavior with a small set of positive and negative examples or tests. If failures are user-facing, prefer result-based flows such as resolvers over uncontrolled exceptions.
 
 ## Outputs
-- A Zod schema (or schema extension) implementing normalization at the boundary.
-- Types derived from the schema (`z.infer`) where needed.
-- A small set of usage examples or tests exercising the normalization rules.
+- A Zod schema or schema extension implementing normalization at the boundary.
+- Derived types from the schema via `z.infer`.
+- A small set of examples or tests covering the normalization rules and nearby failure cases.
 
 ## References
+- Boundary model: `references/mental-model-sets.md`
 - Pattern routing: `references/catalog.md`
 - Canonical implementations: `references/patterns.md`
 - Anti-examples and edge cases: `references/pitfalls.md`

@@ -1,0 +1,23 @@
+- [x] 1. Document the real dogfooding gaps for `skill-contract-forge`.
+- [x] 1.1 Author `proposal.md`, `design.md`, and a delta spec for the refinement.
+- [x] 2. Update `packs/core/skill-contract-forge/` so real contract runs no longer depend on playbook-only guidance for durable handoff and compact probe coverage.
+- [x] 2.1 Update `SKILL.md`.
+- [x] 2.2 Update supporting examples and edge cases.
+- [x] 2.3 Update the eval brief template.
+- [x] 3. Validate the maintained skill package.
+- [x] 3.1 Run `openspec validate "dogfood-skill-contract-forge-real-usage" --type change`.
+  - **Command:** `openspec validate "dogfood-skill-contract-forge-real-usage" --type change`
+  - **Result:** PASS - `Change 'dogfood-skill-contract-forge-real-usage' is valid`
+  - **Date:** `2026-03-25`
+  - **Note:** The OpenSpec change now includes a valid delta spec covering the dogfooding refinement.
+- [x] 3.2 Run `python C:\\Users\\Jorge\\.codex\\skills\\.system\\skill-creator\\scripts\\quick_validate.py packs/core/skill-contract-forge`.
+  - **Command:** `python C:\Users\Jorge\.codex\skills\.system\skill-creator\scripts\quick_validate.py packs/core/skill-contract-forge`
+  - **Result:** PASS - `Skill is valid!`
+  - **Date:** `2026-03-25`
+  - **Note:** The maintained skill package remains structurally valid after the refinement.
+- [x] 3.3 Run `npm run validate:skill-metadata`.
+  - **Command:** `npm run validate:skill-metadata`
+  - **Result:** PASS - `Skill metadata validation passed.`
+  - **Date:** `2026-03-25`
+  - **Note:** Repo-wide skill metadata remains aligned after updating the maintained forge skill.
+- [x] 4. Record evidence in this task list.

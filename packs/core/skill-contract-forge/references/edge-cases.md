@@ -99,6 +99,31 @@ If downstream phases must still inspect examples, templates, or long reference m
 - route templates or output scaffolds into `assets/`
 - keep the approved brief as the handoff artifact instead of teaching auxiliary local source paths as required downstream authority
 
+## Durable approved brief artifact
+
+When the environment supports working-file persistence, prefer one inspectable approved brief artifact, commonly an `eval-brief.json`, as the contract-to-implementation handoff.
+
+Do not:
+- leave the only approved brief in transient chat output when later phases need to inspect it directly
+- create multiple local paraphrases of the same brief with drift between them
+- treat auxiliary notes or copied summaries as equivalent authority to the approved brief artifact
+
+The durable artifact should stay contract-only and should remain the single handoff authority for the next phase.
+
+## High-signal probes instead of filler
+
+`activationProbes`, `negativeSignals`, and `seedEvalIntent` should preserve the smallest useful discovery and edge-case surface.
+
+Prefer:
+- 3-5 representative trigger probes
+- nearby non-trigger negatives that could otherwise false-trigger
+- at least one ambiguity or stop-and-ask comparison when the boundary has a likely confusion point
+
+Avoid:
+- long padded lists of nearly identical trigger prompts
+- generic out-of-scope negatives that do not help nearby routing
+- empty or decorative `seedEvalIntent` notes that fail to preserve what later dogfooding should compare
+
 ## Grounded repo defaults
 
 Do not invent repo-local truths just to make a brief feel more complete.

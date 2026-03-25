@@ -118,6 +118,10 @@ Invalid because `sourceRefs` must reflect real authority used for the brief, not
 
 Invalid when the brief lists repo-local authoring files just because they were inspected upstream. Durable examples, templates, or reference material should be distilled into the brief or routed into `references/` or `assets/` through `authoring.packageShape`.
 
+### Trigger output spreads the handoff across multiple paraphrases
+
+Invalid when the run leaves several inconsistent local summaries of the approved brief instead of one inspectable brief artifact in working files when the environment can persist files.
+
 ### Trigger output missing `authoring.packageShape`
 
 Invalid because trigger-path briefs must freeze the minimal package shape instead of leaving downstream implementation to invent whether support folders are needed.
@@ -125,6 +129,10 @@ Invalid because trigger-path briefs must freeze the minimal package shape instea
 ### Trigger output selects `agents` without `authoring.interface`
 
 Invalid because once a brief says `agents` is required, it must also freeze the minimal interface metadata that downstream implementation would need for `agents/openai.yaml`.
+
+### Trigger output uses decorative probes and negatives
+
+Invalid when `activationProbes`, `negativeSignals`, or `seedEvalIntent` are padded with repetitive filler instead of preserving a small, high-signal set of representative triggers, nearby non-triggers, and ambiguity edges.
 
 ## What the examples are for
 

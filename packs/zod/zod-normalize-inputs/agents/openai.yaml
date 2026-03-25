@@ -1,5 +1,6 @@
 interface:
   display_name: "zod-normalize-inputs"
-  short_description: "Normalize untrusted inputs with Zod coercion/transform/refine: query/path params, forms, and DB row decoding."
+  short_description: "Normalize untrusted inputs with Zod coercion, transform, and refine for params, forms, DB rows, and similar boundary values."
+  default_prompt: "Use this skill when inputs arrive as strings or loosely typed values at a boundary and need one-time normalization with Zod before business logic."
 policy:
   allow_implicit_invocation: true

@@ -16,6 +16,8 @@ Examples:
 Expected behavior:
 - begin with `Result: trigger`
 - end with `Skill implementation ready`
+- map approved brief fields into maintained files instead of paraphrasing the contract abstractly
+- preserve existing support files that already satisfy the approved brief
 
 ## Stop-and-ask examples
 
@@ -45,3 +47,13 @@ Examples:
 
 Expected behavior:
 - begin with `Result: non-trigger`
+
+## Anti-examples
+
+### Rewriting every support file in a required folder
+
+Invalid when implementation rewrites every file under `references/` or `agents/` just because the approved contract requires that folder.
+
+### Leaving frontmatter or agent metadata implicit
+
+Invalid when the approved contract already freezes `skill.description` or `authoring.interface`, but implementation leaves those fields unchanged or reconstructs them from repo habit instead of applying the contract directly.

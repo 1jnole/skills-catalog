@@ -1,0 +1,112 @@
+{
+  "skill": {
+    "name": "zod-normalize-inputs",
+    "description": "Normalizes untrusted stringly-typed or loosely typed inputs into domain-friendly values with Zod coercion, transform, and refine. Use when query/path params, form fields, DB row shapes, or similar boundary inputs need typed normalization before application logic. Do not use for HTTP JSON response validation, schema-variant derivation from a base schema, or inputs already normalized upstream.",
+    "version": "0.1.0"
+  },
+  "authoring": {
+    "singleJob": "Define one reusable skill that normalizes untrusted boundary inputs with Zod so downstream code can rely on typed values without repeating normalization across layers.",
+    "packageShape": {
+      "requiredFiles": [
+        "SKILL.md"
+      ],
+      "supportFolders": [
+        "references",
+        "agents"
+      ]
+    },
+    "interface": {
+      "display_name": "zod-normalize-inputs",
+      "short_description": "Normalize untrusted inputs with Zod coercion, transform, and refine for params, forms, DB rows, and similar boundary values.",
+      "default_prompt": "Use this skill when inputs arrive as strings or loosely typed values at a boundary and need one-time normalization with Zod before business logic."
+    },
+    "triggerBoundary": {
+      "shouldTriggerWhen": [
+        "A task needs to normalize query params or path params from strings into typed values with Zod",
+        "A task needs to normalize form field values into domain-friendly types before application logic",
+        "A task needs to decode DB rows or other stringly shaped records into typed values with Zod",
+        "A task needs to transform validated boundary strings into runtime values such as Date",
+        "A task needs refine or superRefine rules on top of normalized boundary inputs"
+      ],
+      "shouldNotTriggerWhen": [
+        "The main task is validating HTTP JSON responses or API payloads coming from external services",
+        "The main task is deriving create, patch, public, or private schema variants from an existing base schema",
+        "The input values are already normalized and validated upstream",
+        "The task is general TypeScript coercion cleanup without adopting or extending Zod boundary schemas"
+      ],
+      "stopConditions": [
+        "It is unclear whether normalization belongs at this boundary or has already happened in another layer",
+        "The request mixes normalization with response validation or schema-variant derivation as one inseparable task",
+        "The boundary source of the untrusted values is missing or ambiguous",
+        "The task would require duplicating the same normalization logic across multiple layers instead of choosing one boundary"
+      ]
+    }
+  },
+  "successModel": {
+    "outcomeGoals": [
+      "The skill routes boundary normalization tasks to Zod coercion, transform, and refine patterns",
+      "The skill keeps normalization as a one-time boundary concern instead of repeated downstream coercion"
+    ],
+    "boundaryGoals": [
+      "The skill cleanly excludes HTTP JSON response validation",
+      "The skill cleanly excludes schema-variant derivation from base schemas",
+      "The skill stops when boundary ownership or upstream normalization is ambiguous"
+    ],
+    "styleGoals": [
+      "Instructions stay procedural and compact",
+      "Pattern routing remains shallow and explicit"
+    ],
+    "efficiencyGoals": [
+      "The core workflow stays in SKILL.md while examples and pitfalls remain in references",
+      "The skill minimizes duplicate normalization guidance across layers"
+    ],
+    "definitionOfDone": [
+      "Eval Brief ready"
+    ],
+    "nonGoals": [
+      "Implement the maintained skill package in this phase",
+      "Author eval coverage in this phase",
+      "Define shared runtime validation architecture"
+    ]
+  },
+  "activationProbes": [
+    {
+      "id": "probe-query-params-normalization",
+      "kind": "explicit",
+      "prompt": "Normalize Express query params with Zod so page and completed become typed values before filtering.",
+      "expectedSignal": "Trigger for boundary input normalization with coercion and optional handling."
+    },
+    {
+      "id": "probe-string-to-date-transform",
+      "kind": "explicit",
+      "prompt": "Take a submitted date string and normalize it to a Date with Zod before service logic uses it.",
+      "expectedSignal": "Trigger for transform-based boundary normalization."
+    },
+    {
+      "id": "probe-db-row-decoding",
+      "kind": "explicit",
+      "prompt": "Decode a DB row where booleans arrive as 0/1 and timestamps as strings into a typed shape with Zod.",
+      "expectedSignal": "Trigger for stringly DB row normalization."
+    }
+  ],
+  "seedEvalIntent": {
+    "mustStopAt": "Eval Brief ready",
+    "comparisonFocus": [
+      "Boundary normalization tasks that should trigger the skill",
+      "Nearby requests that belong to API response validation instead",
+      "Nearby requests that belong to schema variant derivation instead",
+      "Ambiguous cases where boundary ownership should force stop-and-ask"
+    ],
+    "notes": [
+      "This artifact freezes the contract only and does not implement the maintained skill files.",
+      "Later dogfooding should compare real contract-first use against the expected forge behavior and move any missing guidance into the forge skills rather than leaving it external to the normal flow."
+    ]
+  },
+  "negativeSignals": [
+    "Validate a REST response body from fetch or axios with Zod",
+    "Derive CreateUserSchema and PatchUserSchema from a base object schema",
+    "Normalize values that are already typed and validated in an earlier boundary layer",
+    "Mix boundary normalization, response parsing, and schema derivation in one inseparable instruction"
+  ],
+  "sourceRefs": []
+}

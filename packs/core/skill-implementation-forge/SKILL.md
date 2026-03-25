@@ -73,6 +73,7 @@ If `authoring.packageShape.supportFolders` includes `agents`, the same approved 
 If that interface authority is missing, stop and ask rather than inventing dependency-facing agent metadata.
 
 Supportive context may include an existing implementation, repository policy, or official external docs when the contract or implementation explicitly depends on them. Those materials are helpful context, not extra required handoff authority.
+When a target package already exists, inspect it before editing. Start with the maintained `SKILL.md`, then inspect only the support files materially affected by the approved contract so you can reuse aligned content instead of rewriting it by default.
 
 ## Outputs
 
@@ -83,6 +84,7 @@ Produce:
 - dependency-facing agent files only when `agents` is required and the same contract artifact freezes the needed `authoring.interface`
 
 Do not add support folders just to mirror upstream local authoring notes unless the approved contract freezes a durable downstream need.
+Do not rewrite every file inside a contract-required support folder just because that folder exists. Change only the files materially affected by the approved contract and preserve already-aligned support content.
 
 When the approved contract freezes durable examples, templates, or long reference content, materialize that content into the target package instead of leaving the implementation dependent on upstream local authoring paths.
 
@@ -155,14 +157,19 @@ Return `stop-and-ask` when:
 4. If `authoring.packageShape` exists, obey it. Otherwise use the conservative legacy fallback of `SKILL.md` only.
 5. If `supportFolders` includes `agents`, confirm that the same contract authority also freezes `authoring.interface`; otherwise stop and ask.
 6. Inspect the current target state, if any.
-7. Create or refactor `SKILL.md` as the core implementation surface.
-8. Add only the support files and folders the approved contract requires. Do not create empty support folders.
-9. When support folders are contract-required, keep durable support content in the nearest justified folder instead of growing a monolithic `SKILL.md`.
-10. Preserve conditional contract semantics. Do not turn a conditional repo convention into an unconditional path or input requirement.
-11. Before finalizing, verify that the resulting skill still has one clear job, explicit inputs and outputs, strong stop-and-ask behavior, relevant edge cases handled at the smallest justified package shape, and no unnecessary support folders.
-12. If the current repo provides a skill-metadata validation gate, run it before closure. In this repo, use `npm run validate:skill-metadata`.
-13. Start the response with the exact `Result:` line for the routed path.
-14. On trigger paths, stop at the exact terminal marker `Skill implementation ready`.
+7. Map the approved brief into concrete maintained files:
+   - apply `skill.name` and `skill.description` to `SKILL.md` frontmatter
+   - apply the approved boundary, negatives, and stop conditions to the maintained `SKILL.md` instructions
+   - apply `authoring.interface` to dependency-facing agent metadata when `agents` is contract-required
+8. Create or refactor `SKILL.md` as the core implementation surface.
+9. Add only the support files and folders the approved contract requires. Do not create empty support folders.
+10. When contract-required support folders already exist, inspect the existing files materially affected by the approved contract and preserve the ones that already satisfy it.
+11. When support folders are contract-required, keep durable support content in the nearest justified folder instead of growing a monolithic `SKILL.md`.
+12. Preserve conditional contract semantics. Do not turn a conditional repo convention into an unconditional path or input requirement.
+13. Before finalizing, verify that the resulting skill still has one clear job, explicit inputs and outputs, strong stop-and-ask behavior, relevant edge cases handled at the smallest justified package shape, and no unnecessary support-folder churn.
+14. If the current repo provides a skill-metadata validation gate, run it before closure. In this repo, use `npm run validate:skill-metadata`.
+15. Start the response with the exact `Result:` line for the routed path.
+16. On trigger paths, stop at the exact terminal marker `Skill implementation ready`.
 
 ## Guardrails
 

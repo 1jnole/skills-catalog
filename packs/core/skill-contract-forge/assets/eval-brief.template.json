@@ -55,16 +55,24 @@
       "kind": "explicit",
       "prompt": "Create one reusable skill from this request",
       "expectedSignal": "Workflow is scoped and contract-first"
+    },
+    {
+      "id": "probe-explicit-2",
+      "kind": "explicit",
+      "prompt": "Refactor one named existing skill by freezing its contract first",
+      "expectedSignal": "Existing-skill refactor routes to contract-first work"
     }
   ],
   "seedEvalIntent": {
     "mustStopAt": "Eval Brief ready",
     "comparisonFocus": [
       "Requests that should trigger skill authoring",
-      "Nearby requests that should not trigger skill authoring"
+      "Nearby requests that should not trigger skill authoring",
+      "At least one ambiguity or stop-and-ask edge near the skill boundary"
     ],
     "notes": [
       "This artifact carries authoring intent only",
+      "Prefer a tiny high-signal set of representative triggers and nearby negatives instead of padded lists",
       "Downstream eval authoring turns this into Promptfoo-native suite cases under evals/engines/promptfoo/tests/"
     ]
   },
