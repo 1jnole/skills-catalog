@@ -97,9 +97,10 @@
         - type: icontains-any
           metric: stop_marker
           value:
-            - clarify
-            - please provide
-            - please specify
+            - brief
+            - not accessible
+            - not inspectable
+            - exact reference
         - type: icontains-any
           metric: authority_reason
           value:
@@ -132,11 +133,10 @@
         - type: icontains-any
           metric: stop_marker
           value:
-            - clarify
-            - please provide
-            - please specify
-            - please separate
             - separate
+            - separate phase
+            - implementation work
+            - mixed phase
         - type: icontains-any
           metric: mixed_phase_reason
           value:

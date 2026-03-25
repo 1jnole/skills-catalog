@@ -66,6 +66,7 @@ Use this checklist when editing Promptfoo family prompts or tests:
 - keep `prompts/with-skill.txt` as harness guidance; do not let it become a second contract with narrower or broader routing rules
 - preserve distinct suite roles: `contract` for normative boundary checks, `uplift` for lighter comparative improvement, and `uplift.without-skill` for baseline non-impersonation only
 - prefer small structural assertions over long wording lists; rely first on terminal markers, routing boundary, and the primary stop reason
+- use `not-icontains` and `not-icontains-any` for load-bearing negatives such as terminal markers, wrong response-mode labels, and baseline impersonation; do not use them to police courtesy wording or incidental style
 - protect routing edge cases when simplifying YAML, especially deictic target, authority-mentioned-only, mixed-phase requests, conflicting authority, and baseline impersonation guards
 - run `promptfoo validate -c evals/engines/promptfoo/<skill-name>/promptfooconfig*.yaml` after meaningful family edits
 

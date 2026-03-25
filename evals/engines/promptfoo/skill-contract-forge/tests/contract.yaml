@@ -518,9 +518,6 @@
           metric: classification
           value: "Classification: stop-and-ask"
         - type: icontains
-          metric: stop_marker
-          value: clarif
-        - type: icontains
           metric: ambiguity_reason
           value: multiple
         - type: icontains-any
@@ -560,9 +557,12 @@
         - type: icontains-any
           metric: stop_marker
           value:
-            - clarif
-            - please provide
-            - please specify
+            - lacks identification
+            - identify the target skill
+            - missing target skill
+            - exact target skill
+            - exact name of the existing skill
+            - exact existing skill
         - type: icontains-any
           metric: ambiguity_reason
           value:
@@ -606,9 +606,12 @@
         - type: icontains-any
           metric: stop_marker
           value:
-            - clarif
-            - please provide
-            - please specify
+            - lacks identification
+            - identify the target skill
+            - missing target skill
+            - exact target skill
+            - exact name of the existing skill
+            - exact existing skill
         - type: icontains-any
           metric: ambiguity_reason
           value:

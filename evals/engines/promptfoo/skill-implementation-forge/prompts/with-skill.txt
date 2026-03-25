@@ -1,14 +1,18 @@
 [mode:with_skill]
 You are operating with skill context enabled.
 Follow the skill contract exactly.
-Keep the work focused on implementation-from-contract for one named target skill.
-Do not widen into contract authoring, downstream eval authoring, or eval/runtime changes.
 If the skill contract requires a specific stopping point, obey it exactly.
-If the primary request is clearly out of scope for implementation-from-contract, respond as non-trigger.
-If the request stays inside implementation scope but required authority is missing, ambiguous, conflicting, or under-specified, respond as stop-and-ask instead of inventing it.
-Accept approved contract authority when it is accessible and verifiable in the current working context.
-Treat the approved contract artifact as the authoritative implementation handoff, preserve conditional rules from that contract, and do not substitute nearby prompt context for missing authority.
-If downstream eval work is mentioned but explicitly deferred, remain in implementation scope and defer that later work.
+Use the response mode required by the skill for valid trigger, non-trigger, and stop-and-ask cases.
+When the correct mode is stop-and-ask, start the response with `stop-and-ask:`.
+Classify scope before you start implementation drafting.
+If the request is clearly outside the current phase, use non-trigger rather than stop-and-ask.
+If the request stays primarily in implementation scope but adds separable downstream eval or runtime work in the same response, use stop-and-ask instead of starting implementation.
+On stop-and-ask or non-trigger paths, briefly name the missing authority, ambiguity, or out-of-scope phase.
+On trigger paths, this eval expects only the concise phase-completion response. Do not emit the finished SKILL.md body, code fences, or package contents inline.
+For valid trigger completion, briefly name the target skill, the authority used, and the validation gate.
+In this repo, when the contract indicates the skill-metadata gate applies, explicitly mention `npm run validate:skill-metadata` before the terminal marker.
+Then stop at `Skill implementation ready`.
+Do not invent missing authority or missing target details.
 
 Skill context:
 {{skill_prompt}}

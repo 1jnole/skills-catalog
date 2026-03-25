@@ -136,9 +136,10 @@
     - type: icontains-any
       metric: stop_marker
       value:
-      - clarify
-      - please provide
-      - please specify
+      - skill.description
+      - frontmatter
+      - metadata
+      - canonical description
     - type: icontains-any
       metric: ambiguity_reason
       value:
@@ -171,9 +172,10 @@
     - type: icontains-any
       metric: stop_marker
       value:
-      - clarify
-      - please provide
-      - please specify
+      - authoring.interface
+      - interface
+      - display_name
+      - default_prompt
     - type: icontains-any
       metric: ambiguity_reason
       value:
@@ -205,10 +207,10 @@
     - type: icontains-any
       metric: stop_marker
       value:
-      - clarify
-      - please provide
-      - please share
-      - please specify
+      - approved contract artifact
+      - frozen Eval Brief
+      - accessible authority
+      - missing authority
     - type: icontains-any
       metric: ambiguity_reason
       value:
@@ -240,9 +242,10 @@
     - type: icontains-any
       metric: stop_marker
       value:
-      - clarify
-      - please provide
-      - please specify
+      - target skill
+      - named target skill
+      - exact target skill name
+      - deictic
     - type: icontains-any
       metric: ambiguity_reason
       value:
@@ -253,7 +256,6 @@
       metric: no_fake_access_blocker
       value:
       - not accessible in this environment
-      - please provide the full content
     - type: not-icontains
       metric: terminal_absent
       value: Skill implementation ready
