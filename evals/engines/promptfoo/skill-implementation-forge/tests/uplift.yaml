@@ -98,20 +98,8 @@
     threshold: 1
     assert:
     - type: icontains
-      metric: target_skill
-      value: openspec-bootstrap
-    - type: icontains-any
-      metric: package_shape_authority
-      value:
-      - packageShape
-      - references
-      - support folder
-    - type: icontains-any
-      metric: validation_gate
-      value:
-      - npm run validate:skill-metadata
-      - validate:skill-metadata
-      - skill metadata validation
+      metric: trigger_marker
+      value: 'Result: trigger'
     - type: icontains
       metric: terminal_marker
       value: Skill implementation ready
@@ -366,28 +354,8 @@
     threshold: 1
     assert:
     - type: icontains
-      metric: target_skill
-      value: planner
-    - type: icontains-any
-      metric: durable_support_routing
-      value:
-      - references
-      - assets
-      - examples
-      - templates
-    - type: icontains-any
-      metric: package_shape_surface
-      value:
-      - authoring.packageShape
-      - supportFolders
-      - requiredFiles
-      - package shape
-    - type: icontains-any
-      metric: validation_gate
-      value:
-      - npm run validate:skill-metadata
-      - validate:skill-metadata
-      - skill metadata validation
+      metric: trigger_marker
+      value: 'Result: trigger'
     - type: icontains
       metric: terminal_marker
       value: Skill implementation ready

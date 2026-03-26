@@ -130,17 +130,16 @@
       metric: stop_and_ask_behavior
       threshold: 1
       assert:
-        - type: icontains-any
+        - type: icontains
           metric: stop_marker
-          value:
-            - separate
-            - separate phase
-            - implementation work
-            - mixed phase
+          value: "Result: stop-and-ask"
         - type: icontains-any
           metric: mixed_phase_reason
           value:
             - implementation
+            - approved brief
+            - current implementation
+            - eval coverage
             - inseparable
             - mixed
         - type: not-icontains

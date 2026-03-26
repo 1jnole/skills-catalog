@@ -94,7 +94,7 @@ The exact terminal marker is:
 
 `Skill implementation ready`
 
-Use `Skill implementation ready` only for valid trigger-path completion. Do not end `non-trigger` or `stop-and-ask` responses with that marker.
+Use the trigger completion marker only for valid trigger-path completion. Do not end `non-trigger` or `stop-and-ask` responses with that marker.
 
 ## Required response format
 
@@ -120,7 +120,7 @@ Line 1 must be exactly:
 
 Then explain briefly why the request is outside implementation-from-contract scope.
 
-Do not end with `Skill implementation ready`.
+Do not end with the trigger completion marker.
 
 ### Stop-and-ask path
 
@@ -130,7 +130,7 @@ Line 1 must be exactly:
 
 Then ask only for the missing clarification needed to continue safely.
 
-Do not end with `Skill implementation ready`.
+Do not end with the trigger completion marker.
 
 ### Format guardrails
 

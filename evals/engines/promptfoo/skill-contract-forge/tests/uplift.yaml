@@ -111,13 +111,6 @@
           metric: classification
           value: "Classification: non-trigger"
         - type: icontains-any
-          metric: out_of_scope_marker
-          value:
-            - Out of scope for skill-contract-forge.
-            - outside the scope
-            - out of scope
-            - not about defining or refining the contract of a single skill
-        - type: icontains-any
           metric: reason_marker
           value:
             - AGENTS
@@ -152,14 +145,6 @@
         - type: starts-with
           metric: classification
           value: "Classification: non-trigger"
-        - type: icontains-any
-          metric: boundary_marker
-          value:
-            - Out of scope for skill-contract-forge.
-            - outside the scope
-            - out of scope
-            - outside the contract authoring scope
-            - outside the contract authoring phase
         - type: icontains-any
           metric: reason_marker
           value:

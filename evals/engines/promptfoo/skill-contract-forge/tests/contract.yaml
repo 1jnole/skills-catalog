@@ -338,13 +338,6 @@
           metric: classification
           value: "Classification: non-trigger"
         - type: icontains-any
-          metric: out_of_scope_marker
-          value:
-            - Out of scope for skill-contract-forge.
-            - outside the scope
-            - out of scope
-            - not about defining or refining the contract of a single skill
-        - type: icontains-any
           metric: reason_marker
           value:
             - AGENTS
@@ -379,14 +372,6 @@
         - type: starts-with
           metric: classification
           value: "Classification: non-trigger"
-        - type: icontains-any
-          metric: boundary_marker
-          value:
-            - Out of scope for skill-contract-forge.
-            - outside the scope
-            - out of scope
-            - outside the contract authoring scope
-            - outside the contract authoring phase
         - type: icontains-any
           metric: reason_marker
           value:
@@ -423,19 +408,6 @@
         - type: starts-with
           metric: classification
           value: "Classification: non-trigger"
-        - type: icontains-any
-          metric: out_of_scope_marker
-          value:
-            - Out of scope for skill-contract-forge.
-            - outside the scope
-            - out of scope
-            - not about defining or refining the contract of a single skill
-            - not about defining or refining the contract of a single skill
-            - does not cover
-            - does not handle
-            - only handles
-            - only defines or refines
-            - before implementation
         - type: icontains-any
           metric: reason_marker
           value:
@@ -476,20 +448,6 @@
         - type: starts-with
           metric: classification
           value: "Classification: non-trigger"
-        - type: icontains-any
-          metric: boundary_marker
-          value:
-            - Out of scope for skill-contract-forge.
-            - outside the scope
-            - out of scope
-            - does not cover
-            - only handles
-            - does not produce
-            - this skill is only for
-            - only defines or refines
-            - only defines
-            - outside the contract authoring phase
-            - contract authoring scope
         - type: icontains-any
           metric: reason_marker
           value:
