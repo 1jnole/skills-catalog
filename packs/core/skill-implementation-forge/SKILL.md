@@ -85,6 +85,8 @@ Produce:
 
 Do not add support folders just to mirror upstream local authoring notes unless the approved contract freezes a durable downstream need.
 Do not rewrite every file inside a contract-required support folder just because that folder exists. Change only the files materially affected by the approved contract and preserve already-aligned support content.
+When `SKILL.md` is the primary maintained execution surface, make output and completion guidance explicit inside that file instead of leaving closure implied.
+Map approved-brief success semantics into concise maintained sections such as `Outputs`, validation expectations, or a small `Done When` equivalent when the workflow benefits from an explicit done signal.
 
 When the approved contract freezes durable examples, templates, or long reference content, materialize that content into the target package instead of leaving the implementation dependent on upstream local authoring paths.
 
@@ -160,13 +162,14 @@ Return `stop-and-ask` when:
 7. Map the approved brief into concrete maintained files:
    - apply `skill.name` and `skill.description` to `SKILL.md` frontmatter
    - apply the approved boundary, negatives, and stop conditions to the maintained `SKILL.md` instructions
+   - apply approved output and success semantics to concise maintained closure guidance when `SKILL.md` is the main execution surface
    - apply `authoring.interface` to dependency-facing agent metadata when `agents` is contract-required
 8. Create or refactor `SKILL.md` as the core implementation surface.
 9. Add only the support files and folders the approved contract requires. Do not create empty support folders.
 10. When contract-required support folders already exist, inspect the existing files materially affected by the approved contract and preserve the ones that already satisfy it.
 11. When support folders are contract-required, keep durable support content in the nearest justified folder instead of growing a monolithic `SKILL.md`.
 12. Preserve conditional contract semantics. Do not turn a conditional repo convention into an unconditional path or input requirement.
-13. Before finalizing, verify that the resulting skill still has one clear job, explicit inputs and outputs, strong stop-and-ask behavior, relevant edge cases handled at the smallest justified package shape, and no unnecessary support-folder churn.
+13. Before finalizing, verify that the resulting skill still has one clear job, explicit inputs and outputs, an explicit completion condition when the workflow needs one, strong stop-and-ask behavior, relevant edge cases handled at the smallest justified package shape, and no unnecessary support-folder churn.
 14. If the current repo provides a skill-metadata validation gate, run it before closure. In this repo, use `npm run validate:skill-metadata`.
 15. Start the response with the exact `Result:` line for the routed path.
 16. On trigger paths, stop at the exact terminal marker `Skill implementation ready`.

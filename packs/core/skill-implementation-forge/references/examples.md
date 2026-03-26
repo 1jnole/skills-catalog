@@ -57,3 +57,7 @@ Invalid when implementation rewrites every file under `references/` or `agents/`
 ### Leaving frontmatter or agent metadata implicit
 
 Invalid when the approved contract already freezes `skill.description` or `authoring.interface`, but implementation leaves those fields unchanged or reconstructs them from repo habit instead of applying the contract directly.
+
+### Leaving target-skill closure implicit
+
+Invalid when the implemented target `SKILL.md` has routing and outputs but still lacks a clear completion signal even though the workflow benefits from one. Implementation should materialize concise output and done guidance inside the target package rather than assuming an external playbook will fill that gap later.

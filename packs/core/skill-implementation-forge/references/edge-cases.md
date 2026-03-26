@@ -86,9 +86,21 @@ Implementation should map approved brief fields into the nearest maintained outp
 Common mappings:
 - `skill.name` and `skill.description` -> `SKILL.md` frontmatter
 - approved boundary, nearby negatives, and stop conditions -> maintained `SKILL.md` instructions
+- approved output and success semantics -> maintained `Outputs`, validation, or concise completion guidance when `SKILL.md` is the primary execution surface
 - `authoring.interface` -> `agents/openai.yaml` or equivalent dependency-facing agent metadata when `agents` is required
 
 Do not leave those mappings implicit when the approved contract already froze them explicitly.
+
+## Target skill still lacks a clear done signal
+
+When the implemented target skill's main workflow lives in `SKILL.md`, do not stop after metadata and routing sections if the result still leaves closure implicit.
+
+Prefer adding concise maintained guidance such as:
+- outputs the skill should leave behind
+- validation expectations
+- a small `Done When` equivalent when the workflow benefits from an explicit completion condition
+
+Do not rely on external playbooks to supply that closure semantics after implementation.
 
 ## Repo-local gate
 

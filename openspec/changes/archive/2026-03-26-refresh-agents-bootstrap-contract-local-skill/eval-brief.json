@@ -1,0 +1,106 @@
+{
+  "skill": {
+    "name": "agents-bootstrap",
+    "description": "Syncs or refreshes the managed root `AGENTS.md` block from a maintained baseline so repo-level guardrails stay deterministic. Use when the repository root `AGENTS.md` needs its managed section bootstrapped, refreshed after baseline drift, or standardized without touching user-authored sections. Do not use for ad-hoc edits outside managed markers, OpenSpec workspace bootstrap, or broader policy rewrites beyond the current managed baseline.",
+    "version": "0.1.0"
+  },
+  "authoring": {
+    "singleJob": "Define one reusable skill that synchronizes the managed block in the repository root `AGENTS.md` from a maintained baseline while preserving all non-managed content.",
+    "packageShape": {
+      "requiredFiles": [
+        "SKILL.md"
+      ],
+      "supportFolders": [
+        "assets"
+      ]
+    },
+    "triggerBoundary": {
+      "shouldTriggerWhen": [
+        "A task asks to bootstrap or refresh the managed block in the repository root `AGENTS.md`",
+        "A task asks to realign the root managed instructions after the maintained baseline changed",
+        "A task asks to standardize repo-level guardrails inside the managed markers without rewriting user-owned sections",
+        "A task needs to create the managed markers in a root `AGENTS.md` that is missing them while preserving surrounding content"
+      ],
+      "shouldNotTriggerWhen": [
+        "The task asks for ad-hoc edits outside the managed markers in `AGENTS.md`",
+        "The task is OpenSpec workspace bootstrap or repair such as `openspec/config.yaml` or `openspec/AGENTS.override.md` work",
+        "The task is about nested override authoring near specialized work instead of the root managed block",
+        "The task is a broader repository policy rewrite that goes beyond synchronizing the current managed baseline"
+      ],
+      "stopConditions": [
+        "It is unclear which repository root owns the target `AGENTS.md`",
+        "The request mixes managed-block sync with unrelated `AGENTS.md` rewrites in one inseparable pass",
+        "The canonical managed baseline is missing or ambiguous",
+        "Repository policy forbids managed-block automation for this repo"
+      ]
+    }
+  },
+  "successModel": {
+    "outcomeGoals": [
+      "The skill routes root `AGENTS.md` managed-block sync requests to a deterministic baseline-driven workflow",
+      "The skill preserves non-managed content while updating only the managed section",
+      "The skill keeps the managed template asset aligned with the live managed baseline"
+    ],
+    "boundaryGoals": [
+      "The skill cleanly excludes ad-hoc editing outside managed markers",
+      "The skill cleanly excludes OpenSpec bootstrap responsibilities",
+      "The skill stops when repository root ownership or baseline authority is ambiguous"
+    ],
+    "styleGoals": [
+      "Instructions stay procedural and compact",
+      "The workflow favors minimal, reviewable diffs"
+    ],
+    "efficiencyGoals": [
+      "Core routing and procedure stay in `SKILL.md`",
+      "The managed baseline lives in `assets/AGENTS.managed.md` instead of being reconstructed ad hoc"
+    ],
+    "definitionOfDone": [
+      "Eval Brief ready"
+    ],
+    "nonGoals": [
+      "Implement the maintained skill package in this phase",
+      "Edit `openspec/AGENTS.override.md` in this phase",
+      "Author eval coverage in this phase"
+    ]
+  },
+  "activationProbes": [
+    {
+      "id": "probe-root-managed-block-refresh",
+      "kind": "explicit",
+      "prompt": "Refresh the managed section in the repo root AGENTS.md so it matches the current baseline but keep all custom notes outside the markers.",
+      "expectedSignal": "Trigger for managed-block synchronization with preservation of non-managed content."
+    },
+    {
+      "id": "probe-insert-missing-markers",
+      "kind": "explicit",
+      "prompt": "Bootstrap the managed block in AGENTS.md because the root file is missing the BEGIN and END markers.",
+      "expectedSignal": "Trigger for marker insertion and baseline-driven root sync."
+    },
+    {
+      "id": "probe-template-drift",
+      "kind": "explicit",
+      "prompt": "Update the root AGENTS managed instructions and keep the packaged AGENTS.managed.md template aligned to the same baseline.",
+      "expectedSignal": "Trigger for syncing both the live managed block and the maintained template asset."
+    }
+  ],
+  "seedEvalIntent": {
+    "mustStopAt": "Eval Brief ready",
+    "comparisonFocus": [
+      "Root `AGENTS.md` managed-block sync requests that should trigger the skill",
+      "Nearby requests that belong to ad-hoc `AGENTS.md` editing instead",
+      "Nearby requests that belong to `openspec-bootstrap` instead",
+      "Ambiguous cases where repository-root ownership or baseline authority should force stop-and-ask"
+    ],
+    "notes": [
+      "This artifact was refreshed from the local repo copy of `skill-contract-forge` and the local `agents-bootstrap` package.",
+      "The refreshed contract keeps `assets/AGENTS.managed.md` as durable package-shape authority instead of relying on a Codex-home skill copy."
+    ]
+  },
+  "negativeSignals": [
+    "Rewrite AGENTS.md sections outside the managed markers to add custom repo rules",
+    "Bootstrap or repair `openspec/config.yaml` or `openspec/AGENTS.override.md`",
+    "Author nested override instructions for a specialized subtree instead of the root managed block",
+    "Mix managed-block synchronization with a larger repository policy redesign in one inseparable request"
+  ],
+  "sourceRefs": []
+}

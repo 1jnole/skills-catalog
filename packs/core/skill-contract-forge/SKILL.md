@@ -115,6 +115,9 @@ Use the smallest justified package shape:
 - use `assets` for templates or output resources
 - use `agents` only when metadata, UI, or dependency-facing interface files are materially required
 
+For `existing-skill-refactor` and `skill-rewrite`, treat an existing maintained template, baseline, or output scaffold in `assets/` as positive justification for keeping `assets` in `supportFolders` when downstream implementation must preserve that artifact.
+Do not collapse the package shape to `supportFolders: []` just because that durable `assets/` surface is small.
+
 If `authoring.packageShape.supportFolders` includes `agents`, the brief must also freeze:
 - `authoring.interface.display_name`
 - `authoring.interface.short_description`
@@ -307,6 +310,7 @@ Read `assets/skill-template.guardrail.md` only when reusable guardrail wording w
 Read `assets/spec-template.md` only when reusable Eval Brief plan wording would help freeze success-model or non-goal text cleanly.
 When refactoring or rewriting a named existing skill, inspect the current target skill package and nearby repo docs as needed to map the current boundary before freezing the brief.
 Start with the maintained `SKILL.md`, then inspect only the support folders that materially affect `authoring.packageShape` or `authoring.interface`.
+If the current package already owns a durable template or baseline in `assets/`, freeze that dependency through `authoring.packageShape` instead of treating it as incidental context.
 If those materials need to survive into implementation or eval authoring, distill them into the brief or freeze them into `references/` or `assets/` via `authoring.packageShape` instead of preserving local file refs.
 Engine-specific execution assets live outside this skill contract.
 
@@ -318,6 +322,7 @@ Engine-specific execution assets live outside this skill contract.
 4. Freeze the canonical skill metadata in `skill.name` and `skill.description` so downstream implementation does not have to infer required frontmatter.
    Write `skill.description` from the activation boundary: summarize when to use the skill from `activationProbes`, add nearby non-use boundaries from `negativeSignals`, and do not collapse it into a deliverable-only summary of `authoring.singleJob`.
 5. Freeze the minimal package shape in `authoring.packageShape`, keeping `requiredFiles` anchored on `SKILL.md` and `supportFolders` limited to the folders the request truly justifies.
+   When an existing skill already depends on a maintained template, scaffold, or baseline in `assets/`, preserve `assets` in `supportFolders` even if the durable support surface is only one file.
 6. If `supportFolders` includes `agents`, freeze `authoring.interface.display_name`, `authoring.interface.short_description`, and `authoring.interface.default_prompt` in the same brief.
 7. Freeze only portable `sourceRefs`: allow `[]` when the distilled brief is sufficient, include only durable authority that must survive the handoff, and do not preserve auxiliary repo-local authoring refs as downstream dependencies.
 8. Keep repo-local claims honest: do not invent repo defaults, planning paths, mandatory `AGENTS.md` inputs, or mandatory external-doc dependencies unless grounded authority actually requires them, and distill any consulted repo-local rules into the brief itself.

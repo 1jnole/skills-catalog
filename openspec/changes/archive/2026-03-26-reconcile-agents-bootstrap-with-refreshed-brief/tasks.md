@@ -1,0 +1,29 @@
+- [x] 1. Implement `agents-bootstrap` from the refreshed approved brief artifact.
+- [x] 1.1 Author `proposal.md`, `design.md`, and a delta spec for the implementation change.
+- [x] 1.2 Refactor `packs/core/agents-bootstrap/SKILL.md` to match the refreshed brief.
+- [x] 1.3 Preserve `packs/core/agents-bootstrap/assets/AGENTS.managed.md` unchanged because it already satisfies the refreshed package shape.
+- [x] 2. Validate the implementation phase.
+- [x] 2.1 Run `openspec validate "reconcile-agents-bootstrap-with-refreshed-brief" --type change`.
+  - **Command:** `openspec validate "reconcile-agents-bootstrap-with-refreshed-brief" --type change`
+  - **Result:** PASS - `Change 'reconcile-agents-bootstrap-with-refreshed-brief' is valid`
+  - **Date:** `2026-03-26`
+  - **Note:** The implementation slug includes a valid delta spec for the refreshed-brief refactor.
+- [x] 2.2 Run `npm run validate:skill-metadata`.
+  - **Command:** `npm run validate:skill-metadata`
+  - **Result:** PASS - `Skill metadata validation passed.`
+  - **Date:** `2026-03-26`
+  - **Note:** Repo-wide skill metadata remains aligned after updating the target skill package.
+- [x] 2.3 Record implementation evidence showing the maintained package now matches the refreshed brief.
+  - **Command:** `git diff -- packs/core/agents-bootstrap/SKILL.md`
+  - **Result:** PASS - the maintained skill now shows a substantive refactor from the older `Purpose/Inputs/Steps` shape to the refreshed `Overview/Use When/Do Not Use When/Stop And Ask When/Procedure` shape, and removes the old `npm run verify` requirement.
+  - **Date:** `2026-03-26`
+  - **Note:** The visible diff confirms this phase-2 run changed the maintained skill rather than only documenting reconciliation.
+  - **Command:** `rg -n "A task asks to bootstrap or refresh the managed block|It is unclear which repository root owns the target|The canonical managed baseline is missing or ambiguous|assets/AGENTS\.managed\.md" packs/core/agents-bootstrap/SKILL.md`
+  - **Result:** PASS - lines 10, 15, 27, 29, 34, 41, 53, 55, and 63 confirm the refreshed brief markers are now present in the maintained skill.
+  - **Date:** `2026-03-26`
+  - **Note:** The refactored `SKILL.md` now matches the refreshed brief on description, package-shape references, and stop conditions.
+  - **Command:** `rg -n "BEGIN MANAGED: agents-bootstrap|END MANAGED: agents-bootstrap" packs/core/agents-bootstrap/assets/AGENTS.managed.md`
+  - **Result:** PASS - lines 1 and 35 confirm the managed baseline asset still carries the expected markers.
+  - **Date:** `2026-03-26`
+  - **Note:** The contract-required `assets/` surface remained aligned without unnecessary edits.
+- [x] 3. Stop at the implementation handoff.

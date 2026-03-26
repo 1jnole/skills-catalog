@@ -99,6 +99,11 @@ If downstream phases must still inspect examples, templates, or long reference m
 - route templates or output scaffolds into `assets/`
 - keep the approved brief as the handoff artifact instead of teaching auxiliary local source paths as required downstream authority
 
+For existing-skill refactors and rewrites:
+- do not drop `assets` from `authoring.packageShape` when the current package already owns a maintained template, baseline, or scaffold that downstream implementation must preserve
+- do not treat a single-file `assets/` folder as decorative noise if it carries deterministic skill behavior
+- prefer preserving that durable support surface in `supportFolders` over forcing downstream implementation to rediscover it from local inspection
+
 ## Durable approved brief artifact
 
 When the environment supports working-file persistence, prefer one inspectable approved brief artifact, commonly an `eval-brief.json`, as the contract-to-implementation handoff.

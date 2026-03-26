@@ -1,0 +1,24 @@
+- [x] 1. Refresh the contract-only brief for `agents-bootstrap` using the local repo copy of `skill-contract-forge`.
+- [x] 1.1 Author `proposal.md`, `design.md`, and a delta spec for the contract refresh.
+- [x] 1.2 Materialize `eval-brief.json` from the local repo skill and local target package state.
+- [x] 2. Validate the refreshed change artifacts.
+- [x] 2.1 Run `openspec validate "refresh-agents-bootstrap-contract-local-skill" --type change`.
+  - **Command:** `openspec validate "refresh-agents-bootstrap-contract-local-skill" --type change`
+  - **Result:** PASS - `Change 'refresh-agents-bootstrap-contract-local-skill' is valid`
+  - **Date:** `2026-03-25`
+  - **Note:** The refreshed contract slug includes a valid delta spec and durable brief artifact.
+- [x] 2.2 Parse-check the refreshed brief JSON top-level structure.
+  - **Command:** `node -e "const fs=require('fs'); const p='openspec/changes/refresh-agents-bootstrap-contract-local-skill/eval-brief.json'; const j=JSON.parse(fs.readFileSync(p,'utf8')); const keys=['skill','authoring','successModel','activationProbes','negativeSignals','sourceRefs']; const missing=keys.filter(k=>!(k in j)); if(missing.length){console.error('Missing keys:', missing.join(',')); process.exit(1);} console.log('Top-level keys OK:', keys.join(', '));"`
+  - **Result:** PASS - `Top-level keys OK: skill, authoring, successModel, activationProbes, negativeSignals, sourceRefs`
+  - **Date:** `2026-03-25`
+  - **Note:** The refreshed approved brief retains the expected top-level contract structure.
+- [x] 2.3 Compare the refreshed brief with the prior brief and the current implementation.
+  - **Command:** `node -e "const fs=require('fs'); const oldJ=JSON.parse(fs.readFileSync('openspec/changes/archive/2026-03-25-refactor-agents-bootstrap-contract/eval-brief.json','utf8')); const newJ=JSON.parse(fs.readFileSync('openspec/changes/refresh-agents-bootstrap-contract-local-skill/eval-brief.json','utf8')); const diffs=[]; const keys=new Set([...Object.keys(oldJ),...Object.keys(newJ)]); for (const k of keys){ const a=JSON.stringify(oldJ[k]); const b=JSON.stringify(newJ[k]); if(a!==b) diffs.push(k); } console.log('Top-level fields with changes:', diffs.join(', ')||'(none)');"`
+  - **Result:** PASS - `Top-level fields with changes: seedEvalIntent`
+  - **Date:** `2026-03-25`
+  - **Note:** The refreshed brief matches the prior contract payload except for refreshed provenance notes in `seedEvalIntent`.
+  - **Command:** `rg -n "repository root owns the target|canonical managed baseline is missing or ambiguous|assets/AGENTS\\.managed\\.md" packs/core/agents-bootstrap/SKILL.md`
+  - **Result:** PASS - lines 10, 27, 29, 34, 41, 53, 55, and 63 all match the refreshed brief's baseline and stop-condition markers.
+  - **Date:** `2026-03-25`
+  - **Note:** The current implementation still aligns with the refreshed contract on the key package-shape and stop-condition markers.
+- [x] 3. Record verification evidence in this task list and stop at the refreshed contract handoff.

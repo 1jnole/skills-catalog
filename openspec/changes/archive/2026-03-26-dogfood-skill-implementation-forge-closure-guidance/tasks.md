@@ -1,0 +1,21 @@
+- [x] 1. Document the new dogfooding gap for `skill-implementation-forge`.
+- [x] 1.1 Author `proposal.md`, `design.md`, and a delta spec for the refinement.
+- [x] 2. Update `packs/core/skill-implementation-forge/` so implementation runs teach explicit output and completion guidance in maintained target skills.
+- [x] 2.1 Update `SKILL.md`.
+- [x] 2.2 Update supporting references.
+- [x] 3. Validate the maintained skill package.
+- [x] 3.1 Run `openspec validate "dogfood-skill-implementation-forge-closure-guidance" --type change`.
+  - **Command:** `openspec validate "dogfood-skill-implementation-forge-closure-guidance" --type change`
+  - **Result:** PASS - `Change 'dogfood-skill-implementation-forge-closure-guidance' is valid`
+  - **Date:** `2026-03-26`
+  - **Note:** The OpenSpec change includes a valid delta spec for the closure-guidance refinement.
+- [x] 3.2 Run `npm run validate:skill-metadata`.
+  - **Command:** `npm run validate:skill-metadata`
+  - **Result:** PASS - `Skill metadata validation passed.`
+  - **Date:** `2026-03-26`
+  - **Note:** Repo-wide skill metadata remains aligned after updating the maintained implementation-forge skill.
+- [x] 4. Record evidence in this task list.
+  - **Command:** `git diff -- packs/core/skill-implementation-forge/SKILL.md packs/core/skill-implementation-forge/references/edge-cases.md packs/core/skill-implementation-forge/references/examples.md`
+  - **Result:** PASS - the maintained forge skill now teaches explicit closure guidance in `SKILL.md` and reinforces it in supporting references.
+  - **Date:** `2026-03-26`
+  - **Note:** The dogfooding refinement landed in the implementation-forge skill itself, which was the intended outcome of this review.

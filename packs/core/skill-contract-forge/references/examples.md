@@ -126,6 +126,10 @@ Invalid when the run leaves several inconsistent local summaries of the approved
 
 Invalid because trigger-path briefs must freeze the minimal package shape instead of leaving downstream implementation to invent whether support folders are needed.
 
+### Trigger output drops durable `assets/` authority from an existing skill
+
+Invalid when a refactor brief collapses `supportFolders` to `[]` even though the current package already depends on a maintained template, baseline, or output scaffold in `assets/`. Small durable support surfaces still count as package-shape authority when downstream implementation must preserve them.
+
 ### Trigger output selects `agents` without `authoring.interface`
 
 Invalid because once a brief says `agents` is required, it must also freeze the minimal interface metadata that downstream implementation would need for `agents/openai.yaml`.

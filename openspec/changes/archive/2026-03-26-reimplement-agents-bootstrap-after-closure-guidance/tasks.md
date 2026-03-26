@@ -1,0 +1,29 @@
+- [x] 1. Implement `agents-bootstrap` again from the refreshed approved brief using the updated local `skill-implementation-forge`.
+- [x] 1.1 Author `proposal.md`, `design.md`, and a delta spec for the rerun.
+- [x] 1.2 Refactor `packs/core/agents-bootstrap/SKILL.md` to the refreshed contract shape.
+- [x] 1.3 Preserve `packs/core/agents-bootstrap/assets/AGENTS.managed.md` unchanged because it already satisfies the contract.
+- [x] 2. Validate the rerun implementation.
+- [x] 2.1 Run `openspec validate "reimplement-agents-bootstrap-after-closure-guidance" --type change`.
+  - **Command:** `openspec validate "reimplement-agents-bootstrap-after-closure-guidance" --type change`
+  - **Result:** PASS - `Change 'reimplement-agents-bootstrap-after-closure-guidance' is valid`
+  - **Date:** `2026-03-26`
+  - **Note:** The rerun implementation slug includes a valid delta spec for the closure-guidance rerun.
+- [x] 2.2 Run `npm run validate:skill-metadata`.
+  - **Command:** `npm run validate:skill-metadata`
+  - **Result:** PASS - `Skill metadata validation passed.`
+  - **Date:** `2026-03-26`
+  - **Note:** Repo-wide skill metadata remains aligned after rerunning the implementation.
+- [x] 2.3 Record implementation evidence showing the maintained skill now reflects the refreshed brief and explicit closure guidance.
+  - **Command:** `git diff -- packs/core/agents-bootstrap/SKILL.md`
+  - **Result:** PASS - the maintained skill now shows a substantive refactor from the older `Purpose/Inputs/Steps` shape to the refreshed contract shape and adds explicit `Done When` guidance.
+  - **Date:** `2026-03-26`
+  - **Note:** The rerun demonstrates a visible implementation improvement driven by the updated local implementation-forge guidance.
+  - **Command:** `rg -n "A task asks to bootstrap or refresh the managed block|It is unclear which repository root owns the target|The canonical managed baseline is missing or ambiguous|## Done When|assets/AGENTS\.managed\.md" packs/core/agents-bootstrap/SKILL.md`
+  - **Result:** PASS - lines 10, 15, 27, 29, 34, 41, 53, 55, 57, 59, and 69 confirm the refreshed brief markers and explicit closure guidance are present in the maintained skill.
+  - **Date:** `2026-03-26`
+  - **Note:** The rerun now materializes the closure semantics that the dogfooding change to `skill-implementation-forge` was meant to teach.
+  - **Command:** `rg -n "BEGIN MANAGED: agents-bootstrap|END MANAGED: agents-bootstrap" packs/core/agents-bootstrap/assets/AGENTS.managed.md`
+  - **Result:** PASS - lines 1 and 35 confirm the contract-required baseline asset remained aligned without unnecessary edits.
+  - **Date:** `2026-03-26`
+  - **Note:** The `assets/` surface stayed stable while the `SKILL.md` implementation improved.
+- [x] 3. Stop at the implementation handoff.

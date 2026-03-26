@@ -1,0 +1,16 @@
+- [x] 1. Implement `agents-bootstrap` from the approved contract artifact.
+- [x] 1.1 Author `proposal.md`, `design.md`, and a delta spec for the implementation change.
+- [x] 1.2 Refactor `packs/core/agents-bootstrap/SKILL.md` to match the approved contract.
+- [x] 1.3 Preserve `packs/core/agents-bootstrap/assets/AGENTS.managed.md` as the contract-required baseline asset without unnecessary changes.
+- [x] 2. Validate the implementation.
+- [x] 2.1 Run `openspec validate "implement-agents-bootstrap-from-contract" --type change`.
+  - **Command:** `openspec validate "implement-agents-bootstrap-from-contract" --type change`
+  - **Result:** PASS - `Change 'implement-agents-bootstrap-from-contract' is valid`
+  - **Date:** `2026-03-25`
+  - **Note:** The implementation slug includes a valid delta spec and aligned implementation artifacts.
+- [x] 2.2 Run `npm run validate:skill-metadata`.
+  - **Command:** `npm run validate:skill-metadata`
+  - **Result:** PASS - `Skill metadata validation passed.`
+  - **Date:** `2026-03-25`
+  - **Note:** Repo-wide skill metadata remains aligned after updating the target skill package.
+- [x] 3. Record evidence in this task list and stop at the implementation handoff.

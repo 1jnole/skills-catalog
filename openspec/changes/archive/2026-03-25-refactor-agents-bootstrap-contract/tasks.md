@@ -1,0 +1,15 @@
+- [x] 1. Freeze the contract-only brief for `agents-bootstrap` as an `existing-skill-refactor`.
+- [x] 1.1 Author `proposal.md`, `design.md`, and a delta spec for the refactor intent.
+- [x] 1.2 Materialize `eval-brief.json` with explicit skill metadata, package shape, trigger boundary, negatives, and stop conditions.
+- [x] 2. Validate the change artifacts.
+- [x] 2.1 Run `openspec validate "refactor-agents-bootstrap-contract" --type change`.
+  - **Command:** `openspec validate "refactor-agents-bootstrap-contract" --type change`
+  - **Result:** PASS - `Change 'refactor-agents-bootstrap-contract' is valid`
+  - **Date:** `2026-03-25`
+  - **Note:** The contract slug includes a valid delta spec and approved brief artifact.
+- [x] 2.2 Parse-check the brief JSON top-level structure.
+  - **Command:** `node -e "const fs=require('fs'); const p='openspec/changes/refactor-agents-bootstrap-contract/eval-brief.json'; const j=JSON.parse(fs.readFileSync(p,'utf8')); const keys=['skill','authoring','successModel','activationProbes','negativeSignals','sourceRefs']; const missing=keys.filter(k=>!(k in j)); if(missing.length){console.error('Missing keys:', missing.join(',')); process.exit(1);} console.log('Top-level keys OK:', keys.join(', '));"`
+  - **Result:** PASS - `Top-level keys OK: skill, authoring, successModel, activationProbes, negativeSignals, sourceRefs`
+  - **Date:** `2026-03-25`
+  - **Note:** The approved brief retains the expected top-level contract structure.
+- [x] 3. Record verification evidence in this task list and stop at the contract handoff.
