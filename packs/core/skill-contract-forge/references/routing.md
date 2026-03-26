@@ -43,6 +43,7 @@ Signals:
 
 This path also requires a clear existing target skill. If the target is missing, return `Classification: stop-and-ask`.
 Phrases like "rewrite the skill", "rewrite this", or "replace the current contract" are still ambiguous unless they name the existing skill.
+The current repo, current skill folder, or active skill context never counts as naming that target skill.
 
 ## Deferred downstream work
 

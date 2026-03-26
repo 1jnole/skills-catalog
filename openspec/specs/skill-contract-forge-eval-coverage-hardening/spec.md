@@ -24,6 +24,11 @@ Trigger cases in the supported `skill-contract-forge` runtime MUST require embed
 - **WHEN** a trigger-case output includes the required trigger markers and embedded JSON satisfying the supported Eval Brief schema
 - **THEN** the hardened Promptfoo suite SHALL allow that structural portion of the case to pass
 
+#### Scenario: Trigger output uses array-shaped `seedEvalIntent`
+- **WHEN** a trigger-case output includes the required trigger markers and terminal marker
+- **AND** the embedded JSON payload emits `seedEvalIntent` as a bare array or bare string
+- **THEN** the hardened Promptfoo suite SHALL mark that case as failed
+
 ### Requirement: Classification contradictions are rejected
 The supported `skill-contract-forge` runtime SHALL reject outputs that mix incompatible classification families or trigger markers.
 

@@ -19,6 +19,11 @@ The `skill-contract-forge` core contract MUST preserve the neutral structural gu
 - **THEN** it SHALL describe that structure as consumable by downstream structural validation
 - **AND** it SHALL NOT describe Promptfoo checks as the reason the structure must remain stable
 
+#### Scenario: `seedEvalIntent` remains engine-neutral but explicit
+- **WHEN** `packs/core/skill-contract-forge/SKILL.md` describes `seedEvalIntent`
+- **THEN** it SHALL describe `seedEvalIntent` as a neutral brief field with `mustStopAt`, `comparisonFocus`, and `notes`
+- **AND** it SHALL keep that structure independent from any engine-specific suite implementation
+
 ### Requirement: Core skill metadata remains contract-first
 The maintained `skill-contract-forge` skill metadata MUST describe the current contract-first workflow and stop at `Eval Brief ready`.
 

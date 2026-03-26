@@ -343,6 +343,7 @@
             - Out of scope for skill-contract-forge.
             - outside the scope
             - out of scope
+            - not about defining or refining the contract of a single skill
         - type: icontains-any
           metric: reason_marker
           value:
@@ -428,19 +429,25 @@
             - Out of scope for skill-contract-forge.
             - outside the scope
             - out of scope
+            - not about defining or refining the contract of a single skill
+            - not about defining or refining the contract of a single skill
             - does not cover
+            - does not handle
             - only handles
+            - only defines or refines
             - before implementation
         - type: icontains-any
           metric: reason_marker
           value:
             - downstream eval authoring
+            - downstream evaluation implementation
             - finished Eval Brief
             - finished brief
             - golden and negative test cases
             - creating golden and negative test cases
             - evaluation test cases
             - downstream evaluation authoring
+            - contract authoring for a single skill
         - type: not-icontains
           metric: incompatible_trigger
           value: "Classification: trigger"

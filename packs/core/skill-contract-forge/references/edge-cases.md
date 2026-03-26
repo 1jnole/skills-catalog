@@ -44,6 +44,21 @@ Anti-example:
 - Do not pick `Workflow: skill-rewrite`
 - Do not assume the target is `skill-contract-forge` just because the prompt is evaluated inside this repo or skill folder
 
+## Structured `seedEvalIntent`
+
+Trigger-path briefs should keep `seedEvalIntent` structured and compact.
+
+Prefer:
+- an object with `mustStopAt`, `comparisonFocus`, and `notes`
+- one short comparison sentence that preserves the most important follow-up check
+- notes that stay contract-only and engine-neutral
+
+Avoid:
+- bare arrays of free-form bullets under `seedEvalIntent`
+- strings like `"seedEvalIntent": "compare later"`
+- empty placeholder objects that omit the intended comparison surface
+- `comparisonFocus` lists that restate downstream test cases
+
 ## Downstream eval noise
 
 Mentions of benchmark suites, scoring, runtime evals, or Promptfoo do not automatically make the request non-trigger.
@@ -121,11 +136,13 @@ The durable artifact should stay contract-only and should remain the single hand
 
 Prefer:
 - 3-5 representative trigger probes
+- plain natural-language probes rather than quoted multi-line snippets inside JSON strings
 - nearby non-trigger negatives that could otherwise false-trigger
 - at least one ambiguity or stop-and-ask comparison when the boundary has a likely confusion point
 
 Avoid:
 - long padded lists of nearly identical trigger prompts
+- trigger probes that rely on awkward escaped quotes or pasted multi-line code inside one JSON string
 - generic out-of-scope negatives that do not help nearby routing
 - empty or decorative `seedEvalIntent` notes that fail to preserve what later dogfooding should compare
 

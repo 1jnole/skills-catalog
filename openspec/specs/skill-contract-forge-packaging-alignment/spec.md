@@ -18,11 +18,10 @@ Keep `skill-contract-forge` as one portable skill package whose contract lives i
 ### Requirement: Supportive material is separated from the normative contract
 Examples, routing expansion, and edge-case walkthroughs MUST live outside the always-loaded `SKILL.md` when they are not required to state the contract itself.
 
-#### Scenario: Skill references are reviewed after refactor
-- **WHEN** `packs/core/skill-contract-forge/SKILL.md` and `packs/core/skill-contract-forge/references/*.md` are reviewed together
-- **THEN** `SKILL.md` SHALL keep purpose, scope, routing envelope, trigger rules, core operating rules, and procedure
-- **AND** long examples, anti-examples, and edge-case walkthroughs SHALL live in `references/`
-- **AND** `SKILL.md` SHALL point to those support files using relative paths
+#### Scenario: Trigger path needs packaged interface metadata
+- **WHEN** `packs/core/skill-contract-forge/SKILL.md` teaches when to use `agents`
+- **THEN** it SHALL state that UI-facing metadata for skill lists or dependency-facing interface metadata justify `authoring.packageShape.supportFolders: ["agents"]`
+- **AND** it SHALL NOT teach freezing `authoring.interface` while leaving the package shape as if no `agents` support surface were required
 
 ### Requirement: Eval runtime remains outside the skill package
 

@@ -116,6 +116,7 @@
             - Out of scope for skill-contract-forge.
             - outside the scope
             - out of scope
+            - not about defining or refining the contract of a single skill
         - type: icontains-any
           metric: reason_marker
           value:

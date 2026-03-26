@@ -7,6 +7,7 @@
     "successModel",
     "activationProbes",
     "negativeSignals",
+    "seedEvalIntent",
     "sourceRefs"
   ],
   "properties": {
@@ -275,17 +276,19 @@
     },
     "seedEvalIntent": {
       "type": "object",
+      "required": [
+        "mustStopAt",
+        "comparisonFocus",
+        "notes"
+      ],
       "properties": {
         "mustStopAt": {
           "type": "string",
           "minLength": 1
         },
         "comparisonFocus": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          }
+          "type": "string",
+          "minLength": 1
         },
         "notes": {
           "type": "array",

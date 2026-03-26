@@ -68,6 +68,7 @@ The request should make it possible to identify:
 - enough context to define boundaries without inventing missing facts
 
 For `existing-skill-refactor` and `skill-rewrite`, the target skill must be identified explicitly. Deictic phrases such as `this skill`, `the current skill`, `rewrite this`, or similar shorthand do not identify a valid target skill on their own.
+The visible current repository, current skill folder, or active skill context does not count as naming the target skill either.
 
 Useful supporting inputs may include existing skill files, repository docs, templates, examples, and prior notes about the skill boundary.
 For `existing-skill-refactor` and `skill-rewrite`, inspect the current target skill package first when it is available, especially the maintained `SKILL.md` and any existing `references/`, `assets/`, `scripts/`, or `agents/` folders that materially shape package or interface decisions.
@@ -84,13 +85,34 @@ The brief should be implementation-ready for the next step, but must remain cont
 - `successModel`
 - `activationProbes`
 - `negativeSignals`
+- `seedEvalIntent`
 - `sourceRefs`
 
 Treat `activationProbes`, `negativeSignals`, and `seedEvalIntent` as a tiny high-signal surface, not as filler:
 - use `activationProbes` for a small set of representative trigger prompts that should help later discovery and dogfooding
+- keep `activationProbes` as plain natural-language prompts rather than quoted multi-line snippets that make the JSON surface brittle
 - keep `negativeSignals` focused on nearby non-trigger requests, not generic out-of-scope noise
 - use `seedEvalIntent` to preserve what later phases should compare, including at least one ambiguity or stop-and-ask edge when the boundary has a likely confusion point
+- emit `seedEvalIntent` as an object, not as a bare array or bare string
+- keep `seedEvalIntent.mustStopAt` set to `Eval Brief ready`
+- keep `seedEvalIntent.comparisonFocus` as one short comparison sentence
+- keep `seedEvalIntent.notes` as a very short list of implementation-neutral handoff notes
 - prefer 3-5 strong signals over a padded list of weak or repetitive items
+
+Use this minimal `seedEvalIntent` shape on trigger paths:
+
+```json
+{
+  "seedEvalIntent": {
+    "mustStopAt": "Eval Brief ready",
+    "comparisonFocus": "Verify the contract boundary, especially trigger vs non-trigger vs stop-and-ask behavior.",
+    "notes": [
+      "Keep coverage contract-only.",
+      "Do not include runtime or grader implementation details."
+    ]
+  }
+}
+```
 
 On trigger paths, `skill` must freeze both:
 - `name`
@@ -122,6 +144,9 @@ If `authoring.packageShape.supportFolders` includes `agents`, the brief must als
 - `authoring.interface.display_name`
 - `authoring.interface.short_description`
 - `authoring.interface.default_prompt`
+
+If the request says the skill should ship with UI-facing metadata for skill lists or dependency-facing interface metadata for integration, treat that as positive justification for including `agents` in `authoring.packageShape.supportFolders`.
+Do not freeze `authoring.interface` while leaving `supportFolders: []` for that same request.
 
 If the request does not justify a support folder clearly, default to `supportFolders: []` rather than inventing scaffolding.
 
@@ -225,6 +250,8 @@ Do not end with `Eval Brief ready`.
 - Even when the chosen workflow is `existing-skill-refactor` or `skill-rewrite`, the classification line still remains `Classification: trigger`.
 - Do not output bare JSON without the required routing header lines.
 - Do not prepend commentary, bullets, or explanation before the required classification line.
+- Do not output `seedEvalIntent` as a bare array or bare string on trigger paths.
+- Do not expand `seedEvalIntent.comparisonFocus` into a checklist or mini test matrix.
 - On trigger paths, keep the JSON payload boundary-only and place `Eval Brief ready` on its own final line.
 
 For examples, anti-examples, and edge-case walkthroughs, see:
@@ -268,6 +295,7 @@ Return `Classification: stop-and-ask` when:
 - the request combines multiple major workflows
 - the target skill is missing or ambiguous
 - the request uses deictic target references such as `this skill`, `the current skill`, or `rewrite this` instead of naming the existing skill to change
+- the only apparent target comes from the current repo, current folder, or active skill context rather than the prompt itself
 - the user asks for contract and implementation in one inseparable step
 - the scope is too unclear to freeze a single-skill contract safely
 - a refactor or rewrite request does not identify which existing skill should be changed
@@ -289,6 +317,7 @@ Do not silently widen the job from contract authoring into final skill implement
 ### 5. No invention
 If required facts are missing, stop and ask rather than invent them.
 Do not infer the target skill from the current repository, folder, or active skill context when the prompt itself does not name that skill.
+Do not treat the skill currently being inspected as an implicit target for `existing-skill-refactor` or `skill-rewrite`.
 
 ### 6. Minimal downstream intent
 Include enough evaluation intent to make downstream authoring easier, but stop before runtime or full eval implementation.
@@ -324,9 +353,10 @@ Engine-specific execution assets live outside this skill contract.
 5. Freeze the minimal package shape in `authoring.packageShape`, keeping `requiredFiles` anchored on `SKILL.md` and `supportFolders` limited to the folders the request truly justifies.
    When an existing skill already depends on a maintained template, scaffold, or baseline in `assets/`, preserve `assets` in `supportFolders` even if the durable support surface is only one file.
 6. If `supportFolders` includes `agents`, freeze `authoring.interface.display_name`, `authoring.interface.short_description`, and `authoring.interface.default_prompt` in the same brief.
+   If the request explicitly asks for UI-facing metadata or dependency-facing interface metadata, include `agents` in `supportFolders` rather than leaving the interface detached from package shape.
 7. Freeze only portable `sourceRefs`: allow `[]` when the distilled brief is sufficient, include only durable authority that must survive the handoff, and do not preserve auxiliary repo-local authoring refs as downstream dependencies.
 8. Keep repo-local claims honest: do not invent repo defaults, planning paths, mandatory `AGENTS.md` inputs, or mandatory external-doc dependencies unless grounded authority actually requires them, and distill any consulted repo-local rules into the brief itself.
-9. Freeze a tiny high-signal discovery surface inside the brief: preserve 3-5 representative `activationProbes`, focused nearby `negativeSignals`, and `seedEvalIntent` comparison notes that include at least one ambiguity or stop-and-ask edge when relevant.
+9. Freeze a tiny high-signal discovery surface inside the brief: preserve 3-5 representative `activationProbes`, focused nearby `negativeSignals`, and a structured `seedEvalIntent` object with `mustStopAt`, one short `comparisonFocus` sentence, and concise `notes` that include at least one ambiguity or stop-and-ask edge when relevant.
 10. Produce the boundary-only Eval Brief JSON and, when the environment supports working-file persistence, materialize it as one inspectable approved brief artifact instead of multiple paraphrased handoff files.
 11. End trigger-path responses with the exact line `Eval Brief ready`.
 12. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative cases, explicit `skill.name` plus an activation-oriented `skill.description`, portable `sourceRefs`, honest repo-local claims, one durable brief artifact when working files are available, a compact high-signal probe/negative surface, and the smallest justified `packageShape` without silently widening scope.
