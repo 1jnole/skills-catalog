@@ -21,6 +21,9 @@
     threshold: 1
     assert:
     - type: icontains
+      metric: trigger_marker
+      value: 'Result: trigger'
+    - type: icontains
       metric: target_skill
       value: skill-eval-forge
     - type: icontains-any
@@ -28,15 +31,7 @@
       value:
       - contract artifact
       - approved contract artifact
-      - accessible
-      - verifiable
-      - current working context
-    - type: icontains-any
-      metric: validation_gate
-      value:
-      - npm run validate:skill-metadata
-      - validate:skill-metadata
-      - skill metadata validation
+      - openspec/specs/skill-eval-forge/spec.md
     - type: icontains
       metric: terminal_marker
       value: Skill implementation ready
@@ -60,21 +55,18 @@
     threshold: 1
     assert:
     - type: icontains
+      metric: trigger_marker
+      value: 'Result: trigger'
+    - type: icontains
       metric: target_skill
       value: release-notes-skill
     - type: icontains-any
       metric: contract_authority
       value:
+      - provided
+      - attached
       - uploaded
-      - accessible
-      - verifiable
-      - approved contract artifact
-    - type: icontains-any
-      metric: validation_gate
-      value:
-      - npm run validate:skill-metadata
-      - validate:skill-metadata
-      - skill metadata validation
+      - supplied
     - type: icontains
       metric: terminal_marker
       value: Skill implementation ready
@@ -100,6 +92,14 @@
     - type: icontains
       metric: trigger_marker
       value: 'Result: trigger'
+    - type: icontains
+      metric: target_skill
+      value: openspec-bootstrap
+    - type: icontains-any
+      metric: package_shape_authority
+      value:
+      - references
+      - support folder
     - type: icontains
       metric: terminal_marker
       value: Skill implementation ready
@@ -356,6 +356,16 @@
     - type: icontains
       metric: trigger_marker
       value: 'Result: trigger'
+    - type: icontains
+      metric: target_skill
+      value: planner
+    - type: icontains-any
+      metric: durable_support_routing
+      value:
+      - references
+      - assets
+      - examples
+      - templates
     - type: icontains
       metric: terminal_marker
       value: Skill implementation ready

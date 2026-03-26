@@ -107,6 +107,8 @@ Line 1 must be exactly:
 `Result: trigger`
 
 Then give the concise implementation-phase response.
+Name the target skill and the approved contract authority you used.
+When `authoring.packageShape` materially affects the implementation, briefly name the relevant support surface or package-shape consequence without expanding into a long summary.
 
 The final line must be exactly:
 
