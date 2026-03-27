@@ -10,6 +10,108 @@
     "seedEvalIntent",
     "sourceRefs"
   ],
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "supportArtifacts"
+        ],
+        "properties": {
+          "supportArtifacts": {
+            "type": "array",
+            "contains": {
+              "type": "object",
+              "required": [
+                "path"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "pattern": "^references/[^/]+$"
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "authoring": {
+            "type": "object",
+            "properties": {
+              "packageShape": {
+                "type": "object",
+                "properties": {
+                  "supportFolders": {
+                    "type": "array",
+                    "contains": {
+                      "const": "references"
+                    }
+                  }
+                },
+                "required": [
+                  "supportFolders"
+                ]
+              }
+            },
+            "required": [
+              "packageShape"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "supportArtifacts"
+        ],
+        "properties": {
+          "supportArtifacts": {
+            "type": "array",
+            "contains": {
+              "type": "object",
+              "required": [
+                "path"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "pattern": "^assets/[^/]+$"
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "authoring": {
+            "type": "object",
+            "properties": {
+              "packageShape": {
+                "type": "object",
+                "properties": {
+                  "supportFolders": {
+                    "type": "array",
+                    "contains": {
+                      "const": "assets"
+                    }
+                  }
+                },
+                "required": [
+                  "supportFolders"
+                ]
+              }
+            },
+            "required": [
+              "packageShape"
+            ]
+          }
+        }
+      }
+    }
+  ],
   "properties": {
     "skill": {
       "type": "object",
@@ -158,39 +260,43 @@
     "successModel": {
       "type": "object",
       "minProperties": 1,
-      "anyOf": [
-        {
-          "required": [
-            "outcomeGoals"
-          ]
-        },
-        {
-          "required": [
-            "mustPass"
-          ]
-        },
-        {
-          "required": [
-            "criteria"
-          ]
-        },
-        {
-          "required": [
-            "mustPassChecks"
-          ]
-        },
-        {
-          "required": [
-            "description"
-          ]
-        },
-        {
-          "required": [
-            "outcome"
-          ]
-        }
-      ],
       "additionalProperties": true
+    },
+    "supportArtifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "kind",
+          "required",
+          "purpose",
+          "whenToRead"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^(references|assets)/[^/]+$"
+          },
+          "kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 1
+          },
+          "whenToRead": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": true
+      }
     },
     "activationProbes": {
       "oneOf": [

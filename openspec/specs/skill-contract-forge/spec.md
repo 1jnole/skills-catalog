@@ -57,6 +57,22 @@ The maintained `skill-contract-forge` skill SHALL teach refactor and rewrite run
 - **AND** it SHALL not collapse the package shape to `supportFolders: []` merely because the durable support surface is small
 - **AND** it SHALL treat that asset as package-shape authority rather than as decorative context
 
+### Requirement: Trigger briefs may freeze source-backed support artifacts when they materially sharpen the handoff
+
+The maintained `skill-contract-forge` skill SHALL allow trigger-path Eval Briefs to declare optional `supportArtifacts` when the provided sources already contain high-signal patterns, canonical examples, anti-examples, or edge cases that materially improve routing, blockers, or downstream eval intent.
+
+#### Scenario: Source-backed support material is preserved through the brief
+
+- **WHEN** a trigger-path `skill-contract-forge` run receives source-backed patterns, examples, anti-examples, or edge cases that materially sharpen routing, blockers, or eval intent
+- **THEN** it SHALL allow the approved brief to declare those materials in optional top-level `supportArtifacts`
+- **AND** it SHALL keep the main brief body boundary-only instead of pasting dense catalogs directly into the payload
+
+#### Scenario: Weak or repetitive source material does not create filler artifacts
+
+- **WHEN** the available sources do not contain high-signal support material that materially improves the contract handoff
+- **THEN** the approved brief SHALL omit `supportArtifacts`
+- **AND** it SHALL NOT emit `supportArtifacts: []` or decorative placeholder artifacts
+
 ### Requirement: Missing-target refactors and rewrites do not self-target from local context
 
 The maintained `skill-contract-forge` skill SHALL treat missing-target existing-skill requests as unresolved even when the current skill is visible in local context.
@@ -67,4 +83,3 @@ The maintained `skill-contract-forge` skill SHALL treat missing-target existing-
 - **AND** the current repository, current folder, or active skill context makes one skill locally visible
 - **THEN** it SHALL still return `Classification: stop-and-ask`
 - **AND** it SHALL NOT treat that visible local skill as the prompt's named target
-

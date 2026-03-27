@@ -119,6 +119,30 @@ For existing-skill refactors and rewrites:
 - do not treat a single-file `assets/` folder as decorative noise if it carries deterministic skill behavior
 - prefer preserving that durable support surface in `supportFolders` over forcing downstream implementation to rediscover it from local inspection
 
+## Omitted source-backed support artifacts
+
+Return a lower-quality trigger brief when the provided sources clearly contain high-signal patterns, examples, anti-examples, or edge cases that materially improve routing or eval design, but the brief fails to declare them through `supportArtifacts`.
+
+Prefer declaring:
+- `references/` for pattern notes or edge-case catalogs
+- `assets/` for structured examples or scaffolds
+
+Do not invent support artifacts when the source material is weak or absent.
+Do not declare support artifacts as filler.
+
+## Support-artifact alignment and depth
+
+When `supportArtifacts` is present:
+- keep each path one level deep under `references/` or `assets/`
+- include the matching folder in `authoring.packageShape.supportFolders`
+- avoid `scripts/`, `agents/`, nested paths, and repo-local authoring notes outside the implemented skill package
+- explicitly say when downstream phases should read each artifact
+
+Anti-examples:
+- `references/patterns/source-patterns.md`
+- `notes/source-patterns.md`
+- `scripts/source-examples.json`
+
 ## Durable approved brief artifact
 
 When the environment supports working-file persistence, prefer one inspectable approved brief artifact, commonly an `eval-brief.json`, as the contract-to-implementation handoff.

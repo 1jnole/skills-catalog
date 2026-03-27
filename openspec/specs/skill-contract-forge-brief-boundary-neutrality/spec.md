@@ -24,6 +24,12 @@ The `skill-contract-forge` core contract MUST preserve the neutral structural gu
 - **THEN** it SHALL describe `seedEvalIntent` as a neutral brief field with `mustStopAt`, `comparisonFocus`, and `notes`
 - **AND** it SHALL keep that structure independent from any engine-specific suite implementation
 
+#### Scenario: `supportArtifacts` remains engine-neutral but explicit
+- **WHEN** `packs/core/skill-contract-forge/SKILL.md` describes `supportArtifacts`
+- **THEN** it SHALL describe `supportArtifacts` as an optional engine-neutral brief field
+- **AND** it SHALL keep those artifacts limited to source-backed implementation support rather than runtime or grader instructions
+- **AND** it SHALL keep the structure independent from any engine-specific suite implementation
+
 ### Requirement: Core skill metadata remains contract-first
 The maintained `skill-contract-forge` skill metadata MUST describe the current contract-first workflow and stop at `Eval Brief ready`.
 
@@ -141,4 +147,3 @@ The maintained `skill-contract-forge` authoring guidance SHALL teach `skill.desc
 - **THEN** they SHALL keep `skill.description` activation-oriented
 - **AND** they SHALL use third-person capability wording followed by routing boundaries such as `Use when ... Do not use for ...`
 - **AND** they SHALL NOT teach second-person metadata phrasing such as `Use this skill when ...`
-

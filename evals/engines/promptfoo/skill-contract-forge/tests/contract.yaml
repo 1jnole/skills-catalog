@@ -136,6 +136,160 @@
         - type: not-icontains
           metric: incompatible_stop_and_ask
           value: "Classification: stop-and-ask"
+- description: new-skill-support-artifacts-when-source-backed
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: new-skill-support-artifacts-when-source-backed
+    prompt: >-
+      Create a new reusable skill called `planner` for producing exactly one repo-native implementation plan before coding starts.
+      The provided sources already include high-signal routing patterns, canonical trigger examples, anti-examples, and edge cases that should stay inspectable downstream.
+      Keep the main brief lean.
+      If that source-backed material materially improves routing, blockers, or eval intent, preserve the patterns in `references/source-patterns.md` and the structured examples in `assets/source-examples.json` instead of pasting long tables into the main JSON payload.
+      Stop at `Eval Brief ready`.
+    expected_stop: Eval Brief ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: regression
+    expected_stop: Eval Brief ready
+  assert:
+    - type: assert-set
+      metric: support_artifacts_present
+      threshold: 1
+      assert:
+        - type: starts-with
+          metric: classification
+          value: "Classification: trigger"
+        - type: icontains
+          metric: workflow
+          value: "Workflow: new-skill"
+        - type: contains-json
+          metric: schema_valid
+          value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
+        - type: icontains
+          metric: support_artifacts_field
+          value: '"supportArtifacts": ['
+        - type: icontains
+          metric: support_artifact_reference_path
+          value: references/source-patterns.md
+        - type: icontains
+          metric: support_artifact_asset_path
+          value: assets/source-examples.json
+        - type: icontains
+          metric: package_shape_references
+          value: references
+        - type: icontains
+          metric: package_shape_assets
+          value: assets
+        - type: not-icontains
+          metric: no_empty_support_artifacts
+          value: '"supportArtifacts": []'
+        - type: icontains
+          metric: terminal_marker
+          value: Eval Brief ready
+        - type: not-icontains
+          metric: incompatible_non_trigger
+          value: "Classification: non-trigger"
+        - type: not-icontains
+          metric: incompatible_stop_and_ask
+          value: "Classification: stop-and-ask"
+- description: new-skill-omits-support-artifacts-when-not-material
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: new-skill-omits-support-artifacts-when-not-material
+    prompt: >-
+      Create a new reusable skill called `planner` for producing exactly one repo-native implementation plan before coding starts.
+      You may inspect repo-local planning notes if helpful, but the provided sources do not include canonical examples, anti-examples, edge-case catalogs, or reusable templates worth preserving downstream.
+      Freeze a lean contract and do not add decorative support artifacts.
+      Stop at `Eval Brief ready`.
+    expected_stop: Eval Brief ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: regression
+    expected_stop: Eval Brief ready
+  assert:
+    - type: assert-set
+      metric: support_artifacts_omitted
+      threshold: 1
+      assert:
+        - type: starts-with
+          metric: classification
+          value: "Classification: trigger"
+        - type: icontains
+          metric: workflow
+          value: "Workflow: new-skill"
+        - type: contains-json
+          metric: schema_valid
+          value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
+        - type: not-icontains
+          metric: no_support_artifacts_field
+          value: '"supportArtifacts":'
+        - type: not-icontains
+          metric: no_empty_support_artifacts
+          value: '"supportArtifacts": []'
+        - type: icontains
+          metric: terminal_marker
+          value: Eval Brief ready
+        - type: not-icontains
+          metric: incompatible_non_trigger
+          value: "Classification: non-trigger"
+        - type: not-icontains
+          metric: incompatible_stop_and_ask
+          value: "Classification: stop-and-ask"
+- description: new-skill-support-artifacts-stay-shallow-and-portable
+  vars:
+    skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md
+    case_id: new-skill-support-artifacts-stay-shallow-and-portable
+    prompt: >-
+      Create a new reusable skill called `planner` for producing exactly one repo-native implementation plan before coding starts.
+      The provided sources include one source-backed pattern note that may help routing, but do not preserve nested artifact paths or repo-local authoring notes as support artifacts.
+      If you declare support artifacts, keep them shallow inside `references/` or `assets/`, keep the matching folder in `authoring.packageShape.supportFolders`, and do not use paths like `references/patterns/source-patterns.md`, `notes/source-patterns.md`, `scripts/source-examples.json`, or `agents/source-examples.json`.
+      Stop at `Eval Brief ready`.
+    expected_stop: Eval Brief ready
+    should_trigger: true
+  metadata:
+    skill_name: skill-contract-forge
+    case_bucket: regression
+    expected_stop: Eval Brief ready
+  assert:
+    - type: assert-set
+      metric: support_artifacts_portability
+      threshold: 1
+      assert:
+        - type: starts-with
+          metric: classification
+          value: "Classification: trigger"
+        - type: icontains
+          metric: workflow
+          value: "Workflow: new-skill"
+        - type: contains-json
+          metric: schema_valid
+          value: file://evals/contracts/skill-contract-forge/eval-brief-output.schema.json
+        - type: not-icontains
+          metric: no_nested_reference_path
+          value: references/patterns/source-patterns.md
+        - type: not-icontains
+          metric: no_authoring_note_path
+          value: notes/source-patterns.md
+        - type: not-icontains
+          metric: no_scripts_support_artifact
+          value: scripts/source-examples.json
+        - type: not-icontains
+          metric: no_agents_support_artifact
+          value: agents/source-examples.json
+        - type: not-icontains
+          metric: no_empty_support_artifacts
+          value: '"supportArtifacts": []'
+        - type: icontains
+          metric: terminal_marker
+          value: Eval Brief ready
+        - type: not-icontains
+          metric: incompatible_non_trigger
+          value: "Classification: non-trigger"
+        - type: not-icontains
+          metric: incompatible_stop_and_ask
+          value: "Classification: stop-and-ask"
 - description: existing-skill-refactor-clear-target
   vars:
     skill_prompt: file://../../../../packs/core/skill-contract-forge/SKILL.md

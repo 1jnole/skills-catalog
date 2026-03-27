@@ -53,6 +53,8 @@ That handoff must define:
 - minimal downstream evaluation intent
 - relevant source references
 
+If the provided sources contain high-signal patterns, canonical examples, anti-examples, or edge cases that materially sharpen routing, blockers, or downstream eval design, freeze them as optional support artifacts in the Eval Brief instead of embedding them directly in the main contract.
+
 When the environment supports persisted working files, treat the approved brief as one inspectable handoff artifact for later phases rather than leaving the contract only in transient chat output.
 
 The response must stop at:
@@ -82,11 +84,56 @@ Before emitting trigger-path JSON, copy the structure from `assets/eval-brief.te
 The brief should be implementation-ready for the next step, but must remain contract-only. On trigger paths, the current Eval Brief contract expects these top-level fields:
 - `skill`
 - `authoring`
+- `supportArtifacts` (optional)
 - `successModel`
 - `activationProbes`
 - `negativeSignals`
 - `seedEvalIntent`
 - `sourceRefs`
+
+Use `supportArtifacts` only when source-backed supporting material would materially improve routing, blockers, or eval design.
+
+`supportArtifacts` is optional. Do not add it as decorative filler.
+
+When used:
+- keep each artifact one level deep
+- use `references/` for patterns, long-form notes, edge cases, and consultation material
+- use `assets/` for templates, structured examples, schemas, and output scaffolds
+- explicitly say when downstream phases should read each artifact
+- keep the artifacts source-backed and implementation-relevant
+- do not invent examples, anti-examples, or edge cases that are not grounded in the provided sources
+- if an artifact path starts with `references/` or `assets/`, include that folder in `authoring.packageShape.supportFolders`
+- omit `supportArtifacts` entirely when no source-backed artifact materially improves the contract
+
+Prefer concise declarations over bloated payloads.
+
+Use this minimal `supportArtifacts` shape when it is present:
+
+```json
+{
+  "supportArtifacts": [
+    {
+      "path": "references/source-patterns.md",
+      "kind": "patterns",
+      "required": false,
+      "purpose": "Constrains implementation with source-backed patterns that should not be restated in SKILL.md.",
+      "whenToRead": "Read before writing the main procedure."
+    },
+    {
+      "path": "assets/source-examples.json",
+      "kind": "examples",
+      "required": false,
+      "purpose": "Provides canonical examples, anti-examples, or edge cases that sharpen routing and eval coverage.",
+      "whenToRead": "Read before finalizing trigger rules, blockers, or eval seeds."
+    }
+  ]
+}
+```
+
+Keep `successModel` structured too:
+- emit `successModel` as an object, not as a bare string
+- keep it contract-only and implementation-neutral
+- prefer concise named goal buckets over long narrative paragraphs
 
 Treat `activationProbes`, `negativeSignals`, and `seedEvalIntent` as a tiny high-signal surface, not as filler:
 - use `activationProbes` for a small set of representative trigger prompts that should help later discovery and dogfooding
@@ -168,9 +215,10 @@ Keep repo-local claims grounded too:
 - distill repo-local constraints into the brief instead of preserving their local file paths as downstream dependencies
 
 When downstream phases must still inspect long examples, templates, or reference material:
+- declare source-backed, materially helpful support material in `supportArtifacts`
 - freeze that need through `authoring.packageShape`
 - put reusable reference material in `references`
-- put templates or output scaffolds in `assets`
+- put structured examples, templates, schemas, or output scaffolds in `assets`
 - do not rely on auxiliary local source refs to keep that content reachable downstream
 
 Do not include runtime behavior, provider wiring, benchmark layout, grader logic, or scoring implementation in the brief payload.
@@ -251,6 +299,8 @@ Do not end with `Eval Brief ready`.
 - Do not output bare JSON without the required routing header lines.
 - Do not prepend commentary, bullets, or explanation before the required classification line.
 - Do not output `seedEvalIntent` as a bare array or bare string on trigger paths.
+- Do not output `successModel` as a bare string on trigger paths.
+- Do not emit `supportArtifacts: []`; omit `supportArtifacts` entirely when it is unused.
 - Do not expand `seedEvalIntent.comparisonFocus` into a checklist or mini test matrix.
 - On trigger paths, keep the JSON payload boundary-only and place `Eval Brief ready` on its own final line.
 
@@ -341,6 +391,7 @@ When refactoring or rewriting a named existing skill, inspect the current target
 Start with the maintained `SKILL.md`, then inspect only the support folders that materially affect `authoring.packageShape` or `authoring.interface`.
 If the current package already owns a durable template or baseline in `assets/`, freeze that dependency through `authoring.packageShape` instead of treating it as incidental context.
 If those materials need to survive into implementation or eval authoring, distill them into the brief or freeze them into `references/` or `assets/` via `authoring.packageShape` instead of preserving local file refs.
+If the provided sources contain high-signal patterns, canonical examples, anti-examples, or edge cases that should survive downstream, declare them in `supportArtifacts` and keep the matching folder in `authoring.packageShape.supportFolders` instead of embedding dense catalogs in the main brief body.
 Engine-specific execution assets live outside this skill contract.
 
 ## Procedure
@@ -355,11 +406,13 @@ Engine-specific execution assets live outside this skill contract.
 6. If `supportFolders` includes `agents`, freeze `authoring.interface.display_name`, `authoring.interface.short_description`, and `authoring.interface.default_prompt` in the same brief.
    If the request explicitly asks for UI-facing metadata or dependency-facing interface metadata, include `agents` in `supportFolders` rather than leaving the interface detached from package shape.
 7. Freeze only portable `sourceRefs`: allow `[]` when the distilled brief is sufficient, include only durable authority that must survive the handoff, and do not preserve auxiliary repo-local authoring refs as downstream dependencies.
-8. Keep repo-local claims honest: do not invent repo defaults, planning paths, mandatory `AGENTS.md` inputs, or mandatory external-doc dependencies unless grounded authority actually requires them, and distill any consulted repo-local rules into the brief itself.
-9. Freeze a tiny high-signal discovery surface inside the brief: preserve 3-5 representative `activationProbes`, focused nearby `negativeSignals`, and a structured `seedEvalIntent` object with `mustStopAt`, one short `comparisonFocus` sentence, and concise `notes` that include at least one ambiguity or stop-and-ask edge when relevant.
-10. Produce the boundary-only Eval Brief JSON and, when the environment supports working-file persistence, materialize it as one inspectable approved brief artifact instead of multiple paraphrased handoff files.
-11. End trigger-path responses with the exact line `Eval Brief ready`.
-12. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative cases, explicit `skill.name` plus an activation-oriented `skill.description`, portable `sourceRefs`, honest repo-local claims, one durable brief artifact when working files are available, a compact high-signal probe/negative surface, and the smallest justified `packageShape` without silently widening scope.
+8. Inspect the provided sources for source-backed patterns, canonical examples, anti-examples, and edge cases that materially sharpen routing, blockers, or eval intent.
+9. If that material exists, declare it in `supportArtifacts`, keep the paths shallow under `references/` or `assets/`, align `authoring.packageShape.supportFolders` with the declared artifact paths, and keep dense catalogs out of the main brief body.
+10. Keep repo-local claims honest: do not invent repo defaults, planning paths, mandatory `AGENTS.md` inputs, or mandatory external-doc dependencies unless grounded authority actually requires them, and distill any consulted repo-local rules into the brief itself.
+11. Freeze a tiny high-signal discovery surface inside the brief: preserve 3-5 representative `activationProbes`, focused nearby `negativeSignals`, and a structured `seedEvalIntent` object with `mustStopAt`, one short `comparisonFocus` sentence, and concise `notes` that include at least one ambiguity or stop-and-ask edge when relevant.
+12. Produce the boundary-only Eval Brief JSON and, when the environment supports working-file persistence, materialize it as one inspectable approved brief artifact instead of multiple paraphrased handoff files.
+13. End trigger-path responses with the exact line `Eval Brief ready`.
+14. Before finalizing a trigger-path brief, check that the resulting skill still describes one clear job, explicit inputs and outputs, strong stop-and-ask behavior, nearby negative cases, explicit `skill.name` plus an activation-oriented `skill.description`, portable `sourceRefs`, honest repo-local claims, one durable brief artifact when working files are available, a compact high-signal probe/negative surface, the smallest justified `packageShape` without silently widening scope, and `supportArtifacts` omitted when unnecessary or source-backed and aligned when present.
 
 ## Quality bar
 

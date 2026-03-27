@@ -1,0 +1,16 @@
+- [x] 1. Author the OpenSpec change for `supportArtifacts`.
+  - [x] 1.1 Add `proposal.md`, `design.md`, and `tasks.md` for `skill-contract-forge-support-artifacts-handoff`.
+  - [x] 1.2 Add change specs for `skill-contract-forge`, `skill-contract-forge-brief-boundary-neutrality`, `skill-contract-forge-packaging-alignment`, and `skill-contract-forge-eval-coverage-hardening`.
+- [x] 2. Update the maintained `skill-contract-forge` contract surfaces.
+  - [x] 2.1 Update `packs/core/skill-contract-forge/SKILL.md` with optional `supportArtifacts`, the source-backed decision rule, and the new preflight step.
+  - [x] 2.2 Update `packs/core/skill-contract-forge/references/examples.md` and `packs/core/skill-contract-forge/references/edge-cases.md` with good and bad `supportArtifacts` patterns.
+  - [x] 2.3 Keep `packs/core/skill-contract-forge/assets/eval-brief.template.json` lean without adding a default `supportArtifacts` field.
+- [x] 3. Harden the Eval Brief schema and Promptfoo coverage.
+  - [x] 3.1 Extend `evals/contracts/skill-contract-forge/eval-brief-output.schema.json` for optional `supportArtifacts` and package-shape alignment.
+  - [x] 3.2 Add Promptfoo contract cases for valid presence, valid omission, and invalid empty/decorative/inconsistent support-artifact behavior.
+  - [x] 3.3 Refresh maintained `skill-contract-forge` fixtures after the live Promptfoo run passes.
+- [x] 4. Verify and review the change.
+  - [x] 4.1 Run `openspec validate "skill-contract-forge-support-artifacts-handoff" --type change`.
+  - [x] 4.2 Run `npm run promptfoo:validate`.
+  - [x] 4.3 Run `npm run promptfoo:run`.
+  - [x] 4.4 Review the resulting implementation against `promptfoo-playbook-v2.md` and `skill-authoring-doc.md`, then correct any drift before closure.

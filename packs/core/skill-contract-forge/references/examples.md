@@ -34,6 +34,14 @@ Workflow: new-skill
   "negativeSignals": [
     "Requests for runtime implementation."
   ],
+  "seedEvalIntent": {
+    "mustStopAt": "Eval Brief ready",
+    "comparisonFocus": "Verify the contract boundary, especially trigger vs non-trigger vs stop-and-ask behavior.",
+    "notes": [
+      "Keep coverage contract-only.",
+      "Do not include runtime or grader implementation details."
+    ]
+  },
   "sourceRefs": []
 }
 Eval Brief ready
@@ -137,6 +145,27 @@ Invalid because once a brief says `agents` is required, it must also freeze the 
 ### Trigger output uses decorative probes and negatives
 
 Invalid when `activationProbes`, `negativeSignals`, or `seedEvalIntent` are padded with repetitive filler instead of preserving a small, high-signal set of representative triggers, nearby non-triggers, and ambiguity edges.
+
+## Optional support-artifact examples
+
+Use `supportArtifacts` when source-backed support material materially improves the contract.
+
+### Good pattern: source-backed examples declared as support
+
+- `references/source-patterns.md` for implementation patterns distilled from user-provided material
+- `assets/source-examples.json` for canonical trigger examples, anti-examples, and edge cases extracted from the provided sources
+
+### Bad pattern: examples stuffed into the main brief
+
+Invalid when the brief copies long example sets, edge-case catalogs, or pattern tables directly into the main JSON payload instead of routing them through `references/` or `assets/`.
+
+### Bad pattern: invented support artifacts
+
+Invalid when the brief declares examples, anti-examples, or edge cases that are not grounded in the provided sources.
+
+### Bad pattern: decorative support artifacts
+
+Invalid when `supportArtifacts` is present but does not materially help routing, blockers, or eval design.
 
 ## What the examples are for
 

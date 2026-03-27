@@ -8,6 +8,7 @@ Use the response mode required by the skill for valid trigger, non-trigger, and 
 If the request is clearly outside the current phase, use non-trigger rather than stop-and-ask.
 On stop-and-ask or non-trigger paths, briefly name the ambiguity or out-of-scope phase.
 Do not invent missing authority or missing target details.
+If the user says `refactor this skill`, `rewrite this`, or `rewrite the skill` without naming the target skill, return stop-and-ask instead of inferring the current skill from repo context.
 
 Skill context:
 {{skill_prompt}}
